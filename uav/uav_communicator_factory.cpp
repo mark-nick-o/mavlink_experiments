@@ -13,6 +13,7 @@
 #include "send_vfr_hud_handler.h"
 #include "send_home_position_handler.h"
 #include "send_gps_raw_handler.h"
+#include "send_camera_info_handler.hpp"
 
 using namespace domain;
 
@@ -31,6 +32,7 @@ MavLinkCommunicator* UavCommunicatorFactory::create()
     new domain::SendVfrHudHandler(communicator, m_model);
     new domain::SendHomePositionHandler(communicator, m_model);
     new domain::SendGpsRawHandler(communicator, m_model);
-
+    new domain::SendCameraInfoHandler(communicator, m_model);
+    
     return communicator;
 }
