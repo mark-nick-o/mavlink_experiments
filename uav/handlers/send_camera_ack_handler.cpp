@@ -51,8 +51,8 @@ void SendCameraAckoHandler::sendCmdACKMAVLinkMessage( std::uint8_t res, std::uin
 /*
    This is next the message the Camera will send to the GCS to accept this communication
 */
-void SendCameraAckoHandler::cameraACKCameraInformationReqAccepted( std::int32_t rpm2, std::uint8_t componentId )
+void SendCameraAckoHandler::cameraACKCameraInformationReqAccepted( std::uint8_t componentId )
 {
 	//const std::int8_t CAMERA_INFORMATION = 259;
-	SendCameraAckoHandler::sendCmdACKMAVLinkMessage( MAV_RESULT_ACCEPTED, CAMERA_INFORMATION, MAV_CMD_REQUEST_MESSAGE, MAV_TYPE_GCS, std::int32_t rpm2, std::uint8_t componentId)
+	SendCameraAckoHandler::sendCmdACKMAVLinkMessage( MAV_RESULT_ACCEPTED, 100, MAV_CMD_REQUEST_MESSAGE, MAV_TYPE_GCS, CAMERA_INFORMATION, std::uint8_t componentId)
 }
