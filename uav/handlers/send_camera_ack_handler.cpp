@@ -45,7 +45,7 @@ void SendCameraAckoHandler::sendCmdACKMAVLinkMessage( std::uint8_t res, std::uin
   
   /* encode */
   len = mavlink_msg_command_ack_encode(target_sys, componentId, &message, &com);
-  emit MavLinkCommunicator::sendPacketfromME(message);
+  m_communicator->sendMessageOnLastReceivedLink(message);
 }
 
 /*
@@ -54,5 +54,5 @@ void SendCameraAckoHandler::sendCmdACKMAVLinkMessage( std::uint8_t res, std::uin
 void SendCameraAckoHandler::cameraACKCameraInformationReqAccepted( std::int32_t rpm2, std::uint8_t componentId )
 {
 	//const std::int8_t CAMERA_INFORMATION = 259;
-	MavLinkCommunicator::sendCmdACKMAVLinkMessage( MAV_RESULT_ACCEPTED, CAMERA_INFORMATION, MAV_CMD_REQUEST_MESSAGE, MAV_TYPE_GCS, std::int32_t rpm2, std::uint8_t componentId)
+	SendCameraAckoHandler::sendCmdACKMAVLinkMessage( MAV_RESULT_ACCEPTED, CAMERA_INFORMATION, MAV_CMD_REQUEST_MESSAGE, MAV_TYPE_GCS, std::int32_t rpm2, std::uint8_t componentId)
 }
