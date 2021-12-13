@@ -9,9 +9,13 @@
 
 using namespace domain;
 
-getCamInfoHandler::getCamInfoHandler(MavLinkCommunicator* communicator):
-    AbstractHandler(communicator)
-{}
+getCamInfoHandler::getCamInfoHandler(MavLinkCommunicator* communicator,
+                                         GcsModel* model):
+    AbstractHandler(communicator),
+    m_model(model)
+{
+    //this->startTimer(40); // 25 Hz
+}
 
 void getCamInfoHandler::processMessage(const mavlink_message_t& message)
 {
@@ -24,4 +28,5 @@ void getCamInfoHandler::processMessage(const mavlink_message_t& message)
     qDebug() << "firmware version : " << info.firmware_version
              << "focal length : " << info.focal_length
              << "url : " << info.cam_definition_uri;
+    m_focal_len = info.focal_length; 
 }
