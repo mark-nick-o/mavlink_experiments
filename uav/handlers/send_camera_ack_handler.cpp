@@ -26,7 +26,7 @@ void SendCameraAckHandler::processMessage(const mavlink_message_t& message)
     Q_UNUSED(message)
 }
 
-void SendCameraAckHandler::sendCmdACKMAVLinkMessage( std::uint8_t res, std::uint8_t progrez, std::uint16_t cmd, std::uint8_t target_sys, std::uint8_t target_comp, std::int32_t rpm2, std::uint8_t componentId)
+void SendCameraAckHandler::sendCmdACKMAVLinkMessage( std::uint8_t res, std::uint8_t progrez, std::uint16_t cmd, std::uint8_t target_sys, std::uint8_t target_comp, std::int32_t rpm2 )
 {
   std::uint16_t len=0u;
 
@@ -41,7 +41,7 @@ void SendCameraAckHandler::sendCmdACKMAVLinkMessage( std::uint8_t res, std::uint
   com.result           = res;
   
   /* encode */
-  len = mavlink_msg_command_ack_encode(target_sys, componentId, &message, &com);
+  len = mavlink_msg_command_ack_encode(target_sys, target_comp, &message, &com);
   m_communicator->sendMessageOnLastReceivedLink(message);
 }
 
