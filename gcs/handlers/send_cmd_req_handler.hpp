@@ -6,10 +6,12 @@
 namespace domain
 {
 
+    class GcsModel;
+    
     class SendCmdReqHandler: public AbstractHandler
     {
     public:
-        SendCmdReqHandler(MavLinkCommunicator* communicator);
+        SendCmdReqHandler(MavLinkCommunicator* communicator, GcsModel* model);
 
     public slots:
         void processMessage(const mavlink_message_t& message) override;
@@ -17,5 +19,7 @@ namespace domain
     protected:
         void timerEvent(QTimerEvent *event) override;
 
+    private:
+        GcsModel* m_model;
     };
 }
