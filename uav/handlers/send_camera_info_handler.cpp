@@ -1,4 +1,4 @@
-#include "send_camera_info_handler.h"
+#include "send_camera_info_handler.hpp"
 
 // MAVLink
 #include <mavlink.h>
