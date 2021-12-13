@@ -23,13 +23,18 @@ void CmdReqHandler::processMessage(const mavlink_message_t& message)
     switch (cmdReq.param1)
     {
 	   case CAMERA_INFORMATION:
-           /* parse information regarding the camera  */
+           /* send information regarding the camera  */
 	   m_substate = DO_SEND_ACK;
 	   m_sendState = SENS_CI;
            break;
 
+	   case CAMERA_SETTINGS:
+	   m_substate = DO_SEND_ACK;
+	   m_sendState = SENS_CS;
+           break;
+		    
            case STORAGE_INFORMATION:
-           /* parse information regarding the storage media */
+           /* send information regarding the storage media */
 	   m_substate = DO_SEND_ACK;
 	   m_sendState = SENS_SI;
            break;					
