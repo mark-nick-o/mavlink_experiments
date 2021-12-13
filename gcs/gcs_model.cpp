@@ -22,6 +22,7 @@ GcsModel::GcsModel(QObject* parent):
     QObject(parent),
     m_substate(0),
     m_sendState(0),
+    m_focal_len(0),
     m_battery_remain(0)
 {
     qsrand(QDateTime::currentMSecsSinceEpoch() / 1000);
@@ -57,4 +58,9 @@ std::int8_t GcsModel::get_sendState() const
 std::int8_t GcsModel::get_batteryRemain() const
 {
     return m_battery_remain;       
+}
+
+std::float32_t GcsModel::get_focalLen() const
+{
+    return m_focal_len;       
 }
