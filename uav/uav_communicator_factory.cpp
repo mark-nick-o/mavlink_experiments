@@ -6,7 +6,7 @@
 // Internal
 #include "mavlink_communicator.h"
 
-#include "heartbeat_handler.h"
+#include "send_heartbeat_handler.hpp"
 #include "send_system_status_handler.h"
 #include "send_position_handler.h"
 #include "send_attitude_handler.h"
