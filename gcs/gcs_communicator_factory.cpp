@@ -20,7 +20,7 @@ MavLinkCommunicator* GcsCommunicatorFactory::create()
 
     new domain::HeartbeatHandler(MAV_TYPE_GCS, communicator);
     new domain::AttitudeHandler(communicator);
-    new domain::SendCmdReqHandler();
+    new domain::SendCmdReqHandler(communicator, m_model);
     
     return communicator;
 }
