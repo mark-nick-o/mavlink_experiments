@@ -1,4 +1,4 @@
-#include "heartbeat_handler.h"
+#include "heartbeat_handler.hpp"
 
 // MAVLink
 #include <mavlink.h>
