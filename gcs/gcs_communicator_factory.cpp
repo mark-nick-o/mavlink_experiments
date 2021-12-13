@@ -20,7 +20,7 @@ MavLinkCommunicator* GcsCommunicatorFactory::create()
 {
     MavLinkCommunicator* communicator = new MavLinkCommunicator(255, 0);
 
-    new domain::HeartbeatHandler(MAV_TYPE_GCS, communicator);
+    new domain::HeartHandler(communicator, m_model);
     new domain::AttitudeHandler(communicator);
     new domain::SendCmdReqHandler(communicator, m_model);
     new domain::getCamInfoHandler(communicator, m_model);
