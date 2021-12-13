@@ -18,6 +18,7 @@
 #include "send_camera_ack_handler.hpp"
 #include "send_camera_cancel_handler.hpp"
 #include "cmd_req_handler.hpp"
+#include "send_video_stream_handler.hpp"
 
 using namespace domain;
 
@@ -42,6 +43,7 @@ MavLinkCommunicator* UavCommunicatorFactory::create()
     new domain::SendCameraAckHandler(communicator, m_model);
     new domain::SendCameraCancelHandler(communicator, m_model);
     new domain::SendCameraSettingsHandler(communicator, m_model);
+    new domain::SendVideoStreamHandler(communicator, m_model);
     
     return communicator;
 }
