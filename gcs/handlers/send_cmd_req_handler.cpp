@@ -74,6 +74,66 @@ void SendCmdReqHandler::SetCamModeMAVLinkMessage( std:uint8_t cam_mode, std::uin
 }
 
 /*
+   control video stream
+*/
+void SendCmdReqHandler::SendVideoCaptureMAVLinkMessage( std::uint8_t stream, std::uint8_t start, std::uint8_t target_sys, std::uint8_t target_comp, std::uint8_t conf)
+{
+  std::uint16_t len=0u;
+
+  mavlink_command_long_t com = NULL;                          // Command Type
+  mavlink_message_t message;                                           
+
+  com.target_system    = target_sys;
+  com.target_component = target_comp;
+  if ( start != 0 )
+  {
+      com.command      = MAV_CMD_VIDEO_STOP_CAPTURE;
+  }
+  else
+  {
+      com.command      = MAV_CMD_VIDEO_START_CAPTURE;	  
+  }
+  com.confirmation     = conf;
+  com.param1           = stream;                                  
+
+  /* encode */
+  len = mavlink_msg_command_long_encode(target_sys, target_comp, &message, &com);
+  m_communicator->sendMessageOnLastReceivedLink(message);
+}
+
+/*
+   control image taking
+*/
+void SendCmdReqHandler::SendImageActionMAVLinkMessage( std::uint8_t start, std::uint8_t interVal, std::uint8_t image, std::uint8_t sequence, std::uint8_t target_sys, std::uint8_t target_comp, std::uint8_t conf)
+{
+  std::uint16_t len=0u;
+
+  mavlink_command_long_t com = NULL;                          // Command Type
+  mavlink_message_t message;                                           
+  // uint8_t buf[MAVLINK_MSG_ID_COMMAND_LONG_LEN];
+
+  com.target_system    = target_sys;
+  com.target_component = target_comp;
+  if ( start != 0 )
+  {	  
+     com.command       = MAV_CMD_IMAGE_STOP_CAPTURE;
+  }
+  else
+  {
+     com.command       = MAV_CMD_IMAGE_START_CAPTURE;	  
+  }
+  com.confirmation     = conf;
+  com.param1           = 0;
+  com.param2           = interVal;                                    
+  com.param3           = image; 
+  com.param4           = sequence; 
+	
+  /* encode */
+  len = mavlink_msg_command_long_encode(target_sys, target_comp, &message, &com);
+  m_communicator->sendMessageOnLastReceivedLink(message);
+}
+
+/*
     This is the message the Camera Board shall send back to the GCS on receipt of the above message
 */
 void SendCmdReqHandler::timerEvent(QTimerEvent* event)
@@ -108,5 +168,25 @@ void SendCmdReqHandler::timerEvent(QTimerEvent* event)
     {
         SendCmdReqHandler::SetCamModeMAVLinkMessage( 3, m_communicator->systemId(), m_communicator->componentId(), 0);
         m_substate == DO_CAM_SENT_MODE_CHANGE;
+    }
+    else if (m_substate == DO_CAM_SEND_VC_START)                       /* ---  --- */
+    {
+        SendCmdReqHandler::SendVideoCaptureMAVLinkMessage( 1, 1, m_communicator->systemId(), m_communicator->componentId(), 0);
+        m_substate == DO_CAM_SENT_VC_START;
+    }
+    else if (m_substate == DO_CAM_SEND_VC_STOP)                       /* ---  --- */
+    {
+        SendCmdReqHandler::SendVideoCaptureMAVLinkMessage( 1, 0, m_communicator->systemId(), m_communicator->componentId(), 0);
+        m_substate == DO_CAM_SENT_VC_STOP;
+    }
+    else if (m_substate == DO_CAM_SEND_IM_START)                       /* ---  --- */
+    {
+        SendCmdReqHandler::SendImageActionMAVLinkMessage( 1, 3, 1, 1, m_communicator->systemId(), m_communicator->componentId(), 0);
+        m_substate == DO_CAM_SENT_IM_START;
+    }
+    else if (m_substate == DO_CAM_SEND_IM_STOP)                       /* ---  --- */
+    {
+        SendCmdReqHandler::SendImageActionMAVLinkMessage( 0, 3, 1, 1, m_communicator->systemId(), m_communicator->componentId(), 0);
+        m_substate == DO_CAM_SENT_IM_STOP;
     }
 }
