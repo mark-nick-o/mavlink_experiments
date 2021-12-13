@@ -23,3 +23,5 @@ namespace domain
         GcsModel* m_model;
     };
 }
+
+#endif
