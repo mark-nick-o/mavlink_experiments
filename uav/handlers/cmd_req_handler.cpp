@@ -44,6 +44,18 @@ void CmdReqHandler::processMessage(const mavlink_message_t& message)
 	   m_substate = DO_SEND_ACK;
 	   m_sendState = SENS_SI;
            break;
+
+           case CAMERA_CAPTURE_STATUS:
+           /* send information regarding the capture status */
+	   m_substate = DO_SEND_ACK;
+	   m_sendState = SENS_CCS;
+           break;
+
+           case 269:
+           /* send information regarding the video streaming status */
+	   m_substate = DO_SEND_ACK;
+	   m_sendState = SENS_VS;
+           break;
 			
            default:
            break;
