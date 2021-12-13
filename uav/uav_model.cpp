@@ -48,6 +48,8 @@ UavModel::UavModel(QObject* parent):
     m_model_name("alpha750")
     m_lens_id(67)
     m_cam_definition_uri("http://121.1.1.2/pics/1.jpg")
+    m_substate(0)
+	m_sendState(0)
 {
     qsrand(QDateTime::currentMSecsSinceEpoch() / 1000);
     this->startTimer(::interval);
@@ -182,6 +184,16 @@ std::uint8_t lens_id() const
 std::char* cam_definition_uri() const
 {
     return m_cam_definition_uri;                  /*<  Camera definition URI (if any, otherwise only basic functions will be available). HTTP- (http://) and MAVLink FTP- (mavlinkftp://) formatted URIs are allowed (and both must be supported by any GCS that implements the Camera Protocol).*/
+}
+
+std::int8_t get_substate() const
+{
+    return m_substate;       
+}
+
+std::int8_t get_sendState() const
+{
+    return m_sendState;       
 }
 
                                                    
