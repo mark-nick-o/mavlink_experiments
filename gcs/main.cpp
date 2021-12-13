@@ -7,12 +7,14 @@
 
 #include "gcs_communicator_factory.h"
 #include "mavlink_communicator.h"
+#include "gcs_model.h"
 
 int main(int argc, char* argv[])
 {
     QCoreApplication app(argc, argv);
 
-    domain::GcsCommunicatorFactory factory;
+    domain::GcsModel model;
+    domain::GcsCommunicatorFactory factory(&model);
     domain::MavLinkCommunicator* communicator = factory.create();
     communicator->setParent(&app);
 
@@ -23,3 +25,4 @@ int main(int argc, char* argv[])
 
     return app.exec();
 }
+
