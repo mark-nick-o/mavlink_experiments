@@ -71,7 +71,7 @@ void SendCameraAckHandler::cameraACKCameraInformationReqAlready( std::uint8_t ta
 void SendCameraAckHandler::timerEvent(QTimerEvent* event)
 {
     Q_UNUSED(event)
-    if ((m_substate == DO_SENDING_ACK) && (m_sendState != 0))
+    if ((m_substate == DO_SENDING_ACK) && (m_sendState != GO_IDLE))
     {
         SendCameraAckHandler::cameraACKCameraInformationReqAlready( m_communicator->systemId(), m_communicator->componentId(), 50 );
         m_substate == DO_SENDING_ACK;
@@ -80,5 +80,11 @@ void SendCameraAckHandler::timerEvent(QTimerEvent* event)
     {
         SendCameraAckHandler::cameraACKCameraInformationReqAccepted( m_communicator->systemId(), m_communicator->componentId(), 0 );
         m_substate == DO_SENDING_ACK;
+    }
+    else if ((m_substate == DO_SENDING_ACK) && (m_sendState == SENT_CI))
+    {
+        SendCameraAckHandler::cameraACKCameraInformationReqAccepted( m_communicator->systemId(), m_communicator->componentId(), 100 );
+        m_substate == GO_IDLE;
+        m_sendState == GO_IDLE;
     }
 }
