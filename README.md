@@ -28,3 +28,4 @@ cmake ..
 make
 ```
 I have added the camera protocol for testing.. WIP
+https://mavlink.io/en/services/camera.html
