@@ -10,6 +10,7 @@
 #include "attitude_handler.h"
 #include "get_camera_info_handler.hpp"
 #include "send_cmd_req_handler.hpp"
+#include "battery_status.hpp"
 
 using namespace domain;
 
@@ -24,6 +25,7 @@ MavLinkCommunicator* GcsCommunicatorFactory::create()
     new domain::AttitudeHandler(communicator);
     new domain::SendCmdReqHandler(communicator, m_model);
     new domain::getCamInfoHandler(communicator, m_model);
+    new domain::BattStatHandler(communicator, m_model);
     
     return communicator;
 }
