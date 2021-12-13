@@ -13,7 +13,7 @@
 
 using namespace domain;
 
-SendCameraAckHandler::SendCameraCancelHandler(MavLinkCommunicator* communicator,
+SendCameraCancelHandler::SendCameraCancelHandler(MavLinkCommunicator* communicator,
                                          UavModel* model):
     AbstractHandler(communicator),
     m_model(model)
@@ -26,7 +26,7 @@ void SendCameraCancelHandler::processMessage(const mavlink_message_t& message)
     Q_UNUSED(message)
 }
 
-void SendCameraAckHandler::sendCmdCancelMAVLinkMessage( std::uint16_t cmd, std::uint8_t target_sys, std::uint8_t target_comp, std::uint8_t componentId )
+void SendCameraCancelHandler::sendCmdCancelMAVLinkMessage( std::uint16_t cmd, std::uint8_t target_sys, std::uint8_t target_comp, std::uint8_t componentId )
 {
   std::uint16_t len=0u;
 
@@ -45,10 +45,20 @@ void SendCameraAckHandler::sendCmdCancelMAVLinkMessage( std::uint16_t cmd, std::
 /*
    This is the message the Camera will send as an ACK to the GCS if cancel was received
 */
-void SendCameraAckHandler::cameraCancelCameraInformationReqAccepted( std::uint8_t componentId )
+void SendCameraCancelHandler::cameraCancelCameraInformationReqAccepted( std::uint8_t target_sys, std::uint8_t componentId )
 {
 	//const std::int8_t CAMERA_INFORMATION = 259;
-	SendCameraAckHandler::sendCmdCancelMAVLinkMessage( MAV_RESULT_CANCELLED,  MAV_TYPE_GCS, std::uint8_t target_comp, std::uint8_t componentId)
+	//target_sys = MAV_TYPE_GCS;
+	SendCameraCancelHandler::sendCmdCancelMAVLinkMessage( MAV_RESULT_CANCELLED, target_sys, std::uint8_t target_comp, std::uint8_t componentId)
+}
+
+/*
+    This is the message the Camera Board shall send back to the GCS on receipt of the above message
+*/
+void SendCameraAckHandle::timerEvent(QTimerEvent* event)
+{
+    Q_UNUSED(event)
+    SendCameraAckHandler::cameraCancelCameraInformationReqAccepted( m_communicator->systemId(), m_communicator->componentId() );
 }
 
 
