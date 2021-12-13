@@ -50,6 +50,30 @@ void SendCmdReqHandler::sendRequestCmdMAVLinkMessage( std::int8_t cmd, std::uint
 }
 
 /*
+   set camera mode
+*/
+void SendCmdReqHandler::SetCamModeMAVLinkMessage( std:uint8_t cam_mode, std::uint8_t target_sys, std::uint8_t target_comp, std::uint8_t conf)
+{
+  std::uint16_t len=0u;
+
+  mavlink_command_long_t com = NULL;                          // Command Type
+  mavlink_message_t message;                                           
+
+  // Disabled as Sony cam has more modes than 3!!!      if (cam_mode >= 3) std::cout << "invalid mode set options 0-2" << std::endl;
+ 
+  com.target_system    = target_sys;
+  com.target_component = target_comp;
+  com.command          = MAV_CMD_SET_CAMERA_MODE;
+  com.confirmation     = conf;
+  com.param1           = 0;
+  com.param2           = cam_mode;                                    
+
+  /* encode */
+  len = mavlink_msg_command_long_encode(target_sys, target_comp, &message, &com);
+  m_communicator->sendMessageOnLastReceivedLink(message);
+}
+
+/*
     This is the message the Camera Board shall send back to the GCS on receipt of the above message
 */
 void SendCmdReqHandler::timerEvent(QTimerEvent* event)
@@ -79,5 +103,10 @@ void SendCmdReqHandler::timerEvent(QTimerEvent* event)
     {
         SendCmdReqHandler::sendRequestCmdMAVLinkMessage( 269, m_communicator->systemId(), m_communicator->componentId(), 0);
         m_substate == DO_CMD_SENT_VIDEO_STREAM_REQ;
+    }
+    else if (m_substate == DO_CAM_SEND_MODE_CHANGE)                       /* ---  --- */
+    {
+        SendCmdReqHandler::SetCamModeMAVLinkMessage( 3, m_communicator->systemId(), m_communicator->componentId(), 0);
+        m_substate == DO_CAM_SENT_MODE_CHANGE;
     }
 }
