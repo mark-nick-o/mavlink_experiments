@@ -16,6 +16,7 @@
 #include "send_camera_info_handler.hpp"
 #include "send_camera_ack_handler.hpp"
 #include "send_camera_cancel_handler.hpp"
+#include "cmd_req_handler.hpp"
 
 using namespace domain;
 
@@ -26,8 +27,10 @@ UavCommunicatorFactory::UavCommunicatorFactory(domain::UavModel* model):
 MavLinkCommunicator* UavCommunicatorFactory::create()
 {
     MavLinkCommunicator* communicator = new MavLinkCommunicator(1, 0);
-
+   
     new domain::HeartbeatHandler(MAV_TYPE_FIXED_WING, communicator);
+    new domain::CmdReqHandler(communicator, m_model); 
+    
     new domain::SendSystemStatusHandler(communicator, m_model);
     new domain::SendPositionHandler(communicator, m_model);
     new domain::SendAttitudeHandler(communicator, m_model);
@@ -37,6 +40,6 @@ MavLinkCommunicator* UavCommunicatorFactory::create()
     new domain::SendCameraInfoHandler(communicator, m_model);
     new domain::SendCameraAckHandler(communicator, m_model);
     new domain::SendCameraCancelHandler(communicator, m_model);
-    
+
     return communicator;
 }
