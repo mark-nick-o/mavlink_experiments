@@ -1,4 +1,4 @@
-#include "send_camera_cancel_handler.h"
+#include "send_camera_cancel_handler.hpp"
 
 // MAVLink
 #include <mavlink.h>
