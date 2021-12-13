@@ -37,6 +37,7 @@ void SendCameraSettingsHandler::timerEvent(QTimerEvent* event)
         mavlink_camera_settings_t com = NULL;                                                                   /* Command Type */
 
         m_sendState = SEND_CS;
+        com.time_boot_ms = 64524u;
         com.mode_id = 76;                                                               /*<  Camera mode*/
         com.zoomLevel = 2.43f;                                                           /*<  Current zoom level (0.0 to 100.0, NaN if not known)*/
         com.focusLevel = 1.9f;  
