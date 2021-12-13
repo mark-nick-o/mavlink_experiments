@@ -20,8 +20,9 @@ using namespace domain;
 
 GcsModel::GcsModel(QObject* parent):
     QObject(parent),
-    m_substate(0)
-	m_sendState(0)
+    m_substate(0),
+    m_sendState(0),
+    m_battery_remain(0)
 {
     qsrand(QDateTime::currentMSecsSinceEpoch() / 1000);
     this->startTimer(::interval);
@@ -51,4 +52,9 @@ std::int8_t GcsModel::get_substate() const
 std::int8_t GcsModel::get_sendState() const
 {
     return m_sendState;       
+}
+
+std::int8_t GcsModel::get_batteryRemain() const
+{
+    return m_battery_remain;       
 }
