@@ -27,4 +27,4 @@ cd build
 cmake ..
 make
 ```
-I have added the camera protocol for testing..
+I have added the camera protocol for testing.. WIP
