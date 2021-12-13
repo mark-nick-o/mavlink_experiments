@@ -15,13 +15,15 @@ CmdReqHandler::CmdReqHandler(MavLinkCommunicator* communicator):
 
 void CmdReqHandler::processMessage(const mavlink_message_t& message)
 {
-    if (message.msgid != MAV_CMD_REQUEST_MESSAGE || message.sysid == 0) return;
+    if (message.msgid != MAV_CMD_LONG_MESSAGE || message.sysid == 0) return;
 
-    mavlink_cmd_request_t cmdReq;
-    mavlink_msg_cmd_request_decode(&message, &cmdReq);
-
-    switch (cmdReq.param1)
+    mavlink_command_long_t cmdReq;
+    mavlink_msg_command_long_decode(&message, &cmdReq);
+    
+    if ((cmdReq.command == MAV_CMD_REQUEST_MESSAGE) && (cmdReq.target_system == MAV_CMP_ID_CAMERA))
     {
+        switch (cmdReq.param1)
+        {
 	   case CAMERA_INFORMATION:
            /* send information regarding the camera  */
 	   m_substate = DO_SEND_ACK;
@@ -37,6 +39,10 @@ void CmdReqHandler::processMessage(const mavlink_message_t& message)
            /* send information regarding the storage media */
 	   m_substate = DO_SEND_ACK;
 	   m_sendState = SENS_SI;
-           break;					
+           break;
+			
+           default:
+           break;
+       }
     }
 }
