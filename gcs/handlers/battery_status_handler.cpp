@@ -9,9 +9,13 @@
 
 using namespace domain;
 
-BattStatHandler::BattStatHandler(MavLinkCommunicator* communicator):
-    AbstractHandler(communicator)
-{}
+BattStatHandler::BattStatHandler(MavLinkCommunicator* communicator,
+                                         GcsModel* model):
+    AbstractHandler(communicator),
+    m_model(model)
+{
+    this->startTimer(40); // 25 Hz
+}
 
 void BattStatHandler::processMessage(const mavlink_message_t& message)
 {
