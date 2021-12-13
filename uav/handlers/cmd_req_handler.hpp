@@ -5,15 +5,20 @@
 
 namespace domain
 {
+    class UavModel;
+    
     class CmdReqHandler: public CmdReqHandler
     {
         Q_OBJECT
 
     public:
-        CmdReqHandler(MavLinkCommunicator* communicator);
+        CmdReqHandler(MavLinkCommunicator* communicator, UavModel* model);
 
     public slots:
         void processMessage(const mavlink_message_t& message) override;
+        
+    private:
+        UavModel* m_model;
     };
 }
 
