@@ -9,9 +9,13 @@
 
 using namespace domain;
 
-HeartHandler::HeartHandler(MavLinkCommunicator* communicator):
-    AbstractHandler(communicator)
-{}
+HeartHandler::HeartHandler(MavLinkCommunicator* communicator,
+                                         GcsModel* model):
+    AbstractHandler(communicator),
+    m_model(model)
+{
+    // so far we dont send it back so this is out this->startTimer(40); // 25 Hz
+}
 
 void HeartHandler::processMessage(const mavlink_message_t& message)
 {
@@ -22,6 +26,5 @@ void HeartHandler::processMessage(const mavlink_message_t& message)
     mavlink_msg_heartbeat_decode(&message, &heart);
 
     qDebug() << "pitch" << heart.mavlink_version;
-    m_substate = HEART_RCV; 
-    
+    m_substate = HEART_RCV;     
 }
