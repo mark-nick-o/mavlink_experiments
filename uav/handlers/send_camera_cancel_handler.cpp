@@ -26,7 +26,7 @@ void SendCameraCancelHandler::processMessage(const mavlink_message_t& message)
     Q_UNUSED(message)
 }
 
-void MavLinkCommunicator::sendCmdCancelMAVLinkMessage( std::uint16_t cmd, std::uint8_t target_sys, std::uint8_t target_comp, std::int32_t rpm2, std::uint8_t componentId)
+void SendCameraAckHandler::sendCmdCancelMAVLinkMessage( std::uint16_t cmd, std::uint8_t target_sys, std::uint8_t target_comp, std::uint8_t componentId )
 {
   std::uint16_t len=0u;
 
@@ -45,10 +45,10 @@ void MavLinkCommunicator::sendCmdCancelMAVLinkMessage( std::uint16_t cmd, std::u
 /*
    This is the message the Camera will send as an ACK to the GCS if cancel was received
 */
-void MavlinkCommunicator::cameraCancelCameraInformationReqAccepted( std::int32_t rpm2, std::uint8_t componentId )
+void SendCameraAckHandler::cameraCancelCameraInformationReqAccepted( std::uint8_t componentId )
 {
 	//const std::int8_t CAMERA_INFORMATION = 259;
-	MavLinkCommunicator::sendCmdACKMAVLinkMessage( MAV_RESULT_CANCELLED, CAMERA_INFORMATION, MAV_CMD_REQUEST_MESSAGE, MAV_TYPE_GCS, std::int32_t rpm2, std::uint8_t componentId)
+	SendCameraAckHandler::sendCmdCancelMAVLinkMessage( MAV_RESULT_CANCELLED,  MAV_TYPE_GCS, std::uint8_t target_comp, std::uint8_t componentId)
 }
 
 
