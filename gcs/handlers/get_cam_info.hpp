@@ -8,10 +8,10 @@ namespace domain
 
     class GcsModel;
     
-    class SendCmdReqHandler: public AbstractHandler
+    class GetCamInfoHandler: public AbstractHandler
     {
     public:
-        SendCmdReqHandler(MavLinkCommunicator* communicator, GcsModel* model);
+        GetCamInfoHandler(MavLinkCommunicator* communicator, GcsModel* model);
 
     public slots:
         void processMessage(const mavlink_message_t& message) override;
