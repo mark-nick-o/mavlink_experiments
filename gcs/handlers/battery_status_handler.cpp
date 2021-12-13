@@ -21,8 +21,9 @@ void BattStatHandler::processMessage(const mavlink_message_t& message)
     mavlink_battery_status_t bs;
     mavlink_msg_battery_status_decode(&message, &bs);
 
+    m_battery_remain = bs.battery_remaining;
     qDebug() << "current : " << bs.current_consumed
              << "energy : " << bs.energy_consumed
-			       << "remaining : " << bs.battery_remaining
+	     << "remaining : " << bs.battery_remaining
              << "temperature : " << bs.temperature;
 }
