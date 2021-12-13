@@ -9,9 +9,13 @@
 
 using namespace domain;
 
-CmdReqHandler::CmdReqHandler(MavLinkCommunicator* communicator):
-    AbstractHandler(communicator)
-{}
+CmdReqHandler::CmdReqHandler(MavLinkCommunicator* communicator,
+                                         UavModel* model):
+    AbstractHandler(communicator),
+    m_model(model)
+{
+    //this->startTimer(40); // 25 Hz
+}
 
 void CmdReqHandler::processMessage(const mavlink_message_t& message)
 {
