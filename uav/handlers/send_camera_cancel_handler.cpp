@@ -26,7 +26,7 @@ void SendCameraCancelHandler::processMessage(const mavlink_message_t& message)
     Q_UNUSED(message)
 }
 
-void SendCameraCancelHandler::sendCmdCancelMAVLinkMessage( std::uint16_t cmd, std::uint8_t target_sys, std::uint8_t target_comp, std::uint8_t componentId )
+void SendCameraCancelHandler::sendCmdCancelMAVLinkMessage( std::uint16_t cmd, std::uint8_t target_sys, std::uint8_t target_comp )
 {
   std::uint16_t len=0u;
 
@@ -38,7 +38,7 @@ void SendCameraCancelHandler::sendCmdCancelMAVLinkMessage( std::uint16_t cmd, st
   com.command          = cmd;
   
   /* encode */
-  len = mavlink_msg_command_cancel_encode(target_sys, componentId, &message, &com);
+  len = mavlink_msg_command_cancel_encode(target_sys, target_comp, &message, &com);
   m_communicator->sendMessageOnLastReceivedLink(message);
 }
 
