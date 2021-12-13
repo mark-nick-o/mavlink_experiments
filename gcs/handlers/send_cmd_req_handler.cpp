@@ -14,7 +14,7 @@
 using namespace domain;
 
 SendCmdReqHandler::SendCmdReqHandler(MavLinkCommunicator* communicator,
-                                         UavModel* model):
+                                         GcsModel* model):
     AbstractHandler(communicator),
     m_model(model)
 {
