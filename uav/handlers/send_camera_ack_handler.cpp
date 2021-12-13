@@ -13,7 +13,7 @@
 
 using namespace domain;
 
-SendCameraAckoHandler::SendCameraAckHandler(MavLinkCommunicator* communicator,
+SendCameraAckHandler::SendCameraAckHandler(MavLinkCommunicator* communicator,
                                          UavModel* model):
     AbstractHandler(communicator),
     m_model(model)
@@ -29,7 +29,7 @@ void SendCameraAckHandler::processMessage(const mavlink_message_t& message)
 /*
     This is the message the Camera Board shall send back to the GCS on receipt of the above message
 */
-void SendCameraAckoHandler::sendCmdACKMAVLinkMessage( std::uint8_t res, std::uint8_t progrez, std::uint16_t cmd, std::uint8_t target_sys, std::uint8_t target_comp, std::int32_t rpm2, std::uint8_t componentId)
+void SendCameraAckHandler::sendCmdACKMAVLinkMessage( std::uint8_t res, std::uint8_t progrez, std::uint16_t cmd, std::uint8_t target_sys, std::uint8_t target_comp, std::int32_t rpm2, std::uint8_t componentId)
 {
   std::uint16_t len=0u;
 
@@ -51,8 +51,8 @@ void SendCameraAckoHandler::sendCmdACKMAVLinkMessage( std::uint8_t res, std::uin
 /*
    This is next the message the Camera will send to the GCS to accept this communication
 */
-void SendCameraAckoHandler::cameraACKCameraInformationReqAccepted( std::uint8_t componentId )
+void SendCameraAckHandler::cameraACKCameraInformationReqAccepted( std::uint8_t componentId )
 {
 	//const std::int8_t CAMERA_INFORMATION = 259;
-	SendCameraAckoHandler::sendCmdACKMAVLinkMessage( MAV_RESULT_ACCEPTED, 100, MAV_CMD_REQUEST_MESSAGE, MAV_TYPE_GCS, CAMERA_INFORMATION, std::uint8_t componentId)
+	SendCameraAckHandler::sendCmdACKMAVLinkMessage( MAV_RESULT_ACCEPTED, 100, MAV_CMD_REQUEST_MESSAGE, MAV_TYPE_GCS, CAMERA_INFORMATION, std::uint8_t componentId)
 }
