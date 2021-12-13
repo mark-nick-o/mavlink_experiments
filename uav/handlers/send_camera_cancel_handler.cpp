@@ -58,9 +58,13 @@ void SendCameraCancelHandler::cameraCancelCameraInformationReqAccepted( std::uin
 void SendCameraAckHandle::timerEvent(QTimerEvent* event)
 {
     Q_UNUSED(event)
-    SendCameraAckHandler::cameraCancelCameraInformationReqAccepted( m_communicator->systemId(), m_communicator->componentId() );
+    if (m_substate == DO_SEND_CANCEL)
+    {
+        SendCameraAckHandler::cameraCancelCameraInformationReqAccepted( m_communicator->systemId(), m_communicator->componentId() );
+        m_substate = GO_IDLE;
+        m_sendState = GO_IDLE;
+    }
 }
-
 
 
 
