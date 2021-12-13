@@ -26,5 +26,5 @@ void HeartHandler::processMessage(const mavlink_message_t& message)
     mavlink_msg_heartbeat_decode(&message, &heart);
 
     qDebug() << "pitch" << heart.mavlink_version;
-    m_substate = HEART_RCV;     
+    m_sendState = HEART_RCV;     
 }
