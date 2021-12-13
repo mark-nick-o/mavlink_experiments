@@ -34,7 +34,9 @@ namespace domain
         std::uint8_t* model_name() const;                                                           /*<  Name of the camera model*/
         std::uint8_t lens_id() const;                                                               /*<  Reserved for a lens ID*/
         std::char* cam_definition_uri() const;  
-
+        std::int8_t get_sendState() const;
+	std::int8_t get_substate() const;
+	
         QGeoCoordinate position() const;
         QGeoCoordinate homePosition() const;
 
@@ -65,8 +67,8 @@ namespace domain
         std::uint8_t m_model_name[32u];                                                       /*<  Name of the camera model*/
         std::uint8_t m_lens_id;                                                               /*<  Reserved for a lens ID*/
         std::char m_cam_definition_uri[140u];  
-		std::int8_t m_substate = 0;                                                           /*<  substate for sending ACK or Cancel */                                                     
-		std::int8_t m_sendState = 0;                                                          /*<  sending state */
+	std::int8_t m_substate = 0;                                                           /*<  substate for sending ACK or Cancel */                                                     
+	std::int8_t m_sendState = 0;                                                          /*<  sending state */
         
         QGeoCoordinate m_position;
         QGeoCoordinate m_homePosition;
