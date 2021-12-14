@@ -1,4 +1,5 @@
 #include "send_camera_ack_handler.hpp"
+#include "camera_status_data.h"
 
 // MAVLink
 #include <mavlink.h>
@@ -52,7 +53,43 @@ void SendCameraAckHandler::cameraACKCameraInformationReqAccepted( std::uint8_t t
 {
    //const std::int8_t CAMERA_INFORMATION = 259;
    //target_sys = MAV_TYPE_GCS;
-   SendCameraAckHandler::sendCmdACKMAVLinkMessage( MAV_RESULT_ACCEPTED, progrez, MAV_CMD_REQUEST_MESSAGE, target_sys, CAMERA_INFORMATION, std::uint8_t componentId);
+   SendCameraAckHandler::sendCmdACKMAVLinkMessage( MAV_RESULT_ACCEPTED, progrez, MAV_CMD_REQUEST_MESSAGE, target_sys, componentId, CAMERA_INFORMATION );
+}
+
+/*
+   This is next the message the Camera will send to the GCS to accept this communication
+*/
+void MavlinkCommunicator::cameraACKCameraSettingsReqAccepted( std::uint8_t target_sys, std::uint8_t componentId, std::uint8_t progrez )
+{
+	//const std::int8_t CAMERA_INFORMATION = 259;
+	SendCameraAckHandler::sendCmdACKMAVLinkMessage( MAV_RESULT_ACCEPTED, progrez, MAV_CMD_REQUEST_MESSAGE, target_sys, componentId, CAMERA_SETTINGS);
+}
+
+/*
+   This is next the message the Camera will send to the GCS to accept this communication
+*/
+void MavlinkCommunicator::cameraACKCameraStorageInfoReqAccepted( std::uint8_t target_sys, std::uint8_t componentId, std::uint8_t progrez  )
+{
+	//const std::int8_t CAMERA_INFORMATION = 259;
+	SendCameraAckHandler::sendCmdACKMAVLinkMessage( MAV_RESULT_ACCEPTED, progrez, MAV_CMD_REQUEST_MESSAGE, target_sys, componentId, STORAGE_INFORMATION);  
+}
+
+/*
+   This is next the message the Camera will send to the GCS to accept this communication
+*/
+void MavlinkCommunicator::cameraACKCameraImageCapturedReqAccepted( std::uint8_t target_sys, std::uint8_t componentId, std::uint8_t progrez )
+{
+	//const std::int8_t CAMERA_INFORMATION = 259;
+	SendCameraAckHandler::sendCmdACKMAVLinkMessage( MAV_RESULT_ACCEPTED, progrez, MAV_CMD_REQUEST_MESSAGE, target_sys, componentId, CAMERA_IMAGE_CAPTURED);      
+}
+
+/*
+   This is next the message the Camera will send to the GCS to accept this communication
+*/
+void MavlinkCommunicator::cameraACKVideoStreamReqAccepted( std::uint8_t target_sys, std::uint8_t componentId, std::uint8_t progrez )
+{
+	//const std::int8_t CAMERA_INFORMATION = 259;
+	SendCameraAckHandler::sendCmdACKMAVLinkMessage( MAV_RESULT_ACCEPTED, progrez, MAV_CMD_REQUEST_MESSAGE, target_sys, componentId, VIDEO_STREAM_STATUS);      
 }
 
 /*
@@ -62,7 +99,47 @@ void SendCameraAckHandler::cameraACKCameraInformationReqAlready( std::uint8_t ta
 {
    //const std::int8_t CAMERA_INFORMATION = 259;
    //target_sys = MAV_TYPE_GCS;
-   SendCameraAckHandler::sendCmdACKMAVLinkMessage( MAV_RESULT_IN_PROGRESS, progrez, MAV_CMD_REQUEST_MESSAGE, target_sys, CAMERA_INFORMATION, std::uint8_t componentId);
+   SendCameraAckHandler::sendCmdACKMAVLinkMessage( MAV_RESULT_IN_PROGRESS, progrez, MAV_CMD_REQUEST_MESSAGE, target_sys, componentId, CAMERA_INFORMATION);
+}
+
+/*
+   This is next the message the Camera will send to the GCS to accept this communication
+*/
+void SendCameraAckHandler::cameraACKCameraSettingsReqAlready( std::uint8_t target_sys, std::uint8_t componentId, std::uint8_t progrez )
+{
+   //const std::int8_t CAMERA_INFORMATION = 259;
+   //target_sys = MAV_TYPE_GCS;
+   SendCameraAckHandler::sendCmdACKMAVLinkMessage( MAV_RESULT_IN_PROGRESS, progrez, MAV_CMD_REQUEST_MESSAGE, target_sys, componentId, CAMERA_SETTINGS);
+}
+
+/*
+   This is next the message the Camera will send to the GCS to accept this communication
+*/
+void SendCameraAckHandler::cameraACKCameraStorageInfoReqAlready( std::uint8_t target_sys, std::uint8_t componentId, std::uint8_t progrez )
+{
+   //const std::int8_t CAMERA_INFORMATION = 259;
+   //target_sys = MAV_TYPE_GCS;
+   SendCameraAckHandler::sendCmdACKMAVLinkMessage( MAV_RESULT_IN_PROGRESS, progrez, MAV_CMD_REQUEST_MESSAGE, target_sys, componentId, STORAGE_INFORMATION);
+}
+
+/*
+   This is next the message the Camera will send to the GCS to accept this communication
+*/
+void SendCameraAckHandler::cameraACKCameraImageCapturedReqAlready( std::uint8_t target_sys, std::uint8_t componentId, std::uint8_t progrez )
+{
+   //const std::int8_t CAMERA_INFORMATION = 259;
+   //target_sys = MAV_TYPE_GCS;
+   SendCameraAckHandler::sendCmdACKMAVLinkMessage( MAV_RESULT_IN_PROGRESS, progrez, MAV_CMD_REQUEST_MESSAGE, target_sys, componentId, CAMERA_IMAGE_CAPTURED);
+}
+
+/*
+   This is next the message the Camera will send to the GCS to accept this communication
+*/
+void SendCameraAckHandler::cameraACKVideoStreamReqAlready( std::uint8_t target_sys, std::uint8_t componentId, std::uint8_t progrez )
+{
+   //const std::int8_t CAMERA_INFORMATION = 259;
+   //target_sys = MAV_TYPE_GCS;
+   SendCameraAckHandler::sendCmdACKMAVLinkMessage( MAV_RESULT_IN_PROGRESS, progrez, MAV_CMD_REQUEST_MESSAGE, target_sys, componentId, VIDEO_STREAM_STATUS);
 }
 
 /*
@@ -71,10 +148,10 @@ void SendCameraAckHandler::cameraACKCameraInformationReqAlready( std::uint8_t ta
 void SendCameraAckHandler::timerEvent(QTimerEvent* event)
 {
     Q_UNUSED(event)
-    if ((m_substate == DO_SENDING_ACK) && (m_sendState != GO_IDLE))
+    if ((m_substate == DO_SENDING_ACK) && ((m_sendState == SENS_CI) || (m_sendState == SEND_CI)))
     {
         SendCameraAckHandler::cameraACKCameraInformationReqAlready( m_communicator->systemId(), m_communicator->componentId(), 50 );
-        m_substate == DO_SENDING_ACK;
+        //m_substate == DO_SENDING_ACK;
     }
     else if ((m_substate == DO_SEND_ACK) && (m_sendState == SENS_CI))
     {
@@ -86,5 +163,73 @@ void SendCameraAckHandler::timerEvent(QTimerEvent* event)
         SendCameraAckHandler::cameraACKCameraInformationReqAccepted( m_communicator->systemId(), m_communicator->componentId(), 100 );
         m_substate == GO_IDLE;
         m_sendState == GO_IDLE;
+    }
+    if ((m_substate == DO_SENDING_ACK) && ((m_sendState == SENS_CS) || (m_sendState == SEND_CS)))
+    {
+        SendCameraAckHandler::cameraACKCameraSettingsReqAlready( m_communicator->systemId(), m_communicator->componentId(), 50 );
+        //m_substate == DO_SENDING_ACK;
+    }
+    else if ((m_substate == DO_SEND_ACK) && (m_sendState == SENS_CS))
+    {
+        SendCameraAckHandler::cameraACKCameraSettingsReqAccepted( m_communicator->systemId(), m_communicator->componentId(), 0 );
+        m_substate == DO_SENDING_ACK;
+    }
+    else if ((m_substate == DO_SENDING_ACK) && (m_sendState == SENT_CS))
+    {
+        SendCameraAckHandler::cameraACKCameraSettingsReqAccepted( m_communicator->systemId(), m_communicator->componentId(), 100 );
+        m_substate == GO_IDLE;
+        m_sendState == GO_IDLE;
+    }
+    if ((m_substate == DO_SENDING_ACK) && ((m_sendState == SENS_SI) || (m_sendState == SEND_SI)))
+    {
+        SendCameraAckHandler::cameraACKCameraStorageInfoReqAlready( m_communicator->systemId(), m_communicator->componentId(), 50 );
+        //m_substate == DO_SENDING_ACK;
+    }
+    else if ((m_substate == DO_SEND_ACK) && (m_sendState == SENS_SI))
+    {
+        SendCameraAckHandler::cameraACKCameraStorageInfoReqAccepted( m_communicator->systemId(), m_communicator->componentId(), 0 );
+        m_substate == DO_SENDING_ACK;
+    }
+    else if ((m_substate == DO_SENDING_ACK) && (m_sendState == SENT_SI))
+    {
+        SendCameraAckHandler::cameraACKCameraStorageInfoReqAccepted( m_communicator->systemId(), m_communicator->componentId(), 100 );
+        m_substate == GO_IDLE;
+        m_sendState == GO_IDLE;
+    }
+    if ((m_substate == DO_SENDING_ACK) && ((m_sendState == SENS_CCS) || (m_sendState == SEND_CCS)))
+    {
+        SendCameraAckHandler::cameraACKCameraImageCapturedReqAlready( m_communicator->systemId(), m_communicator->componentId(), 50 );
+        //m_substate == DO_SENDING_ACK;
+    }
+    else if ((m_substate == DO_SEND_ACK) && (m_sendState == SENS_CCS))
+    {
+        SendCameraAckHandler::cameraACKCameraImageCapturedReqAccepted( m_communicator->systemId(), m_communicator->componentId(), 0 );
+        m_substate == DO_SENDING_ACK;
+    }
+    else if ((m_substate == DO_SENDING_ACK) && (m_sendState == SENT_CCS))
+    {
+        SendCameraAckHandler::cameraACKCameraImageCapturedReqAccepted( m_communicator->systemId(), m_communicator->componentId(), 100 );
+        m_substate == GO_IDLE;
+        m_sendState == GO_IDLE;
+    }
+    if ((m_substate == DO_SENDING_ACK) && ((m_sendState == SENS_VS) || (m_sendState == SEND_VS)))
+    {
+        SendCameraAckHandler::cameraACKVideoStreamReqAlready( m_communicator->systemId(), m_communicator->componentId(), 50 );
+        //m_substate == DO_SENDING_ACK;
+    }
+    else if ((m_substate == DO_SEND_ACK) && (m_sendState == SENS_VS))
+    {
+        SendCameraAckHandler::cameraACKVideoStreamReqAccepted( m_communicator->systemId(), m_communicator->componentId(), 0 );
+        m_substate == DO_SENDING_ACK;
+    }
+    else if ((m_substate == DO_SENDING_ACK) && (m_sendState == SENT_VS))
+    {
+        SendCameraAckHandler::cameraACKVideoStreamReqAccepted( m_communicator->systemId(), m_communicator->componentId(), 100 );
+        m_substate == GO_IDLE;
+        m_sendState == GO_IDLE;
+    }
+    else (m_substate == GO_IDLE)
+    {
+         SendCameraAckHandler::cameraACKCameraInformationReqAccepted( m_communicator->systemId(), m_communicator->componentId(), 0 );
     }
 }
