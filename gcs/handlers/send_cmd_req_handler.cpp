@@ -655,4 +655,18 @@ void SendCmdReqHandler::timerEvent(QTimerEvent* event)
 	SendCmdReqHandler::SendRelayActionMAVLinkMessage( relayNo, relayAction, m_communicator->systemId(), m_communicator->componentId(), 0,  m_communicator->componentId());
 	m_substate == DO_PI_SENT_RELAY1_OFF;
     }
+    else if (m_substate == DO_PI_SEND_RELAY2_ON)                       /* ---  --- */
+    {
+	std:uint8_t relayNo = 2;
+	std::uint8_t relayAction = 1;    
+	SendCmdReqHandler::SendRelayActionMAVLinkMessage( relayNo, relayAction, m_communicator->systemId(), m_communicator->componentId(), 0,  m_communicator->componentId());
+	m_substate == DO_PI_SENT_RELAY2_ON;
+    }	
+    else if (m_substate == DO_PI_SEND_RELAY2_OFF)                       /* ---  --- */
+    {
+	std:uint8_t relayNo = 2;
+	std::uint8_t relayAction = 0;    
+	SendCmdReqHandler::SendRelayActionMAVLinkMessage( relayNo, relayAction, m_communicator->systemId(), m_communicator->componentId(), 0,  m_communicator->componentId());
+	m_substate == DO_PI_SENT_RELAY2_OFF;
+    }
 }
