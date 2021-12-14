@@ -193,7 +193,15 @@ enum mavSendState_e : std::int32_t
     DO_GIM_CONF_RESET,
     DO_GIM_SEND_QUAT,
     DO_GIM_SENT_QUAT,
-    DO_GIM_CONF_QUAT
+    DO_GIM_CONF_QUAT,
+    DO_PI_SEND_RELAY1_ON,
+    DO_PI_SENT_RELAY1_ON,
+    DO_PI_SEND_RELAY1_OFF,
+    DO_PI_SENT_RELAY1_OFF,
+    DO_PI_SEND_RELAY2_ON,
+    DO_PI_SENT_RELAY2_ON,
+    DO_PI_SEND_RELAY2_OFF,
+    DO_PI_SENT_RELAY2_OFF
 };
 
 // ==== heartbeat pulses determine our system health =====
