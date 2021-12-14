@@ -1,4 +1,5 @@
 #include "cmd_req_handler.hpp"
+#inlcude "camera_action_states.h"
 
 // MAVLink
 #include <mavlink.h>
@@ -63,6 +64,26 @@ void CmdReqHandler::processMessage(const mavlink_message_t& message)
     }
     else if ((cmdReq.command == MAV_CMD_DO_SET_RELAY) && (cmdReq.target_system == MAV_CMP_ID_CAMERA))
     {
-	   std::cout << " now set the relay number " << cmdReq.param1 << " to state : " << cmdReq..param2 << std::endl;
+	   qDebug() << " now set the relay number " << cmdReq.param1 << " to state : " << cmdReq..param2 << std::endl;
+    }
+    else if ((cmdReq.command == MAV_CMD_VIDEO_STOP_CAPTURE) && (cmdReq.target_system == MAV_CMP_ID_CAMERA))
+    {
+	   qDebug() << " stop video capture on channel " << cmdReq.param1  << std::endl;
+    }
+    else if ((cmdReq.command == MAV_CMD_VIDEO_START_CAPTURE) && (cmdReq.target_system == MAV_CMP_ID_CAMERA))
+    {
+	   qDebug() << " start video capture on channel " << cmdReq.param1  << std::endl;
+    }
+    else if ((cmdReq.command == MAV_CMD_IMAGE_STOP_CAPTURE) && (cmdReq.target_system == MAV_CMP_ID_CAMERA))
+    {
+	   qDebug() << " stop image capture on image " << cmdReq.param3 << " sequence : " << cmdReq..param4 << std::endl;
+    }
+    else if ((cmdReq.command == MAV_CMD_VIDEO_STOP_STREAMING) && (cmdReq.target_system == MAV_CMP_ID_CAMERA))
+    {
+	   qDebug() << " stop video stream on stream No. " << cmdReq.param1 << std::endl;
+    }
+    else if ((cmdReq.command == MAV_CMD_VIDEO_START_STREAMING) && (cmdReq.target_system == MAV_CMP_ID_CAMERA))
+    {
+	   qDebug() << " start video stream on stream No. " << cmdReq.param1 << std::endl;
     }
 }
