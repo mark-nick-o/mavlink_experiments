@@ -1,4 +1,5 @@
 #include "heartbeat_handler.hpp"
+#include "camera_data.h"
 
 // MAVLink
 #include <mavlink.h>
@@ -35,7 +36,7 @@ void SendHeartBeatHandler::timerEvent(QTimerEvent* event)
 
     // reset the heartbeat state
     //
-    m_sendState = 0;     
+    m_sendState = GO_IDLE;     
   
     // we are mot sending heartbeats out of the gcs 
     //
