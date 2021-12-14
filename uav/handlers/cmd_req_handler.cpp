@@ -61,4 +61,8 @@ void CmdReqHandler::processMessage(const mavlink_message_t& message)
            break;
        }
     }
+    else if ((cmdReq.command == MAV_CMD_DO_SET_RELAY) && (cmdReq.target_system == MAV_CMP_ID_CAMERA))
+    {
+	   std::cout << " now set the relay number " << cmdReq.param1 << " to state : " << cmdReq..param2 << std::endl;
+    }
 }
