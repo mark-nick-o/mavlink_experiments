@@ -156,8 +156,7 @@ void SendCmdReqHandler::SendStreamActionMAVLinkMessage( std::uint8_t stream, std
      com.command       = MAV_CMD_VIDEO_START_STREAMING;	  
   }
   com.confirmation     = conf;
-  com.param1           = r_num;
-  com.param2           = Action;                                    
+  com.param1           = stream;                                   
 
   /* encode */
   len = mavlink_msg_command_long_encode(target_sys, componentId, &message, &com);
