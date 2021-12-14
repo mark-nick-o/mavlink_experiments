@@ -196,8 +196,6 @@ void SendCmdReqHandler::SetCamZoomMAVLinkMessage( std:uint8_t zoom_type, std::ui
 
   mavlink_command_long_t com = NULL;                          // Command Type
   mavlink_message_t message;                                           
-
-  if (cam_mode >= 3) std::cout << "invalid mode set options 0-2" << std::endl;
  
   com.target_system    = target_sys;
   com.target_component = target_comp;
@@ -221,8 +219,6 @@ void SendCmdReqHandler::SetCamFocusMAVLinkMessage( std:uint32_t focus_type, std:
 
   mavlink_command_long_t com = NULL;                          // Command Type
   mavlink_message_t message;                                           
-
-  if (cam_mode >= 3) std::cout << "invalid mode set options 0-2" << std::endl;
  
   com.target_system    = target_sys;
   com.target_component = target_comp;
