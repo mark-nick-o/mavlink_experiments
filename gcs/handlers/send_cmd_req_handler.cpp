@@ -463,6 +463,28 @@ void SendCmdReqHandler::moveGimbal2QuatMAVLinkMessage( vector <std::int16_t> vec
 }
 
 /*
+   set a relay on the Pi4
+*/
+void SendCmdReqHandler::SendRelayActionMAVLinkMessage( std:uint8_t r_num, std::uint8_t Action, std::uint8_t target_sys, std::uint8_t target_comp, std::uint8_t conf, std::uint8_t componentId)
+{
+  std::uint16_t len=0u;
+
+  mavlink_command_long_t com = NULL;                          // Command Type
+  mavlink_message_t message;                                           
+
+  com.target_system    = target_sys;
+  com.target_component = target_comp;
+  com.command          = MAV_CMD_DO_SET_RELAY;
+  com.confirmation     = conf;
+  com.param1           = r_num;
+  com.param2           = Action;                                    
+
+  /* encode */
+  len = mavlink_msg_command_long_encode(target_sys, componentId, &message, &com);
+  m_communicator->sendMessageOnLastReceivedLink(message);
+}
+
+/*
     This is the message the Camera Board shall send back to the GCS on receipt of the above message
 */
 void SendCmdReqHandler::timerEvent(QTimerEvent* event)
@@ -618,5 +640,19 @@ void SendCmdReqHandler::timerEvent(QTimerEvent* event)
 	quaternionSet[3] = 110;
         SendCmdReqHandler::moveGimbal2QuatMAVLinkMessage( quaternionSet, 3, 0, m_communicator->systemId(), m_communicator->componentId(), 0,  m_communicator->componentId());
 	m_substate == DO_GIM_SENT_QUAT;
+    }
+    else if (m_substate == DO_PI_SEND_RELAY1_ON)                       /* ---  --- */
+    {
+	std:uint8_t relayNo = 1;
+	std::uint8_t relayAction = 1;    
+	SendCmdReqHandler::SendRelayActionMAVLinkMessage( relayNo, relayAction, m_communicator->systemId(), m_communicator->componentId(), 0,  m_communicator->componentId());
+	m_substate == DO_PI_SENT_RELAY1_ON;
+    }	
+    else if (m_substate == DO_PI_SEND_RELAY1_OFF)                       /* ---  --- */
+    {
+	std:uint8_t relayNo = 1;
+	std::uint8_t relayAction = 0;    
+	SendCmdReqHandler::SendRelayActionMAVLinkMessage( relayNo, relayAction, m_communicator->systemId(), m_communicator->componentId(), 0,  m_communicator->componentId());
+	m_substate == DO_PI_SENT_RELAY1_OFF;
     }
 }
