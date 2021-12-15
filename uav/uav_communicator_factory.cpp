@@ -45,7 +45,7 @@ MavLinkCommunicator* UavCommunicatorFactory::create()
     new domain::SendCameraAckHandler(communicator, m_model);
     new domain::SendCameraCancelHandler(communicator, m_model);
     new domain::SendCameraSettingsHandler(communicator, m_model);
-    new domain::SendVideoStreamHandler(communicator, m_model);
+    new domain::SendVideoStreamInfoHandler(communicator, m_model);
     new domain::SendBatterStatusHandler(communicator, m_model);
     new domain::SendCameraStorageInfoHandler(communicator, m_model);
     
