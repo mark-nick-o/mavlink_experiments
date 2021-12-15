@@ -125,11 +125,14 @@ void CmdReqHandler::processMessage(const mavlink_message_t& message)
     {
 	   qDebug() << " interval : " << cmdReq.param2 << " start image capture on image " << cmdReq.param3 << " sequence : " << cmdReq..param4 << std::endl;
 	   m_substate = DO_SEND_ACK;
+	   m_sendState = SENS_CIC;
+	   m_cic_interval = cmdReq.param2;
     }
     else if ((cmdReq.command == MAV_CMD_IMAGE_STOP_CAPTURE) && (cmdReq.target_system == MAV_CMP_ID_CAMERA))
     {
 	   qDebug() << " stop image capture on image " << cmdReq.param3 << " sequence : " << cmdReq..param4 << std::endl;
 	   m_substate = DO_SEND_ACK;
+	   m_cic_interval = 0;
     }
     else if ((cmdReq.command == MAV_CMD_VIDEO_STOP_STREAMING) && (cmdReq.target_system == MAV_CMP_ID_CAMERA))
     {
@@ -233,5 +236,18 @@ void CmdReqHandler::::timerEvent(QTimerEvent* event)
          }
          m_ccs_time_cycle %= m_ccs_update_trigger;     // modulate cycle counter by the set-point which has been sent in multiples od 25Hz rests at value to zero
     }	
+	
+    /* send information regarding the capture status after we sent a MAV_CMD_VIDEO_START_CAPTURE @ the rate specified by m_ccs_update_trigger */
+    if (m_cic_interval > 0)
+    {
+        if (((m_substate == GO_IDLE) && (m_sendState == GO_IDLE)) && (m_cic_time_cycle == 0)) 
+        {
+	    m_substate = DO_SEND_ACK;
+	    m_sendState = SENS_CIC;
+	    ++m_cic_time_cycle;
+         }
+         m_ccs_time_cycle %= m_cic_interval;     // modulate cycle counter by the set-point which has been sent in multiples od 25Hz rests at value to zero
+    }
+	
 }
 
