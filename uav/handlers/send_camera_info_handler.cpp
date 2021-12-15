@@ -42,9 +42,12 @@ void SendCameraInfoHandler::timerEvent(QTimerEvent* event)
             com = getInfoDataFromCam();
             if (com.reqfailure == 1)
             {
-                m_reject |= 
+                m_reject |= CI_FAIL_BIT;
             }
-        
+            else
+            {
+                << code as below success ...... >>
+            }
            for the purpose of testing we are jsut filling in the values here 
         */    
         com.time_boot_ms = 65321;                                                                                  /*< [ms] Timestamp (time since system boot).*/
