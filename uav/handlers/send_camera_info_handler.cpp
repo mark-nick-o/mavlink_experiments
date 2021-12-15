@@ -37,6 +37,16 @@ void SendCameraInfoHandler::timerEvent(QTimerEvent* event)
         mavlink_camera_information_t com = NULL;                                                                   /* Command Type */
 
         m_sendState = SEND_CI;
+        /*
+            now get the data from the camera 
+            com = getInfoDataFromCam();
+            if (com.reqfailure == 1)
+            {
+                m_
+            }
+        
+           for the purpose of testing we are jsut filling in the values here 
+        */    
         com.time_boot_ms = 65321;                                                                                  /*< [ms] Timestamp (time since system boot).*/
         com.firmware_version = 10000;                                                                              /*<  Version of the camera firmware (v << 24 & 0xff = Dev, v << 16 & 0xff = Patch, v << 8 & 0xff = Minor, v & 0xff = Major)*/
         com.focal_length = 1.4;                                                                                    /*< [mm] Focal length*/
