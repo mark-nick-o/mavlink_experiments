@@ -18,12 +18,14 @@ using namespace std;
 #define VS_BIT 16
 #define US_BIT 32
 #define FMT_BIT 64
-#define CI_FAIL_BIT 128
-#define CS_FAIL_BIT 256
-#define SI_FAIL_BIT 512
-#define CCS_FAIL_BIT 1024
-#define VS_FAIL_BIT 2048
-#define FORMAT_FAIL_BIT 4096
+#define CIC_BIT 128
+#define CI_FAIL_BIT 256
+#define CS_FAIL_BIT 512
+#define SI_FAIL_BIT 1024
+#define CCS_FAIL_BIT 2048
+#define VS_FAIL_BIT 4096
+#define FORMAT_FAIL_BIT 8192
+#define CIC_FAIL_BIT 16384
 
 struct cam_config_t
 {
@@ -177,6 +179,9 @@ enum mavCommandedState_e : std::int32_t
   SENT_VS,
   SENS_FMT,
   SEND_FMT,
-  SENT_FMT
+  SENT_FMT,
+  SENS_CIC,
+  SEND_CIC,
+  SENT_CIC
 };
 #endif
