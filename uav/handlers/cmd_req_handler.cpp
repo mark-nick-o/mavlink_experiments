@@ -187,7 +187,20 @@ void CmdReqHandler::processMessage(const mavlink_message_t& message)
     else if ((cmdReq.command == MAV_CMD_STORAGE_FORMAT) && (cmdReq.target_system == MAV_CMP_ID_CAMERA))
     {
 	   qDebug() << " ID : " << cmdReq.param1 << " Format " << cmdReq.param2 << "  Reset Image Log " << cmdReq.param3 << std::endl;
-	   m_substate = DO_SEND_ACK;
+	   std::uint8_t stausOfFormat = 0;
+	   /*
+	       if format is on then format the drive
+	       if (cmdReq.param2 == 1) stausOfFormat = formatDrive(cmdReq.param1);
+	       if (cmdReq.param3 == 1)  retCmd = resetCamCaptureStausImageCount(cmdReq.param1);
+	   */
+	   if (stausOfFormat == 0)
+	   {
+	       m_substate = DO_SEND_ACK;
+	   }
+	   else
+	   {
+		   
+	   }
     }
 	
 }
