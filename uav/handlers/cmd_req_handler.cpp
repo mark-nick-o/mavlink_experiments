@@ -121,6 +121,11 @@ void CmdReqHandler::processMessage(const mavlink_message_t& message)
 	   m_ccs_update_trigger = cmdReq.param2;
 	   m_substate = DO_SEND_ACK;
     }
+    else if ((cmdReq.command == MAV_CMD_IMAGE_START_CAPTURE) && (cmdReq.target_system == MAV_CMP_ID_CAMERA))
+    {
+	   qDebug() << " interval : " << cmdReq.param2 << " start image capture on image " << cmdReq.param3 << " sequence : " << cmdReq..param4 << std::endl;
+	   m_substate = DO_SEND_ACK;
+    }
     else if ((cmdReq.command == MAV_CMD_IMAGE_STOP_CAPTURE) && (cmdReq.target_system == MAV_CMP_ID_CAMERA))
     {
 	   qDebug() << " stop image capture on image " << cmdReq.param3 << " sequence : " << cmdReq..param4 << std::endl;
