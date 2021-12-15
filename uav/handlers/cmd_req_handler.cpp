@@ -16,6 +16,11 @@ CmdReqHandler::CmdReqHandler(MavLinkCommunicator* communicator,
     m_model(model)
 {
     //this->startTimer(40); // 25 Hz
+    //if (m_ccs_update_trigger != 0)
+    //{
+    //   this->startTimer(static_cast<std::uint16_t>(m_ccs_update_trigger*1.6f));                              // m_ccs_update_trigger Hz
+    //}
+    this->startTimer(40);                            // @ 25 Hz	    
 }
 
 void CmdReqHandler::processMessage(const mavlink_message_t& message)
@@ -106,11 +111,14 @@ void CmdReqHandler::processMessage(const mavlink_message_t& message)
     else if ((cmdReq.command == MAV_CMD_VIDEO_STOP_CAPTURE) && (cmdReq.target_system == MAV_CMP_ID_CAMERA))
     {
 	   qDebug() << " stop video capture on channel " << cmdReq.param1  << std::endl;
+	   m_ccs_update_trigger = 0;
            m_substate = DO_SEND_ACK;	
     }
     else if ((cmdReq.command == MAV_CMD_VIDEO_START_CAPTURE) && (cmdReq.target_system == MAV_CMP_ID_CAMERA))
     {
 	   qDebug() << " start video capture on channel " << cmdReq.param1  << std::endl;
+	   qDebug() << " send update CAMERA_CAPTURE_MESSAGE @ timer Hz " << cmdReq.param2  << std::endl;
+	   m_ccs_update_trigger = cmdReq.param2;
 	   m_substate = DO_SEND_ACK;
     }
     else if ((cmdReq.command == MAV_CMD_IMAGE_STOP_CAPTURE) && (cmdReq.target_system == MAV_CMP_ID_CAMERA))
@@ -204,3 +212,21 @@ void CmdReqHandler::processMessage(const mavlink_message_t& message)
     }
 	
 }
+
+void CmdReqHandler::::timerEvent(QTimerEvent* event)
+{
+    Q_UNUSED(event)
+	    
+    /* send information regarding the capture status after we sent a MAV_CMD_VIDEO_START_CAPTURE @ the rate specified by m_ccs_update_trigger */
+    if (m_ccs_update_trigger > 0)
+    {
+        if (((m_substate == GO_IDLE) && (m_sendState == GO_IDLE)) && (m_ccs_time_cycle == 0)) 
+        {
+	    m_substate = DO_SEND_ACK;
+	    m_sendState = SENS_CCS;
+	    ++m_ccs_time_cycle;
+         }
+         m_ccs_time_cycle %= m_ccs_update_trigger;     // modulate cycle counter by the set-point which has been sent in multiples od 25Hz rests at value to zero
+    }	
+}
+
