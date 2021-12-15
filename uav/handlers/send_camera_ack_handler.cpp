@@ -219,6 +219,56 @@ void SendCameraAckHandler::cameraACKVideoStreamReqAlready( std::uint8_t target_s
 }
 
 /*
+   This is next the message the Camera will send to the GCS if the camera action requested fails to work
+*/
+void SendCameraAckHandler::cameraACKCameraInformationReqFailed( std::uint8_t target_sys, std::uint8_t componentId, std::uint8_t progrez )
+{
+   //const std::int8_t CAMERA_INFORMATION = 259;
+   //target_sys = MAV_TYPE_GCS;
+   SendCameraAckHandler::sendCmdACKMAVLinkMessage( MAV_RESULT_FAILED, progrez, MAV_CMD_REQUEST_MESSAGE, target_sys, componentId, CAMERA_INFORMATION);
+}
+
+/*
+   This is next the message the Camera will send to the GCS if the camera action requested fails to work
+*/
+void SendCameraAckHandler::cameraACKCameraSettingsReqFailed( std::uint8_t target_sys, std::uint8_t componentId, std::uint8_t progrez )
+{
+   //const std::int8_t CAMERA_INFORMATION = 259;
+   //target_sys = MAV_TYPE_GCS;
+   SendCameraAckHandler::sendCmdACKMAVLinkMessage( MAV_RESULT_FAILED, progrez, MAV_CMD_REQUEST_MESSAGE, target_sys, componentId, CAMERA_SETTINGS);
+}
+
+/*
+   This is next the message the Camera will send to the GCS if the camera action requested fails to work
+*/
+void SendCameraAckHandler::cameraACKCameraStorageInfoReqFailed( std::uint8_t target_sys, std::uint8_t componentId, std::uint8_t progrez )
+{
+   //const std::int8_t CAMERA_INFORMATION = 259;
+   //target_sys = MAV_TYPE_GCS;
+   SendCameraAckHandler::sendCmdACKMAVLinkMessage( MAV_RESULT_FAILED, progrez, MAV_CMD_REQUEST_MESSAGE, target_sys, componentId, STORAGE_INFORMATION);
+}
+
+/*
+   This is next the message the Camera will send to the GCS if the camera action requested fails to work
+*/
+void SendCameraAckHandler::cameraACKCameraImageCapturedReqFailed( std::uint8_t target_sys, std::uint8_t componentId, std::uint8_t progrez )
+{
+   //const std::int8_t CAMERA_INFORMATION = 259;
+   //target_sys = MAV_TYPE_GCS;
+   SendCameraAckHandler::sendCmdACKMAVLinkMessage( MAV_RESULT_FAILED, progrez, MAV_CMD_REQUEST_MESSAGE, target_sys, componentId, CAMERA_IMAGE_CAPTURED);
+}
+
+/*
+   This is next the message the Camera will send to the GCS if the camera action requested fails to work
+*/
+void SendCameraAckHandler::cameraACKVideoStreamReqFailed( std::uint8_t target_sys, std::uint8_t componentId, std::uint8_t progrez )
+{
+   //const std::int8_t CAMERA_INFORMATION = 259;
+   //target_sys = MAV_TYPE_GCS;
+   SendCameraAckHandler::sendCmdACKMAVLinkMessage( MAV_RESULT_FAILED, progrez, MAV_CMD_REQUEST_MESSAGE, target_sys, componentId, VIDEO_STREAM_STATUS);
+}
+
+/*
     This is the message the Camera Board shall send back to the GCS on receipt of the above message
 */
 void SendCameraAckHandler::timerEvent(QTimerEvent* event)
@@ -315,7 +365,8 @@ void SendCameraAckHandler::timerEvent(QTimerEvent* event)
         SendCameraAckHandler::cameraACKReqAccepted( std::uint8_t target_sys, std::uint8_t componentId, std::uint8_t progrez )( m_communicator->systemId(), m_communicator->componentId(), 0 );
         m_substate == DO_SENDING_ACK;
     }
-	
+
+    /* reject as already busy messages or failed action messages back to GCS */
     if (m_reject & CI_BIT)
     {
 	SendCameraAckHandler::cameraACKCameraInformationReqTempRejected( m_communicator->systemId(), m_communicator->componentId(), 0  );
@@ -355,6 +406,41 @@ void SendCameraAckHandler::timerEvent(QTimerEvent* event)
     {
 	SendCameraAckHandler::cameraACKTotalRejection( m_communicator->systemId(), m_communicator->componentId(), 0  );  
 	std::uint16_t mask = US_BIT;
+	m_reject &= ~mask;	    
+    }
+
+    if (m_reject & CI_FAIL_BIT)
+    {
+	SendCameraAckHandler::cameraACKCameraInformationReqFailed( m_communicator->systemId(), m_communicator->componentId(), 0  );
+	std::uint16_t mask = CI_FAIL_BIT;
+	m_reject &= ~mask;
+    }
+
+    if (m_reject & CS_FAIL_BIT)
+    {
+	SendCameraAckHandler::cameraACKCameraSettingsReqFailed( m_communicator->systemId(), m_communicator->componentId(), 0  );  
+	std::uint16_t mask = CS_FAIL_BIT;
+	m_reject &= ~mask;
+    }
+	
+    if (m_reject & SI_FAIL_BIT)
+    {
+	SendCameraAckHandler::cameraACKCameraStorageInfoReqFailed( m_communicator->systemId(), m_communicator->componentId(), 0  );  
+	std::uint16_t mask = SI_FAIL_BIT;
+	m_reject &= ~mask;
+    }
+	
+    if (m_reject & CCS_FAIL_BIT)
+    {
+	SendCameraAckHandler::cameraACKCameraImageCapturedReqFailed( m_communicator->systemId(), m_communicator->componentId(), 0  );  
+	std::uint16_t mask = CCS_FAIL_BIT;
+	m_reject &= ~mask;
+    }
+	
+    if (m_reject & VS_FAIL_BIT)
+    {
+	SendCameraAckHandler::cameraACKVideoStreamReqFailed( m_communicator->systemId(), m_communicator->componentId(), 0  );  
+	std::uint16_t mask = VS_FAIL_BIT;
 	m_reject &= ~mask;	    
     }
 	
