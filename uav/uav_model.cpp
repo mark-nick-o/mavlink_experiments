@@ -49,7 +49,8 @@ UavModel::UavModel(QObject* parent):
     m_lens_id(67)
     m_cam_definition_uri("http://121.1.1.2/pics/1.jpg")
     m_substate(0)
-	m_sendState(0)
+    m_sendState(0)
+    m_reject(0)
 {
     qsrand(QDateTime::currentMSecsSinceEpoch() / 1000);
     this->startTimer(::interval);
