@@ -59,7 +59,7 @@ void SendCameraAckHandler::cameraACKCameraInformationReqAccepted( std::uint8_t t
 /*
    This is next the message the Camera will send to the GCS to accept this communication
 */
-void MavlinkCommunicator::cameraACKCameraSettingsReqAccepted( std::uint8_t target_sys, std::uint8_t componentId, std::uint8_t progrez )
+void SendCameraAckHandler::cameraACKCameraSettingsReqAccepted( std::uint8_t target_sys, std::uint8_t componentId, std::uint8_t progrez )
 {
 	//const std::int8_t CAMERA_INFORMATION = 259;
 	SendCameraAckHandler::sendCmdACKMAVLinkMessage( MAV_RESULT_ACCEPTED, progrez, MAV_CMD_REQUEST_MESSAGE, target_sys, componentId, CAMERA_SETTINGS);
@@ -68,7 +68,7 @@ void MavlinkCommunicator::cameraACKCameraSettingsReqAccepted( std::uint8_t targe
 /*
    This is next the message the Camera will send to the GCS to accept this communication
 */
-void MavlinkCommunicator::cameraACKCameraStorageInfoReqAccepted( std::uint8_t target_sys, std::uint8_t componentId, std::uint8_t progrez  )
+void SendCameraAckHandler::cameraACKCameraStorageInfoReqAccepted( std::uint8_t target_sys, std::uint8_t componentId, std::uint8_t progrez  )
 {
 	//const std::int8_t CAMERA_INFORMATION = 259;
 	SendCameraAckHandler::sendCmdACKMAVLinkMessage( MAV_RESULT_ACCEPTED, progrez, MAV_CMD_REQUEST_MESSAGE, target_sys, componentId, STORAGE_INFORMATION);  
@@ -77,7 +77,7 @@ void MavlinkCommunicator::cameraACKCameraStorageInfoReqAccepted( std::uint8_t ta
 /*
    This is next the message the Camera will send to the GCS to accept this communication
 */
-void MavlinkCommunicator::cameraACKCameraImageCapturedReqAccepted( std::uint8_t target_sys, std::uint8_t componentId, std::uint8_t progrez )
+void SendCameraAckHandler::cameraACKCameraImageCapturedReqAccepted( std::uint8_t target_sys, std::uint8_t componentId, std::uint8_t progrez )
 {
 	//const std::int8_t CAMERA_INFORMATION = 259;
 	SendCameraAckHandler::sendCmdACKMAVLinkMessage( MAV_RESULT_ACCEPTED, progrez, MAV_CMD_REQUEST_MESSAGE, target_sys, componentId, CAMERA_IMAGE_CAPTURED);      
@@ -86,10 +86,76 @@ void MavlinkCommunicator::cameraACKCameraImageCapturedReqAccepted( std::uint8_t 
 /*
    This is next the message the Camera will send to the GCS to accept this communication
 */
-void MavlinkCommunicator::cameraACKVideoStreamReqAccepted( std::uint8_t target_sys, std::uint8_t componentId, std::uint8_t progrez )
+void SendCameraAckHandler::cameraACKVideoStreamReqAccepted( std::uint8_t target_sys, std::uint8_t componentId, std::uint8_t progrez )
 {
 	//const std::int8_t CAMERA_INFORMATION = 259;
 	SendCameraAckHandler::sendCmdACKMAVLinkMessage( MAV_RESULT_ACCEPTED, progrez, MAV_CMD_REQUEST_MESSAGE, target_sys, componentId, VIDEO_STREAM_STATUS);      
+}
+
+/*
+   This is next the message the Camera will send to the GCS to accept this communication
+*/
+void SendCameraAckHandler::cameraACKVideoStreamReqAccepted( std::uint8_t target_sys, std::uint8_t componentId, std::uint8_t progrez )
+{
+	//const std::int8_t CAMERA_INFORMATION = 259;
+	SendCameraAckHandler::sendCmdACKMAVLinkMessage( MAV_RESULT_ACCEPTED, progrez, MAV_CMD_REQUEST_MESSAGE, target_sys, componentId, VIDEO_STREAM_STATUS);      
+}
+
+// --- Command is valid, but cannot be executed at this time. This is used to indicate a problem that should be fixed just by waiting (e.g. a state machine is busy, can't arm because have not got GPS lock, etc.). Retrying later should work.
+
+/*
+   This is next the message the Camera will send to the GCS to accept this communication
+*/
+void SendCameraAckHandler::cameraACKCameraInformationReqTempRejected( std::uint8_t target_sys, std::uint8_t componentId, std::uint8_t progrez )
+{
+   //const std::int8_t CAMERA_INFORMATION = 259;
+   //target_sys = MAV_TYPE_GCS;
+   SendCameraAckHandler::sendCmdACKMAVLinkMessage( MAV_RESULT_TEMPORARILY_REJECTED, progrez, MAV_CMD_REQUEST_MESSAGE, target_sys, componentId, CAMERA_INFORMATION );
+}
+
+/*
+   This is next the message the Camera will send to the GCS to accept this communication
+*/
+void SendCameraAckHandler::cameraACKCameraSettingsTempRejected( std::uint8_t target_sys, std::uint8_t componentId, std::uint8_t progrez )
+{
+	//const std::int8_t CAMERA_INFORMATION = 259;
+	SendCameraAckHandler::sendCmdACKMAVLinkMessage( MAV_RESULT_TEMPORARILY_REJECTED, progrez, MAV_CMD_REQUEST_MESSAGE, target_sys, componentId, CAMERA_SETTINGS);
+}
+
+/*
+   This is next the message the Camera will send to the GCS to accept this communication
+*/
+void SendCameraAckHandler::cameraACKCameraStorageInfoTempRejected( std::uint8_t target_sys, std::uint8_t componentId, std::uint8_t progrez  )
+{
+	//const std::int8_t CAMERA_INFORMATION = 259;
+	SendCameraAckHandler::sendCmdACKMAVLinkMessage( MAV_RESULT_TEMPORARILY_REJECTED, progrez, MAV_CMD_REQUEST_MESSAGE, target_sys, componentId, STORAGE_INFORMATION);  
+}
+
+/*
+   This is next the message the Camera will send to the GCS to accept this communication
+*/
+void SendCameraAckHandler::cameraACKCameraImageCapturedTempRejected( std::uint8_t target_sys, std::uint8_t componentId, std::uint8_t progrez )
+{
+	//const std::int8_t CAMERA_INFORMATION = 259;
+	SendCameraAckHandler::sendCmdACKMAVLinkMessage( MAV_RESULT_TEMPORARILY_REJECTED, progrez, MAV_CMD_REQUEST_MESSAGE, target_sys, componentId, CAMERA_IMAGE_CAPTURED);      
+}
+
+/*
+   This is next the message the Camera will send to the GCS to accept this communication
+*/
+void SendCameraAckHandler::cameraACKVideoStreamTempRejected( std::uint8_t target_sys, std::uint8_t componentId, std::uint8_t progrez )
+{
+	//const std::int8_t CAMERA_INFORMATION = 259;
+	SendCameraAckHandler::sendCmdACKMAVLinkMessage( MAV_RESULT_TEMPORARILY_REJECTED, progrez, MAV_CMD_REQUEST_MESSAGE, target_sys, componentId, VIDEO_STREAM_STATUS);      
+}
+
+/*
+   This is next the message the Camera will send to the GCS to reject any communication
+*/
+void SendCameraAckHandler::cameraACKTotalRejection( std::uint8_t target_sys, std::uint8_t componentId, std::uint8_t progrez )
+{
+	//const std::int8_t CAMERA_INFORMATION = 259;
+	SendCameraAckHandler::sendCmdACKMAVLinkMessage( MAV_RESULT_UNSUPPORTED, progrez, MAV_CMD_REQUEST_MESSAGE, target_sys, componentId, 0);      
 }
 
 /*
@@ -232,4 +298,47 @@ void SendCameraAckHandler::timerEvent(QTimerEvent* event)
     {
          SendCameraAckHandler::cameraACKCameraInformationReqAccepted( m_communicator->systemId(), m_communicator->componentId(), 0 );
     }
+    
+    if (m_reject & CI_BIT)
+    {
+	SendCameraAckHandler::cameraACKCameraInformationReqTempRejected( m_communicator->systemId(), m_communicator->componentId(), 0  );
+	std::uint16_t mask = CI_BIT;
+	m_reject &= ~mask;
+    }
+
+    if (m_reject & CS_BIT)
+    {
+	SendCameraAckHandler::cameraACKCameraSettingsTempRejected( m_communicator->systemId(), m_communicator->componentId(), 0  );  
+	std::uint16_t mask = CS_BIT;
+	m_reject &= ~mask;
+    }
+	
+    if (m_reject & SI_BIT)
+    {
+	SendCameraAckHandler::cameraACKCameraStorageInfoTempRejected( m_communicator->systemId(), m_communicator->componentId(), 0  );  
+	std::uint16_t mask = SI_BIT;
+	m_reject &= ~mask;
+    }
+	
+    if (m_reject & CCS_BIT)
+    {
+	SendCameraAckHandler::cameraACKCameraImageCapturedTempRejected( m_communicator->systemId(), m_communicator->componentId(), 0  );  
+	std::uint16_t mask = CCS_BIT;
+	m_reject &= ~mask;
+    }
+	
+    if (m_reject & VS_BIT)
+    {
+	SendCameraAckHandler::cameraACKVideoStreamTempRejected( m_communicator->systemId(), m_communicator->componentId(), 0  );  
+	std::uint16_t mask = VS_BIT;
+	m_reject &= ~mask;	    
+    }
+	
+    if (m_reject & US_BIT)
+    {
+	SendCameraAckHandler::cameraACKTotalRejection( m_communicator->systemId(), m_communicator->componentId(), 0  );  
+	std::uint16_t mask = US_BIT;
+	m_reject &= ~mask;	    
+    }
+	
 }
