@@ -49,6 +49,16 @@ void SendCameraAckHandler::sendCmdACKMAVLinkMessage( std::uint8_t res, std::uint
 /*
    This is next the message the Camera will send to the GCS to accept this communication
 */
+void SendCameraAckHandler::cameraACKReqAccepted( std::uint8_t target_sys, std::uint8_t componentId, std::uint8_t progrez )
+{
+   //const std::int8_t CAMERA_INFORMATION = 259;
+   //target_sys = MAV_TYPE_GCS;
+   SendCameraAckHandler::sendCmdACKMAVLinkMessage( MAV_RESULT_ACCEPTED, progrez, MAV_CMD_REQUEST_MESSAGE, target_sys, componentId, 0 );
+}
+
+/*
+   This is next the message the Camera will send to the GCS to accept this communication
+*/
 void SendCameraAckHandler::cameraACKCameraInformationReqAccepted( std::uint8_t target_sys, std::uint8_t componentId, std::uint8_t progrez )
 {
    //const std::int8_t CAMERA_INFORMATION = 259;
@@ -298,7 +308,14 @@ void SendCameraAckHandler::timerEvent(QTimerEvent* event)
     {
          SendCameraAckHandler::cameraACKCameraInformationReqAccepted( m_communicator->systemId(), m_communicator->componentId(), 0 );
     }
-    
+ 
+    /* if not listed above general ack sent */
+    if (m_substate == DO_SEND_ACK) 
+    {
+        SendCameraAckHandler::cameraACKReqAccepted( std::uint8_t target_sys, std::uint8_t componentId, std::uint8_t progrez )( m_communicator->systemId(), m_communicator->componentId(), 0 );
+        m_substate == DO_SENDING_ACK;
+    }
+	
     if (m_reject & CI_BIT)
     {
 	SendCameraAckHandler::cameraACKCameraInformationReqTempRejected( m_communicator->systemId(), m_communicator->componentId(), 0  );
