@@ -69,7 +69,8 @@ namespace domain
         std::uint8_t m_cam_definition_uri[140u];  
 	std::int8_t m_substate = 0;                                                           /*<  substate for sending ACK or Cancel */                                                     
 	std::int8_t m_sendState = 0;                                                          /*<  sending state */
-        
+        std::uint16_t m_reject = 0;                                                           /*   reject message we are in progress of another conflicting action */
+	
         QGeoCoordinate m_position;
         QGeoCoordinate m_homePosition;
     };
