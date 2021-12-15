@@ -42,7 +42,7 @@ void SendCameraInfoHandler::timerEvent(QTimerEvent* event)
             com = getInfoDataFromCam();
             if (com.reqfailure == 1)
             {
-                m_
+                m_reject |= 
             }
         
            for the purpose of testing we are jsut filling in the values here 
