@@ -16,6 +16,7 @@ using namespace std;
 #define SI_BIT 4
 #define CCS_BIT 8
 #define VS_BIT 16
+#define US_BIT 32
 
 struct cam_config_t
 {
