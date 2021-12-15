@@ -9,6 +9,14 @@
 
 using namespace std;
 
+// define the reject bits
+//
+#define CI_BIT 1
+#define CS_BIT 2
+#define SI_BIT 4
+#define CCS_BIT 8
+#define VS_BIT 16
+
 struct cam_config_t
 {
   std::uint8_t mode;
