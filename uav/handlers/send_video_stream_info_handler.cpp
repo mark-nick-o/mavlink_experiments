@@ -61,7 +61,7 @@ void SendVideoStreamInfoHandler::timerEvent(QTimerEvent* event)
         com.hfov = 45; /*< [deg] Horizontal Field of view.*/
         com.stream_id = 2; /*<  Video Stream ID (1 for first, 2 for second, etc.)*/
         com.count = 4; /*<  Number of streams available.*/
-        com.type = ; /*<  Type of stream.*/
+        com.type = VIDEO_STREAM_TYPE_MPEG_TS_H264; /*<  Type of stream.*/
         strcpy(&com.name,"vid01",5); /*<  Stream name.*/
         strcpy(&com.uri,"http://10.1.2.4/vids/01.mov",strlen("http://10.1.2.4/vids/01.mov")); /*<  Video stream URI (TCP or RTSP URI ground station should connect to) or port number (UDP port ground station should listen to).*/
  
