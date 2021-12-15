@@ -37,6 +37,19 @@ void SendCameraSettingsHandler::timerEvent(QTimerEvent* event)
         mavlink_camera_settings_t com = NULL;                                                                   /* Command Type */
 
         m_sendState = SEND_CS;
+        /*
+            now get the data from the camera 
+            com = getSettingsDataFromCam();
+            if (com.reqfailure == 1)
+            {
+                m_reject |= CS_FAIL_BIT;
+            }
+            else
+            {
+                << code as below success ...... >>
+            }
+           for the purpose of testing we are jsut filling in the values here 
+        */ 
         com.time_boot_ms = 64524u;
         com.mode_id = 76;                                                               /*<  Camera mode*/
         com.zoomLevel = 2.43f;                                                           /*<  Current zoom level (0.0 to 100.0, NaN if not known)*/
