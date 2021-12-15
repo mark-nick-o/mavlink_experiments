@@ -54,14 +54,14 @@ namespace domain
         float m_airspeed;
         float m_climb;
 
-        std::uint32_t m_time_boot_ms;                                                         /*< [ms] Timestamp (time since system boot).*/
+        std::uint32_t m_time_boot_ms;                                                         /*<  [ms] Timestamp (time since system boot).*/
         std::uint32_t m_firmware_version;                                                     /*<  Version of the camera firmware (v << 24 & 0xff = Dev, v << 16 & 0xff = Patch, v << 8 & 0xff = Minor, v & 0xff = Major)*/
-        std::float32_t m_focal_length;                                                        /*< [mm] Focal length*/
-        std::float32_t m_sensor_size_h;                                                       /*< [mm] Image sensor size horizontal*/
-        std::float32_t m_sensor_size_v;                                                       /*< [mm] Image sensor size vertical*/
+        std::float32_t m_focal_length;                                                        /*<  [mm] Focal length*/
+        std::float32_t m_sensor_size_h;                                                       /*<  [mm] Image sensor size horizontal*/
+        std::float32_t m_sensor_size_v;                                                       /*<  [mm] Image sensor size vertical*/
         std::uint32_t m_flags;                                                                /*<  Bitmap of camera capability flags.*/
-        std::uint16_t m_resolution_h;                                                         /*< [pix] Horizontal image resolution*/
-        std::uint16_t m_resolution_v;                                                         /*< [pix] Vertical image resolution*/
+        std::uint16_t m_resolution_h;                                                         /*<  [pix] Horizontal image resolution*/
+        std::uint16_t m_resolution_v;                                                         /*<  [pix] Vertical image resolution*/
         std::uint16_t m_cam_definition_version;                                               /*<  Camera definition version (iteration)*/
         std::uint8_t m_vendor_name[32u];                                                      /*<  Name of the camera vendor*/
         std::uint8_t m_model_name[32u];                                                       /*<  Name of the camera model*/
@@ -70,7 +70,9 @@ namespace domain
 	std::int8_t m_substate = 0;                                                           /*<  substate for sending ACK or Cancel */                                                     
 	std::int8_t m_sendState = 0;                                                          /*<  sending state */
         std::uint16_t m_reject = 0;                                                           /*   reject message we are in progress of another conflicting action */
-	
+        std::uint32_t m_ccs_update_trigger = 0;                                               /*   frequency in multiples of 25Hz that CCS update is sent when MAV_CMD_VIDEO_START_CAPTURE sent */
+        std::uint32_t m_ccs_time_cycle = 0;                                                   /*   counter in multiples of 25Hz to check against the above limit to retriger CCS message */
+
         QGeoCoordinate m_position;
         QGeoCoordinate m_homePosition;
     };
