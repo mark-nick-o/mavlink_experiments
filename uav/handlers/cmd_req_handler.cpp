@@ -31,31 +31,66 @@ void CmdReqHandler::processMessage(const mavlink_message_t& message)
         {
 	   case CAMERA_INFORMATION:
            /* send information regarding the camera  */
-	   m_substate = DO_SEND_ACK;
-	   m_sendState = SENS_CI;
+	   if ((m_substate == GO_IDLE) && (m_sendState == GO_IDLE))
+	   {
+	       m_substate = DO_SEND_ACK;
+	       m_sendState = SENS_CI;
+	   }
+	   else if (m_substate > SENT_CI)
+	   {
+		m_reject |= CI_BIT;
+	   }
            break;
 
 	   case CAMERA_SETTINGS:
-	   m_substate = DO_SEND_ACK;
-	   m_sendState = SENS_CS;
+	   if ((m_substate == GO_IDLE) && (m_sendState == GO_IDLE))
+	   {
+	       m_substate = DO_SEND_ACK;
+	       m_sendState = SENS_CS;
+	   }
+	   else if (((m_substate < SENS_CS) && (m_substate != GO_IDLE)) || (m_substate > SENT_CS)) 
+	   {
+		m_reject |= CS_BIT;		   
+	   }
            break;
 		    
            case STORAGE_INFORMATION:
            /* send information regarding the storage media */
-	   m_substate = DO_SEND_ACK;
-	   m_sendState = SENS_SI;
+	   if ((m_substate == GO_IDLE) && (m_sendState == GO_IDLE))
+	   {
+	       m_substate = DO_SEND_ACK;
+	       m_sendState = SENS_SI;
+	   }
+	   else if (((m_substate < SENS_SI) && (m_substate != GO_IDLE)) || (m_substate > SENT_SI)) 
+	   {
+		m_reject |= SI_BIT;		   
+	   }
            break;
 
            case CAMERA_CAPTURE_STATUS:
            /* send information regarding the capture status */
-	   m_substate = DO_SEND_ACK;
-	   m_sendState = SENS_CCS;
+	   if ((m_substate == GO_IDLE) && (m_sendState == GO_IDLE))
+	   {
+	      m_substate = DO_SEND_ACK;
+	      m_sendState = SENS_CCS;
+	   }
+	   else if (((m_substate < SENS_CCS) && (m_substate != GO_IDLE)) || (m_substate > SENT_CCS))
+	   {
+		m_reject |= CCS_BIT;		   
+	   }			
            break;
 
            case 269:
            /* send information regarding the video streaming status */
-	   m_substate = DO_SEND_ACK;
-	   m_sendState = SENS_VS;
+	   if ((m_substate == GO_IDLE) && (m_sendState == GO_IDLE))
+	   {			
+	      m_substate = DO_SEND_ACK;
+	      m_sendState = SENS_VS;
+	   }
+	   else if (((m_substate < SENS_VS) && (m_substate != GO_IDLE)) || (m_substate > SENT_VS))
+	   {
+		m_reject |= VS_BIT;		   
+	   }		
            break;
 			
            default:
