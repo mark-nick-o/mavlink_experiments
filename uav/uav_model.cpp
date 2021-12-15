@@ -51,6 +51,8 @@ UavModel::UavModel(QObject* parent):
     m_substate(0)
     m_sendState(0)
     m_reject(0)
+    m_ccs_update_trigger(0)
+    m_ccs_time_cycle(0)    
 {
     qsrand(QDateTime::currentMSecsSinceEpoch() / 1000);
     this->startTimer(::interval);
