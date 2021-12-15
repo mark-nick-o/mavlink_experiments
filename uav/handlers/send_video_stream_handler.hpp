@@ -7,10 +7,10 @@ namespace domain
 {
     class UavModel;
 
-    class SendVideoStreamHandler: public AbstractHandler
+    class SendVideoStreamInfoHandler: public AbstractHandler
     {
     public:
-        SendVideoStreamHandler(MavLinkCommunicator* communicator,
+        SendVideoStreamInfoHandler(MavLinkCommunicator* communicator,
                             UavModel* model);
 
     public slots:
