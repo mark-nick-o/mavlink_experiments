@@ -94,6 +94,7 @@ void CmdReqHandler::processMessage(const mavlink_message_t& message)
            break;
 			
            default:
+	   m_reject |= US_BIT;
            break;
        }
     }
