@@ -17,6 +17,12 @@ using namespace std;
 #define CCS_BIT 8
 #define VS_BIT 16
 #define US_BIT 32
+#define CI_FAIL_BIT 64
+#define CS_FAIL_BIT 128
+#define SI_FAIL_BIT 256
+#define CCS_FAIL_BIT 512
+#define VS_FAIL_BIT 1024
+#define SPARE_BIT 2048
 
 struct cam_config_t
 {
