@@ -22,6 +22,7 @@
 #include "send_battery_status.hpp"
 #include "send_camera_storage_info_handler.hpp"
 #include "send_camera_capture_status_handler.hpp"
+#include "send_camera_image_captured_handler.hpp"
 
 using namespace domain;
 
@@ -50,6 +51,7 @@ MavLinkCommunicator* UavCommunicatorFactory::create()
     new domain::SendBatterStatusHandler(communicator, m_model);
     new domain::SendCameraStorageInfoHandler(communicator, m_model);
     new domain::SendCameraCaptureStatusHandler(communicator, m_model);
+    new domain::SendCameraImageCapturedHandler(communicator, m_model);
     
     return communicator;
 }
