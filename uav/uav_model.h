@@ -72,7 +72,9 @@ namespace domain
         std::uint16_t m_reject = 0;                                                           /*   reject message we are in progress of another conflicting action */
         std::uint32_t m_ccs_update_trigger = 0;                                               /*   frequency in multiples of 25Hz that CCS update is sent when MAV_CMD_VIDEO_START_CAPTURE sent */
         std::uint32_t m_ccs_time_cycle = 0;                                                   /*   counter in multiples of 25Hz to check against the above limit to retriger CCS message */
-
+        std::uint32_t m_cic_interval = 0;
+        std::uint32_t m_ccs_time_cycle = 0;
+	
         QGeoCoordinate m_position;
         QGeoCoordinate m_homePosition;
     };
