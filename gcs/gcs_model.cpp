@@ -45,6 +45,11 @@ void GcsModel::set_sendState(const std::int8_t& h)
     m_sendState = h;
 }
 
+void GcsModel::set_cancelCmd(const std::uint16_t& h)
+{
+    m_cancel_cmd = h;
+}
+
 std::int8_t GcsModel::get_substate() const
 {
     return m_substate;       
@@ -63,4 +68,9 @@ std::int8_t GcsModel::get_batteryRemain() const
 std::float32_t GcsModel::get_focalLen() const
 {
     return m_focal_len;       
+}
+
+std::uint16_t GcsModel::get_cancelCmd() const
+{
+    return m_cancel_cmd;       
 }
