@@ -138,9 +138,16 @@ void CmdReqHandler::processMessage(const mavlink_message_t& message)
     else if ((cmdReq.command == MAV_CMD_IMAGE_START_CAPTURE) && (cmdReq.target_system == MAV_CMP_ID_CAMERA))
     {
 	   qDebug() << " interval : " << cmdReq.param2 << " start image capture on image " << cmdReq.param3 << " sequence : " << cmdReq..param4 << std::endl;
-	   m_substate = DO_SEND_ACK;
-	   m_sendState = SENS_CIC;
-	   m_cic_interval = cmdReq.param2;
+	   if ((m_substate == GO_IDLE) && (m_sendState == GO_IDLE))
+	   {			
+	      m_substate = DO_SEND_ACK;
+	      m_sendState = SENS_CIC;
+	      m_cic_interval = cmdReq.param2;
+	   }
+	   else if (((m_substate < SENS_CIC) && (m_substate != GO_IDLE)) || (m_substate > SENT_CIC))
+	   {
+		m_reject |= CIC_BIT;		   
+	   }
     }
     else if ((cmdReq.command == MAV_CMD_IMAGE_STOP_CAPTURE) && (cmdReq.target_system == MAV_CMP_ID_CAMERA))
     {
@@ -152,13 +159,22 @@ void CmdReqHandler::processMessage(const mavlink_message_t& message)
     {
 	   qDebug() << " stop video stream on stream No. " << cmdReq.param1 << std::endl;
 	   m_ack_cmd = MAV_CMD_VIDEO_STOP_STREAMING;
+	   m_sendState == GO_IDLE;
 	   m_substate = DO_SEND_ACK;
     }
     else if ((cmdReq.command == MAV_CMD_VIDEO_START_STREAMING) && (cmdReq.target_system == MAV_CMP_ID_CAMERA))
     {
 	   qDebug() << " start video stream on stream No. " << cmdReq.param1 << std::endl;
-	   m_ack_cmd = MAV_CMD_VIDEO_START_STREAMING;	    
-	   m_substate = DO_SEND_ACK;
+	   m_ack_cmd = MAV_CMD_VIDEO_START_STREAMING;
+	   if ((m_substate == GO_IDLE) && (m_sendState == GO_IDLE))
+	   {			
+	      m_substate = DO_SEND_ACK;
+	      m_sendState = SENS_VS;
+	   }
+	   else if (((m_substate < SENS_VS) && (m_substate != GO_IDLE)) || (m_substate > SENT_VS))
+	   {
+		m_reject |= VS_BIT;		   
+	   }
     }
     else if ((cmdReq.command == MAV_CMD_SET_CAMERA_MODE) && (cmdReq.target_system == MAV_CMP_ID_CAMERA))
     {
