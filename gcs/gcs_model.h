@@ -17,6 +17,12 @@ namespace domain
         void setHomePosition(const QGeoCoordinate& homePosition);
         std::uint16_t GcsModel::get_cancelCmd();
         void GcsModel::set_cancelCmd(const std::uint16_t& h);
+        std::int8_t GcsModel::get_substate();
+        std::int8_t GcsModel::get_sendState();
+        std::int8_t GcsModel::get_batteryRemain();
+        std::float32_t GcsModel::get_focalLen();
+        void GcsModel::set_substate(const std::int8_t& h);
+        void GcsModel::set_sendState(const std::int8_t& h);	
 	
     protected:
         void timerEvent(QTimerEvent* event);
