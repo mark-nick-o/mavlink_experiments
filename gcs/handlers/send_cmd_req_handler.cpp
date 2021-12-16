@@ -51,6 +51,29 @@ void SendCmdReqHandler::sendRequestCmdMAVLinkMessage( std::int8_t cmd, std::uint
 }
 
 /*
+   request a one-shot message to recover images from the camera
+*/
+void SendCmdReqHandler::sendRequestCmdLostImagesMAVLinkMessage( std::uint8_t missing_img_idx, std::uint8_t target_sys, std::uint8_t target_comp, std::uint8_t conf)
+{
+  std::uint16_t len=0u;
+
+  mavlink_command_long_t com = NULL;                          // Command Type
+  mavlink_message_t message;                                           
+ 
+  com.target_system    = target_sys;
+  com.target_component = target_comp;
+  com.command          = MAV_CMD_REQUEST_MESSAGE;
+  com.confirmation     = conf;
+  com.param1           = MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED;
+  com.param2           = missing_img_idx;
+  com.param7           = target_comp;
+  
+  /* encode */
+  len = mavlink_msg_command_long_encode(target_sys, target_comp, &message, &com);
+  m_communicator->sendMessageOnLastReceivedLink(message);
+}
+
+/*
    set camera mode
 */
 void SendCmdReqHandler::SetCamModeMAVLinkMessage( std:uint8_t cam_mode, std::uint8_t target_sys, std::uint8_t target_comp, std::uint8_t conf)
@@ -663,5 +686,11 @@ void SendCmdReqHandler::timerEvent(QTimerEvent* event)
 	std::uint8_t relayAction = 0;    
 	SendCmdReqHandler::SendRelayActionMAVLinkMessage( relayNo, relayAction, m_communicator->systemId(), m_communicator->componentId(), 0,  m_communicator->componentId());
 	m_substate == DO_PI_SENT_RELAY2_OFF;
+    }
+    else if (m_substate == DO_CAM_SEND_IMAGE_MISS)                       /* ---  --- */
+    {
+        std::uint8_t missing_image_index = 4;
+        SendCmdReqHandler::sendRequestCmdLostImagesMAVLinkMessage( missing_image_index,  m_communicator->systemId(), m_communicator->componentId(),  0);
+	m_substate == DO_CAM_SENT_IMAGE_MISS;
     }
 }
