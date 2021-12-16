@@ -79,6 +79,8 @@ namespace domain
         std::int32_t m_disk1_count_of_images = 0;
         std::int32_t m_disk2_count_of_images = 0;
 	
+	std::uint16_t m_ack_cmd = 0;
+	
         QGeoCoordinate m_position;
         QGeoCoordinate m_homePosition;
     };
