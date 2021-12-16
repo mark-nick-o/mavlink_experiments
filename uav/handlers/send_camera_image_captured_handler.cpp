@@ -39,11 +39,19 @@ void SendCameraImageCapturedHandler::timerEvent(QTimerEvent* event)
         m_sendState = SEND_CIC;
         /*
             now get the data from the camera 
-            com = getCamImgCapDataFromCam();
+	    if (m_missing_image_index != 0)   // we requested a specific lost image
+	    {
+	       com = getImageNoFromCam(m_missing_image_index);
+	       m_missing_image_index = 0;
+	    }
+	    else
+	    {
+                com = getCamImgCapDataFromCam();
+	    }
             if (com.reqfailure == 1)
             {
                 m_reject |= CIC_FAIL_BIT;
-				        !!!!! CHECK !!!!! if you want to still send message then set this not sure you should just the error ACK message above com.status = STORAGE_STATUS_NOT_SUPPORTED;
+		!!!!! CHECK !!!!! if you want to still send message then set this not sure you should just the error ACK message above com.status = STORAGE_STATUS_NOT_SUPPORTED;
             }
             else
             {
