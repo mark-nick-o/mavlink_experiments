@@ -535,7 +535,7 @@ void SendCameraAckHandler::timerEvent(QTimerEvent* event)
     /* if not listed above general ack sent for now until fully complete */
     if (m_substate == DO_SEND_ACK) 
     {
-        SendCameraAckHandler::cameraACKReqAccepted( m_communicator->systemId(), m_communicator->componentId(), 0, 0 );
+        SendCameraAckHandler::cameraACKReqAccepted( m_communicator->systemId(), m_communicator->componentId(), 0, m_ack_cmd );
         // m_substate == DO_SENDING_ACK;
     }
 
