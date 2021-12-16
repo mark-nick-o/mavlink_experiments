@@ -75,6 +75,9 @@ namespace domain
         std::uint32_t m_cic_interval = 0;
         std::uint32_t m_ccs_time_cycle = 0;
         std::float m_missing_image_index = 0;
+
+        std::int32_t m_disk1_count_of_images = 0;
+        std::int32_t m_disk2_count_of_images = 0;
 	
         QGeoCoordinate m_position;
         QGeoCoordinate m_homePosition;
