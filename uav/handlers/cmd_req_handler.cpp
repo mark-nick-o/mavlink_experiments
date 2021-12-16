@@ -151,26 +151,31 @@ void CmdReqHandler::processMessage(const mavlink_message_t& message)
     else if ((cmdReq.command == MAV_CMD_VIDEO_STOP_STREAMING) && (cmdReq.target_system == MAV_CMP_ID_CAMERA))
     {
 	   qDebug() << " stop video stream on stream No. " << cmdReq.param1 << std::endl;
+	   m_ack_cmd = MAV_CMD_VIDEO_STOP_STREAMING;
 	   m_substate = DO_SEND_ACK;
     }
     else if ((cmdReq.command == MAV_CMD_VIDEO_START_STREAMING) && (cmdReq.target_system == MAV_CMP_ID_CAMERA))
     {
 	   qDebug() << " start video stream on stream No. " << cmdReq.param1 << std::endl;
+	   m_ack_cmd = MAV_CMD_VIDEO_START_STREAMING;	    
 	   m_substate = DO_SEND_ACK;
     }
     else if ((cmdReq.command == MAV_CMD_SET_CAMERA_MODE) && (cmdReq.target_system == MAV_CMP_ID_CAMERA))
     {
 	   qDebug() << " set camera mode to. " << cmdReq.param2 << std::endl;
+	   m_ack_cmd = MAV_CMD_SET_CAMERA_MODE;	    
 	   m_substate = DO_SEND_ACK;
     }
     else if ((cmdReq.command == MAV_CMD_SET_CAMERA_ZOOM) && (cmdReq.target_system == MAV_CMP_ID_CAMERA))
     {
 	   qDebug() << " type : " << cmdReq.param1 << " value : " << cmdReq.param2 << " scale : " << cmdReq.param3 << std::endl;
+	   m_ack_cmd = MAV_CMD_SET_CAMERA_ZOOM;	  	    
 	   m_substate = DO_SEND_ACK;
     }
     else if ((cmdReq.command == MAV_CMD_SET_CAMERA_FOCUS) && (cmdReq.target_system == MAV_CMP_ID_CAMERA))
     {
 	   qDebug() << " type : " << cmdReq.param1 << " value : " << cmdReq.param2 << std::endl;
+	   m_ack_cmd = MAV_CMD_SET_CAMERA_FOCUS;	  	    
 	   m_substate = DO_SEND_ACK;
     }
     else if ((cmdReq.command == MAV_CMD_DO_DIGICAM_CONFIGURE) && (cmdReq.target_system == MAV_CMP_ID_CAMERA))
@@ -178,6 +183,7 @@ void CmdReqHandler::processMessage(const mavlink_message_t& message)
 	   qDebug() << " mode : " << cmdReq.param1 << " shutter speed : " << cmdReq.param2 << " aperture : " << cmdReq.param3 << std::endl;
 	   qDebug() << " iso : " << cmdReq.param4 << " exposure : " << cmdReq.param5 << " identity : " << cmdReq.param6 << std::endl;
 	   qDebug() << " engine cut off : " << cmdReq.param7 << std::endl;
+	   m_ack_cmd = MAV_CMD_DO_DIGICAM_CONFIGURE;
 	   m_substate = DO_SEND_ACK;
     }
     else if ((cmdReq.command == MAV_CMD_DO_DIGICAM_CONTROL) && (cmdReq.target_system == MAV_CMP_ID_CAMERA))
@@ -185,53 +191,63 @@ void CmdReqHandler::processMessage(const mavlink_message_t& message)
 	   qDebug() << " SessionControl : " << cmdReq.param1 << " ZoomAbsolute : " << cmdReq.param2 << " ZoomRelative : " << cmdReq.param3 << std::endl;
 	   qDebug() << " Focus : " << cmdReq.param4 << " Shoot : " << cmdReq.param5 << " CommandId : " << cmdReq.param6 << std::endl;
 	   qDebug() << " ShotID : " << cmdReq.param7 << std::endl;
+	   m_ack_cmd = MAV_CMD_DO_DIGICAM_CONTROL;	    
 	   m_substate = DO_SEND_ACK;
     }
     else if ((cmdReq.command == MAV_CMD_DO_CONTROL_VIDEO) && (cmdReq.target_system == MAV_CMP_ID_CAMERA))
     {
 	   qDebug() << " ID : " << cmdReq.param1 << " Transmission : " << cmdReq.param2 << " Interval : " << cmdReq.param3 << std::endl;
 	   qDebug() << " Recording : " << cmdReq.param4 << std::endl;
+	   m_ack_cmd = MAV_CMD_DO_CONTROL_VIDEO;		    
 	   m_substate = DO_SEND_ACK;
     }
     else if ((cmdReq.command == MAV_CMD_DO_SET_CAM_TRIGG_INTERVAL) && (cmdReq.target_system == MAV_CMP_ID_CAMERA))
     {
 	   qDebug() << " Trigger Cycle : " << cmdReq.param1 << " Shutter Integration : " << cmdReq.param2 << std::endl;
+	   m_ack_cmd = MAV_CMD_DO_SET_CAM_TRIGG_INTERVAL;		    
 	   m_substate = DO_SEND_ACK;
     }
     else if ((cmdReq.command == MAV_CMD_RESET_CAMERA_SETTINGS) && (cmdReq.target_system == MAV_CMP_ID_CAMERA))
     {
 	   qDebug() << " State Param : " << cmdReq.param1 << std::endl;
+	   m_ack_cmd = MAV_CMD_RESET_CAMERA_SETTINGS;	    
 	   m_substate = DO_SEND_ACK;
     }
     else if ((cmdReq.command == MAV_CMD_DO_MOUNT_CONTROL_QUAT) && (cmdReq.target_system == MAV_CMP_ID_CAMERA))
     {
 	   qDebug() << " quaternion : [ " << cmdReq.param1 << " , " << cmdReq.param2 << " , " << cmdReq.param3 << " , " << cmdReq.param4 <<  " ] "  << std::endl;
+	   m_ack_cmd = MAV_CMD_DO_MOUNT_CONTROL_QUAT;	
 	   m_substate = DO_SEND_ACK;
     }
     else if ((cmdReq.command == MAV_CMD_DO_GIMBAL_MANAGER_PITCHYAW) && (cmdReq.target_system == MAV_CMP_ID_CAMERA))
     {
 	   qDebug() << " quaternion : [ " << cmdReq.param1 << " , " << cmdReq.param2 << " , " << cmdReq.param3 << " , " << cmdReq.param4 <<  " ] "  << std::endl;
 	   qDebug() << " Flags : " << cmdReq.param5 << " Id : " << cmdReq.param6 << std::endl;
+	   m_ack_cmd = MAV_CMD_DO_GIMBAL_MANAGER_PITCHYAW;	
 	   m_substate = DO_SEND_ACK;
     }
     else if ((cmdReq.command == MAV_CMD_DO_TRIGGER_CONTROL) && (cmdReq.target_system == MAV_CMP_ID_CAMERA))
     {
 	   qDebug() << " enable : [ " << cmdReq.param1 << " reset : " << cmdReq.param2 << " pause : " << cmdReq.param3 << std::endl;
+	   m_ack_cmd = MAV_CMD_DO_TRIGGER_CONTROL;
 	   m_substate = DO_SEND_ACK;
     }
     else if ((cmdReq.command == 2004) && (cmdReq.target_system == MAV_CMP_ID_CAMERA))  // MAV_CMD_CAMERA_TRACK_POINT=2004
     {
 	   qDebug() << " x : " << cmdReq.param1 << " y : " << cmdReq.param2 << " radius : " << cmdReq.param3 << std::endl;
+	   m_ack_cmd = 2004;	    
 	   m_substate = DO_SEND_ACK;
     }
     else if ((cmdReq.command == 2005) && (cmdReq.target_system == MAV_CMP_ID_CAMERA))  // MAV_CMD_CAMERA_TRACK_RECTANGLE=2005
     {
 	   qDebug() << " x1 " << cmdReq.param1 << " y1 " << cmdReq.param2 << " x2 " << cmdReq.param3 << " y2 " << cmdReq.param4 << std::endl;
+	   m_ack_cmd = 2005;	
 	   m_substate = DO_SEND_ACK;
     }
     else if ((cmdReq.command == 2010) && (cmdReq.target_system == MAV_CMP_ID_CAMERA))  // MAV_CMD_CAMERA_STOP_TRACKING=2010
     {
 	   qDebug() << " camera tracking stop request recieved " << std::endl;
+	   m_ack_cmd = 2010;	    
 	   m_substate = DO_SEND_ACK;
     }
     else if ((cmdReq.command == MAV_CMD_STORAGE_FORMAT) && (cmdReq.target_system == MAV_CMP_ID_CAMERA))
