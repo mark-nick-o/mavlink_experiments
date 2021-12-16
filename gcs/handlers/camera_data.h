@@ -131,6 +131,7 @@ struct camImageCaptured_t
 
 enum mavSendState_e : std::int32_t
 {
+    GO_IDLE,
     DO_CMD_SEND_CAM_INFO,            //CAMERA_INFORMATION
     DO_CMD_SENT_CAM_INFO,
     DO_CMD_CONF_CAM_INFO,
@@ -211,7 +212,10 @@ enum mavSendState_e : std::int32_t
     DO_PI_SENT_RELAY2_ON,
     DO_PI_SEND_RELAY2_OFF,
     DO_PI_SENT_RELAY2_OFF,
-    DO_SEND_CANCEL
+    DO_CAM_SEND_IMAGE_MISS,
+    DO_CAM_SENT_IMAGE_MISS,
+    DO_SEND_CANCEL,
+    NUMBER_OF_SEND_STATES
 };
 
 // ==== heartbeat pulses determine our system health =====
@@ -221,6 +225,7 @@ enum mavSendState_e : std::int32_t
 enum mavHealthState_e : std::int32_t
 {
     GO_IDLE,
-    HEART_RCV
+    HEART_RCV,
+    NUMBER_OF_HEALTH_STATES
 };
 #endif
