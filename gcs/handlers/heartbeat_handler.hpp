@@ -8,7 +8,7 @@ namespace domain
 
     class GcsModel;
     
-    class HeartBeatHandler: public HeartBeatHandler
+    class HeartBeatHandler: public AbstractHandler
     {
     public:
         HeartBeatHandler(MavLinkCommunicator* communicator, GcsModel* model);
