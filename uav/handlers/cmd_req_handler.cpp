@@ -229,7 +229,14 @@ void CmdReqHandler::processMessage(const mavlink_message_t& message)
 	   }
 	   else
 	   {
-		   
+		if (cmdReq.param1 == 1)
+		{
+		   m_disk1_count_of_images = 0;
+		}
+		else if (cmdReq.param1 == 2)
+		{
+		   m_disk2_count_of_images = 0;
+		}
 	   }
     }
 	
