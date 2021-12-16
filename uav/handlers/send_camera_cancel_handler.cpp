@@ -47,9 +47,7 @@ void SendCameraCancelHandler::sendCmdCancelMAVLinkMessage( std::uint16_t cmd, st
 */
 void SendCameraCancelHandler::cameraCancelCameraInformationReqAccepted( std::uint8_t target_sys, std::uint8_t componentId )
 {
-	//const std::int8_t CAMERA_INFORMATION = 259;
-	//target_sys = MAV_TYPE_GCS;
-	SendCameraCancelHandler::sendCmdCancelMAVLinkMessage( MAV_RESULT_CANCELLED, target_sys, std::uint8_t target_comp, std::uint8_t componentId)
+    SendCameraCancelHandler::sendCmdCancelMAVLinkMessage( MAV_RESULT_CANCELLED, target_sys, std::uint8_t target_comp, std::uint8_t componentId)
 }
 
 /*
@@ -60,7 +58,7 @@ void SendCameraAckHandle::timerEvent(QTimerEvent* event)
     Q_UNUSED(event)
     if (m_substate == DO_SEND_CANCEL)
     {
-        SendCameraAckHandler::cameraCancelCameraInformationReqAccepted( m_communicator->systemId(), m_communicator->componentId() );
+        SendCameraCancelHandler::cameraCancelCameraInformationReqAccepted( m_communicator->systemId(), m_communicator->componentId() );
         m_substate = GO_IDLE;
         m_sendState = GO_IDLE;
     }
