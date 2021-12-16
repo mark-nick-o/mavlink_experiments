@@ -1,5 +1,7 @@
 #include "get_cam_info_handler.hpp"
 
+#include "gcs_model.h"
+
 // MAVLink
 #include <mavlink.h>
 
