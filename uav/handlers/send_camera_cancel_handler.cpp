@@ -53,7 +53,7 @@ void SendCameraCancelHandler::cameraCancelCameraInformationReqAccepted( std::uin
 /*
     This is the message the Camera Board shall send back to the GCS on receipt of the above message
 */
-void SendCameraAckHandle::timerEvent(QTimerEvent* event)
+void SendCameraCancelHandler::timerEvent(QTimerEvent* event)
 {
     Q_UNUSED(event)
     if (m_substate == DO_SEND_CANCEL)
