@@ -39,6 +39,7 @@ namespace domain
 	std::int8_t m_substate = 0;                                                           /*<  substate for sending ACK or Cancel */                                                     
 	std::int8_t m_sendState = 0;                                                          /*<  sending state */
 
+        std::uint16_t m_cancel_cmd = 0;                                                       /*< command you wish to send cancel operation to */
     };
 }
 
