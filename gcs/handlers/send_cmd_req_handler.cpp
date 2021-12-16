@@ -503,6 +503,96 @@ void SendCmdReqHandler::SendRelayActionMAVLinkMessage( std:uint8_t r_num, std::u
 }
 
 /*
+   do trigger control
+*/
+void SendCmdReqHandler::SendTriggerActionMAVLinkMessage( std:uint8_t enable, std::uint8_t reset, std::uint8_t pause, std::uint8_t target_sys, std::uint8_t target_comp, std::uint8_t conf, std::uint8_t componentId)
+{
+  std::uint16_t len=0u;
+
+  mavlink_command_long_t com = NULL;                          // Command Type
+  mavlink_message_t message;                                           
+
+  com.target_system    = target_sys;
+  com.target_component = target_comp;
+  com.command          = MAV_CMD_DO_TRIGGER_CONTROL;
+  com.confirmation     = conf;
+  com.param1           = enable;
+  com.param2           = reset;                                    
+  com.param3           = pause;
+	
+  /* encode */
+  len = mavlink_msg_command_long_encode(target_sys, componentId, &message, &com);
+  m_communicator->sendMessageOnLastReceivedLink(message);
+}
+
+/*
+   set track to x,y point
+*/
+void SendCmdReqHandler::SendCameraTrackPointActionMAVLinkMessage( vector <std::int16_t> point, std::int16_t radius, std::uint8_t target_sys, std::uint8_t target_comp, std::uint8_t conf, std::uint8_t componentId)
+{
+  std::uint16_t len=0u;
+
+  mavlink_command_long_t com = NULL;                          // Command Type
+  mavlink_message_t message;                                           
+
+  com.target_system    = target_sys;
+  com.target_component = target_comp;
+  com.command          = 2004;    // MAV_CMD_CAMERA_TRACK_POINT may not be in edit the mavlink2_common.h to contain it. 
+  com.confirmation     = conf;
+  com.param1           = point.at(0);
+  com.param2           = point.at(1);                                    
+  com.param3           = radius;
+	
+  /* encode */
+  len = mavlink_msg_command_long_encode(target_sys, componentId, &message, &com);
+  m_communicator->sendMessageOnLastReceivedLink(message);
+}
+
+/*
+   set track to a rectangle
+*/
+void SendCmdReqHandler::SendCameraTrackRectangleActionMAVLinkMessage( vector <std::int16_t> point, std::uint8_t target_sys, std::uint8_t target_comp, std::uint8_t conf, std::uint8_t componentId)
+{
+  std::uint16_t len=0u;
+
+  mavlink_command_long_t com = NULL;                          // Command Type
+  mavlink_message_t message;                                           
+
+  com.target_system    = target_sys;
+  com.target_component = target_comp;
+  com.command          = 2005;    // MAV_CMD_CAMERA_TRACK_RECTANGLE may not be in edit the mavlink2_common.h to contain it. 
+  com.confirmation     = conf;
+  com.param1           = point.at(0);
+  com.param2           = point.at(1);     
+  com.param3           = point.at(2);
+  com.param4           = point.at(3);   
+	
+  /* encode */
+  len = mavlink_msg_command_long_encode(target_sys, componentId, &message, &com);
+  m_communicator->sendMessageOnLastReceivedLink(message);
+}
+
+/*
+   stop tracking
+*/
+void SendCmdReqHandler::SendCameraStopTrackingActionMAVLinkMessage( std::uint8_t target_sys, std::uint8_t target_comp, std::uint8_t conf, std::uint8_t componentId)
+{
+  std::uint16_t len=0u;
+
+  mavlink_command_long_t com = NULL;                          // Command Type
+  mavlink_message_t message;                                           
+
+  com.target_system    = target_sys;
+  com.target_component = target_comp;
+  com.command          = 2010;    // MAV_CMD_CAMERA_STOP_TRACKING may not be in edit the mavlink2_common.h to contain it. 
+  com.confirmation     = conf; 
+	
+  /* encode */
+  len = mavlink_msg_command_long_encode(target_sys, componentId, &message, &com);
+  m_communicator->sendMessageOnLastReceivedLink(message);
+}
+
+/*
     This is the message the Camera Board shall send back to the GCS on receipt of the above message
 */
 void SendCmdReqHandler::timerEvent(QTimerEvent* event)
@@ -693,4 +783,30 @@ void SendCmdReqHandler::timerEvent(QTimerEvent* event)
         SendCmdReqHandler::sendRequestCmdLostImagesMAVLinkMessage( missing_image_index,  m_communicator->systemId(), m_communicator->componentId(),  0);
 	m_substate == DO_CAM_SENT_IMAGE_MISS;
     }
+    else if (m_substate == DO_CAM_SEND_TRIGG)                       /* ---  --- */
+    {
+        std::uint8_t missing_image_index = 4;
+        SendCmdReqHandler::SendTriggerActionMAVLinkMessage( 1, 0, 0, m_communicator->systemId(), m_communicator->componentId(), 0,  m_communicator->componentId());
+	m_substate == DO_CAM_SEND_TRIGG;
+    }
+    else if (m_substate == DO_CAM_SEND_TRACK_POINT)                       /* ---  --- */
+    {
+        vector <std::int16_t> pointToTrack = { 12, 35 };
+	std::int16_t radius = 5;
+        SendCmdReqHandler::SendCameraTrackPointActionMAVLinkMessage( pointToTrack, radius, m_communicator->systemId(), m_communicator->componentId(), 0,  m_communicator->componentId());
+	m_substate == DO_CAM_SEND_TRACK_POINT;
+    }
+    else if (m_substate == DO_CAM_SEND_TRACK_RECT)                       /* ---  --- */
+    {
+        vector <std::int16_t> rectangleToTrack = { 12, 35, 22, 15 };
+        SendCmdReqHandler::SendCameraTrackRectangleActionMAVLinkMessage( rectangleToTrack, m_communicator->systemId(), m_communicator->componentId(), 0,  m_communicator->componentId());
+	m_substate == DO_CAM_SEND_TRACK_RECT;
+    }
+    else if (m_substate == DO_CAM_SEND_TRACK_STOP)                       /* ---  --- */
+    {
+        vector <std::int16_t> rectangleToTrack = { 12, 35, 22, 15 };
+	SendCmdReqHandler::SendCameraStopTrackingActionMAVLinkMessage(m_communicator->systemId(), m_communicator->componentId(), 0,  m_communicator->componentId());
+	m_substate == DO_CAM_SEND_TRACK_STOP;
+    }
+	
 }
