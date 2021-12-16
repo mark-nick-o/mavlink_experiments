@@ -7,7 +7,7 @@ namespace domain
 {
     class UavModel;
     
-    class CmdReqHandler: public CmdReqHandler
+    class CmdReqHandler: public AbstractHandler
     {
         Q_OBJECT
 
