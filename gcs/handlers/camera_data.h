@@ -210,7 +210,8 @@ enum mavSendState_e : std::int32_t
     DO_PI_SEND_RELAY2_ON,
     DO_PI_SENT_RELAY2_ON,
     DO_PI_SEND_RELAY2_OFF,
-    DO_PI_SENT_RELAY2_OFF
+    DO_PI_SENT_RELAY2_OFF,
+    DO_SEND_CANCEL
 };
 
 // ==== heartbeat pulses determine our system health =====
