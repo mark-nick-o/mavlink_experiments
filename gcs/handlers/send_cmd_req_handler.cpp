@@ -8,7 +8,7 @@
 #include <QDebug>
 
 // Internal
-#include "uav_model.h"
+#include "gcs_model.h"
 #include "mavlink_communicator.h"
 #include "camera_data.h"
 
