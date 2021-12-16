@@ -8,7 +8,7 @@ namespace domain
 
     class GcsModel;
     
-    class SendCameraCancelHandler: public SendCameraCancelHandler
+    class SendCameraCancelHandler: public AbstractHandler
     {
     public:
         SendCameraCancelHandler(MavLinkCommunicator* communicator, GcsModel* model);
