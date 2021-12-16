@@ -11,6 +11,7 @@
 #include "get_camera_info_handler.hpp"
 #include "send_cmd_req_handler.hpp"
 #include "battery_status.hpp"
+#include "send_camera_cancel_handler.hpp"
 
 using namespace domain;
 
@@ -26,6 +27,7 @@ MavLinkCommunicator* GcsCommunicatorFactory::create()
     new domain::SendCmdReqHandler(communicator, m_model);
     new domain::getCamInfoHandler(communicator, m_model);
     new domain::BattStatHandler(communicator, m_model);
+    new domain::SendCameraCancelHandler(communicator, m_model);
     
     return communicator;
 }
