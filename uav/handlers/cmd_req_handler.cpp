@@ -97,6 +97,20 @@ void CmdReqHandler::processMessage(const mavlink_message_t& message)
 		m_reject |= VS_BIT;		   
 	   }		
            break;
+
+           case MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED:
+           /* send information regarding the missing images */
+	   if ((m_substate == GO_IDLE) && (m_sendState == GO_IDLE))
+	   {			
+	      m_substate = DO_SEND_ACK;
+	      m_sendState = SENS_CIC;
+	      m_missing_image_index = cmdReq.param2;
+	   }
+	   else if (((m_substate < SENS_CIC) && (m_substate != GO_IDLE)) || (m_substate > SENT_CIC))
+	   {
+		m_reject |= CIC_BIT;		   
+	   }			
+	   break;
 			
            default:
 	   m_reject |= US_BIT;
