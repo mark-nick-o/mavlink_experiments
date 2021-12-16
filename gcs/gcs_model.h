@@ -15,7 +15,9 @@ namespace domain
 
     public slots:
         void setHomePosition(const QGeoCoordinate& homePosition);
-
+        std::uint16_t GcsModel::get_cancelCmd();
+        void GcsModel::set_cancelCmd(const std::uint16_t& h);
+	
     protected:
         void timerEvent(QTimerEvent* event);
 
