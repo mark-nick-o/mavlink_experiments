@@ -10,7 +10,7 @@ HEADER_DIRECTORIES(INTERNAL_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(${INCLUDES} ${INTERNAL_INCLUDES})
 
 # Sources
-file(GLOB_RECURSE INTERNAL_SOURCES "*.cpp" "*.h")
+file(GLOB_RECURSE INTERNAL_SOURCES "*.cpp" "*.h" "*.hpp")
 
 # Executable target
 add_executable(${PROJECT} ${SOURCES} ${INTERNAL_SOURCES} ${MOC_SOURCES})
