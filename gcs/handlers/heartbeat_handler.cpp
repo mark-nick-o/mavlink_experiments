@@ -1,6 +1,8 @@
 #include "heartbeat_handler.hpp"
 #include "camera_data.h"
 
+#include "gcs_model.h"
+
 // MAVLink
 #include <mavlink.h>
 
