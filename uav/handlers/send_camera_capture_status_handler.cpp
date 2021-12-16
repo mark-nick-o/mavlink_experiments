@@ -58,7 +58,8 @@ void SendCameraCaptureStatusHandler::timerEvent(QTimerEvent* event)
         com.available_capacity = 0.34f; /*< [MiB] Available storage capacity.*/
         com.image_status = 1; /*<  Current status of image capturing (0: idle, 1: capture in progress, 2: interval set but idle, 3: interval set and capture in progress)*/
         com.video_status = 1; /*<  Current status of video capturing (0: idle, 1: capture in progress)*/
- 
+        com.image_count = m_count_of_images;
+	    
         len = mavlink_msg_camera_capture_status_encode(m_communicator->systemId(), m_communicator->componentId(), &message, &com);
 
         m_communicator->sendMessageOnLastReceivedLink(message);
