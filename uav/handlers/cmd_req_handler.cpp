@@ -214,6 +214,26 @@ void CmdReqHandler::processMessage(const mavlink_message_t& message)
 	   qDebug() << " Flags : " << cmdReq.param5 << " Id : " << cmdReq.param6 << std::endl;
 	   m_substate = DO_SEND_ACK;
     }
+    else if ((cmdReq.command == MAV_CMD_DO_TRIGGER_CONTROL) && (cmdReq.target_system == MAV_CMP_ID_CAMERA))
+    {
+	   qDebug() << " enable : [ " << cmdReq.param1 << " reset : " << cmdReq.param2 << " pause : " << cmdReq.param3 << std::endl;
+	   m_substate = DO_SEND_ACK;
+    }
+    else if ((cmdReq.command == 2004) && (cmdReq.target_system == MAV_CMP_ID_CAMERA))  // MAV_CMD_CAMERA_TRACK_POINT=2004
+    {
+	   qDebug() << " x : " << cmdReq.param1 << " y : " << cmdReq.param2 << " radius : " << cmdReq.param3 << std::endl;
+	   m_substate = DO_SEND_ACK;
+    }
+    else if ((cmdReq.command == 2005) && (cmdReq.target_system == MAV_CMP_ID_CAMERA))  // MAV_CMD_CAMERA_TRACK_RECTANGLE=2005
+    {
+	   qDebug() << " x1 " << cmdReq.param1 << " y1 " << cmdReq.param2 << " x2 " << cmdReq.param3 << " y2 " << cmdReq.param4 << std::endl;
+	   m_substate = DO_SEND_ACK;
+    }
+    else if ((cmdReq.command == 2010) && (cmdReq.target_system == MAV_CMP_ID_CAMERA))  // MAV_CMD_CAMERA_STOP_TRACKING=2010
+    {
+	   qDebug() << " camera tracking stop request recieved " << std::endl;
+	   m_substate = DO_SEND_ACK;
+    }
     else if ((cmdReq.command == MAV_CMD_STORAGE_FORMAT) && (cmdReq.target_system == MAV_CMP_ID_CAMERA))
     {
 	   qDebug() << " ID : " << cmdReq.param1 << " Format " << cmdReq.param2 << "  Reset Image Log " << cmdReq.param3 << std::endl;
