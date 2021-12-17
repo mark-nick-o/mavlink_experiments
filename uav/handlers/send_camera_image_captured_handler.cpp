@@ -41,12 +41,12 @@ void SendCameraImageCapturedHandler::timerEvent(QTimerEvent* event)
             now get the data from the camera 
 	    if (m_missing_image_index != 0)   // we requested a specific lost image
 	    {
-	       com = getImageNoFromCam(m_missing_image_index);
+	       // com = getImageNoFromCam(m_missing_image_index);
 	       m_missing_image_index = 0;
 	    }
 	    else
 	    {
-                com = getCamImgCapDataFromCam();
+                // com = getCamImgCapDataFromCam();
 	    }
             if (com.reqfailure == 1)
             {
