@@ -1114,10 +1114,8 @@ class MAVFrame():
             # type=['COMMAND_LONG,RC_CHANNELS']
             #
             msg = the_connection.recv_match(blocking=True, timeout=5)
-            if ( the_connection.target_system == msg.get_srcSystem() )                              # check this and eliminate spurious messages if needed
-            {
-                print(f"connection {the_connection.target_system} == {msg.get_srcSystem()})
-            }
+            if ( the_connection.target_system == msg.get_srcSystem() ):                             # check this and eliminate spurious messages if needed
+                print(f"connection {the_connection.target_system} == {msg.get_srcSystem()}")
             last_timestamp = msg._timestamp
             if not msg:
                 return
@@ -1342,7 +1340,7 @@ class pySony():
         if res.get('result') is not None:
             print("Result", res)	
 
-   def saveOnePicture(self,camera):
+    def saveOnePicture(self,camera):
         res = camera.do(Actions.actTakePicture)
         if res.get('result') is not None:
             stopLiveView()
@@ -1432,11 +1430,11 @@ class redEye():
 
 # Functions
 #
-    def print_myJson( self, cap_data ):
-        if (cap_data.status_code == HTTP_SUCCESS_RETURN)
-            print cap_data.json()
-        else:
-            print "http REST API error"
+    #def print_myJson( self, cap_data ):
+    #    if (cap_data.status_code == self.HTTP_SUCCESS_RETURN):
+    #        print cap_data.json()
+    #    else:
+    #        print "http REST API error"
         
     # Post a message to the camera commanding a capture, block until complete
     #
@@ -1453,7 +1451,7 @@ async def sendMavlinkHeartBeat(fm, cID, sleep):
     fm.mavlink_send_GCS_heartbeat(cID)
     while sleep > 0:
         await asyncio.sleep(1)
-        print(f'{text} counter: {sleep} seconds')
+        print(f'{sleep} seconds')
         sleep -= 1    
 
 #
@@ -1469,7 +1467,7 @@ async def sendMavlinkAckData(fm, cID, sleep, cmd, rpm2, pro, res):
     fm.mavlink_send_ack_command(cID, cmd, rpm2, pro, res)
     while sleep > 0:
         await asyncio.sleep(1)
-        print(f'{text} counter: {sleep} seconds')
+        print(f'{sleep} seconds')
         sleep -= 1
 
 #
@@ -1479,12 +1477,12 @@ async def exceptionMavlinkErrorAckData(fm, cID):
     while fm.task_control_1 > 0:
         await asyncio.sleep(1)
         if (fm.ACK_ERROR == fm.GOT_ERROR):
-            fm.mavlink_send_ack_command(cID, fm.errRCV_COMMAND, fm.errRPM2, 0, MAV_RESULT_TEMPORARILY_REJECTED)
+            fm.mavlink_send_ack_command(cID, fm.errRCV_COMMAND, fm.errRPM2, 0, mavutil.mavlink.MAV_RESULT_TEMPORARILY_REJECTED)
             fm.ACK_ERROR = 0
             fm.errRCV_COMMAND = 0
             fm.errRPM2 = 0
         elif (fm.ACK_ERROR == fm.GOT_BAD):
-            fm.mavlink_send_ack_command(cID, fm.errRCV_COMMAND, fm.errRPM2, 0, MAV_RESULT_FAILED)
+            fm.mavlink_send_ack_command(cID, fm.errRCV_COMMAND, fm.errRPM2, 0, mavutil.mavlink.MAV_RESULT_FAILED)
             fm.ACK_ERROR = 0        
  
 #
@@ -1836,7 +1834,7 @@ async def processMavlinkMessageData(fm, cID, sleep, sonycam, caminst, redeyecam 
             fm.ACK_RESULT = mavutil.mavlink.MAV_RESULT_IN_PROGRESS
         else:
             fm.ACK_RESULT = mavutil.mavlink.MAV_RESULT_FAILED
-     elif (fm.type_of_msg == mavutil.mavlink.MAV_CMD_STORAGE_FORMAT):
+    elif (fm.type_of_msg == mavutil.mavlink.MAV_CMD_STORAGE_FORMAT):
         #
         ## Sets the relay No passed from the mavlink command to the state requested
         #
@@ -1851,7 +1849,7 @@ async def processMavlinkMessageData(fm, cID, sleep, sonycam, caminst, redeyecam 
             
     while sleep > 0:
         await asyncio.sleep(1)
-        print(f'{text} counter: {sleep} seconds')
+        print(f'{sleep} seconds')
         sleep -= 1
     fm.task_control_1 = 0
     
@@ -1863,14 +1861,14 @@ async def main():
     frame = MAVFrame()
     state = False
     while (state == False):
-        connID,state = frame.makeMAVlinkConn()
+        cID,state = frame.makeMAVlinkConn()
 
     # python sony class
     #
-    pysonyCam = pySony()  
-    camInst = pysonyCam.createCameraInstance()    
+    # pysonyCam = pySony()  
+    # camInst = pysonyCam.createCameraInstance()    
     
-    print("connect %s"%(connID))  
+    print("connect %s"%(cID))  
 
     # micasense redEye class
     redEyeCam = redEye()
@@ -1945,4 +1943,4 @@ if __name__ == '__main__':
 #
 # ===================== Main Multi-Thread send/rcv Task ============================
 #
-    asyncio.run(main())
+    asyncio.run(main()) 
