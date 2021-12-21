@@ -8,6 +8,8 @@ Simple Qt app for experiments with MAVLink protocol and testing
   
 ### Ubuntu users can use apt:
 ```bash
+sudo apt update
+sudo apt install libqt5positioning5
 sudo apt-get install g++ cmake qtbase5-dev libqt5serialport5-dev
 ```
 ### Fedora/CentOS/RHEL users can use dnf:
