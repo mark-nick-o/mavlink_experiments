@@ -16,7 +16,7 @@ sudo dnf install g++ cmake qt5-devel qt5-qtserialbus-devel qt5-qtlocation
 ```
 ## Cloning
 ```bash
-git clone --recurse-submodules https://github.com/MishkaRogachev/mavlink_experiments
+git clone --recurse-submodules https://github.com/mark-nick-o/mavlink_experiments
 ```
 Don't forget submodules
 
