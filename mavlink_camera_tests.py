@@ -147,7 +147,7 @@ class MAVFrame():
     vendor_name = "sony"
     model_name = "alpha750"
     lens_id = 1
-    cam_definition_uri = "http://10.0.1.2/pics/01.jpg"
+    cam_definition_uri = "http://10.0.2.51/cam_defs"
 
     # camera settings
     mode_id = 3                                                      #  Camera mode
