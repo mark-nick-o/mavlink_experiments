@@ -65,7 +65,7 @@ std::int8_t GcsModel::get_batteryRemain() const
     return m_battery_remain;       
 }
 
-std::float32_t GcsModel::get_focalLen() const
+float GcsModel::get_focalLen() const
 {
     return m_focal_len;       
 }
