@@ -136,17 +136,17 @@ std::uint32_t firmware_version() const
     return m_firmware_version;
 }
                                                      /*<  Version of the camera firmware (v << 24 & 0xff = Dev, v << 16 & 0xff = Patch, v << 8 & 0xff = Minor, v & 0xff = Major)*/
-std::float32_t focal_length() const
+float focal_length() const
 {
     return m_focal_length;    
 }
                                                        /*< [mm] Focal length*/
-std::float32_t sensor_size_h() const
+float sensor_size_h() const
 {
     return m_sensor_size_h;        
 }
                                                       /*< [mm] Image sensor size horizontal*/
-std::float32_t sensor_size_v() const
+float sensor_size_v() const
 {
     return m_sensor_size_v;        
 }
