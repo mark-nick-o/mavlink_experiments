@@ -54,7 +54,10 @@ UavModel::UavModel(QObject* parent):
     m_ccs_update_trigger(0)
     m_ccs_time_cycle(0)    
     m_cic_interval(0)
-    m_ccs_time_cycle(0)        
+    m_ccs_time_cycle(0)     
+    m_disk1_count_of_images(0)
+    m_disk2_count_of_images(0)
+       
 {
     qsrand(QDateTime::currentMSecsSinceEpoch() / 1000);
     this->startTimer(::interval);
