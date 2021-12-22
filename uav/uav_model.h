@@ -56,9 +56,9 @@ namespace domain
 
         std::uint32_t m_time_boot_ms;                                                         /*<  [ms] Timestamp (time since system boot).*/
         std::uint32_t m_firmware_version;                                                     /*<  Version of the camera firmware (v << 24 & 0xff = Dev, v << 16 & 0xff = Patch, v << 8 & 0xff = Minor, v & 0xff = Major)*/
-        std::float32_t m_focal_length;                                                        /*<  [mm] Focal length*/
-        std::float32_t m_sensor_size_h;                                                       /*<  [mm] Image sensor size horizontal*/
-        std::float32_t m_sensor_size_v;                                                       /*<  [mm] Image sensor size vertical*/
+        float m_focal_length;                                                        /*<  [mm] Focal length*/
+        float m_sensor_size_h;                                                       /*<  [mm] Image sensor size horizontal*/
+        float m_sensor_size_v;                                                       /*<  [mm] Image sensor size vertical*/
         std::uint32_t m_flags;                                                                /*<  Bitmap of camera capability flags.*/
         std::uint16_t m_resolution_h;                                                         /*<  [pix] Horizontal image resolution*/
         std::uint16_t m_resolution_v;                                                         /*<  [pix] Vertical image resolution*/
@@ -73,8 +73,7 @@ namespace domain
         std::uint32_t m_ccs_update_trigger = 0;                                               /*   frequency in multiples of 25Hz that CCS update is sent when MAV_CMD_VIDEO_START_CAPTURE sent */
         std::uint32_t m_ccs_time_cycle = 0;                                                   /*   counter in multiples of 25Hz to check against the above limit to retriger CCS message */
         std::uint32_t m_cic_interval = 0;
-        std::uint32_t m_ccs_time_cycle = 0;
-        std::float m_missing_image_index = 0;
+        float m_missing_image_index = 0;
 
         std::int32_t m_disk1_count_of_images = 0;
         std::int32_t m_disk2_count_of_images = 0;
