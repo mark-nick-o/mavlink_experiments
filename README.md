@@ -14,7 +14,7 @@ sudo apt-get install g++ cmake qtbase5-dev libqt5serialport5-dev qtpositioning5-
 ```
 ### Fedora/CentOS/RHEL users can use dnf:
 ```bash
-sudo dnf install g++ cmake qt5-devel qt5-qtserialbus-devel qt5-qtlocation
+sudo dnf install g++ cmake qt5-devel qt5-qtserialbus-devel qt5-qtlocation qtpositioning5-dev libqt5svg5-dev
 ```
 ## Cloning
 ```bash
