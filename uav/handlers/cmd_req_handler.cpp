@@ -1,5 +1,5 @@
 #include "cmd_req_handler.hpp"
-#inlcude "camera_status_data.h"
+#include "camera_status_data.h"
 
 // MAVLink
 #include <mavlink.h>
