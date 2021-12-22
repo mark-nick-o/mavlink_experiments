@@ -1,3 +1,6 @@
+This is WIP and under test use only if you want to contribute its not a complete working set
+
+
 # mavlink_experiments
 Simple Qt app for experiments with MAVLink protocol and testing
 
