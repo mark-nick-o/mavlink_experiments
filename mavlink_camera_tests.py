@@ -99,17 +99,22 @@ import time
 import asyncio
 import time
 
+#
+# set to zero if you are not using on rasspberry pi as output trigger command
+#
+FOR_RASPBERRY_PI = 1
+if (FOR_RASPBERRY_PI == 1):
 # ============== control Raspberry Pi IO ===============
 # sudo apt-get install rpi.gpio
 #
-import RPi.GPIO as GPIO
+    import RPi.GPIO as GPIO
  
 # to use Raspberry Pi board pin numbers
-GPIO.setmode(GPIO.BOARD)
+    GPIO.setmode(GPIO.BOARD)
  
 # set up the GPIO channels - one input and one output here
-GPIO.setup(11, GPIO.IN)
-GPIO.setup(12, GPIO.OUT)
+    GPIO.setup(11, GPIO.IN)
+    GPIO.setup(12, GPIO.OUT)
 
 #---------------------------------------------------------------------------
 
@@ -615,7 +620,7 @@ class MAVFrame():
             the_conection = mavutil.mavlink_connection('udpin:0.0.0.0:14550',autoreconnect=True)
             return the_conection,True
         except Exception as err_msg:
-            print("Failed to connect to %s : %s" % (device, err_msg))
+            print("Failed to connect : %s" % (err_msg))
             return the_conection,False
         
     # Send heartbeat from a GCS (types are define as enum in the dialect file). 
@@ -1861,7 +1866,10 @@ async def main():
     frame = MAVFrame()
     state = False
     while (state == False):
-        cID,state = frame.makeMAVlinkConn()
+        try:
+            cID,state = frame.makeMAVlinkConn()
+        except Exception as e:
+            print("Error Trap :: ", e.__class__, " occurred.")
 
     # python sony class
     #
@@ -1943,4 +1951,4 @@ if __name__ == '__main__':
 #
 # ===================== Main Multi-Thread send/rcv Task ============================
 #
-    asyncio.run(main()) 
+    asyncio.run(main())
