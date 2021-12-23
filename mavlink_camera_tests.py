@@ -617,7 +617,7 @@ class MAVFrame():
     #
     def makeMAVlinkConn(self):
         try:
-            the_conection = mavutil.mavlink_connection('udpin:0.0.0.0:14550',autoreconnect=True)
+            the_conection = mavutil.mavlink_connection('udpin:0.0.0.0:14550',autoreconnect=True, source_system=mavutil.mavlink.MAV_COMP_ID_AUTOPILOT1,source_component=mavutil.mavlink.MAV_COMP_ID_CAMERA)
             return the_conection,True
         except Exception as err_msg:
             print("Failed to connect : %s" % (err_msg))
@@ -626,12 +626,17 @@ class MAVFrame():
     # Send heartbeat from a GCS (types are define as enum in the dialect file). 
     #
     def mavlink_send_GCS_heartbeat(self, the_conection): 
-        the_conection.mav.heartbeat_send(mavutil.mavlink.MAV_TYPE_GCS, mavutil.mavlink.MAV_AUTOPILOT_INVALID, 0, 0, 0)
+        the_conection.mav.heartbeat_send(mavutil.mavlink.MAV_TYPE_GCS, mavutil.mavlink.MAV_AUTOPILOT_GENERIC, 0, 0, 0)
 
     # Send heartbeat from a MAVLink application.
     #
-    def mavlink_send_OBC_heartbeat2(self, the_connection):   
-        mavutil.mavlink.heartbeat_send(mavutil.mavlink.MAV_TYPE_ONBOARD_CONTROLLER, mavutil.mavlink.MAV_AUTOPILOT_INVALID, 0, 0, 0)
+    def mavlink_send_OBC_heartbeat(self, the_connection):   
+        the_conection.mav.heartbeat_send(mavutil.mavlink.MAV_TYPE_ONBOARD_CONTROLLER, mavutil.mavlink.MAV_AUTOPILOT_GENERIC, 0, 0, 0)
+
+    # Send heartbeat from a MAVLink application.
+    #
+    def mavlink_send_CAM_heartbeat(self, the_connection):   
+        the_conection.mav.heartbeat_send(mavutil.mavlink.MAV_TYPE_CAMERA, mavutil.mavlink.MAV_AUTOPILOT_INVALID, 0, 0, mavutil.mavlink.MAV_STATE_ACTIVE)
 
     # Receive heartbeat from a MAVLink application.
     #
@@ -1453,7 +1458,7 @@ class redEye():
 # The heartbeat task
 #
 async def sendMavlinkHeartBeat(fm, cID, sleep):
-    fm.mavlink_send_GCS_heartbeat(cID)
+    fm.mavlink_send_CAM_heartbeat(cID)
     while sleep > 0:
         await asyncio.sleep(1)
         print(f'{sleep} seconds')
