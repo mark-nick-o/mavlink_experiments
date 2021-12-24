@@ -1,0 +1,14 @@
+#!/usr/bin/python
+#
+#  Python script runner to keep all python applications running
+#  webserver and mavlink to camera interface running should they stop
+#
+import subprocess
+import time
+
+while True:
+    try:
+        subprocess.check_output(['python', 'mavlink_camera_tests.py'])
+    except KeyboardInterrupt:
+        break
+    time.sleep(2)
