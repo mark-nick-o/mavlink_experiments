@@ -1139,15 +1139,15 @@ class MAVFrame():
                     sys.stdout.flush()
             elif msg.get_type() == 'RC_CHANNELS':
                 print("RC Channel message (system %u component %u)\n" % (the_connection.target_system, the_connection.target_component))
-                print("No Chans %u chan1 %u chan2 %u)\n" % (the_connection.chancount, the_connection.chan1_raw, the_connection.chan2_raw))
+                print("No Chans %u chan1 %u chan2 %u)\n" % (msg.chancount, msg.chan1_raw, msg.chan2_raw))
             elif msg.get_type() == 'COMMAND_LONG':
                 print("Long message received (system %u component %u)\n" % (the_connection.target_system, the_connection.target_component))
-                print("Command %u p1 %u p2 %u p3 %u p4 %u \n" % (the_connection.command, the_connection.param1, the_connection.param2, the_connection.param3, the_connection.param4))
-                print("p5 %u p6 %u p7 %u \n" % (the_connection.param5, the_connection.param6, the_connection.param7))  
+                print("Command %u p1 %u p2 %u p3 %u p4 %u \n" % (msg.command, msg.param1, msg.param2, msg.param3, msg.param4))
+                print("p5 %u p6 %u p7 %u \n" % (msg.param5, msg.param6, msg.param7))  
                 if (self.ACK_RESULT == 0):
-                    self.RCV_COMMAND = the_connection.command
+                    self.RCV_COMMAND = msg.command
                     if (self.RCV_COMMAND == mavutil.mavlink.MAV_CMD_REQUEST_MESSAGE):
-                        self.RPM2 = the_connection.param1 
+                        self.RPM2 = msg.param1 
                         if (self.RPM2 == mavutil.mavlink.CAMERA_INFORMATION):                       #camera_information
                             self.type_of_msg = 6500
                         elif (self.RPM2 == mavutil.mavlink.CAMERA_SETTINGS):                        #camera_settings
@@ -1165,117 +1165,129 @@ class MAVFrame():
                             self.type_of_msg = 0
                     elif (self.RCV_COMMAND == mavutil.mavlink.MAV_CMD_DO_SET_RELAY):
                         self.type_of_msg = mavutil.mavlink.MAV_CMD_DO_SET_RELAY;
-                        self.Got_Param1 = the_connection.param1
-                        self.Got_Param2 = the_connection.param2
+                        self.Got_Param1 = msg.param1
+                        self.Got_Param2 = msg.param2
                     elif (self.RCV_COMMAND == mavutil.mavlink. MAV_CMD_VIDEO_START_CAPTURE):
                         self.type_of_msg = mavutil.mavlink.MAV_CMD_VIDEO_START_CAPTURE;
-                        self.Got_Param1 = the_connection.param1 
+                        self.Got_Param1 = msg.param1 
                     elif (self.RCV_COMMAND == mavutil.mavlink. MAV_CMD_VIDEO_STOP_CAPTURE):
                         self.type_of_msg = mavutil.mavlink.MAV_CMD_VIDEO_START_CAPTURE;
-                        self.Got_Param1 = the_connection.param1                           
+                        self.Got_Param1 = msg.param1                           
                     elif (self.RCV_COMMAND == mavutil.mavlink.MAV_CMD_IMAGE_START_CAPTURE):
                         self.type_of_msg = mavutil.mavlink.MAV_CMD_IMAGE_START_CAPTURE;
-                        self.Got_Param1 = the_connection.param2
-                        self.Got_Param2 = the_connection.param3
-                        self.Got_Param3 = the_connection.param4
+                        self.Got_Param1 = msg.param2
+                        self.Got_Param2 = msg.param3
+                        self.Got_Param3 = msg.param4
                     elif (self.RCV_COMMAND == mavutil.mavlink.MAV_CMD_IMAGE_STOP_CAPTURE):
                         self.type_of_msg = mavutil.mavlink.MAV_CMD_IMAGE_STOP_CAPTURE;
-                        self.Got_Param1 = the_connection.param3
-                        self.Got_Param2 = the_connection.param4
+                        self.Got_Param1 = msg.param3
+                        self.Got_Param2 = msg.param4
                     elif (self.RCV_COMMAND == mavutil.mavlink.MAV_CMD_VIDEO_START_STREAMING):
                         self.type_of_msg = mavutil.mavlink.MAV_CMD_VIDEO_START_STREAMING;
-                        self.Got_Param1 = the_connection.param1
+                        self.Got_Param1 = msg.param1
                     elif (self.RCV_COMMAND == mavutil.mavlink.MAV_CMD_VIDEO_STOP_STREAMING):
                         self.type_of_msg = MAV_CMD_VIDEO_STOP_STREAMING;
-                        self.Got_Param1 = the_connection.param1
+                        self.Got_Param1 = msg.param1
                     elif (self.RCV_COMMAND == mavutil.mavlink.MAV_CMD_SET_CAMERA_MODE):
                         self.type_of_msg = mavutil.mavlink.MAV_CMD_SET_CAMERA_MODE;
-                        self.Got_Param1 = the_connection.param2
+                        self.Got_Param1 = msg.param2
                     elif (self.RCV_COMMAND == mavutil.mavlink.MAV_CMD_SET_CAMERA_ZOOM):
                         self.type_of_msg = mavutil.mavlink.MAV_CMD_SET_CAMERA_ZOOM;
-                        self.Got_Param1 = the_connection.param1
-                        self.Got_Param2 = the_connection.param2
-                        self.Got_Param3 = the_connection.param3
+                        self.Got_Param1 = msg.param1
+                        self.Got_Param2 = msg.param2
+                        self.Got_Param3 = msg.param3
                     elif (self.RCV_COMMAND == mavutil.mavlink.MAV_CMD_SET_CAMERA_FOCUS):
                         self.type_of_msg = mavutil.mavlink.MAV_CMD_SET_CAMERA_FOCUS;
-                        self.Got_Param1 = the_connection.param1
-                        self.Got_Param2 = the_connection.param2
+                        self.Got_Param1 = msg.param1
+                        self.Got_Param2 = msg.param2
                     elif (self.RCV_COMMAND == mavutil.mavlink.MAV_CMD_DO_DIGICAM_CONFIGURE):
                         self.type_of_msg = mavutil.mavlink.MAV_CMD_DO_DIGICAM_CONFIGURE;
-                        self.Got_Param1 = the_connection.param1
-                        self.Got_Param2 = the_connection.param2
-                        self.Got_Param3 = the_connection.param3
-                        self.Got_Param4 = the_connection.param4
-                        self.Got_Param5 = the_connection.param5
-                        self.Got_Param6 = the_connection.param6
-                        self.Got_Param7 = the_connection.param7
+                        self.Got_Param1 = msg.param1
+                        self.Got_Param2 = msg.param2
+                        self.Got_Param3 = msg.param3
+                        self.Got_Param4 = msg.param4
+                        self.Got_Param5 = msg.param5
+                        self.Got_Param6 = msg.param6
+                        self.Got_Param7 = msg.param7
                     elif (self.RCV_COMMAND == mavutil.mavlink.MAV_CMD_DO_DIGICAM_CONTROL):
                         self.type_of_msg = mavutil.mavlink.MAV_CMD_DO_DIGICAM_CONTROL;
-                        self.Got_Param1 = the_connection.param1
-                        self.Got_Param2 = the_connection.param2
-                        self.Got_Param3 = the_connection.param3
-                        self.Got_Param4 = the_connection.param4
-                        self.Got_Param5 = the_connection.param5
-                        self.Got_Param6 = the_connection.param6
-                        self.Got_Param7 = the_connection.param7
+                        self.Got_Param1 = msg.param1
+                        self.Got_Param2 = msg.param2
+                        self.Got_Param3 = msg.param3
+                        self.Got_Param4 = msg.param4
+                        self.Got_Param5 = msg.param5
+                        self.Got_Param6 = msg.param6
+                        self.Got_Param7 = msg.param7
                     elif (self.RCV_COMMAND == mavutil.mavlink.MAV_CMD_DO_CONTROL_VIDEO):
                         self.type_of_msg = mavutil.mavlink.MAV_CMD_DO_CONTROL_VIDEO;
-                        self.Got_Param1 = the_connection.param1
-                        self.Got_Param2 = the_connection.param2
-                        self.Got_Param3 = the_connection.param3
-                        self.Got_Param4 = the_connection.param4
+                        self.Got_Param1 = msg.param1
+                        self.Got_Param2 = msg.param2
+                        self.Got_Param3 = msg.param3
+                        self.Got_Param4 = msg.param4
                     elif (self.RCV_COMMAND == mavutil.mavlink.MAV_CMD_DO_SET_CAM_TRIGG_INTERVAL):
                         self.type_of_msg = mavutil.mavlink.MAV_CMD_DO_SET_CAM_TRIGG_INTERVAL;
-                        self.Got_Param1 = the_connection.param1
-                        self.Got_Param2 = the_connection.param2
+                        self.Got_Param1 = msg.param1
+                        self.Got_Param2 = msg.param2
                     elif (self.RCV_COMMAND == mavutil.mavlink.MAV_CMD_RESET_CAMERA_SETTINGS):
                         self.type_of_msg = mavutil.mavlink.MAV_CMD_RESET_CAMERA_SETTINGS;
-                        self.Got_Param1 = the_connection.param1
-                        self.Got_Param2 = the_connection.param2
+                        self.Got_Param1 = msg.param1
+                        self.Got_Param2 = msg.param2
                     elif (self.RCV_COMMAND == mavutil.mavlink.MAV_CMD_DO_MOUNT_CONTROL_QUAT):
                         self.type_of_msg = mavutil.mavlink.MAV_CMD_DO_MOUNT_CONTROL_QUAT;
-                        self.Got_Param1 = the_connection.param1
-                        self.Got_Param2 = the_connection.param2
-                        self.Got_Param3 = the_connection.param3
-                        self.Got_Param4 = the_connection.param4
+                        self.Got_Param1 = msg.param1
+                        self.Got_Param2 = msg.param2
+                        self.Got_Param3 = msg.param3
+                        self.Got_Param4 = msg.param4
                     elif (self.RCV_COMMAND == mavutil.mavlink.MAV_CMD_DO_GIMBAL_MANAGER_PITCHYAW):
                         self.type_of_msg = mavutil.mavlink.MAV_CMD_DO_GIMBAL_MANAGER_PITCHYAW;
-                        self.Got_Param1 = the_connection.param1
-                        self.Got_Param2 = the_connection.param2
-                        self.Got_Param3 = the_connection.param3
-                        self.Got_Param4 = the_connection.param4
-                        self.Got_Param5 = the_connection.param5
-                        self.Got_Param6 = the_connection.param6
+                        self.Got_Param1 = msg.param1
+                        self.Got_Param2 = msg.param2
+                        self.Got_Param3 = msg.param3
+                        self.Got_Param4 = msg.param4
+                        self.Got_Param5 = msg.param5
+                        self.Got_Param6 = msg.param6
                     elif (self.RCV_COMMAND == mavutil.mavlink.MAV_CMD_DO_TRIGGER_CONTROL):
                         self.type_of_msg = mavutil.mavlink.MAV_CMD_DO_TRIGGER_CONTROL;
-                        self.Got_Param1 = the_connection.param1
-                        self.Got_Param2 = the_connection.param2
-                        self.Got_Param3 = the_connection.param3
+                        self.Got_Param1 = msg.param1
+                        self.Got_Param2 = msg.param2
+                        self.Got_Param3 = msg.param3
                     elif (self.RCV_COMMAND == 2004):             # MAV_CMD_CAMERA_TRACK_POINT=2004
                         self.type_of_msg = 2004;
-                        self.Got_Param1 = the_connection.param1
-                        self.Got_Param2 = the_connection.param2
-                        self.Got_Param3 = the_connection.param3
+                        self.Got_Param1 = msg.param1
+                        self.Got_Param2 = msg.param2
+                        self.Got_Param3 = msg.param3
                     elif (self.RCV_COMMAND == 2005):             # MAV_CMD_CAMERA_TRACK_RECTANGLE=2005
                         self.type_of_msg = 2005;
-                        self.Got_Param1 = the_connection.param1
-                        self.Got_Param2 = the_connection.param2
-                        self.Got_Param3 = the_connection.param3
+                        self.Got_Param1 = msg.param1
+                        self.Got_Param2 = msg.param2
+                        self.Got_Param3 = msg.param3
                     elif (self.RCV_COMMAND == 2010):             # MAV_CMD_CAMERA_STOP_TRACKING=2010
                         self.type_of_msg = 2010;
                     elif (self.RCV_COMMAND == mavutil.mavlink.MAV_CMD_STORAGE_FORMAT):           
                         self.type_of_msg = mavutil.mavlink.MAV_CMD_STORAGE_FORMAT;
-                        self.Got_Param1 = the_connection.param1
-                        self.Got_Param2 = the_connection.param2
+                        self.Got_Param1 = msg.param1
+                        self.Got_Param2 = msg.param2
                     else:
                         self.RPM2 = 0
                         self.type_of_msg = self.RCV_COMMAND
                     self.ACK_RESULT = mavutil.mavlink.MAV_RESULT_ACCEPTED
                 else:
                     self.ACK_ERROR = self.GOT_ERROR
-                    self.errRCV_COMMAND = the_connection.command
-                    self.errRPM2 = the_connection.param1
-
+                    self.errRCV_COMMAND = msg.command
+                    self.errRPM2 = msg.param1
+            elif msg.get_type() == 'CAMERA_IMAGE_CAPTURED':
+                print("Cam Cap message received (system %u component %u)\n" % (the_connection.target_system, the_connection.target_component))
+                print("lat %u lon %u alt %u\n" % (msg.lat, msg.lon, msg.alt))
+                print("URL %u)\n" % (msg.file_url))
+            elif msg.get_type() == 'GPS_RAW_INT':
+                the_connection.mav.gps_raw_int_send( 1000, 1, 22, 21, 1, 3, 1, 2, 3, 5)    ## dummy send 
+            elif msg.get_type() == 'REQUEST_DATA_STREAM':
+                print("REQUEST DATA STREAM :: start %u id %u req_rte %u\n" % (msg.start_stop, msg.req_stream_id, msg.req_message_rate))
+            elif msg.get_type() == 'STATUSTEXT':
+                print("STATUSTEXT :: text %s " % (msg.text))
+            else:
+                print(f"unsupported command :: {msg.get_type()}")
+		
     def mavlink_send_ack_command(self, the_connection, cmd, rpm2, pro, res):
         #if self.mavlink10():
         the_connection.mav.command_ack_send(
