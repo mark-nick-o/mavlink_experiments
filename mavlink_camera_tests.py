@@ -626,18 +626,28 @@ class MAVFrame():
     # Send heartbeat from a GCS (types are define as enum in the dialect file). 
     #
     def mavlink_send_GCS_heartbeat(self, the_conection): 
-        the_conection.mav.heartbeat_send(mavutil.mavlink.MAV_TYPE_GCS, mavutil.mavlink.MAV_AUTOPILOT_GENERIC, 0, 0, 0)
+        the_conection.mav.heartbeat_send(mavutil.mavlink.MAV_TYPE_GCS, mavutil.mavlink.MAV_AUTOPILOT_GENERIC, 0, 0, mavutil.mavlink.MAV_STATE_ACTIVE)
 
     # Send heartbeat from a MAVLink application.
     #
     def mavlink_send_OBC_heartbeat(self, the_connection):   
-        the_conection.mav.heartbeat_send(mavutil.mavlink.MAV_TYPE_ONBOARD_CONTROLLER, mavutil.mavlink.MAV_AUTOPILOT_GENERIC, 0, 0, 0)
+        the_conection.mav.heartbeat_send(mavutil.mavlink.MAV_TYPE_ONBOARD_CONTROLLER, mavutil.mavlink.MAV_AUTOPILOT_GENERIC, 0, 0, mavutil.mavlink.MAV_STATE_ACTIVE)
 
-    # Send heartbeat from a MAVLink application.
+    # Send heartbeat from a Camera application.
     #
     def mavlink_send_CAM_heartbeat(self, the_connection):   
         the_conection.mav.heartbeat_send(mavutil.mavlink.MAV_TYPE_CAMERA, mavutil.mavlink.MAV_AUTOPILOT_INVALID, 0, 0, mavutil.mavlink.MAV_STATE_ACTIVE)
 
+    # Send heartbeat from a Camera which is calibrating
+    #
+    def mavlink_send_CAMcal_heartbeat(self, the_connection):   
+        the_conection.mav.heartbeat_send(mavutil.mavlink.MAV_TYPE_CAMERA, mavutil.mavlink.MAV_AUTOPILOT_INVALID, 0, 0, mavutil.mavlink.MAV_STATE_CALIBRATING)
+
+    # Send heartbeat from a Camera which is still powewring up
+    #
+    def mavlink_send_CAMboot_heartbeat(self, the_connection):   
+        the_conection.mav.heartbeat_send(mavutil.mavlink.MAV_TYPE_CAMERA, mavutil.mavlink.MAV_AUTOPILOT_INVALID, 0, 0, mavutil.mavlink.MAV_STATE_BOOT)
+	
     # Receive heartbeat from a MAVLink application.
     #
     def mavlink_rcv_heartbeat(self, the_connection):   
