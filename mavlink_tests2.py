@@ -1509,7 +1509,7 @@ async def exceptionMavlinkErrorAckData(fm, cID):
 #
 # The MSG send thread
 #
-async def processMavlinkMessageData(fm, cID, sleep, sonycam, caminst, redeyecam ):
+async def processMavlinkMessageData(fm, cID, sleep, sonycam=0, caminst=0, redeyecam=0 ):
 
     # define what is sent in param1
     myRedEyeCamera = 1
