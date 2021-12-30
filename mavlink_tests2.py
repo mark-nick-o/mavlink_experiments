@@ -130,6 +130,7 @@ class MAVFrame():
     RCV_COMMAND = mavutil.mavlink.MAV_CMD_REQUEST_MESSAGE
     RPM2 = 0
     ACK_RESULT = 0
+    DEFAULT_SYS_ID = 1
  
     # camera informations (default camera routines will retrieve this)
     time_boot_ms = 1213
@@ -619,12 +620,19 @@ class MAVFrame():
         except Exception as err_msg:
             print("Failed to connect : %s" % (err_msg))
             return the_conection,False
-        
+
+    def makeNewMAVlinkConn(self,id):
+        try:
+            the_conection = custommav.mavlink_connection('udpin:0.0.0.0:14550',autoreconnect=True, source_system=id)
+            return the_conection,True
+        except Exception as err_msg:
+            print("Failed to connect : %s" % (err_msg))
+            return the_conection,False
+            
     # Send heartbeat from a GCS (types are define as enum in the dialect file). 
     #
     def mavlink_send_GCS_heartbeat(self, the_conection): 
         print(" heartbeat..............................  %s\n"%(mavutil.mavlink.MAV_TYPE_CAMERA))
-        the_conection.target_component = 100
         the_conection.mav.heartbeat_send(mavutil.mavlink.MAV_TYPE_CAMERA, mavutil.mavlink.MAV_AUTOPILOT_INVALID, 0, 0, mavutil.mavlink.MAV_STATE_ACTIVE)
 
     # Send heartbeat from a MAVLink application.
@@ -1286,6 +1294,8 @@ class MAVFrame():
                 print("REQUEST DATA STREAM :: start %u id %u req_rte %u\n" % (msg.start_stop, msg.req_stream_id, msg.req_message_rate)) 
             elif msg.get_type() == 'STATUSTEXT':
                 print("STATUSTEXT :: text %s " % (msg.text)) 
+            elif msg.get_type() == 'HEARTBEAT':
+                print("HEARTBEAT :: src %s type %s auto %s sys %s" % (msg.get_srcSystem(), msg.type,msg.autopilot,msg.system_status)) 
             else:
                 print(f"unsupported command :: {msg.get_type()}")   
             #time.sleep(0.05)
@@ -1887,6 +1897,24 @@ async def main():
         except Exception as e:
             print("Error Trap :: ", e.__class__, " occurred.")
 
+    # wait heartbeat 
+    # if it sends another sys id we need to change it
+    #
+    state = False
+    xx = 1
+    while xx == 1:
+        m = cID.recv_match(type="HEARTBEAT", blocking=True, timeout=5)
+        if not ( m.autopilot == mavutil.mavlink.MAV_AUTOPILOT_INVALID ):
+            xx = 2
+    id = m.get_srcSystem() 
+    if not ( m.get_srcSystem() == frame.DEFAULT_SYS_ID ) :
+        print("-------- new id found --------")
+        while (state == False):
+            try:
+                cID,state = frame.makeNewMAVlinkConn(id)
+            except Exception as e:
+                print("Error Trap :: ", e.__class__, " occurred.")
+                
     # python sony class
     #
     # pysonyCam = pySony()  
@@ -1897,7 +1925,6 @@ async def main():
     # micasense redEye class
     #
     redEyeCam = redEye()
-    
     
     frame.RCV_COMMAND = 0
     frame.RPM2 = 0
