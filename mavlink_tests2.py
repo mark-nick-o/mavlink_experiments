@@ -1494,7 +1494,7 @@ async def sendMavlinkAckData(fm, cID, sleep, cmd, rpm2, pro, res):
 #
 # The handle with ACK an error during collection that might happen during the send, its told to come again later or its wrong
 #
-async def exceptionMavlinkErrorAckData(fm, cID):
+async def execptionMavlinkErrorAckData(fm, cID):
     while fm.task_control_1 > 0:
         await asyncio.sleep(1)
         if (fm.ACK_ERROR == fm.GOT_ERROR):
