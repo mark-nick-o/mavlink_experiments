@@ -34,7 +34,7 @@ import sys,os
 # pip install arrow
 #
 import arrow
-import maya
+#import maya
 
 #
 # ntp time sync 
@@ -79,12 +79,13 @@ class micraSenseCamera():
             try:
               import pywin32
             except ImportError:
-              print 'pywin32 module is missing'
+              print ("pywin32 module is missing")
               sys.exit(1)
             dayOfWeek = datetime.datetime(winTimeTuple).isocalendar()[2]
             #pywin32.SetSystemTime( year, month, dayOfWeek, day, hour, minute, second, millseconds )# fill all Parameters with int numbers
             pywin32.SetSystemTime( winTimeTuple[:2] + (dayOfWeek,) + winTimeTuple[2:] )
-        else:print 'wrong param'
+        else:
+            print ("wrong param")
 
     # check our operating system
     #
@@ -98,13 +99,13 @@ class micraSenseCamera():
     def getTimeElementsFromNtpMsg( self, ntpTimeMsg ):
        vars = ntpTimeMsg.split()
        year = f"{vars[4]}"
-       month = f"{vars[1}"
-       dayOfWeekString = f"{vars[0}"
+       month = f"{vars[1]}"
+       dayOfWeekString = f"{vars[0]}"
        day = f"{vars[2]}" 
        time = f"{vars[3]}"
        timeArray = time.split(",")
        hours = f"{timeArray[0]}"
-       minute f"{timeArray[1]}"
+       minute = f"{timeArray[1]}"
        seconds = f"{timeArray[2]}"
        miliseconds = 0
        unix_time = f"{vars[2]} {vars[1]} {vars[4]} {vars[3]}"     
@@ -131,9 +132,9 @@ class micraSenseCamera():
     def print_myJson( self, cap_data ):
         try:
             if (cap_data.status_code == self.HTTP_SUCCESS_RETURN):
-                print cap_data.json()
+                print (cap_data.json())
             else:
-                print "http REST API error"
+                print ("http REST API error")
         except Exception:
             print("invalid json sent to function")
             
@@ -146,15 +147,15 @@ class micraSenseCamera():
         except requests.ConnectionError as e:
             print("OOPS!! Connection Error. Make sure you are connected to Device.\n")
             print(str(e))            
-            continue
+            #continue
         except requests.Timeout as e:
             print("OOPS!! Timeout Error")
             print(str(e))
-            continue
+            #continue
         except requests.RequestException as e:
             print("OOPS!! General Error")
             print(str(e))
-            continue
+            #continue
         except KeyboardInterrupt:
             print("Someone closed the program")
             
@@ -170,15 +171,15 @@ class micraSenseCamera():
         except requests.ConnectionError as e:
             print("OOPS!! Connection Error. Make sure you are connected to Device.\n")
             print(str(e))            
-            continue
+            #continue
         except requests.Timeout as e:
             print("OOPS!! Timeout Error")
             print(str(e))
-            continue
+            #continue
         except requests.RequestException as e:
             print("OOPS!! General Error")
             print(str(e))
-            continue
+            #continue
         except KeyboardInterrupt:
             print("Someone closed the program")
         print_myJson( capture_data )
@@ -279,7 +280,7 @@ class micraSenseCamera():
         placeMarkPointList = []
         root = ET.fromstring(capture_data)
         #for folder_name in root.iter('Folder'):
-        for cnt in root.findall('Folder')
+        for cnt in root.findall('Folder'):
             placeMarkName = cnt.find('name').text
             placeMarkPoint = cnt.find('coordinates').text
             print(" %s : co-ordinates %s\n" % (placeMarkName, placeMarkPoint))
@@ -299,7 +300,7 @@ class micraSenseCamera():
     
         root = ET.fromstring(capture_data)
         #for folder_name in root.iter('Folder'):
-        for cnt in root.findall('Folder')
+        for cnt in root.findall('Folder'):
             placeMarkName = cnt.find('name').text
             placeMarkPoint = cnt.find('coordinates').text
             print(" %s : co-ordinates %s\n" % (placeMarkName, placeMarkPoint))
