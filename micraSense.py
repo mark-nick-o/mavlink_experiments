@@ -589,3 +589,24 @@ class micraSenseCamera():
         url = "http://" + self.CAM_HOST_IP + "/thermal_nuc"
         capture_data = self.micraSensePost( url, nuc_params )
         return capture_data.status_code,status_code 
+
+    
+ if __name__ == '__main__':
+
+    #
+    # This is a simple test to take a picture and check it has completed
+    #
+    myRedEdgeCamNo1 = micraSenseCamera()
+    stat, jso = myRedEdgeCamNo1.redEdgeCapture()
+    if (200 <= stat >= 299):   
+        jsonStat = jso.json()
+        statTxt = jsonStat['status']
+        id = jsonStat['id']
+        while statTxt.find("complete") == -1:
+            stat, js = myRedEdgeCamNo1.redEdgeCaptureStatus( jsonStat['id'] )
+            if (200 <= stat >= 299):
+                statusOut = js.json()
+                statTxt = statusOut['status']
+    else:
+        print("====== error ========")
+   
