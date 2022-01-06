@@ -230,27 +230,21 @@ class micraSenseCamera():
     #
     def redEyeCaptureStatus( self, id ):
        
-        url = HOST_IP + "/capture/" + id 
+        url = "http://" + self.CAM_HOST_IP + "/capture" + id
         
         capture_data = self.micraSenseGet( url )
-        print_myJson( capture_data )
+        self.print_myJson( capture_data )
         return capture_data.status_code,status_code 
 
     # Post a message to the RedEdge camera commanding a capture, block until complete
     #        
     def redEdgeCaptureStatus( self, id ):
 
-        url = HOST_IP + "/capture/" + id 
+        url = "http://" + self.CAM_HOST_IP + "/capture" + id
 
         capture_data = self.micraSenseGet( url )
-        print_myJson( capture_data )
-        return capture_data.status_code,capture_data 
-        
-        json_data_cap_resp = capture_data.json()
-        id = str(json_data_cap_resp['id']) 
-        
-        json_data_cap_resp = capture_data.json()
-        id = str(json_data_cap_resp['id']) 
+        self.print_myJson( capture_data )
+        return capture_data.status_code,capture_data  
         
     # Download KMZ File
     #
