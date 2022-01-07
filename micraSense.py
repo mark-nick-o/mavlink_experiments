@@ -590,23 +590,84 @@ class micraSenseCamera():
         capture_data = self.micraSensePost( url, nuc_params )
         return capture_data.status_code,status_code 
 
+    # Take a picture and wait for completion status then save them to you're hard drive.
+    # 
+    def redEdgeTakeFivePictures( self ):
+    
+        stat, jso = self.redEdgeCapture()
+        if (200 >= stat <= 299):
+            jsonStat = jso.json()
+            statTxt = jsonStat['status']
+            id = jsonStat['id']
+            loop_retry = 10
+            while ((statTxt.find("complete") == -1) and (loop_retry >= 0)):
+                stat, js = self.redEdgeCaptureStatus( jsonStat['id'] )
+                if (200 >= stat <= 299):
+                    statusOut = js.json()
+                    statTxt = statusOut['status']
+                loop_retry -= 1
+            if (loop_retry <= 0):
+                print("------- repeated request failed on timeout---------")
+                return -1
+            picDef = statusOut['raw_cache_path']
+            print(f" time = {statusOut['time']}")
+            piclabels = [ 1,2,3,4,5 ]
+            for i in range(len(piclabels)):
+                print(f"image {i} : {picDef[ piclabels[int(i)] ]}")
+                url = "http://" + self.CAM_HOST_IP + "/" + picDef[ piclabels[int(i)] ]
+                outFileName = "imageFromMicaSenseCam_" + str(id) + "_" + str(i)     # + "_" + statusOut['time']
+                dataGot = requests.get(url)
+                if (200 >= dataGot.status_code <= 299):
+                    out = open(outFileName, 'wb')
+                    out.write(dataGot.content)
+                    out.close
+                    return 1
+        else:
+            print("====== error ========")
+            return -1
     
  if __name__ == '__main__':
 
     #
-    # This is a simple test to take a picture and check it has completed
+    # create the class instance to the camera
     #
     myRedEdgeCamNo1 = micraSenseCamera()
-    stat, jso = myRedEdgeCamNo1.redEdgeCapture()
-    if (200 <= stat >= 299):   
-        jsonStat = jso.json()
-        statTxt = jsonStat['status']
-        id = jsonStat['id']
-        while statTxt.find("complete") == -1:
-            stat, js = myRedEdgeCamNo1.redEdgeCaptureStatus( jsonStat['id'] )
-            if (200 <= stat >= 299):
-                statusOut = js.json()
-                statTxt = statusOut['status']
+
+    #
+    # command it to take a picture
+    #
+    if ( myRedEdgeCamNo1.redEdgeTakeFivePictures() == 1 ):
+        print("saved the pictures")
     else:
-        print("====== error ========")
+        print("error saving the pictures")
+
+    #stat, jso = myRedEdgeCamNo1.redEdgeCapture()
+    #if (200 >= stat <= 299):
+    #    jsonStat = jso.json()
+    #    statTxt = jsonStat['status']
+    #    print("============== id %s ============="%jsonStat['id'])
+    #    id = jsonStat['id']
+    #    while statTxt.find("complete") == -1:
+    #        stat, js = myRedEdgeCamNo1.redEdgeCaptureStatus( jsonStat['id'] )
+    #        if (200 >= stat <= 299):
+    #            statusOut = js.json()
+    #            print(f" wots tha stat ================= {statusOut['status']} ============= ")
+    #            statTxt = statusOut['status']
+    #    picDef = statusOut['raw_cache_path']
+    #    print(f" time = {statusOut['time']}")
+    #    print(f"image 1 : {picDef['1']}")
+    #    print(f"image 2 : {picDef['2']}")
+    #    print(f"image 3 : {picDef['3']}")
+    #    print(f"image 4 : {picDef['4']}")
+    #    print(f"image 5 : {picDef['5']}")
+    #    url = "http://" + myRedEdgeCamNo1.CAM_HOST_IP + "/" + picDef['1']
+    #    print(url)
+    #    dataGot = requests.get(url)
+    #    if (200 >= dataGot.status_code <= 299):
+    #        out = open("imageFromCam.jpg", 'wb')
+    #        out.write(dataGot.content)
+    #        out.close
+    #        #print(dataGot.content)
+    #else:
+    #    print("====== error ========")
    
