@@ -593,39 +593,59 @@ class micraSenseCamera():
     # Take a picture and wait for completion status then save them to you're hard drive.
     # 
     def redEdgeTakeFivePictures( self ):
-    
+
         stat, jso = self.redEdgeCapture()
         if (200 >= stat <= 299):
             jsonStat = jso.json()
             statTxt = jsonStat['status']
             id = jsonStat['id']
-            loop_retry = 10
-            while ((statTxt.find("complete") == -1) and (loop_retry >= 0)):
+            loop_timeout = 3
+            while ((statTxt.find("complete") == -1)  and (loop_timeout >= 0)) :
                 stat, js = self.redEdgeCaptureStatus( jsonStat['id'] )
                 if (200 >= stat <= 299):
                     statusOut = js.json()
                     statTxt = statusOut['status']
-                loop_retry -= 1
-            if (loop_retry <= 0):
-                print("------- repeated request failed on timeout---------")
+                loop_timeout -= 1
+            if (loop_timeout <= 0):
+                print("------- request failed on timeout---------")
                 return -1
             picDef = statusOut['raw_cache_path']
             print(f" time = {statusOut['time']}")
             piclabels = [ 1,2,3,4,5 ]
+            i = 1
+            timeTag = statusOut['time'].split()
             for i in range(len(piclabels)):
-                print(f"image {i} : {picDef[ piclabels[int(i)] ]}")
-                url = "http://" + self.CAM_HOST_IP + "/" + picDef[ piclabels[int(i)] ]
-                outFileName = "imageFromMicaSenseCam_" + str(id) + "_" + str(i)     # + "_" + statusOut['time']
+                index = str(piclabels[int(i)])
+                pdef = picDef[index]
+                print(f"image {i} : {index}")
+                url = "http://" + self.CAM_HOST_IP + "/" + pdef
+                outFileName = "imgMicaCam_" + str(id) + "_" + index + "_" + timeTag[0] + ".jpg"
                 dataGot = requests.get(url)
                 if (200 >= dataGot.status_code <= 299):
                     out = open(outFileName, 'wb')
                     out.write(dataGot.content)
                     out.close
-                    return 1
+            return 1
         else:
             print("====== error ========")
             return -1
-    
+ 
+    #  function to get available disk usage percent 
+    #
+    def getDiskFree( self ):
+        myOs = self.check_os()
+        if (myOs == 1):
+            cmd = "/bin/df"
+            x = os.popen(cmd, 'r')
+            for line in x:
+                if not line.find("root") == -1:
+                    x = line.split()
+            y = x[4].split("%")
+            print(f"disk usage percent {y[0]}")
+            return y[0]
+        else: # no support currently
+            return 100
+        
  if __name__ == '__main__':
 
     #
@@ -633,6 +653,10 @@ class micraSenseCamera():
     #
     myRedEdgeCamNo1 = micraSenseCamera()
 
+    if ( myRedEdgeCamNo1.getDiskFree() >= 95 ):
+        print("No space on the disk exiting......")
+        exit(-1)
+        
     #
     # command it to take a picture
     #
