@@ -128,7 +128,7 @@ class micraSenseCamera():
         my_os = self.check_os()
         winTimeTuple, unixTime = self.getTimeElementsFromNtpMsg(ctime(response.tx_time))
         self.ntp_time_change( my_os, unixTime, winTimeTuple )
-    
+
     def print_myJson( self, cap_data ):
         try:
             if (cap_data.status_code == self.HTTP_SUCCESS_RETURN):
@@ -143,7 +143,9 @@ class micraSenseCamera():
     def micraSensePost( self, url, json_para={ 'block' : True } ):
             
         try:
-            capture_data = requests.post( url, json=json_para, timeout=30)
+            #capture_data = requests.post( url, json=json_para, timeout=30)
+            print(f" posting to   {url}")
+            capture_data = requests.post( url, timeout=20 )
         except requests.ConnectionError as e:
             print("OOPS!! Connection Error. Make sure you are connected to Device.\n")
             print(str(e))            
@@ -159,7 +161,8 @@ class micraSenseCamera():
         except KeyboardInterrupt:
             print("Someone closed the program")
             
-        print_myJson( capture_data )
+        if capture_data:
+            self.print_myJson( capture_data )
         return capture_data  
 
     # Get a message from the camera reading a status
@@ -168,6 +171,7 @@ class micraSenseCamera():
            
         try:
             capture_data = requests.get( url, json=json_para, timeout=30)
+            #capture_data = requests.get( url, timeout=30)
         except requests.ConnectionError as e:
             print("OOPS!! Connection Error. Make sure you are connected to Device.\n")
             print(str(e))            
@@ -182,7 +186,8 @@ class micraSenseCamera():
             #continue
         except KeyboardInterrupt:
             print("Someone closed the program")
-        print_myJson( capture_data )
+        if capture_data:
+            self.print_myJson( capture_data )
         return capture_data 
 
     def micraSensePrintId( self, capture_data ):
@@ -201,7 +206,8 @@ class micraSenseCamera():
         url = "http://" + self.CAM_HOST_IP + "/capture"
         
         capture_data = self.micraSensePost( url, capture_params )
-        print_myJson( capture_data )
+        if capture_data:
+             self.print_myJson( capture_data )
         return capture_data.status_code,status_code 
 
     # Post a message to the RedEdge camera commanding a capture, block until complete
@@ -222,8 +228,13 @@ class micraSenseCamera():
         }        
         url = "http://" + self.CAM_HOST_IP + "/capture"
 
+        print(" red Edge capture ")
         capture_data = self.micraSensePost( url, capture_params )
-        print_myJson( capture_data )
+        if capture_data:
+            self.print_myJson( capture_data )
+        else:
+            print("Capture Failed")
+            exit(1)
         return capture_data.status_code,capture_data         
 
     # Get the RedEye camera capture status, block until complete
@@ -233,7 +244,8 @@ class micraSenseCamera():
         url = "http://" + self.CAM_HOST_IP + "/capture" + id
         
         capture_data = self.micraSenseGet( url )
-        self.print_myJson( capture_data )
+        if capture_data:
+             self.print_myJson( capture_data )
         return capture_data.status_code,status_code 
 
     # Post a message to the RedEdge camera commanding a capture, block until complete
@@ -243,8 +255,10 @@ class micraSenseCamera():
         url = "http://" + self.CAM_HOST_IP + "/capture" + id
 
         capture_data = self.micraSenseGet( url )
-        self.print_myJson( capture_data )
-        return capture_data.status_code,capture_data  
+        if capture_data:
+            self.print_myJson( capture_data )
+        return capture_data.status_code,capture_data 
+        
         
     # Download KMZ File
     #
@@ -590,22 +604,38 @@ class micraSenseCamera():
         capture_data = self.micraSensePost( url, nuc_params )
         return capture_data.status_code,status_code 
 
+    def getDiskFree( self ):
+        myOs = self.check_os()
+        if (myOs == 1):
+            cmd = "/bin/df"
+            x = os.popen(cmd, 'r')
+            for line in x:
+                if not line.find("root") == -1:
+                    x = line.split()
+            y = x[4].split("%")
+            print(f"disk usage percent {y[0]}")
+            return y[0]
+        else: # no support currently
+            return 100
+
     # Take a picture and wait for completion status then save them to you're hard drive.
     # 
     def redEdgeTakeFivePictures( self ):
 
         stat, jso = self.redEdgeCapture()
-        if (200 >= stat <= 299):
+        if (stat >= 200) and (stat <= 299):
+            print("in function >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
             jsonStat = jso.json()
             statTxt = jsonStat['status']
             id = jsonStat['id']
             loop_timeout = 3
-            while ((statTxt.find("complete") == -1)  and (loop_timeout >= 0)) :
+            while ((statTxt.find("complete") == -1) and (loop_timeout >= 0)) :
                 stat, js = self.redEdgeCaptureStatus( jsonStat['id'] )
-                if (200 >= stat <= 299):
+                if (stat >= 200) and (stat <= 299):
                     statusOut = js.json()
-                    statTxt = statusOut['status']
+                statTxt = statusOut['status']
                 loop_timeout -= 1
+                print(f"status returned was {statTxt} stat is {stat}")
             if (loop_timeout <= 0):
                 print("------- request failed on timeout---------")
                 return -1
@@ -621,7 +651,7 @@ class micraSenseCamera():
                 url = "http://" + self.CAM_HOST_IP + "/" + pdef
                 outFileName = "imgMicaCam_" + str(id) + "_" + index + "_" + timeTag[0] + ".jpg"
                 dataGot = requests.get(url)
-                if (200 >= dataGot.status_code <= 299):
+                if (dataGot.status_code >= 200) and (dataGot.status_code <= 299):
                     out = open(outFileName, 'wb')
                     out.write(dataGot.content)
                     out.close
@@ -629,53 +659,36 @@ class micraSenseCamera():
         else:
             print("====== error ========")
             return -1
- 
-    #  function to get available disk usage percent 
-    #
-    def getDiskFree( self ):
-        myOs = self.check_os()
-        if (myOs == 1):
-            cmd = "/bin/df"
-            x = os.popen(cmd, 'r')
-            for line in x:
-                if not line.find("root") == -1:
-                    x = line.split()
-            y = x[4].split("%")
-            print(f"disk usage percent {y[0]}")
-            return y[0]
-        else: # no support currently
-            return 100
-        
- if __name__ == '__main__':
 
-    #
-    # create the class instance to the camera
-    #
+if __name__ == '__main__':
+
     myRedEdgeCamNo1 = micraSenseCamera()
-
-    if ( myRedEdgeCamNo1.getDiskFree() >= 95 ):
-        print("No space on the disk exiting......")
+    # 
+    # check the disk space and if theres not much exit
+    #
+    if ( int(myRedEdgeCamNo1.getDiskFree()) >= 95 ):
+        print("Not much space on the disk exiting......")
         exit(-1)
         
     #
     # command it to take a picture
     #
-    if ( myRedEdgeCamNo1.redEdgeTakeFivePictures() == 1 ):
+    if (myRedEdgeCamNo1.redEdgeTakeFivePictures() == 1):
         print("saved the pictures")
     else:
         print("error saving the pictures")
 
+    # just keep for debug for now
+    #    
     #stat, jso = myRedEdgeCamNo1.redEdgeCapture()
     #if (200 >= stat <= 299):
-    #    jsonStat = jso.json()
+    #   jsonStat = jso.json()
     #    statTxt = jsonStat['status']
-    #    print("============== id %s ============="%jsonStat['id'])
     #    id = jsonStat['id']
     #    while statTxt.find("complete") == -1:
     #        stat, js = myRedEdgeCamNo1.redEdgeCaptureStatus( jsonStat['id'] )
     #        if (200 >= stat <= 299):
     #            statusOut = js.json()
-    #            print(f" wots tha stat ================= {statusOut['status']} ============= ")
     #            statTxt = statusOut['status']
     #    picDef = statusOut['raw_cache_path']
     #    print(f" time = {statusOut['time']}")
@@ -694,4 +707,15 @@ class micraSenseCamera():
     #        #print(dataGot.content)
     #else:
     #    print("====== error ========")
-   
+    
+    #jsonStat = jso.json()
+    #print("============== id %s ============="%jsonStat['id'])
+    #stat, js = myRedEdgeCamNo1.redEdgeCaptureStatus( jsonStat['id'] )
+    #statusOut = js.json()
+    #print(f" wots tha stat ================= {statusOut['status']} ============= ")
+    #myRedEdgeCamNo1.micraSenseSetConfig()
+    #myRedEdgeCamNo1.micraSensePreparePowerDwn()
+    #myRedEdgeCamNo1.micraSensePowerDwnRdy()
+    
+    # myRedEdgeCamNo1.micraSenseReformatSDCard()
+
