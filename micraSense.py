@@ -452,10 +452,14 @@ class micaSenseCamera():
     def redEyeGetKMZ( self ):
            
         url = "http://" + self.CAM_HOST_IP + "/captures.kmz"
-        
-        capture_data = requests.post(url)
-        self.print_myJson( capture_data )
-        return capture_data.status_code,status_code 
+       
+        print(f"getting {url}") 
+        capture_data = self.micaSenseGetNoRetry( url )
+        if ((capture_data.status_code >= 200) and (capture_data.status_code <=299)):
+            print( capture_data.content )
+            out = open("myKMZfile.kmz", 'wb')
+            out.write(capture_data.content)
+        return capture_data.status_code, capture_data
 
     # Download KMZ File
     #
@@ -463,9 +467,14 @@ class micaSenseCamera():
            
         url = "http://" + self.CAM_HOST_IP + "/captures.kmz"
         
-        capture_data = requests.post(url)
-        self.print_myJson( capture_data )
-        return capture_data.status_code,status_code         
+        print(f"getting {url}") 
+        capture_data = self.micaSenseGetNoRetry( url )
+        if ((capture_data.status_code >= 200) and (capture_data.status_code <=299)):
+            print( capture_data.content )
+            out = open("myKMZfile.kmz", 'wb')
+            out.write(capture_data.content)
+            out.close
+        return capture_data.status_code, capture_data        
 
     # Parse the kmz file (xml stream) and print the placemark and co-ordinates
     #
@@ -685,8 +694,8 @@ class micaSenseCamera():
     def micaSenseGetFiles( self ):
 
         #url = "http://" + self.CAM_HOST_IP + "/files/*"
-        #url = "http://" + self.CAM_HOST_IP + "/files/018SET/000/"
-        url = "http://" + self.CAM_HOST_IP + "/files/0018SET/000/IMG_0011_3.tif"
+        url = "http://" + self.CAM_HOST_IP + "/files/018SET/000/"
+        #url = "http://" + self.CAM_HOST_IP + "/files/0018SET/000/IMG_0011_3.tif"
         capture_data = self.micaSenseGetNoRetry( url )
         print(f" stat {capture_data.status_code}")
         return capture_data
@@ -931,6 +940,9 @@ if __name__ == '__main__':
     else:
         print("error saving the pictures")
 
+    a,b = myRedEdgeCamNo1.redEdgeGetKMZ()
+    print(f" ret {a} KMZ {b}")
+
     #
     # get vasrious status about the camera
     #
@@ -980,6 +992,12 @@ if __name__ == '__main__':
     #myRedEdgeCamNo1.micaSenseSetConfig()
     #myRedEdgeCamNo1.micaSensePreparePowerDwn()
     #myRedEdgeCamNo1.micaSensePowerDwnRdy()
+    
+
+
+ 
+
+
     
 
 
