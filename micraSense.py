@@ -48,6 +48,9 @@ from time import ctime
 #
 import xml.etree.ElementTree as ET 
 
+import numpy as np
+import cv2
+
 class micraSenseCamera():
 
     # constants / definitions
@@ -62,6 +65,11 @@ class micraSenseCamera():
     # globals used by the class
     #
     ntp_sync_freq = 0 
+
+    # wifi credentials (default)
+    #
+    WIFI_SSID = "rededgeRX03-2136114-SC"
+    WIFI_PASSWD = "micasense"
     
 # =================================================================================== Functions ==================================================================================================================
 #
@@ -129,35 +137,61 @@ class micraSenseCamera():
         winTimeTuple, unixTime = self.getTimeElementsFromNtpMsg(ctime(response.tx_time))
         self.ntp_time_change( my_os, unixTime, winTimeTuple )
 
+    # This function will try to reconenct the wifi to the camera
+    #    
+    # at present for linux only  
+    # it also requires network manager package
+    #
+    # sudo apt-get install network-manager
+    #
+    # Try to reconnect a broken wifi connection return TRue if SSID matches 
+    # that specified
+    #
+    def reConnectWiFi( self, ssid=WIFI_SSID, passwd=WIFI_PASSWD ):
+        print("ATTEMPT:: re-connecting wifi......... ")
+        if (self.check_os() == 1):
+            cmd = f"sudo nmcli device wifi con {ssid} password {passwd}"
+            x = os.popen(cmd, 'r')
+            cmd = "iwconfig"
+            x = os.popen(cmd, 'r')
+            print(x)
+            for line in x:
+                if not line.find("wlan0") == -1:
+                    zz = line.split() 
+            SSIDFromRadio = zz[3].split(":")
+            print(f" connected to : {SSIDFromRadio[0]} ")
+            print(f" connected to : {SSIDFromRadio[1]} ")
+        return not (SSIDFromRadio[1].find(self.WIFI_SSID) == -1)
+        
     def print_myJson( self, cap_data ):
         try:
             if (cap_data.status_code == self.HTTP_SUCCESS_RETURN):
                 print (cap_data.json())
             else:
-                print ("http REST API error")
+                print (f"http REST API error {cap_data.status_code}")
         except Exception:
             print("invalid json sent to function")
             
-    # Post a message to the camera commanding an action
+    # Post a message to the camera commanding an action without any retry 
     #
-    def micraSensePost( self, url, json_para={ 'block' : True } ):
+    def micraSensePostNoRetry( self, url, json_para={ 'block' : True }, withParam=False ):
             
         try:
             #capture_data = requests.post( url, json=json_para, timeout=30)
             print(f" posting to   {url}")
-            capture_data = requests.post( url, timeout=20 )
+            if (withParam == False):
+                capture_data = requests.post( url, timeout=20 )
+            else:
+                capture_data = requests.post( url, json=json_para, timeout=30)             
         except requests.ConnectionError as e:
             print("OOPS!! Connection Error. Make sure you are connected to Device.\n")
             print(str(e))            
-            #continue
         except requests.Timeout as e:
             print("OOPS!! Timeout Error")
             print(str(e))
-            #continue
         except requests.RequestException as e:
             print("OOPS!! General Error")
             print(str(e))
-            #continue
         except KeyboardInterrupt:
             print("Someone closed the program")
             
@@ -165,9 +199,50 @@ class micraSenseCamera():
             self.print_myJson( capture_data )
         return capture_data  
 
+    # Post a message to the camera commanding an action with retry
+    #
+    def micraSensePost( self, url, json_para={ 'block' : True }, retrys=3, withParam=False ):
+
+        retries = retrys 
+        while retries >= 1:           
+            try:
+                print(f" posting to   {url}")
+                if (withParam == True):
+                    capture_data = requests.post( url, json=json_para, timeout=30)
+                else:
+                    capture_data = requests.post( url, timeout=3 )
+                ret = 1
+            except requests.ConnectionError as e:
+                print("OOPS!! Connection Error. Make sure you are connected to Device.\n")
+                print(str(e))  
+                ret = -1          
+            except requests.Timeout as e:
+                print("OOPS!! Timeout Error")
+                print(str(e))
+                ret = -2
+            except requests.RequestException as e:
+                print("OOPS!! General Error")
+                print(str(e))
+                ret = -3
+            except KeyboardInterrupt:
+                print("Someone closed the program")
+            
+            if (ret == 1):
+                retries = -1
+            else:
+                retries -= 1  
+               
+        
+        if (ret>=1):    
+            if (capture_data.status_code >= 200) and (capture_data.status_code <= 299) :
+                self.print_myJson( capture_data )
+        else:
+            capture_data=0
+        return ret,capture_data 
+        
     # Get a message from the camera reading a status
     #
-    def micraSenseGet( self, url, json_para={ 'block' : True } ):
+    def micraSenseGetNoRetry( self, url, json_para={ 'block' : True } ):
            
         try:
             capture_data = requests.get( url, json=json_para, timeout=30)
@@ -190,6 +265,42 @@ class micraSenseCamera():
             self.print_myJson( capture_data )
         return capture_data 
 
+    # Get a message from the camera reading a status
+    #
+    def micraSenseGet( self, url, json_para={ 'block' : True }, retrys=3 ):
+          
+        retries = retrys 
+        while retries >= 1: 
+            try:
+                capture_data = requests.get( url, json=json_para, timeout=30)
+                ret = 1
+            except requests.ConnectionError as e:
+                print("OOPS!! Connection Error. Make sure you are connected to Device.\n")
+                print(str(e))            
+                ret = -1 
+            except requests.Timeout as e:
+                print("OOPS!! Timeout Error")
+                print(str(e))
+                ret = -2 
+            except requests.RequestException as e:
+                print("OOPS!! General Error")
+                print(str(e))
+                ret = -3 
+            except KeyboardInterrupt:
+                print("Someone closed the program")
+                
+            if (ret == 1):
+                retries = -1
+            else:
+                retries -= 1  
+                
+        if (ret >= 1):    
+            if (capture_data.status_code >= 200) and (capture_data.status_code <= 299) :
+                self.print_myJson( capture_data )
+        else:
+            capture_data=0
+        return ret,capture_data 
+        
     def micraSensePrintId( self, capture_data ):
     
         json_data_cap_resp = capture_data.json()
@@ -205,14 +316,14 @@ class micraSenseCamera():
         capture_params = { 'store_capture' : True, 'block' : True }       
         url = "http://" + self.CAM_HOST_IP + "/capture"
         
-        capture_data = self.micraSensePost( url, capture_params )
+        capture_data = self.micraSensePostNoRetry( url, capture_params, True )
         if capture_data:
              self.print_myJson( capture_data )
         return capture_data.status_code,status_code 
 
     # Post a message to the RedEdge camera commanding a capture, block until complete
     #        
-    def redEdgeCapture( self ):
+    def redEdgeCaptureWithoutReconnect( self ):
 
         # parameters for RedEdge Camera
         #
@@ -229,7 +340,7 @@ class micraSenseCamera():
         url = "http://" + self.CAM_HOST_IP + "/capture"
 
         print(" red Edge capture ")
-        capture_data = self.micraSensePost( url, capture_params )
+        capture_data = self.micraSensePostNoRetry( url, capture_params )
         if capture_data:
             self.print_myJson( capture_data )
         else:
@@ -237,28 +348,102 @@ class micraSenseCamera():
             exit(1)
         return capture_data.status_code,capture_data         
 
+    # Post a message to the RedEdge camera commanding a capture, block until complete if no conenction attempt re-connect the wifi
+    #        
+    def redEdgeCapture( self, retry=2, withCalibration=False  ):
+
+        # parameters for RedEdge Camera if you want to do a calibration
+        #
+        capture_params = {
+            'anti_sat' : False,	                #   If true, strong anti-saturation rules are used for the capture
+            'block' : True,                     #	When 'true', the HTTP request will not return until the capture is complete.
+            'detect_panel' : True,              #	When 'true', the camera will not return an image until a MicaSense reflectance panel is detected
+            'preview' : False,                  #	When 'true', updates the current preview image
+            'cache_jpeg' : 0,	                #   /config's enabled_bands_jpeg	Bitmask for bands from which to capture and cache JPEG images  
+            'cache_raw'	: 0,                    #   /config's enabled_bands_raw	Bitmask for bands from which to capture and cache RAW (tiff) images.    
+            'store_capture' : True,	            #   Store this image to the SD card based on configuration settings.
+            'use_post_capture_state' : False	#   When 'true', the camera will try and retrieve state information from the /capture_state route before falling back on default values.        
+        }        
+        url = "http://" + self.CAM_HOST_IP + "/capture"
+
+        print(" red Edge capture begins .......")
+        retries = retry
+        while retries >= 1:
+            print(f"retry No. {(retry+1) - retries}")
+            if (withCalibration == False):
+                ret,capture_data = self.micraSensePost( url, capture_params )
+            else:
+                ret,capture_data = self.micraSensePost( url, capture_params, 3, True )            
+            if (ret == 1):
+                retries = -1
+            else:
+                if (self.reConnectWiFi()==1):
+                    retries -= 1
+                else:
+                    print("failed to connect to wifi")
+                    retries = -2
+                    
+        if (retries == -2):
+            return 0,0
+        else: 
+            if not (capture_data == 0):        
+                if (capture_data.status_code >= 200) and (capture_data.status_code <= 299) :
+                    self.print_myJson( capture_data )
+                else:
+                    print("Capture Failed")
+                return capture_data.status_code,capture_data   
+            return 0,0
+        
     # Get the RedEye camera capture status, block until complete
     #
     def redEyeCaptureStatus( self, id ):
        
         url = "http://" + self.CAM_HOST_IP + "/capture" + id
         
-        capture_data = self.micraSenseGet( url )
+        capture_data = self.micraSenseGetNoRetry( url )
         if capture_data:
              self.print_myJson( capture_data )
         return capture_data.status_code,status_code 
 
     # Post a message to the RedEdge camera commanding a capture, block until complete
     #        
-    def redEdgeCaptureStatus( self, id ):
+    def redEdgeCaptureStatusNoRetry( self, id ):
 
         url = "http://" + self.CAM_HOST_IP + "/capture" + id
 
-        capture_data = self.micraSenseGet( url )
+        capture_data = self.micraSenseGetNoRetry( url )
         if capture_data:
             self.print_myJson( capture_data )
         return capture_data.status_code,capture_data 
-        
+
+    # Post a message to the RedEdge camera commanding a capture, block until complete
+    #        
+    def redEdgeCaptureStatus( self, id, retry=2 ):
+
+        url = "http://" + self.CAM_HOST_IP + "/capture" + id
+
+        print(" red Edge capture status")
+        retries = retry
+        while retries >= 1:
+            print(f"retry No. {(retry+1) - retries}")
+            ret,capture_data = self.micraSenseGet( url )
+            if (ret == 1):
+                retries = -1
+            else:
+                if (self.reConnectWiFi()==1):
+                    retries -= 1
+                else:
+                    print("failed to connect to wifi")
+                    retries = -2
+                    
+        if (retries == -2):
+            return 0,0
+        else:            
+            if (capture_data.status_code >= 200) and (capture_data.status_code <= 299):
+                self.print_myJson( capture_data )
+            else:
+                print("Capture Failed")
+        return capture_data.status_code,capture_data         
         
     # Download KMZ File
     #
@@ -334,7 +519,7 @@ class micraSenseCamera():
                             "gain5" : g5,
                           }
         url = "http://" + self.CAM_HOST_IP + "/exposure"
-        capture_data = self.micraSensePost( url, exposure_params )
+        capture_data = self.micraSensePostNoRetry( url, exposure_params, True )
         return capture_data.status_code,status_code 
 
         
@@ -343,7 +528,7 @@ class micraSenseCamera():
     def micraSenseDetectPanelOn( self ):
         dt_params = { "detect_panel" : True } 
         url = "http://" + self.CAM_HOST_IP + "/detect_panel"
-        capture_data = self.micraSensePost( url, dt_params )
+        capture_data = self.micraSensePostNoRetry( url, dt_params, True )
         return capture_data.status_code,status_code         
 
     # Detect Panel On
@@ -354,7 +539,7 @@ class micraSenseCamera():
         'detect_panel'	: True          # When 'true', a panel detection capture is active"detect_panel" : True } 
         }
         url = "http://" + self.CAM_HOST_IP + "/detect_panel"
-        capture_data = self.micraSensePost( url, dt_params )
+        capture_data = self.micraSensePostNoRetry( url, dt_params, True )
         return capture_data.status_code,status_code 
    
 
@@ -376,7 +561,7 @@ class micraSenseCamera():
         dtime_utc = dt.datetime.now(pytz.utc)
         dt_params = { "latitude" : lat, "longitude" : lon, "altitude" : alt, "vel_n" : veln, "vel_e" : vele, "vel_d" : veld, "p_acc" : pacc, "v_acc" : vacc, "fix3d" : fix3d, utc_time : dtime_utc } 
         url = "http://" + self.CAM_HOST_IP + "/gps"
-        capture_data = self.micraSensePost( url, dt_params )
+        capture_data = self.micraSensePostNoRetry( url, dt_params, True )
         return capture_data.status_code,status_code 
 
     # get GPS
@@ -384,7 +569,7 @@ class micraSenseCamera():
     def micraSenseGetGPS( self ):
 
         url = "http://" + self.CAM_HOST_IP + "/gps"
-        capture_data = self.micraSenseGet( url )
+        capture_data = self.micraSenseGetNoRetry( url )
         return capture_data
         
 
@@ -394,7 +579,7 @@ class micraSenseCamera():
     
         orintation_params = { "aircraft_phi" : Aphi, "aircraft_theta" : Atheta, "aircraft_psi" : Apsi, "camera_phi" : Cphi, "camera_theta"	: Ctheta, "camera_psi" : Cpsi }
         url = "http://" + self.CAM_HOST_IP + "/orientation"
-        capture_data = self.micraSensePost( url, orintation_params )
+        capture_data = self.micraSensePostNoRetry( url, orintation_params, True )
         return capture_data.status_code,status_code 
 
     # get Orientation
@@ -402,7 +587,7 @@ class micraSenseCamera():
     def micraSenseSetGPS( self ):
 
         url = "http://" + self.CAM_HOST_IP + "/orientation"
-        capture_data = self.micraSenseGet( url )
+        capture_data = self.micraSenseGetNoRetry( url )
         return capture_data      
 
     # set picture state (redEdge Only)
@@ -411,7 +596,7 @@ class micraSenseCamera():
     
         pic_stat_params = { "aircraft_phi" : Aphi, "aircraft_theta" : Atheta, "aircraft_psi" : Apsi, "camera_phi" : Cphi, "camera_theta"	: Ctheta, "camera_psi" : Cpsi, "latitude" : lat, "longitude" : lon, "altitude" : alt, "vel_n" : veln, "vel_e" : vele, "vel_d" : veld, "p_acc" : pacc, "v_acc" : vacc, "fix3d" : fix3d, utc_time : dtime_utc }
         url = "http://" + self.CAM_HOST_IP + "/capture_state"
-        capture_data = self.micraSensePost( url, pic_stat_params )
+        capture_data = self.micraSensePostNoRetry( url, pic_stat_params, True )
         return capture_data.status_code,status_code 
                 
     # set configuration
@@ -444,7 +629,7 @@ class micraSenseCamera():
         "injected_gps_delay" : injected_gps_delay,
         }
         url = "http://" + self.CAM_HOST_IP + "/config"
-        capture_data = self.micraSensePost( url, orintation_params )
+        capture_data = self.micraSensePostNoRetry( url, orintation_params, True )
         return capture_data.status_code,status_code 
        
     # get pins
@@ -452,7 +637,7 @@ class micraSenseCamera():
     def micraSenseGetPinMux( self ):
 
         url = "http://" + self.CAM_HOST_IP + "/pin_mux"
-        capture_data = self.micraSenseGet( url )
+        capture_data = self.micraSenseGetNoRetry( url )
         return capture_data
 
     # get status
@@ -460,7 +645,7 @@ class micraSenseCamera():
     def micraSenseGetStatus( self ):
 
         url = "http://" + self.CAM_HOST_IP + "/status"
-        capture_data = self.micraSenseGet( url )
+        capture_data = self.micraSenseGetNoRetry( url )
         drive_gigaByte_Free = capture_data.json()['sd_gb_free']
         drive_gigaByte_Total = capture_data.json()['sd_gb_total']
         drive_WarningNearFull = capture_data.json()['sd_warn']
@@ -471,7 +656,7 @@ class micraSenseCamera():
     def micraSenseGetStatus( self ):
 
         url = "http://" + self.CAM_HOST_IP + "/networkstatus"
-        capture_data = self.micraSenseGet( url )
+        capture_data = self.micraSenseGetNoRetry( url )
         drive_gigaByte_Free = capture_data.json()['sd_gb_free']
         drive_gigaByte_Total = capture_data.json()['sd_gb_total']
         drive_WarningNearFull = capture_data.json()['sd_warn']
@@ -482,7 +667,7 @@ class micraSenseCamera():
     def micraSenseGetTimeSources( self ):
 
         url = "http://" + self.CAM_HOST_IP + "/timesources"
-        capture_data = self.micraSenseGet( url )
+        capture_data = self.micraSenseGetNoRetry( url )
         return capture_data
         
     # get time sources 
@@ -490,7 +675,7 @@ class micraSenseCamera():
     def micraSenseGetTimeSources( self ):
 
         url = "http://" + self.CAM_HOST_IP + "/version"
-        capture_data = self.micraSenseGet( url )
+        capture_data = self.micraSenseGetNoRetry( url )
         return capture_data
         
     # get files
@@ -499,7 +684,7 @@ class micraSenseCamera():
 
         url = "http://" + self.CAM_HOST_IP + "/files/*"
         # could also be this url = HOST_IP + "/files/000SET/*"
-        capture_data = self.micraSenseGet( url )
+        capture_data = self.micraSenseGetNoRetry( url )
         return capture_data
 
     # delete files (uses GET method)
@@ -507,7 +692,7 @@ class micraSenseCamera():
     def micraSenseDelFiles( self ):
 
         url = "http://" + self.CAM_HOST_IP + "/deletefile/*"
-        capture_data = self.micraSenseGet( url )
+        capture_data = self.micraSenseGetNoRetry( url )
         return capture_data
 
     # delete files (uses GET method)
@@ -516,7 +701,7 @@ class micraSenseCamera():
 
         url = "http://" + self.CAM_HOST_IP + "/deletefile/" + fileDirs + "/" + fullFileNam
         # or /deletefile/0000SET/000 or /deletefile/0001SET/000/IMG_1234_1.tif
-        capture_data = self.micraSenseGet( url )
+        capture_data = self.micraSenseGetNoRetry( url )
         return capture_data
 
     # set wifi
@@ -525,7 +710,7 @@ class micraSenseCamera():
     
         wifi_params = { "enable" : True }
         url = "http://" + self.CAM_HOST_IP + "/wifi"
-        capture_data = self.micraSensePost( url, wifi_params )
+        capture_data = self.micraSensePostNoRetry( url, wifi_params, True )
         return capture_data.status_code,status_code 
 
     # reformat SD card 
@@ -534,7 +719,7 @@ class micraSenseCamera():
     
         sd_params = { "erase_all_data" : True } 
         url = "http://" + self.CAM_HOST_IP + "/reformatsdcard"
-        capture_data = self.micraSensePost( url, sd_params )
+        capture_data = self.micraSensePostNoRetry( url, sd_params, True )
         return capture_data.status_code,status_code 
 
     # get information
@@ -542,7 +727,7 @@ class micraSenseCamera():
     def micraSenseGetInfo( self ):
 
         url = "http://" + self.CAM_HOST_IP + "/camera_info"
-        capture_data = self.micraSenseGet( url )
+        capture_data = self.micraSenseGetNoRetry( url )
         return capture_data       
 
     # get Calibration Distortion
@@ -550,7 +735,7 @@ class micraSenseCamera():
     def micraSenseGetCaliDistortion( self ):
 
         url = "http://" + self.CAM_HOST_IP + "/calibration/distortion"
-        capture_data = self.micraSenseGet( url )
+        capture_data = self.micraSenseGetNoRetry( url )
         return capture_data  
         
     # get Vignette Calibration 
@@ -558,7 +743,7 @@ class micraSenseCamera():
     def micraSenseGetVignetteCali( self ):
 
         url = "http://" + self.CAM_HOST_IP + "/calibration/vignette"
-        capture_data = self.micraSenseGet( url )
+        capture_data = self.micraSenseGetNoRetry( url )
         return capture_data 
         
     # get Rig Relatives Calibration 
@@ -566,7 +751,7 @@ class micraSenseCamera():
     def micraSenseGetVignetteCali( self ):
 
         url = "http://" + self.CAM_HOST_IP + "/calibration/rig_relatives"
-        capture_data = self.micraSenseGet( url )
+        capture_data = self.micraSenseGetNoRetry( url )
         return capture_data 
 
     # Prepare for Power Down 
@@ -575,7 +760,7 @@ class micraSenseCamera():
     
         po_params = { "ready_for_power_down" : True, "power_down" : False }  
         url = "http://" + self.CAM_HOST_IP + "/powerdownready"
-        capture_data = self.micraSensePost( url, po_params )
+        capture_data = self.micraSensePostNoRetry( url, po_params, True )
         return capture_data.status_code,status_code 
 
     # Power Down Ready
@@ -584,7 +769,7 @@ class micraSenseCamera():
     
         po_params = { "ready_for_power_down" : False, "power_down" : True }   
         url = "http://" + self.CAM_HOST_IP + "/powerdownready"
-        capture_data = self.micraSensePost( url, po_params )
+        capture_data = self.micraSensePostNoRetry( url, po_params, True )
         return capture_data.status_code,status_code 
 
     # get Power Down Status 
@@ -592,7 +777,7 @@ class micraSenseCamera():
     def micraSenseGetPowerDwnStatus( self ):
 
         url = "http://" + self.CAM_HOST_IP + "/powerdownready"
-        capture_data = self.micraSenseGet( url )
+        capture_data = self.micraSenseGetNoRetry( url )
         return capture_data 
 
     # Thermal NUC
@@ -601,7 +786,7 @@ class micraSenseCamera():
     
         nuc_params = { "nuc_now" : True, "elapsed_seconds_since_nuc" : 10, "delta_deg_K_since_nuc" : -0.2, "message" : "NUC request failed" }    
         url = "http://" + self.CAM_HOST_IP + "/thermal_nuc"
-        capture_data = self.micraSensePost( url, nuc_params )
+        capture_data = self.micraSensePostNoRetry( url, nuc_params, True )
         return capture_data.status_code,status_code 
 
     def getDiskFree( self ):
@@ -649,12 +834,51 @@ class micraSenseCamera():
                 pdef = picDef[index]
                 print(f"image {i} : {index}")
                 url = "http://" + self.CAM_HOST_IP + "/" + pdef
-                outFileName = "imgMicaCam_" + str(id) + "_" + index + "_" + timeTag[0] + ".jpg"
+                #outFileName = "imgMicaCam_" + str(id) + "_" + index + "_" + timeTag[0] + ".tiff"
+                outFileName = "imgMicaCam_" + str(id) + "_" + index + ".tiff"
                 dataGot = requests.get(url)
                 if (dataGot.status_code >= 200) and (dataGot.status_code <= 299):
                     out = open(outFileName, 'wb')
                     out.write(dataGot.content)
                     out.close
+                    if (i == 1):                                         # blue_img
+                        image = cv2.imread(outFileName)
+                        #image = cv2.imread("im1.png")
+                        #image=np.array(np.rot90(image,-1))
+                        #image = image.copy()
+                        #image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+                        #blue_img,g,r = cv2.split(image)
+                        blue_img = np.array(image)
+                        blue_img = np.array(blue_img)
+                        blue_img = blue_img.copy()
+                        #blue_img = dataGot.content
+                    elif (i == 2):                                        # green 
+                        image = cv2.imread(outFileName)
+                        #image = cv2.imread("im1.png")
+                        #image=np.array(np.rot90(image,-1))
+                        #image = image.copy()
+                        #image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+                        #b,green_img,r = cv2.split(image)
+                        green_img = np.array(image)
+                        green_img = np.array(green_img)
+                        green_img = green_img.copy()
+                        #green_img = dataGot.content
+                    elif (i == 3):                                        # red
+                        image = cv2.imread(outFileName)
+                        #image = cv2.imread("im1.png")
+                        #image=np.array(np.rot90(image,-1))
+                        #image = image.copy()
+                        #image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+                        #b,g,red_img = cv2.split(image)
+                        red_img = np.array(image)
+                        red_img = np.array(red_img)
+                        red_img = red_img.copy()
+                        #red_img = dataGot.content
+                        merge_image = cv2.merge([green_img,blue_img,red_img])
+                        #cv2.imwrite('image.png',merge_image)
+                        out = open("mergedFile.tiff", 'wb')
+                        out.write(merge_image)
+                        out.close 
             return 1
         else:
             print("====== error ========")
@@ -663,13 +887,8 @@ class micraSenseCamera():
 if __name__ == '__main__':
 
     myRedEdgeCamNo1 = micraSenseCamera()
-    # 
-    # check the disk space and if theres not much exit
-    #
-    if ( int(myRedEdgeCamNo1.getDiskFree()) >= 95 ):
-        print("Not much space on the disk exiting......")
-        exit(-1)
-        
+    diskFreePercent = myRedEdgeCamNo1.getDiskFree()
+
     #
     # command it to take a picture
     #
@@ -677,9 +896,7 @@ if __name__ == '__main__':
         print("saved the pictures")
     else:
         print("error saving the pictures")
-
-    # just keep for debug for now
-    #    
+        
     #stat, jso = myRedEdgeCamNo1.redEdgeCapture()
     #if (200 >= stat <= 299):
     #   jsonStat = jso.json()
@@ -718,4 +935,6 @@ if __name__ == '__main__':
     #myRedEdgeCamNo1.micraSensePowerDwnRdy()
     
     # myRedEdgeCamNo1.micraSenseReformatSDCard()
+
+
 
