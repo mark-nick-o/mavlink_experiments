@@ -775,7 +775,7 @@ class micaSenseCamera():
         po_params = { "ready_for_power_down" : True, "power_down" : False }  
         url = "http://" + self.CAM_HOST_IP + "/powerdownready"
         capture_data = self.micaSensePostNoRetry( url, po_params, True )
-        return capture_data.status_code,status_code 
+        return capture_data.status_code, capture_data
 
     # Power Down Ready
     #
@@ -784,7 +784,7 @@ class micaSenseCamera():
         po_params = { "ready_for_power_down" : False, "power_down" : True }   
         url = "http://" + self.CAM_HOST_IP + "/powerdownready"
         capture_data = self.micaSensePostNoRetry( url, po_params, True )
-        return capture_data.status_code,status_code 
+        return capture_data.status_code, capture_data
 
     # get Power Down Status 
     #
@@ -982,24 +982,15 @@ if __name__ == '__main__':
     print(">>>>>>>>>>>>>>>> Get GPS  >>>>>>>>>>>>>>>>>>>>>>>>>")
     a = myRedEdgeCamNo1.micaSenseGetGPS()
 
-    print(">>>>>>>>>>>>>>>> Reformat SD Card >>>>>>>>>>>>>>>>>")
-    a,b = myRedEdgeCamNo1.micaSenseReformatSDCard()
-    if (a == 200):
-        stateOfFormat = b.json()
-        if not (stateOfFormat['reformat_status'].find("success") == -1):
-            print(">>>>>>>>>>>>>> Re-Format OK >>>>>>>>>>>")
+    #print(">>>>>>>>>>>>>>>> Reformat SD Card >>>>>>>>>>>>>>>>>")
+    #a,b = myRedEdgeCamNo1.micaSenseReformatSDCard()
+    #if (a == 200):
+    #    stateOfFormat = b.json()
+    #    if not (stateOfFormat['reformat_status'].find("success") == -1):
+    #        print(">>>>>>>>>>>>>> Re-Format OK >>>>>>>>>>>")
 
     #myRedEdgeCamNo1.micaSenseSetConfig()
     #myRedEdgeCamNo1.micaSensePreparePowerDwn()
     #myRedEdgeCamNo1.micaSensePowerDwnRdy()
-    
-
-
- 
-
-
-    
-
-
     
 
