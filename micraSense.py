@@ -61,6 +61,8 @@ class micraSenseCamera():
     CAM_HOST_IP = WIFI_CAM                               # set this for the camera you want to use
     NTP_SYNC_THRESHOLD = 1000                            # frequency of ntp server syncronisation
     NTP_TIME_SYNC_ENABLE = 1                             # enable if 1 to use ntp timesync :: Internet conenction required (GPRS)
+
+    CALIBRATE_USING_PANEL = True                         # when passed to the CaptureFivePictures method enters calibration sequence 
     
     # globals used by the class
     #
@@ -452,7 +454,7 @@ class micraSenseCamera():
         url = "http://" + self.CAM_HOST_IP + "/captures.kmz"
         
         capture_data = requests.post(url)
-        print_myJson( capture_data )
+        self.print_myJson( capture_data )
         return capture_data.status_code,status_code 
 
     # Download KMZ File
@@ -462,7 +464,7 @@ class micraSenseCamera():
         url = "http://" + self.CAM_HOST_IP + "/captures.kmz"
         
         capture_data = requests.post(url)
-        print_myJson( capture_data )
+        self.print_myJson( capture_data )
         return capture_data.status_code,status_code         
 
     # Parse the kmz file (xml stream) and print the placemark and co-ordinates
@@ -646,21 +648,21 @@ class micraSenseCamera():
 
         url = "http://" + self.CAM_HOST_IP + "/status"
         capture_data = self.micraSenseGetNoRetry( url )
-        drive_gigaByte_Free = capture_data.json()['sd_gb_free']
-        drive_gigaByte_Total = capture_data.json()['sd_gb_total']
-        drive_WarningNearFull = capture_data.json()['sd_warn']
-        return capture_data, drive_gigaByte_Free, drive_gigaByte_Total, drive_WarningNearFull
+        #drive_gigaByte_Free = capture_data.json()['sd_gb_free']
+        #drive_gigaByte_Total = capture_data.json()['sd_gb_total']
+        #drive_WarningNearFull = capture_data.json()['sd_warn']
+        return capture_data #, drive_gigaByte_Free, drive_gigaByte_Total, drive_WarningNearFull
 
     # get status
     #
-    def micraSenseGetStatus( self ):
+    def micraSenseGetNetworkStatus( self ):
 
         url = "http://" + self.CAM_HOST_IP + "/networkstatus"
         capture_data = self.micraSenseGetNoRetry( url )
-        drive_gigaByte_Free = capture_data.json()['sd_gb_free']
-        drive_gigaByte_Total = capture_data.json()['sd_gb_total']
-        drive_WarningNearFull = capture_data.json()['sd_warn']
-        return capture_data, drive_gigaByte_Free, drive_gigaByte_Total, drive_WarningNearFull
+        #drive_gigaByte_Free = capture_data.json()['sd_gb_free']
+        #drive_gigaByte_Total = capture_data.json()['sd_gb_total']
+        #drive_WarningNearFull = capture_data.json()['sd_warn']
+        return capture_data #, drive_gigaByte_Free, drive_gigaByte_Total, drive_WarningNearFull
         
     # get status
     #
@@ -672,7 +674,7 @@ class micraSenseCamera():
         
     # get time sources 
     #
-    def micraSenseGetTimeSources( self ):
+    def micraSenseGetVersion( self ):
 
         url = "http://" + self.CAM_HOST_IP + "/version"
         capture_data = self.micraSenseGetNoRetry( url )
@@ -682,9 +684,11 @@ class micraSenseCamera():
     #
     def micraSenseGetFiles( self ):
 
-        url = "http://" + self.CAM_HOST_IP + "/files/*"
-        # could also be this url = HOST_IP + "/files/000SET/*"
+        #url = "http://" + self.CAM_HOST_IP + "/files/*"
+        #url = "http://" + self.CAM_HOST_IP + "/files/018SET/000/"
+        url = "http://" + self.CAM_HOST_IP + "/files/0018SET/000/IMG_0011_3.tif"
         capture_data = self.micraSenseGetNoRetry( url )
+        print(f" stat {capture_data.status_code}")
         return capture_data
 
     # delete files (uses GET method)
@@ -720,7 +724,8 @@ class micraSenseCamera():
         sd_params = { "erase_all_data" : True } 
         url = "http://" + self.CAM_HOST_IP + "/reformatsdcard"
         capture_data = self.micraSensePostNoRetry( url, sd_params, True )
-        return capture_data.status_code,status_code 
+        print(f"Reformat gave .... {capture_data.status_code}")
+        return capture_data.status_code,capture_data
 
     # get information
     #
@@ -748,7 +753,7 @@ class micraSenseCamera():
         
     # get Rig Relatives Calibration 
     #
-    def micraSenseGetVignetteCali( self ):
+    def micraSenseGetRigRelCali( self ):
 
         url = "http://" + self.CAM_HOST_IP + "/calibration/rig_relatives"
         capture_data = self.micraSenseGetNoRetry( url )
@@ -805,25 +810,42 @@ class micraSenseCamera():
 
     # Take a picture and wait for completion status then save them to you're hard drive.
     # 
-    def redEdgeTakeFivePictures( self ):
+    def redEdgeCaptureFivePictures( self, calibON=False ):
 
-        stat, jso = self.redEdgeCapture()
+        if (calibON == False):
+            stat, jso = self.redEdgeCapture()
+        else:
+            stat, jso = self.redEdgeCapture( 3, True )
         if (stat >= 200) and (stat <= 299):
             print("in function >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
             jsonStat = jso.json()
             statTxt = jsonStat['status']
+            if ((calibON == True) and not (statTxt.find("complete") == -1)):
+                print("Calibration Completed")
+                return 2
             id = jsonStat['id']
             loop_timeout = 3
             while ((statTxt.find("complete") == -1) and (loop_timeout >= 0)) :
+                print(f"doing {jsonStat['id']}")
                 stat, js = self.redEdgeCaptureStatus( jsonStat['id'] )
                 if (stat >= 200) and (stat <= 299):
                     statusOut = js.json()
-                statTxt = statusOut['status']
+                    statTxt = statusOut['status']
+                elif not (stat == 0):
+                    print(f"stat returned was {stat}")
+                    statusOut = js.json()
+                    print(statusOut) 
+                    statTxt = statusOut['status']
+                else:
+                    print("invalid stat was returned !!!")
                 loop_timeout -= 1
                 print(f"status returned was {statTxt} stat is {stat}")
             if (loop_timeout <= 0):
                 print("------- request failed on timeout---------")
                 return -1
+            elif not ((stat >= 200) and (stat <= 299)):
+                print(f"------- returned a stat of {stat} ------")
+                return -2
             picDef = statusOut['raw_cache_path']
             print(f" time = {statusOut['time']}")
             piclabels = [ 1,2,3,4,5 ]
@@ -887,54 +909,76 @@ class micraSenseCamera():
 if __name__ == '__main__':
 
     myRedEdgeCamNo1 = micraSenseCamera()
+
+    #
+    # show the disk free 
+    #
     diskFreePercent = myRedEdgeCamNo1.getDiskFree()
 
     #
+    # command it to calibrating using the panel
+    #
+    #if (myRedEdgeCamNo1.redEdgeCaptureFivePictures(myRedEdgeCamNo1.CALIBRATE_USING_PANEL) == 2):
+    #    print("success @ calibration")
+    #else:
+    #    print("failure in calibration")
+        
+    #
     # command it to take a picture
     #
-    if (myRedEdgeCamNo1.redEdgeTakeFivePictures() == 1):
+    if (myRedEdgeCamNo1.redEdgeCaptureFivePictures() == 1):
         print("saved the pictures")
     else:
         print("error saving the pictures")
-        
-    #stat, jso = myRedEdgeCamNo1.redEdgeCapture()
-    #if (200 >= stat <= 299):
-    #   jsonStat = jso.json()
-    #    statTxt = jsonStat['status']
-    #    id = jsonStat['id']
-    #    while statTxt.find("complete") == -1:
-    #        stat, js = myRedEdgeCamNo1.redEdgeCaptureStatus( jsonStat['id'] )
-    #        if (200 >= stat <= 299):
-    #            statusOut = js.json()
-    #            statTxt = statusOut['status']
-    #    picDef = statusOut['raw_cache_path']
-    #    print(f" time = {statusOut['time']}")
-    #    print(f"image 1 : {picDef['1']}")
-    #    print(f"image 2 : {picDef['2']}")
-    #    print(f"image 3 : {picDef['3']}")
-    #    print(f"image 4 : {picDef['4']}")
-    #    print(f"image 5 : {picDef['5']}")
-    #    url = "http://" + myRedEdgeCamNo1.CAM_HOST_IP + "/" + picDef['1']
-    #    print(url)
-    #    dataGot = requests.get(url)
-    #    if (200 >= dataGot.status_code <= 299):
-    #        out = open("imageFromCam.jpg", 'wb')
-    #        out.write(dataGot.content)
-    #        out.close
-    #        #print(dataGot.content)
-    #else:
-    #    print("====== error ========")
-    
-    #jsonStat = jso.json()
-    #print("============== id %s ============="%jsonStat['id'])
-    #stat, js = myRedEdgeCamNo1.redEdgeCaptureStatus( jsonStat['id'] )
-    #statusOut = js.json()
-    #print(f" wots tha stat ================= {statusOut['status']} ============= ")
+
+    #
+    # get vasrious status about the camera
+    #
+    print(">>>>>>>>>>>>>>>> Status >>>>>>>>>>>>>>>>>>>>>>>>>")
+    a = myRedEdgeCamNo1.micraSenseGetStatus()
+
+    print(">>>>>>>>>>>>>>>> Time >>>>>>>>>>>>>>>>>>>>>>>>>")
+    a = myRedEdgeCamNo1.micraSenseGetTimeSources()
+
+    print(">>>>>>>>>>>>>>>> Files >>>>>>>>>>>>>>>>>>>>>>>>>")
+    a = myRedEdgeCamNo1.micraSenseGetFiles()
+
+    print(">>>>>>>>>>>>>>>> Info >>>>>>>>>>>>>>>>>>>>>>>>>")
+    a = myRedEdgeCamNo1.micraSenseGetInfo()
+
+    print(">>>>>>>>>>>>>>>> Network >>>>>>>>>>>>>>>>>>>>>>>>>")
+    a = myRedEdgeCamNo1.micraSenseGetNetworkStatus()
+
+    print(">>>>>>>>>>>>>>>> Version >>>>>>>>>>>>>>>>>>>>>>>>>")
+    a = myRedEdgeCamNo1.micraSenseGetVersion()
+
+    print(">>>>>>>>>>>>>>>> Get Information >>>>>>>>>>>>>>>>>>>>>>>>>")
+    a = myRedEdgeCamNo1.micraSenseGetInfo()
+
+    print(">>>>>>>>>>>>>>>> Cali Dist >>>>>>>>>>>>>>>>>>>>>>>>>")
+    a = myRedEdgeCamNo1.micraSenseGetCaliDistortion()
+
+    print(">>>>>>>>>>>>>>>> Vignette Cali  >>>>>>>>>>>>>>>>>>>>>>>>>")
+    a = myRedEdgeCamNo1.micraSenseGetVignetteCali()
+
+    print(">>>>>>>>>>>>>>>> Rig Relatives Cali  >>>>>>>>>>>>>>>>>>>>>>>>>")
+    a = myRedEdgeCamNo1.micraSenseGetRigRelCali()
+
+    print(">>>>>>>>>>>>>>>> Get Pin Mux  >>>>>>>>>>>>>>>>>>>>>>>>>")
+    a = myRedEdgeCamNo1.micraSenseGetPinMux()
+
+    print(">>>>>>>>>>>>>>>> Get GPS  >>>>>>>>>>>>>>>>>>>>>>>>>")
+    a = myRedEdgeCamNo1.micraSenseGetGPS()
+
+    print(">>>>>>>>>>>>>>>> Reformat SD Card >>>>>>>>>>>>>>>>>")
+    a,b = myRedEdgeCamNo1.micraSenseReformatSDCard()
+    if (a == 200):
+        stateOfFormat = b.json()
+        if not (stateOfFormat['reformat_status'].find("success") == -1):
+            print(">>>>>>>>>>>>>> Re-Format OK >>>>>>>>>>>")
+
     #myRedEdgeCamNo1.micraSenseSetConfig()
     #myRedEdgeCamNo1.micraSensePreparePowerDwn()
     #myRedEdgeCamNo1.micraSensePowerDwnRdy()
     
-    # myRedEdgeCamNo1.micraSenseReformatSDCard()
-
-
 
