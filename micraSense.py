@@ -1,4 +1,4 @@
-# ------------------------------------------------------------------ micraSense Camera  Library ----------------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------ micaSense Camera  Library ----------------------------------------------------------------------------------------------------------
 #
 #                                                                    using http request
 #                                                                    air cam pro
@@ -51,7 +51,7 @@ import xml.etree.ElementTree as ET
 import numpy as np
 import cv2
 
-class micraSenseCamera():
+class micaSenseCamera():
 
     # constants / definitions
     #
@@ -75,7 +75,7 @@ class micraSenseCamera():
     
 # =================================================================================== Functions ==================================================================================================================
 #
-# General functions have prefix micraSense whereas specific camera actions shall have prefix by type e.g. redEye redEdge
+# General functions have prefix micaSense whereas specific camera actions shall have prefix by type e.g. redEye redEdge
 #
 
     # set the system clock on linux or windows
@@ -176,7 +176,7 @@ class micraSenseCamera():
             
     # Post a message to the camera commanding an action without any retry 
     #
-    def micraSensePostNoRetry( self, url, json_para={ 'block' : True }, withParam=False ):
+    def micaSensePostNoRetry( self, url, json_para={ 'block' : True }, withParam=False ):
             
         try:
             #capture_data = requests.post( url, json=json_para, timeout=30)
@@ -203,7 +203,7 @@ class micraSenseCamera():
 
     # Post a message to the camera commanding an action with retry
     #
-    def micraSensePost( self, url, json_para={ 'block' : True }, retrys=3, withParam=False ):
+    def micaSensePost( self, url, json_para={ 'block' : True }, retrys=3, withParam=False ):
 
         retries = retrys 
         while retries >= 1:           
@@ -244,7 +244,7 @@ class micraSenseCamera():
         
     # Get a message from the camera reading a status
     #
-    def micraSenseGetNoRetry( self, url, json_para={ 'block' : True } ):
+    def micaSenseGetNoRetry( self, url, json_para={ 'block' : True } ):
            
         try:
             capture_data = requests.get( url, json=json_para, timeout=30)
@@ -269,7 +269,7 @@ class micraSenseCamera():
 
     # Get a message from the camera reading a status
     #
-    def micraSenseGet( self, url, json_para={ 'block' : True }, retrys=3 ):
+    def micaSenseGet( self, url, json_para={ 'block' : True }, retrys=3 ):
           
         retries = retrys 
         while retries >= 1: 
@@ -303,7 +303,7 @@ class micraSenseCamera():
             capture_data=0
         return ret,capture_data 
         
-    def micraSensePrintId( self, capture_data ):
+    def micaSensePrintId( self, capture_data ):
     
         json_data_cap_resp = capture_data.json()
         id = str(json_data_cap_resp['id'])
@@ -318,7 +318,7 @@ class micraSenseCamera():
         capture_params = { 'store_capture' : True, 'block' : True }       
         url = "http://" + self.CAM_HOST_IP + "/capture"
         
-        capture_data = self.micraSensePostNoRetry( url, capture_params, True )
+        capture_data = self.micaSensePostNoRetry( url, capture_params, True )
         if capture_data:
              self.print_myJson( capture_data )
         return capture_data.status_code,status_code 
@@ -342,7 +342,7 @@ class micraSenseCamera():
         url = "http://" + self.CAM_HOST_IP + "/capture"
 
         print(" red Edge capture ")
-        capture_data = self.micraSensePostNoRetry( url, capture_params )
+        capture_data = self.micaSensePostNoRetry( url, capture_params )
         if capture_data:
             self.print_myJson( capture_data )
         else:
@@ -373,9 +373,9 @@ class micraSenseCamera():
         while retries >= 1:
             print(f"retry No. {(retry+1) - retries}")
             if (withCalibration == False):
-                ret,capture_data = self.micraSensePost( url, capture_params )
+                ret,capture_data = self.micaSensePost( url, capture_params )
             else:
-                ret,capture_data = self.micraSensePost( url, capture_params, 3, True )            
+                ret,capture_data = self.micaSensePost( url, capture_params, 3, True )            
             if (ret == 1):
                 retries = -1
             else:
@@ -402,7 +402,7 @@ class micraSenseCamera():
        
         url = "http://" + self.CAM_HOST_IP + "/capture" + id
         
-        capture_data = self.micraSenseGetNoRetry( url )
+        capture_data = self.micaSenseGetNoRetry( url )
         if capture_data:
              self.print_myJson( capture_data )
         return capture_data.status_code,status_code 
@@ -413,7 +413,7 @@ class micraSenseCamera():
 
         url = "http://" + self.CAM_HOST_IP + "/capture" + id
 
-        capture_data = self.micraSenseGetNoRetry( url )
+        capture_data = self.micaSenseGetNoRetry( url )
         if capture_data:
             self.print_myJson( capture_data )
         return capture_data.status_code,capture_data 
@@ -428,7 +428,7 @@ class micraSenseCamera():
         retries = retry
         while retries >= 1:
             print(f"retry No. {(retry+1) - retries}")
-            ret,capture_data = self.micraSenseGet( url )
+            ret,capture_data = self.micaSenseGet( url )
             if (ret == 1):
                 retries = -1
             else:
@@ -469,7 +469,7 @@ class micraSenseCamera():
 
     # Parse the kmz file (xml stream) and print the placemark and co-ordinates
     #
-    def micraSenseParseKmzData( self, capture_data ):
+    def micaSenseParseKmzData( self, capture_data ):
     
         placeMarkNameList = []
         placeMarkPointList = []
@@ -491,7 +491,7 @@ class micraSenseCamera():
 
     # Parse the kmz file (xml stream) and print the placemark and co-ordinates
     #
-    def micraSenseParseKmzStream( self, capture_data ):
+    def micaSenseParseKmzStream( self, capture_data ):
     
         root = ET.fromstring(capture_data)
         #for folder_name in root.iter('Folder'):
@@ -507,7 +507,7 @@ class micraSenseCamera():
  
     # Post a message to the camera setting exposure, block until complete 
     #
-    def micraSenseSetExposure( self, e1, e2, e3, e4, e5, g1, g2, g3, g4, g5 ):
+    def micaSenseSetExposure( self, e1, e2, e3, e4, e5, g1, g2, g3, g4, g5 ):
         exposure_params = { "enable_man_exposure" : False, 
                             "exposure1" : e1, 
                             "exposure2" : e2, 
@@ -521,27 +521,27 @@ class micraSenseCamera():
                             "gain5" : g5,
                           }
         url = "http://" + self.CAM_HOST_IP + "/exposure"
-        capture_data = self.micraSensePostNoRetry( url, exposure_params, True )
+        capture_data = self.micaSensePostNoRetry( url, exposure_params, True )
         return capture_data.status_code,status_code 
 
         
     # Detect Panel On
     #
-    def micraSenseDetectPanelOn( self ):
+    def micaSenseDetectPanelOn( self ):
         dt_params = { "detect_panel" : True } 
         url = "http://" + self.CAM_HOST_IP + "/detect_panel"
-        capture_data = self.micraSensePostNoRetry( url, dt_params, True )
+        capture_data = self.micaSensePostNoRetry( url, dt_params, True )
         return capture_data.status_code,status_code         
 
     # Detect Panel On
     #
-    def micraSenseDetectPanelOff( self ):
+    def micaSenseDetectPanelOff( self ):
         dt_params = { 
         'abort_detect_panel' : False,	# When 'true', any actively running panel detection captures will be forced to complete.
         'detect_panel'	: True          # When 'true', a panel detection capture is active"detect_panel" : True } 
         }
         url = "http://" + self.CAM_HOST_IP + "/detect_panel"
-        capture_data = self.micraSensePostNoRetry( url, dt_params, True )
+        capture_data = self.micaSensePostNoRetry( url, dt_params, True )
         return capture_data.status_code,status_code 
    
 
@@ -554,7 +554,7 @@ class micraSenseCamera():
     # timezone_london = pytz.timezone('Europe/London')
     # london_datetime_obj = nw_datetime_obj.astimezone(timezone_london)
     #
-    def micraSenseSetGPS( self, lon, lat, alt, veln, vele, veld, pacc, vacc, fix3d=True ):
+    def micaSenseSetGPS( self, lon, lat, alt, veln, vele, veld, pacc, vacc, fix3d=True ):
         ntp_sync_freq = ntp_sync_freq + 1
         if ((ntp_sync_freq >= self.NTP_SYNC_THRESHOLD) and ( self.NTP_TIME_SYNC_ENABLE >= 1)):
            self.ntp_time_sync()    
@@ -563,33 +563,33 @@ class micraSenseCamera():
         dtime_utc = dt.datetime.now(pytz.utc)
         dt_params = { "latitude" : lat, "longitude" : lon, "altitude" : alt, "vel_n" : veln, "vel_e" : vele, "vel_d" : veld, "p_acc" : pacc, "v_acc" : vacc, "fix3d" : fix3d, utc_time : dtime_utc } 
         url = "http://" + self.CAM_HOST_IP + "/gps"
-        capture_data = self.micraSensePostNoRetry( url, dt_params, True )
+        capture_data = self.micaSensePostNoRetry( url, dt_params, True )
         return capture_data.status_code,status_code 
 
     # get GPS
     #
-    def micraSenseGetGPS( self ):
+    def micaSenseGetGPS( self ):
 
         url = "http://" + self.CAM_HOST_IP + "/gps"
-        capture_data = self.micraSenseGetNoRetry( url )
+        capture_data = self.micaSenseGetNoRetry( url )
         return capture_data
         
 
     # set orientation
     #
-    def micraSenseSetOrientation( self, Aphi, Atheta, Apsi, Cphi, Ctheta, Cpsi ):
+    def micaSenseSetOrientation( self, Aphi, Atheta, Apsi, Cphi, Ctheta, Cpsi ):
     
         orintation_params = { "aircraft_phi" : Aphi, "aircraft_theta" : Atheta, "aircraft_psi" : Apsi, "camera_phi" : Cphi, "camera_theta"	: Ctheta, "camera_psi" : Cpsi }
         url = "http://" + self.CAM_HOST_IP + "/orientation"
-        capture_data = self.micraSensePostNoRetry( url, orintation_params, True )
+        capture_data = self.micaSensePostNoRetry( url, orintation_params, True )
         return capture_data.status_code,status_code 
 
     # get Orientation
     #
-    def micraSenseSetGPS( self ):
+    def micaSenseSetGPS( self ):
 
         url = "http://" + self.CAM_HOST_IP + "/orientation"
-        capture_data = self.micraSenseGetNoRetry( url )
+        capture_data = self.micaSenseGetNoRetry( url )
         return capture_data      
 
     # set picture state (redEdge Only)
@@ -598,12 +598,12 @@ class micraSenseCamera():
     
         pic_stat_params = { "aircraft_phi" : Aphi, "aircraft_theta" : Atheta, "aircraft_psi" : Apsi, "camera_phi" : Cphi, "camera_theta"	: Ctheta, "camera_psi" : Cpsi, "latitude" : lat, "longitude" : lon, "altitude" : alt, "vel_n" : veln, "vel_e" : vele, "vel_d" : veld, "p_acc" : pacc, "v_acc" : vacc, "fix3d" : fix3d, utc_time : dtime_utc }
         url = "http://" + self.CAM_HOST_IP + "/capture_state"
-        capture_data = self.micraSensePostNoRetry( url, pic_stat_params, True )
+        capture_data = self.micaSensePostNoRetry( url, pic_stat_params, True )
         return capture_data.status_code,status_code 
                 
     # set configuration
     #
-    def micraSenseSetConfig( self, streaming_enable=True, streaming_allowed = True, preview_band = "band1", operating_alt = 11, operating_alt_tolerance = 45, overlap_along_track = 11, overlap_cross_track = 5, auto_cap_mode = "overlap", timer_period = 1.2,ext_trigger_mode = "rising", pwm_trigger_threshold = 38.2,	enabled_bands_raw = 43,	enabled_bands_jpeg = 378,enable_man_exposure = True,gain_exposure_crossover = 87.65,	ip_address = "123.456.789.012", raw_format = "TIFF",network_mode = "main", ext_trigger_out_enable = False,	ext_trigger_out_pulse_high = False, agc_minimum_mean = 0.1,	audio_enable = True,audio_select_bitfield = 1,	injected_gps_delay = 9.1 ):
+    def micaSenseSetConfig( self, streaming_enable=True, streaming_allowed = True, preview_band = "band1", operating_alt = 11, operating_alt_tolerance = 45, overlap_along_track = 11, overlap_cross_track = 5, auto_cap_mode = "overlap", timer_period = 1.2,ext_trigger_mode = "rising", pwm_trigger_threshold = 38.2,	enabled_bands_raw = 43,	enabled_bands_jpeg = 378,enable_man_exposure = True,gain_exposure_crossover = 87.65,	ip_address = "123.456.789.012", raw_format = "TIFF",network_mode = "main", ext_trigger_out_enable = False,	ext_trigger_out_pulse_high = False, agc_minimum_mean = 0.1,	audio_enable = True,audio_select_bitfield = 1,	injected_gps_delay = 9.1 ):
         config_params = {
         "streaming_enable" : streaming_enable,	
         "streaming_allowed"	: streaming_allowed, 
@@ -631,23 +631,23 @@ class micraSenseCamera():
         "injected_gps_delay" : injected_gps_delay,
         }
         url = "http://" + self.CAM_HOST_IP + "/config"
-        capture_data = self.micraSensePostNoRetry( url, orintation_params, True )
+        capture_data = self.micaSensePostNoRetry( url, orintation_params, True )
         return capture_data.status_code,status_code 
        
     # get pins
     #
-    def micraSenseGetPinMux( self ):
+    def micaSenseGetPinMux( self ):
 
         url = "http://" + self.CAM_HOST_IP + "/pin_mux"
-        capture_data = self.micraSenseGetNoRetry( url )
+        capture_data = self.micaSenseGetNoRetry( url )
         return capture_data
 
     # get status
     #
-    def micraSenseGetStatus( self ):
+    def micaSenseGetStatus( self ):
 
         url = "http://" + self.CAM_HOST_IP + "/status"
-        capture_data = self.micraSenseGetNoRetry( url )
+        capture_data = self.micaSenseGetNoRetry( url )
         #drive_gigaByte_Free = capture_data.json()['sd_gb_free']
         #drive_gigaByte_Total = capture_data.json()['sd_gb_total']
         #drive_WarningNearFull = capture_data.json()['sd_warn']
@@ -655,10 +655,10 @@ class micraSenseCamera():
 
     # get status
     #
-    def micraSenseGetNetworkStatus( self ):
+    def micaSenseGetNetworkStatus( self ):
 
         url = "http://" + self.CAM_HOST_IP + "/networkstatus"
-        capture_data = self.micraSenseGetNoRetry( url )
+        capture_data = self.micaSenseGetNoRetry( url )
         #drive_gigaByte_Free = capture_data.json()['sd_gb_free']
         #drive_gigaByte_Total = capture_data.json()['sd_gb_total']
         #drive_WarningNearFull = capture_data.json()['sd_warn']
@@ -666,132 +666,132 @@ class micraSenseCamera():
         
     # get status
     #
-    def micraSenseGetTimeSources( self ):
+    def micaSenseGetTimeSources( self ):
 
         url = "http://" + self.CAM_HOST_IP + "/timesources"
-        capture_data = self.micraSenseGetNoRetry( url )
+        capture_data = self.micaSenseGetNoRetry( url )
         return capture_data
         
     # get time sources 
     #
-    def micraSenseGetVersion( self ):
+    def micaSenseGetVersion( self ):
 
         url = "http://" + self.CAM_HOST_IP + "/version"
-        capture_data = self.micraSenseGetNoRetry( url )
+        capture_data = self.micaSenseGetNoRetry( url )
         return capture_data
         
     # get files
     #
-    def micraSenseGetFiles( self ):
+    def micaSenseGetFiles( self ):
 
         #url = "http://" + self.CAM_HOST_IP + "/files/*"
         #url = "http://" + self.CAM_HOST_IP + "/files/018SET/000/"
         url = "http://" + self.CAM_HOST_IP + "/files/0018SET/000/IMG_0011_3.tif"
-        capture_data = self.micraSenseGetNoRetry( url )
+        capture_data = self.micaSenseGetNoRetry( url )
         print(f" stat {capture_data.status_code}")
         return capture_data
 
     # delete files (uses GET method)
     #
-    def micraSenseDelFiles( self ):
+    def micaSenseDelFiles( self ):
 
         url = "http://" + self.CAM_HOST_IP + "/deletefile/*"
-        capture_data = self.micraSenseGetNoRetry( url )
+        capture_data = self.micaSenseGetNoRetry( url )
         return capture_data
 
     # delete files (uses GET method)
     #
-    def micraSenseDelFile( self, fileDirs, fullFileNam ):
+    def micaSenseDelFile( self, fileDirs, fullFileNam ):
 
         url = "http://" + self.CAM_HOST_IP + "/deletefile/" + fileDirs + "/" + fullFileNam
         # or /deletefile/0000SET/000 or /deletefile/0001SET/000/IMG_1234_1.tif
-        capture_data = self.micraSenseGetNoRetry( url )
+        capture_data = self.micaSenseGetNoRetry( url )
         return capture_data
 
     # set wifi
     #
-    def micraSenseSetWiFi( self ):
+    def micaSenseSetWiFi( self ):
     
         wifi_params = { "enable" : True }
         url = "http://" + self.CAM_HOST_IP + "/wifi"
-        capture_data = self.micraSensePostNoRetry( url, wifi_params, True )
+        capture_data = self.micaSensePostNoRetry( url, wifi_params, True )
         return capture_data.status_code,status_code 
 
     # reformat SD card 
     #
-    def micraSenseReformatSDCard( self ):
+    def micaSenseReformatSDCard( self ):
     
         sd_params = { "erase_all_data" : True } 
         url = "http://" + self.CAM_HOST_IP + "/reformatsdcard"
-        capture_data = self.micraSensePostNoRetry( url, sd_params, True )
+        capture_data = self.micaSensePostNoRetry( url, sd_params, True )
         print(f"Reformat gave .... {capture_data.status_code}")
         return capture_data.status_code,capture_data
 
     # get information
     #
-    def micraSenseGetInfo( self ):
+    def micaSenseGetInfo( self ):
 
         url = "http://" + self.CAM_HOST_IP + "/camera_info"
-        capture_data = self.micraSenseGetNoRetry( url )
+        capture_data = self.micaSenseGetNoRetry( url )
         return capture_data       
 
     # get Calibration Distortion
     #
-    def micraSenseGetCaliDistortion( self ):
+    def micaSenseGetCaliDistortion( self ):
 
         url = "http://" + self.CAM_HOST_IP + "/calibration/distortion"
-        capture_data = self.micraSenseGetNoRetry( url )
+        capture_data = self.micaSenseGetNoRetry( url )
         return capture_data  
         
     # get Vignette Calibration 
     #
-    def micraSenseGetVignetteCali( self ):
+    def micaSenseGetVignetteCali( self ):
 
         url = "http://" + self.CAM_HOST_IP + "/calibration/vignette"
-        capture_data = self.micraSenseGetNoRetry( url )
+        capture_data = self.micaSenseGetNoRetry( url )
         return capture_data 
         
     # get Rig Relatives Calibration 
     #
-    def micraSenseGetRigRelCali( self ):
+    def micaSenseGetRigRelCali( self ):
 
         url = "http://" + self.CAM_HOST_IP + "/calibration/rig_relatives"
-        capture_data = self.micraSenseGetNoRetry( url )
+        capture_data = self.micaSenseGetNoRetry( url )
         return capture_data 
 
     # Prepare for Power Down 
     #
-    def micraSensePreparePowerDwn( self ):
+    def micaSensePreparePowerDwn( self ):
     
         po_params = { "ready_for_power_down" : True, "power_down" : False }  
         url = "http://" + self.CAM_HOST_IP + "/powerdownready"
-        capture_data = self.micraSensePostNoRetry( url, po_params, True )
+        capture_data = self.micaSensePostNoRetry( url, po_params, True )
         return capture_data.status_code,status_code 
 
     # Power Down Ready
     #
-    def micraSensePowerDwnRdy( self ):
+    def micaSensePowerDwnRdy( self ):
     
         po_params = { "ready_for_power_down" : False, "power_down" : True }   
         url = "http://" + self.CAM_HOST_IP + "/powerdownready"
-        capture_data = self.micraSensePostNoRetry( url, po_params, True )
+        capture_data = self.micaSensePostNoRetry( url, po_params, True )
         return capture_data.status_code,status_code 
 
     # get Power Down Status 
     #
-    def micraSenseGetPowerDwnStatus( self ):
+    def micaSenseGetPowerDwnStatus( self ):
 
         url = "http://" + self.CAM_HOST_IP + "/powerdownready"
-        capture_data = self.micraSenseGetNoRetry( url )
+        capture_data = self.micaSenseGetNoRetry( url )
         return capture_data 
 
     # Thermal NUC
     #
-    def micraSenseThermalNUC( self ):
+    def micaSenseThermalNUC( self ):
     
         nuc_params = { "nuc_now" : True, "elapsed_seconds_since_nuc" : 10, "delta_deg_K_since_nuc" : -0.2, "message" : "NUC request failed" }    
         url = "http://" + self.CAM_HOST_IP + "/thermal_nuc"
-        capture_data = self.micraSensePostNoRetry( url, nuc_params, True )
+        capture_data = self.micaSensePostNoRetry( url, nuc_params, True )
         return capture_data.status_code,status_code 
 
     def getDiskFree( self ):
@@ -908,7 +908,7 @@ class micraSenseCamera():
 
 if __name__ == '__main__':
 
-    myRedEdgeCamNo1 = micraSenseCamera()
+    myRedEdgeCamNo1 = micaSenseCamera()
 
     #
     # show the disk free 
@@ -935,50 +935,53 @@ if __name__ == '__main__':
     # get vasrious status about the camera
     #
     print(">>>>>>>>>>>>>>>> Status >>>>>>>>>>>>>>>>>>>>>>>>>")
-    a = myRedEdgeCamNo1.micraSenseGetStatus()
+    a = myRedEdgeCamNo1.micaSenseGetStatus()
 
     print(">>>>>>>>>>>>>>>> Time >>>>>>>>>>>>>>>>>>>>>>>>>")
-    a = myRedEdgeCamNo1.micraSenseGetTimeSources()
+    a = myRedEdgeCamNo1.micaSenseGetTimeSources()
 
     print(">>>>>>>>>>>>>>>> Files >>>>>>>>>>>>>>>>>>>>>>>>>")
-    a = myRedEdgeCamNo1.micraSenseGetFiles()
+    a = myRedEdgeCamNo1.micaSenseGetFiles()
 
     print(">>>>>>>>>>>>>>>> Info >>>>>>>>>>>>>>>>>>>>>>>>>")
-    a = myRedEdgeCamNo1.micraSenseGetInfo()
+    a = myRedEdgeCamNo1.micaSenseGetInfo()
 
     print(">>>>>>>>>>>>>>>> Network >>>>>>>>>>>>>>>>>>>>>>>>>")
-    a = myRedEdgeCamNo1.micraSenseGetNetworkStatus()
+    a = myRedEdgeCamNo1.micaSenseGetNetworkStatus()
 
     print(">>>>>>>>>>>>>>>> Version >>>>>>>>>>>>>>>>>>>>>>>>>")
-    a = myRedEdgeCamNo1.micraSenseGetVersion()
+    a = myRedEdgeCamNo1.micaSenseGetVersion()
 
     print(">>>>>>>>>>>>>>>> Get Information >>>>>>>>>>>>>>>>>>>>>>>>>")
-    a = myRedEdgeCamNo1.micraSenseGetInfo()
+    a = myRedEdgeCamNo1.micaSenseGetInfo()
 
     print(">>>>>>>>>>>>>>>> Cali Dist >>>>>>>>>>>>>>>>>>>>>>>>>")
-    a = myRedEdgeCamNo1.micraSenseGetCaliDistortion()
+    a = myRedEdgeCamNo1.micaSenseGetCaliDistortion()
 
     print(">>>>>>>>>>>>>>>> Vignette Cali  >>>>>>>>>>>>>>>>>>>>>>>>>")
-    a = myRedEdgeCamNo1.micraSenseGetVignetteCali()
+    a = myRedEdgeCamNo1.micaSenseGetVignetteCali()
 
     print(">>>>>>>>>>>>>>>> Rig Relatives Cali  >>>>>>>>>>>>>>>>>>>>>>>>>")
-    a = myRedEdgeCamNo1.micraSenseGetRigRelCali()
+    a = myRedEdgeCamNo1.micaSenseGetRigRelCali()
 
     print(">>>>>>>>>>>>>>>> Get Pin Mux  >>>>>>>>>>>>>>>>>>>>>>>>>")
-    a = myRedEdgeCamNo1.micraSenseGetPinMux()
+    a = myRedEdgeCamNo1.micaSenseGetPinMux()
 
     print(">>>>>>>>>>>>>>>> Get GPS  >>>>>>>>>>>>>>>>>>>>>>>>>")
-    a = myRedEdgeCamNo1.micraSenseGetGPS()
+    a = myRedEdgeCamNo1.micaSenseGetGPS()
 
     print(">>>>>>>>>>>>>>>> Reformat SD Card >>>>>>>>>>>>>>>>>")
-    a,b = myRedEdgeCamNo1.micraSenseReformatSDCard()
+    a,b = myRedEdgeCamNo1.micaSenseReformatSDCard()
     if (a == 200):
         stateOfFormat = b.json()
         if not (stateOfFormat['reformat_status'].find("success") == -1):
             print(">>>>>>>>>>>>>> Re-Format OK >>>>>>>>>>>")
 
-    #myRedEdgeCamNo1.micraSenseSetConfig()
-    #myRedEdgeCamNo1.micraSensePreparePowerDwn()
-    #myRedEdgeCamNo1.micraSensePowerDwnRdy()
+    #myRedEdgeCamNo1.micaSenseSetConfig()
+    #myRedEdgeCamNo1.micaSensePreparePowerDwn()
+    #myRedEdgeCamNo1.micaSensePowerDwnRdy()
+    
+
+
     
 
