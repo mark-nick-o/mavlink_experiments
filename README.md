@@ -32,5 +32,10 @@ cd build
 cmake ..
 make
 ```
-I have added the camera protocol for testing.. WIP
+I have added the camera protocol for testing.. WIP (becasuse I might be preferning to use the driver as python due to the requests library being more suitable for the micasense camera, this will at sometime be checked when i have spare time)
 https://mavlink.io/en/services/camera.html
+
+At present I have added a class for control of the micaSense camera RedEye/RedEdge/Altim This is working via http over Wifi 
+and some mavlink communication scripts for testing using pymavlink and mavlink-routerd as well as scripts to run them via crontab to keep mavlink-routerd running all the time even when it is killed.
+
+This is for use at present on raspberry Pi 
