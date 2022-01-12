@@ -130,6 +130,7 @@ class MAVFrame():
     RCV_COMMAND = mavutil.mavlink.MAV_CMD_REQUEST_MESSAGE
     RPM2 = 0
     ACK_RESULT = 0
+    DEFAULT_SYS_ID = 1
  
     # camera informations (default camera routines will retrieve this)
     time_boot_ms = 1213
@@ -210,6 +211,12 @@ class MAVFrame():
     
     # used to decide what is being requested from the calling (GCS) station
     type_of_msg = 0
+   
+    g_count = 0
+
+    # defines for camera ID file
+    CAM_XML_FILE =  "alpha_cam_new.xml"
+    NETWORK_ID = 1
     
     def on_click_connect(self,e):
         #"""
@@ -619,12 +626,19 @@ class MAVFrame():
         except Exception as err_msg:
             print("Failed to connect : %s" % (err_msg))
             return the_conection,False
-        
+
+    def makeNewMAVlinkConn(self,id):
+        try:
+            the_conection = custommav.mavlink_connection('udpin:0.0.0.0:14550',autoreconnect=True, source_system=id)
+            return the_conection,True
+        except Exception as err_msg:
+            print("Failed to connect : %s" % (err_msg))
+            return the_conection,False
+            
     # Send heartbeat from a GCS (types are define as enum in the dialect file). 
     #
     def mavlink_send_GCS_heartbeat(self, the_conection): 
         print(" heartbeat..............................  %s\n"%(mavutil.mavlink.MAV_TYPE_CAMERA))
-        the_conection.target_component = 100
         the_conection.mav.heartbeat_send(mavutil.mavlink.MAV_TYPE_CAMERA, mavutil.mavlink.MAV_AUTOPILOT_INVALID, 0, 0, mavutil.mavlink.MAV_STATE_ACTIVE)
 
     # Send heartbeat from a MAVLink application.
@@ -761,32 +775,39 @@ class MAVFrame():
     def mavlink_video_stop_streaming(self, the_connection, streamNo):
         #if self.mavlink10():
         the_connection.mav.command_long_send(
-            the_connection.target_system,  # target_system
-            the_connection.target_component, # target_component
+            the_connection.target_system,                 # target_system
+            the_connection.target_component,              # target_component
             mavutil.mavlink.MAV_CMD_VIDEO_STOP_STREAMING, # command
-            0, # Confirmation
-            streamNo, # stream number
-            0, # param2
-            0, # param3 
-            0, # param4
-            0, # param5
-            0, # param6
-            0) # param7
+            0,                                            # Confirmation
+            streamNo,                                     # stream number
+            0,                                            # param2
+            0,                                            # param3 
+            0,                                            # param4
+            0,                                            # param5
+            0,                                            # param6
+            0)                                            # param7
+
+    def mavlink_do_ftp_send(self, the_connection, network, payload):
+           the_connection.mav. file_transfer_protocol_send (
+            network,
+            the_connection.target_system,        # target_system
+            the_connection.target_component,     # target_component
+            payload )
 
     def mavlink_video_start_streaming(self, the_connection, streamNo):
         #if self.mavlink10():
         the_connection.mav.command_long_send(
-            the_connection.target_system,  # target_system
-            the_connection.target_component, # target_component
-            mavutil.mavlink.MAV_CMD_VIDEO_START_STREAMING, # command
-            0, # Confirmation
-            streamNo, # stream number
-            0, # param2
-            0, # param3 
-            0, # param4
-            0, # param5
-            0, # param6
-            0) # param7
+            the_connection.target_system,                   # target_system
+            the_connection.target_component,                # target_component
+            mavutil.mavlink.MAV_CMD_VIDEO_START_STREAMING,  # command
+            0,                                              # Confirmation
+            streamNo,                                       # stream number
+            0,                                              # param2
+            0,                                              # param3 
+            0,                                              # param4
+            0,                                              # param5
+            0,                                              # param6
+            0)                                              # param7
 
     # suitable variables to drive CamMode
     #
@@ -1064,6 +1085,7 @@ class MAVFrame():
  
     def mavlink_send_video_stream_information(self, the_connection):
         #if self.mavlink10():
+        print("    !!! sending the video stream information   !!! \n")
         the_connection.mav.video_stream_information_send(
             the_connection.target_system,                                      # target_system
             the_connection.target_component,                                   # target_component
@@ -1105,13 +1127,13 @@ class MAVFrame():
             
     # process the incoming messages received
     #
-    def process_messages_from_connection(self, the_connection):
+    def process_messages_from_connection(self, fra, the_connection):
         #"""
         #This runs continuously. The mavutil.recv_match() function will call mavutil.post_message()
         #any time a new message is received, and will notify all functions in the master.message_hooks list.
         #"""
-        loop = 1
-        while loop == 1:
+        loop = 2
+        while loop >= 1:
             print("im receiving.............")
             # wait heartbeat (only the GCS does this )
             # m = the_connection.recv_match(type="HEARTBEAT", blocking=True, timeout=5)
@@ -1119,11 +1141,17 @@ class MAVFrame():
             # you can also use type lists like this 
             # type=['COMMAND_LONG,RC_CHANNELS']
             #
-            msg = the_connection.recv_match(blocking=True, timeout=5)
+            #msg = the_connection.recv_match(blocking=True, timeout=5)
+            msg = the_connection.recv_match(blocking=True, timeout=1)
             if ( the_connection.target_system == msg.get_srcSystem() ):                             # check this and eliminate spurious messages if needed
                 print(f"data read {msg.get_type()}")
                 print(f"connection {the_connection.target_system} == {msg.get_srcSystem()}")
             last_timestamp = msg._timestamp
+            print("send camera feedback message")
+            the_connection.mav.camera_feedback_send( 1000, 1, 1, 22, 21, 10, 30, 21, 2, 3, 5, 2, 3)
+            the_connection.mav.gps_raw_int_send( 1000, self.g_count, 77, 66, 76, 3, 1, 2, 3, 5)
+            the_connection.mav.vibration_send( 1000, 1, 1, 22, 21, 10, 30 )
+            self.g_count = self.g_count + 1
             if not msg:
                 return
             if msg.get_type() == "BAD_DATA":
@@ -1136,7 +1164,8 @@ class MAVFrame():
             elif msg.get_type() == 'RC_CHANNELS':
                 print("RC Channel message (system %u component %u)\n" % (the_connection.target_system, the_connection.target_component))
             elif msg.get_type() == 'COMMAND_LONG':
-                print("Long message received (system %u component %u)\n" % (the_connection.target_system, the_connection.target_component))
+                print("!!!!!! Long message received (system %u component %u)\n" % (the_connection.target_system, the_connection.target_component))
+                print("in cmd long ... ACK RES %s %u \n" % (self.ACK_RESULT,mavutil.mavlink.MAV_CMD_REQUEST_CAMERA_INFORMATION))
                 print("Command %u p1 %u p2 %u p3 %u p4 %u \n" % (msg.command, msg.param1, msg.param2, msg.param3, msg.param4))
                 print("p5 %u p6 %u p7 %u \n" % (msg.param5, msg.param6, msg.param7))  
                 if (self.ACK_RESULT == 0):
@@ -1158,6 +1187,18 @@ class MAVFrame():
                             self.type_of_msg = 6505                             
                         else:
                             self.type_of_msg = 0
+                    elif (self.RCV_COMMAND == mavutil.mavlink.MAV_CMD_REQUEST_CAMERA_INFORMATION):
+                         print("request camera Info OLD MESSAGE.....")
+                         fra.mavlink_send_camera_information(the_connection)
+                         if (msg.param1 == 1):
+                             self.type_of_msg = mavutil.mavlink.MAV_CMD_REQUEST_CAMERA_INFORMATION
+                             print("=========== !! send to QGround Camera Information !! ==========")
+                             fra.mavlink_send_camera_information(the_connection)
+                    elif (self.RCV_COMMAND == mavutil.mavlink.MAV_CMD_REQUEST_VIDEO_STREAM_INFORMATION):
+                         print("request video stream Info OLD MESSAGE.....")
+                         self.type_of_msg = mavutil.mavlink.MAV_CMD_REQUEST_VIDEO_STREAM_INFORMATION
+                         print("=========== !! send to QGround VideoStream !! ==========")
+                         fra.mavlink_send_video_stream_information(the_connection)
                     elif (self.RCV_COMMAND == mavutil.mavlink.MAV_CMD_DO_SET_RELAY):
                         self.type_of_msg = mavutil.mavlink.MAV_CMD_DO_SET_RELAY;
                         self.Got_Param1 = msg.param1
@@ -1267,6 +1308,7 @@ class MAVFrame():
                         self.RPM2 = 0
                         self.type_of_msg = self.RCV_COMMAND
                     self.ACK_RESULT = mavutil.mavlink.MAV_RESULT_ACCEPTED
+                    print("ACK RES %s"%(self.ACK_RESULT))
                 else:
                     self.ACK_ERROR = self.GOT_ERROR
                     self.errRCV_COMMAND = msg.command
@@ -1276,19 +1318,30 @@ class MAVFrame():
                 print("Cam Cap message received (system %u component %u)\n" % (the_connection.target_system, the_connection.target_component)) 
                 print("lat %u lon %u alt %u\n" % (msg.lat, msg.lon, msg.alt)) 
                 print("URL %u)\n" % (msg.file_url))                    
-
             elif msg.get_type() == 'GPS_RAW_INT':
-                the_connection.mav.gps_raw_int_send( 1000, 1, 22, 21, 1, 3, 1, 2, 3, 5)
+                #the_connection.mav.gps_raw_int_send( 1000, 1, 22, 21, 1, 3, 1, 2, 3, 5)
+                fra.mavlink_send_camera_information(the_connection)
             elif msg.get_type() == 'CAMERA_FEEDBACK':
                 print("Camera Feedback")
                 the_connection.mav.camera_feedback_send( 1000, 1, 1, 22, 21, 10, 30, 21, 2, 3, 5, 2, 3)
+            elif msg.get_type() == 'FILE_TRANSFER_PROTOCOL':
+                print("FTP request for XML file .... I'm sending it as my payload")
+                try:
+                    f = open(self.CAM_XML_FILE,'r')
+                    payload = f.read()
+                    f.close()
+                    self.mavlink_do_ftp_send( the_connection, self.NETWORK_ID, payload)
+                except Exception as e:
+                    print(f" XML file read exception {e}") 
             elif msg.get_type() == 'REQUEST_DATA_STREAM':
-                print("REQUEST DATA STREAM :: start %u id %u req_rte %u\n" % (msg.start_stop, msg.req_stream_id, msg.req_message_rate)) 
+                print("REQUEST DATA STREAM :: start %u id %u req_rte %u\n" % (msg.start_stop, msg.req_stream_id, msg.req_message_rate))
             elif msg.get_type() == 'STATUSTEXT':
                 print("STATUSTEXT :: text %s " % (msg.text)) 
+            elif msg.get_type() == 'HEARTBEAT':
+                print("HEARTBEAT :: src %s type %s auto %s sys %s" % (msg.get_srcSystem(), msg.type,msg.autopilot,msg.system_status)) 
             else:
                 print(f"unsupported command :: {msg.get_type()}")   
-            time.sleep(0.05)
+            #time.sleep(0.05)
             loop = loop - 1
 
     def mavlink_send_ack_command(self, the_connection, cmd, rpm2, pro, res):
@@ -1479,7 +1532,7 @@ async def sendMavlinkHeartBeat(fm, cID, sleep):
 # The continuos reading thread
 #
 async def readMavlinkIncomingData(fm, cID):
-    fm.process_messages_from_connection(cID)
+    fm.process_messages_from_connection(fm,cID)
 
 #
 # The ACK send thread
@@ -1494,7 +1547,7 @@ async def sendMavlinkAckData(fm, cID, sleep, cmd, rpm2, pro, res):
 #
 # The handle with ACK an error during collection that might happen during the send, its told to come again later or its wrong
 #
-async def exceptionMavlinkErrorAckData(fm, cID):
+async def execptionMavlinkErrorAckData(fm, cID):
     while fm.task_control_1 > 0:
         await asyncio.sleep(1)
         if (fm.ACK_ERROR == fm.GOT_ERROR):
@@ -1509,13 +1562,15 @@ async def exceptionMavlinkErrorAckData(fm, cID):
 #
 # The MSG send thread
 #
-async def processMavlinkMessageData(fm, cID, sleep, sonycam, caminst, redeyecam ):
+async def processMavlinkMessageData(fm, cID, sleep, sonycam=0, caminst=0, redeyecam=0 ):
 
     # define what is sent in param1
     myRedEyeCamera = 1
     mySonyCamera = 2
     mySonyCameraContShoot = 3 
-    
+   
+    print("=================================== !!!!! in process !!!!!! ========================")
+ 
     if (fm.type_of_msg == 65000):
         #
         ## TODO :: Add the cmera retrieval class cam_data_result = fm.getCameraInfomationFromCam()
@@ -1867,6 +1922,9 @@ async def processMavlinkMessageData(fm, cID, sleep, sonycam, caminst, redeyecam 
             fm.ACK_RESULT = mavutil.mavlink.MAV_RESULT_IN_PROGRESS
         else:
             fm.ACK_RESULT = mavutil.mavlink.MAV_RESULT_FAILED
+    elif (fm.type_of_msg == mavutil.mavlink.MAV_CMD_REQUEST_CAMERA_INFORMATION):
+        print("============================= CAMERA INFO MESSAGE ================================== ")
+        fm.mavlink_send_camera_information(cID)
             
     while sleep > 0:
         await asyncio.sleep(1)
@@ -1887,6 +1945,24 @@ async def main():
         except Exception as e:
             print("Error Trap :: ", e.__class__, " occurred.")
 
+    # wait heartbeat 
+    # if it sends another sys id we need to change it
+    #
+    state = False
+    xx = 1
+    while xx == 1:
+        m = cID.recv_match(type="HEARTBEAT", blocking=True, timeout=5)
+        if not ( m.autopilot == mavutil.mavlink.MAV_AUTOPILOT_INVALID ):
+            xx = 2
+    id = m.get_srcSystem() 
+    if not ( m.get_srcSystem() == frame.DEFAULT_SYS_ID ) :
+        print("-------- new id found --------")
+        while (state == False):
+            try:
+                cID,state = frame.makeNewMAVlinkConn(id)
+            except Exception as e:
+                print("Error Trap :: ", e.__class__, " occurred.")
+                
     # python sony class
     #
     # pysonyCam = pySony()  
@@ -1898,40 +1974,46 @@ async def main():
     #
     redEyeCam = redEye()
     
-    
     frame.RCV_COMMAND = 0
     frame.RPM2 = 0
     frame.ACK_RESULT = 0
 
     #read_task_1 = asyncio.create_task(readMavlinkIncomingData(frame, cID))
-        
+    print("started reader")
+    
     while True: 
         read_task_1 = asyncio.create_task(readMavlinkIncomingData(frame, cID))
-        await read_task_1 
-        print(f"Started: {time.strftime('%X')}")
+        #await read_task_1 
+        print(f"Started in main : {time.strftime('%X')}")
         
         snd_task_1 = asyncio.create_task(sendMavlinkHeartBeat(frame, cID, 1))
+        print("hb send....................................................................")
         await snd_task_1
 
+        print("hb end....................................................................ACK RES %s"%(frame.ACK_RESULT))
         #doesnt wait its continuos ---> await read_task_1
         
         if not (frame.ACK_RESULT == 0):
             snd_task_2 = asyncio.create_task(sendMavlinkAckData(frame, cID, 1, frame.RCV_COMMAND, frame.RPM2, 0, frame.ACK_RESULT ))      
             await snd_task_2
  
+            print("ack end....................................................................")
             fm.task_control_1 = 1 
             #snd_task_3 = asyncio.create_task(processMavlinkMessageData(frame, cID, 1, pysonyCam, camInst, redEyeCam))
             snd_task_3 = asyncio.create_task(processMavlinkMessageData(frame, cID, 2))
             exc_task_error_handler = asyncio.create_task(execptionMavlinkErrorAckData(frame, cID))           
             await snd_task_3 
             await exc_task_error_handler
-            
+            print("end 2 tasks...............................") 
             snd_task_2 = asyncio.create_task(sendMavlinkAckData(frame, cID, 1, frame.RCV_COMMAND, frame.RPM2, 100, frame.ACK_RESULT )) 
             await snd_task_2
 
+            print("ack end2...................................................................")
             frame.RCV_COMMAND = 0  
             frame.ACK_RESULT = 0      
-            
+        
+        print("completed..................................................")    
+        read_task_1.cancel()
         print(f"Ended: {time.strftime('%X')}")
 
 if __name__ == '__main__':
