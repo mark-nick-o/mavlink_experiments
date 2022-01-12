@@ -101,6 +101,8 @@ from mypymavlink import mavutilcust as custommav
 import asyncio
 import time
 
+import numpy as np
+
 # ============== control Raspberry Pi IO ===============
 # sudo apt-get install rpi.gpio
 #
@@ -788,11 +790,25 @@ class MAVFrame():
             0)                                            # param7
 
     def mavlink_do_ftp_send(self, the_connection, network, payload):
-           the_connection.mav. file_transfer_protocol_send (
-            network,
-            the_connection.target_system,        # target_system
-            the_connection.target_component,     # target_component
-            payload )
+        MAX_CHUNK_BYTES = 251
+        numOfchunk = round(len(payload) / MAX_CHUNK_BYTES)
+        for i in range(numOfchunk):
+            #print(f"ftp send chunk {i} offset {i*251}")
+            msgpay = []
+            b = 1
+            for b in range(MAX_CHUNK_BYTES):
+                try:
+                    msgpay.append(payload[b+(i*251)])
+                except Exception as e:
+                    msgpay.append(0)
+            try:
+                the_connection.mav.file_transfer_protocol_send (
+                    network,
+                    the_connection.target_system,        # target_system
+                    the_connection.target_component,     # target_component
+                    msgpay )
+            except Exception as e:
+                 print(f" ftp send exception {e} \nchunk {i} @ offset {i*MAX_CHUNK_BYTES}") 
 
     def mavlink_video_start_streaming(self, the_connection, streamNo):
         #if self.mavlink10():
@@ -1148,9 +1164,21 @@ class MAVFrame():
                 print(f"connection {the_connection.target_system} == {msg.get_srcSystem()}")
             last_timestamp = msg._timestamp
             print("send camera feedback message")
+            #
+            # These are test messages to check the receive end !!!!
+            #
             the_connection.mav.camera_feedback_send( 1000, 1, 1, 22, 21, 10, 30, 21, 2, 3, 5, 2, 3)
-            the_connection.mav.gps_raw_int_send( 1000, self.g_count, 77, 66, 76, 3, 1, 2, 3, 5)
-            the_connection.mav.vibration_send( 1000, 1, 1, 22, 21, 10, 30 )
+            #the_connection.mav.gps_raw_int_send( 1000, self.g_count, 77, 66, 76, 3, 1, 2, 3, 5)
+            #the_connection.mav.vibration_send( 1000, 1, 1, 22, 21, 10, 30 )
+            #print("FTP request for XML file .... I'm sending it as my payload")
+            #try:
+            #    f = open(self.CAM_XML_FILE,'r')
+            #    #payload = f.read() not raw read but as bytes below
+            #    lab = np.fromfile(f, dtype=np.uint8)
+            #    f.close()
+            #except Exception as e:
+            #     print(f" XML file read exception {e}") 
+            #self.mavlink_do_ftp_send( the_connection, self.NETWORK_ID, lab)
             self.g_count = self.g_count + 1
             if not msg:
                 return
@@ -1326,13 +1354,15 @@ class MAVFrame():
                 the_connection.mav.camera_feedback_send( 1000, 1, 1, 22, 21, 10, 30, 21, 2, 3, 5, 2, 3)
             elif msg.get_type() == 'FILE_TRANSFER_PROTOCOL':
                 print("FTP request for XML file .... I'm sending it as my payload")
+                lab = []
                 try:
                     f = open(self.CAM_XML_FILE,'r')
-                    payload = f.read()
+                    #payload = f.read() not raw read but as bytes below
+                    lab = np.fromfile(f, dtype=np.uint8)
                     f.close()
-                    self.mavlink_do_ftp_send( the_connection, self.NETWORK_ID, payload)
                 except Exception as e:
                     print(f" XML file read exception {e}") 
+                self.mavlink_do_ftp_send( the_connection, self.NETWORK_ID, lab)
             elif msg.get_type() == 'REQUEST_DATA_STREAM':
                 print("REQUEST DATA STREAM :: start %u id %u req_rte %u\n" % (msg.start_stop, msg.req_stream_id, msg.req_message_rate))
             elif msg.get_type() == 'STATUSTEXT':
@@ -2053,3 +2083,5 @@ if __name__ == '__main__':
 # ===================== Main Multi-Thread send/rcv Task ============================
 #
     asyncio.run(main())
+
+
