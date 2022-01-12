@@ -135,20 +135,20 @@ class MAVFrame():
     DEFAULT_SYS_ID = 1
  
     # camera informations (default camera routines will retrieve this)
-    time_boot_ms = 1213
+    time_boot_ms = 1
     firmware_version = 12
-    focal_length = 11
-    sensor_size_h = 300
-    sensor_size_v = 400
+    focal_length = 1.1
+    sensor_size_h = 3.0
+    sensor_size_v = 4.0
     flags = 4
     resolution_h = 300
     resolution_v = 400
     cam_definition_version = 2
-    vendor_name = "sony"
-    model_name = "alpha750"
+    vendor_name = np.dtype([('s',np.uint8)])
+    model_name = np.dtype([('a',np.uint8)])
     lens_id = 1
     cam_definition_uri = "http://10.0.2.51/cam_defs"
-
+                                           
     # camera settings
     mode_id = 3                                                      #  Camera mode
     zoomLevel = 7                                                    #  Current zoom level (0.0 to 100.0, NaN if not known)*/
@@ -175,14 +175,14 @@ class MAVFrame():
     # video stream
     framerate = 30.0                                                          # [Hz] Frame rate.
     bitrate = 3000                                                            # [bits/s] Bit rate.
-    flags = 3                                                                 # Bitmap of stream status flags.
-    resolution_h = 300                                                        # [pix] Horizontal resolution.
-    resolution_v = 400                                                        # [pix] Vertical resolution.
+    Vflags = 3                                                                 # Bitmap of stream status flags.
+    Vresolution_h = 300                                                        # [pix] Horizontal resolution.
+    Vresolution_v = 400                                                        # [pix] Vertical resolution.
     rotation = 90                                                             # [deg] Video image rotation clockwise.
     hfov = 45                                                                 # [deg] Horizontal Field of view.
     stream_id = 2                                                             # Video Stream ID (1 for first, 2 for second, etc.)
     count = 4                                                                 # Number of streams available.
-    type = mavutil.mavlink.VIDEO_STREAM_TYPE_MPEG_TS_H264                     # Type of stream.
+    stream_type = mavutil.mavlink.VIDEO_STREAM_TYPE_MPEG_TS_H264              # Type of stream.
     videoname = "vid_001"
     video_uri = "http://10.0.0.56/vids/001.mov"
 
@@ -197,7 +197,21 @@ class MAVFrame():
     camera_id = 1                                                            #  Camera ID (1 for first, 2 for second, etc.)
     capture_result = 1                                                       #  Boolean indicating success (1) or failure (0) while capturing this image.
     file_url = "http://10.1.2.3/img/1.jpg"
-        
+
+    # camera feedback
+    time_usec = 10000 
+    cam_idx = 1 
+    img_idx = 1 
+    # already lat, 
+    lng = lon 
+    alt_msl = 2 
+    alt_rel = 4 
+    roll = 6
+    pitch = 1 
+    yaw = 2 
+    foc_len = 7 
+    CFflags = 3
+                
     ACK_ERROR = 0
     errRCV_COMMAND = 0
     errRPM2 = 0
@@ -641,17 +655,35 @@ class MAVFrame():
     #
     def mavlink_send_GCS_heartbeat(self, the_conection): 
         print(" heartbeat..............................  %s\n"%(mavutil.mavlink.MAV_TYPE_CAMERA))
-        the_conection.mav.heartbeat_send(mavutil.mavlink.MAV_TYPE_CAMERA, mavutil.mavlink.MAV_AUTOPILOT_INVALID, 0, 0, mavutil.mavlink.MAV_STATE_ACTIVE)
-
+        try:
+            the_conection.mav.heartbeat_send(mavutil.mavlink.MAV_TYPE_CAMERA, mavutil.mavlink.MAV_AUTOPILOT_INVALID, 0, 0, mavutil.mavlink.MAV_STATE_ACTIVE)
+            ret = True
+        except Exception as err_msg:
+            print("Failed to send GCS heartbeat : %s" % (err_msg))
+            ret = False
+        return ret
+        
     # Send heartbeat from a MAVLink application.
     #
     def mavlink_send_OBC_heartbeat2(self, the_connection):   
-        mavutil.mavlink.heartbeat_send(mavutil.mavlink.MAV_TYPE_CAMERA, mavutil.mavlink.MAV_AUTOPILOT_GENERIC, 0, 0, 0)
-
+        try:
+            mavutil.mavlink.heartbeat_send(mavutil.mavlink.MAV_TYPE_CAMERA, mavutil.mavlink.MAV_AUTOPILOT_GENERIC, 0, 0, 0)
+            ret = True
+        except Exception as err_msg:
+            print("Failed to send OBC heartbeat : %s" % (err_msg))
+            ret = False
+        return ret
+        
     # Receive heartbeat from a MAVLink application.
     #
     def mavlink_rcv_heartbeat(self, the_connection):   
-        the_connection.wait_heartbeat()
+        try:
+            the_connection.wait_heartbeat()
+            ret = True
+        except Exception as err_msg:
+            print("Failed to wait for heartbeat : %s" % (err_msg))
+            ret = False
+        return ret
         
     # Sets a value to the rc channel
     #
@@ -669,23 +701,28 @@ class MAVFrame():
         # https://mavlink.io/en/messages/common.html#RC_CHANNELS_OVERRIDE
         rc_channel_values = [65535 for _ in range(18)]
         rc_channel_values[channel_id - 1] = pwm
-        # target_system
-        # target_component
-        # RC channel list, in microseconds.
-        the_connection.mav.rc_channels_override_send( the_connection.target_system, the_connection.target_component, *rc_channel_values )   
 
+        try:
+            the_connection.mav.rc_channels_override_send( the_connection.target_system, the_connection.target_component, *rc_channel_values )  
+            ret = True            
+        except Exception as err_msg:
+            print("Failed to set RC Chan PWM : %s" % (err_msg))
+            ret = False
+        return ret
+        
     # drives a gimbal axis controller to the pitch roll yaw specified
     #
-    def gimbal_move_to( self, the_connection, tilt, roll=0, pan=0):
+    def gimbal_move_to( self, the_connection, tilt=0, roll=0, pan=0):
     #"""
     #Moves gimbal to given position
-    #Args:
-    #    tilt (float): tilt angle in centidegrees (0 is forward)
-    #    roll (float, optional): pan angle in centidegrees (0 is forward)
-    #    pan  (float, optional): pan angle in centidegrees (0 is forward)
-    #"""
-        the_connection.mav.command_long_send(the_connection.target_system, the_connection.target_component, mavutil.mavlink.MAV_CMD_DO_MOUNT_CONTROL, 1, tilt, roll, pan, 0, 0, 0, mavutil.mavlink.MAV_MOUNT_MODE_MAVLINK_TARGETING)
-
+        try:
+            the_connection.mav.command_long_send(the_connection.target_system, the_connection.target_component, mavutil.mavlink.MAV_CMD_DO_MOUNT_CONTROL, 1, tilt, roll, pan, 0, 0, 0, mavutil.mavlink.MAV_MOUNT_MODE_MAVLINK_TARGETING)
+            ret = True
+        except Exception as err_msg:
+            print("Failed to move gimbal using command long : %s" % (err_msg))
+            ret = False
+        return ret
+        
     def mavlink10(self,connID):
      #   '''return True if using MAVLink 1.0 or later'''
         return float(connID.WIRE_PROTOCOL_VERSION) >= 1
@@ -694,100 +731,137 @@ class MAVFrame():
      #  '''return True if using MAVLink 2.0 or later'''
         return float(connID.WIRE_PROTOCOL_VERSION) >= 2		        
 
+    #   Set relay_pin to value of state
     def mavlink_set_relay(self, the_connection, relay_pin=0, state=True):
-     #   Set relay_pin to value of state
+
         #if self.mavlink10():
-        the_connection.mav.command_long_send(
-            the_connection.target_system,  # target_system
-            the_connection.target_component, # target_component
-            mavutil.mavlink.MAV_CMD_DO_SET_RELAY, # command
-            0, # Confirmation
-            relay_pin, # Relay Number
-            int(state), # state (1 to indicate arm)
-            0, # param3 (all other params meaningless)
-            0, # param4
-            0, # param5
-            0, # param6
-            0) # param7
-        #else:
-        #    print("Setting relays not supported.")
+        try:
+            the_connection.mav.command_long_send(
+                the_connection.target_system,  # target_system
+                the_connection.target_component, # target_component
+                mavutil.mavlink.MAV_CMD_DO_SET_RELAY, # command
+                0, # Confirmation
+                relay_pin, # Relay Number
+                int(state), # state (1 to indicate arm)
+                0, # param3 (all other params meaningless)
+                0, # param4
+                0, # param5
+                0, # param6
+                0) # param7
+            ret = True
+        except Exception as err_msg:
+            print("Failed to set relay using command long : %s" % (err_msg))
+            ret = False
+        return ret
+        
 
     # ref:- https://mavlink.io/en/messages/common.html#MAV_CMD
     
     def mavlink_video_stop_capture(self, the_connection, streamNo):
         #if self.mavlink10():
-        the_connection.mav.command_long_send(
-            the_connection.target_system,  # target_system
-            the_connection.target_component, # target_component
-            mavutil.mavlink.MAV_CMD_VIDEO_STOP_CAPTURE, # command
-            0, # Confirmation
-            streamNo, # stream number
-            0, # param2
-            0, # param3 
-            0, # param4
-            0, # param5
-            0, # param6
-            0) # param7
+        try:
+            the_connection.mav.command_long_send(
+                the_connection.target_system,  # target_system
+                the_connection.target_component, # target_component
+                mavutil.mavlink.MAV_CMD_VIDEO_STOP_CAPTURE, # command
+                0, # Confirmation
+                streamNo, # stream number
+                0, # param2
+                0, # param3 
+                0, # param4
+                0, # param5
+                0, # param6
+                0) # param7
+            ret = True
+        except Exception as err_msg:
+            print("Failed to stop video capture using command long : %s" % (err_msg))
+            ret = False
+        return ret            
+            
 
     def mavlink_video_start_capture(self, the_connection, streamNo, freq):
         #if self.mavlink10():
-        the_connection.mav.command_long_send(
-            the_connection.target_system,  # target_system
-            the_connection.target_component, # target_component
-            mavutil.mavlink.MAV_CMD_VIDEO_START_CAPTURE, # command
-            0, # Confirmation
-            streamNo, # stream number
-            freq, # param2
-            0, # param3 
-            0, # param4
-            0, # param5
-            0, # param6
-            0) # param7
+        try:
+            the_connection.mav.command_long_send(
+                the_connection.target_system,  # target_system
+                the_connection.target_component, # target_component
+                mavutil.mavlink.MAV_CMD_VIDEO_START_CAPTURE, # command
+                0, # Confirmation
+                streamNo, # stream number
+                freq, # param2
+                0, # param3 
+                0, # param4
+                0, # param5
+                0, # param6
+                0) # param7
+            ret = True
+        except Exception as err_msg:
+            print("Failed to start video capture using command long : %s" % (err_msg))
+            ret = False
+        return ret            
 
     def mavlink_image_stop_capture(self, the_connection):
         #if self.mavlink10():
-        the_connection.mav.command_long_send(
-            the_connection.target_system,  # target_system
-            the_connection.target_component, # target_component
-            mavutil.mavlink.MAV_CMD_IMAGE_STOP_CAPTURE, # command
-            0, # Confirmation
-            0, # param1
-            0, # param2
-            0, # param3 
-            0, # param4
-            0, # param5
-            0, # param6
-            0) # param7
-
+        try:
+            the_connection.mav.command_long_send(
+                the_connection.target_system,  # target_system
+                the_connection.target_component, # target_component
+                mavutil.mavlink.MAV_CMD_IMAGE_STOP_CAPTURE, # command
+                0, # Confirmation
+                0, # param1
+                0, # param2
+                0, # param3 
+                0, # param4
+                0, # param5
+                0, # param6
+                0) # param7
+            ret = True
+        except Exception as err_msg:
+            print("Failed to stop image capture using command long : %s" % (err_msg))
+            ret = False
+        return ret 
+        
     def mavlink_image_start_capture(self, the_connection, interval, totalImages, seqNo):
         #if self.mavlink10():
-        the_connection.mav.command_long_send(
-            the_connection.target_system,  # target_system
-            the_connection.target_component, # target_component
-            mavutil.mavlink.MAV_CMD_IMAGE_START_CAPTURE, # command
-            0, # Confirmation
-            0, # param1
-            interval, # Desired elapsed time between two consecutive pictures (in seconds)
-            totalImages, # Total number of images to capture. 0 to capture forever/until MAV_CMD_IMAGE_STOP_CAPTURE.
-            seqNo, # Capture sequence number starting from 1. This is only valid for single-capture (param3 == 1), otherwise set to 0. Increment the capture ID for each capture command to prevent double captures when a command is re-transmitted
-            0, # param5
-            0, # param6
-            0) # param7
+        try:
+            the_connection.mav.command_long_send(
+                the_connection.target_system,  # target_system
+                the_connection.target_component, # target_component
+                mavutil.mavlink.MAV_CMD_IMAGE_START_CAPTURE, # command
+                0, # Confirmation
+                0, # param1
+                interval, # Desired elapsed time between two consecutive pictures (in seconds)
+                totalImages, # Total number of images to capture. 0 to capture forever/until MAV_CMD_IMAGE_STOP_CAPTURE.
+                seqNo, # Capture sequence number starting from 1. This is only valid for single-capture (param3 == 1), otherwise set to 0. Increment the capture ID for each capture command to prevent double captures when a command is re-transmitted
+                0, # param5
+                0, # param6
+                0) # param7
+            ret = True
+        except Exception as err_msg:
+            print("Failed to start image capture using command long : %s" % (err_msg))
+            ret = False
+        return ret             
 
     def mavlink_video_stop_streaming(self, the_connection, streamNo):
         #if self.mavlink10():
-        the_connection.mav.command_long_send(
-            the_connection.target_system,                 # target_system
-            the_connection.target_component,              # target_component
-            mavutil.mavlink.MAV_CMD_VIDEO_STOP_STREAMING, # command
-            0,                                            # Confirmation
-            streamNo,                                     # stream number
-            0,                                            # param2
-            0,                                            # param3 
-            0,                                            # param4
-            0,                                            # param5
-            0,                                            # param6
-            0)                                            # param7
+        try:
+            the_connection.mav.command_long_send(
+                the_connection.target_system,                 # target_system
+                the_connection.target_component,              # target_component
+                mavutil.mavlink.MAV_CMD_VIDEO_STOP_STREAMING, # command
+                0,                                            # Confirmation
+                streamNo,                                     # stream number
+                0,                                            # param2
+                0,                                            # param3 
+                0,                                            # param4
+                0,                                            # param5
+                0,                                            # param6
+                0)                                            # param7
+            ret = True
+        except Exception as err_msg:
+            print("Failed to send stop streaming using command long : %s" % (err_msg))
+            ret = False
+        return ret              
 
     def mavlink_do_ftp_send(self, the_connection, network, payload):
         MAX_CHUNK_BYTES = 251
@@ -812,18 +886,24 @@ class MAVFrame():
 
     def mavlink_video_start_streaming(self, the_connection, streamNo):
         #if self.mavlink10():
-        the_connection.mav.command_long_send(
-            the_connection.target_system,                   # target_system
-            the_connection.target_component,                # target_component
-            mavutil.mavlink.MAV_CMD_VIDEO_START_STREAMING,  # command
-            0,                                              # Confirmation
-            streamNo,                                       # stream number
-            0,                                              # param2
-            0,                                              # param3 
-            0,                                              # param4
-            0,                                              # param5
-            0,                                              # param6
-            0)                                              # param7
+        try:
+            the_connection.mav.command_long_send(
+                the_connection.target_system,                   # target_system
+                the_connection.target_component,                # target_component
+                mavutil.mavlink.MAV_CMD_VIDEO_START_STREAMING,  # command
+                0,                                              # Confirmation
+                streamNo,                                       # stream number
+                0,                                              # param2
+                0,                                              # param3 
+                0,                                              # param4
+                0,                                              # param5
+                0,                                              # param6
+                0)                                              # param7
+            ret = True
+        except Exception as err_msg:
+            print("Failed to send start streaming using command long : %s" % (err_msg))
+            ret = False
+        return ret               
 
     # suitable variables to drive CamMode
     #
@@ -833,19 +913,25 @@ class MAVFrame():
     
     def mavlink_video_set_camera_mode(self, the_connection, camMode):
         #if self.mavlink10():
-        the_connection.mav.command_long_send(
-            the_connection.target_system,  # target_system
-            the_connection.target_component, # target_component
-            mavutil.mavlink.MAV_CMD_SET_CAMERA_MODE, # command
-            0, # Confirmation
-            0, # param1
-            CamMode, # param2
-            0, # param3 
-            0, # param4
-            0, # param5
-            0, # param6
-            0) # param7
-
+        try:
+            the_connection.mav.command_long_send(
+                the_connection.target_system,  # target_system
+                the_connection.target_component, # target_component
+                mavutil.mavlink.MAV_CMD_SET_CAMERA_MODE, # command
+                0, # Confirmation
+                0, # param1
+                CamMode, # param2
+                0, # param3 
+                0, # param4
+                0, # param5
+                0, # param6
+                0) # param7
+            ret = True
+        except Exception as err_msg:
+            print("Failed to send video set camera mode using command long : %s" % (err_msg))
+            ret = False
+        return ret 
+        
     # suitable variables to drive CamZoomType
     #
     MAV_ZOOM_TYPE_STEP = 0	        # Zoom one step increment (-1 for wide, 1 for tele)
@@ -855,19 +941,25 @@ class MAVFrame():
     
     def mavlink_video_set_camera_zoom(self, the_connection, camZoomType, camZoomValue):
         #if self.mavlink10():
-        the_connection.mav.command_long_send(
-            the_connection.target_system,  # target_system
-            the_connection.target_component, # target_component
-            mavutil.mavlink.MAV_CMD_SET_CAMERA_MODE, # command
-            0, # Confirmation
-            CamZoomType, # param1
-            CamZoomValue, # param2
-            0, # param3 
-            0, # param4
-            0, # param5
-            0, # param6
-            0) # param7
-
+        try:
+            the_connection.mav.command_long_send(
+                the_connection.target_system,  # target_system
+                the_connection.target_component, # target_component
+                mavutil.mavlink.MAV_CMD_SET_CAMERA_MODE, # command
+                0, # Confirmation
+                CamZoomType, # param1
+                CamZoomValue, # param2
+                0, # param3 
+                0, # param4
+                0, # param5
+                0, # param6
+                0) # param7
+            ret = True
+        except Exception as err_msg:
+            print("Failed to send camera zoom using command long : %s" % (err_msg))
+            ret = False
+        return ret 
+        
     MAV_FOCUS_TYPE_STEP = 0	       # Focus one step increment (-1 for focusing in, 1 for focusing out towards infinity).
     MAV_FOCUS_TYPE_CONTINUOUS = 1  # Continuous focus up/down until stopped (-1 for focusing in, 1 for focusing out towards infinity, 0 to stop focusing)
     MAV_FOCUS_TYPE_RANGE = 2	   # Focus value as proportion of full camera focus range (a value between 0.0 and 100.0)
@@ -875,272 +967,376 @@ class MAVFrame():
 
     def mavlink_video_set_camera_focus(self, the_connection, camFocusType, camFocusValue):
         #if self.mavlink10():
-        the_connection.mav.command_long_send(
-            the_connection.target_system,  # target_system
-            the_connection.target_component, # target_component
-            mavdefs.MAV_CMD_SET_CAMERA_FOCUS, # command
-            0, # Confirmation
-            camFocusType, # param1
-            camFocusValue, # param2
-            0, # param3 
-            0, # param4
-            0, # param5
-            0, # param6
-            0) # param7
-
+        try:
+            the_connection.mav.command_long_send(
+                the_connection.target_system,  # target_system
+                the_connection.target_component, # target_component
+                mavdefs.MAV_CMD_SET_CAMERA_FOCUS, # command
+                0, # Confirmation
+                camFocusType, # param1
+                camFocusValue, # param2
+                0, # param3 
+                0, # param4
+                0, # param5
+                0, # param6
+                0) # param7
+            ret = True
+        except Exception as err_msg:
+            print("Failed to send camera focus using command long : %s" % (err_msg))
+            ret = False
+        return ret
+        
     def mavlink_do_digicam_configure(self, the_connection, camMode, camShutterSpeed, camAperture, camISO, camExposure, camCommandIdentity, camEngineCutOff):
         #if self.mavlink10():
-        the_connection.mav.command_long_send(
-            the_connection.target_system,  # target_system
-            the_connection.target_component, # target_component
-            mavutil.mavlink.MAV_CMD_DO_DIGICAM_CONFIGURE, # command
-            0, # Confirmation
-            camMode, # param1
-            camShutterSpeed, # param2
-            camAperture, # param3 
-            camISO, # param4
-            camExposure, # param5
-            camCommandIdentity, # param6
-            camEngineCutOff) # param7
-
+        try:
+            the_connection.mav.command_long_send(
+                the_connection.target_system,  # target_system
+                the_connection.target_component, # target_component
+                mavutil.mavlink.MAV_CMD_DO_DIGICAM_CONFIGURE, # command
+                0, # Confirmation
+                camMode, # param1
+                camShutterSpeed, # param2
+                camAperture, # param3 
+                camISO, # param4
+                camExposure, # param5
+                camCommandIdentity, # param6
+                camEngineCutOff) # param7
+            ret = True
+        except Exception as err_msg:
+            print("Failed to send digicam configure using command long : %s" % (err_msg))
+            ret = False
+        return ret
+        
     def mavlink_do_digicam_control(self, the_connection, camSessionControl, camZoomAbsolute, camZoomRelative, camFocus, camShootCommand, camCommandIdentity, camShotID):
         #if self.mavlink10():
-        the_connection.mav.command_long_send(
-            the_connection.target_system,  # target_system
-            the_connection.target_component, # target_component
-            mavutil.mavlink.MAV_CMD_DO_DIGICAM_CONTROL, # command
-            0, # Confirmation
-            camSessionControl, # param1
-            camZoomAbsolute, # param2
-            camZoomRelative, # param3 
-            camFocus, # param4
-            camShootCommand, # param5
-            camCommandIdentity, # param6
-            camShotID) # param7
-
+        try:
+            the_connection.mav.command_long_send(
+                the_connection.target_system,  # target_system
+                the_connection.target_component, # target_component
+                mavutil.mavlink.MAV_CMD_DO_DIGICAM_CONTROL, # command
+                0, # Confirmation
+                camSessionControl, # param1
+                camZoomAbsolute, # param2
+                camZoomRelative, # param3 
+                camFocus, # param4
+                camShootCommand, # param5
+                camCommandIdentity, # param6
+                camShotID) # param7
+            ret = True
+        except Exception as err_msg:
+            print("Failed to send digicam control using command long : %s" % (err_msg))
+            ret = False
+        return ret
+        
     def mavlink_do_video_control(self, the_connection, camID, camTransmission, camInterval, camRecording):
         #if self.mavlink10():
-        the_connection.mav.command_long_send(
-            the_connection.target_system,  # target_system
-            the_connection.target_component, # target_component
-            mavutil.mavlink.MAV_CMD_DO_CONTROL_VIDEO, # command
-            0, # Confirmation
-            camID, # param1
-            camTransmission, # param2
-            camInterval, # param3 
-            camRecording, # param4
-            0, # param5
-            0, # param6
-            0) # param7 
-
+        try:
+            the_connection.mav.command_long_send(
+                the_connection.target_system,  # target_system
+                the_connection.target_component, # target_component
+                mavutil.mavlink.MAV_CMD_DO_CONTROL_VIDEO, # command
+                0, # Confirmation
+                camID, # param1
+                camTransmission, # param2
+                camInterval, # param3 
+                camRecording, # param4
+                0, # param5
+                0, # param6
+                0) # param7 
+            ret = True
+        except Exception as err_msg:
+            print("Failed to send do video control using command long : %s" % (err_msg))
+            ret = False
+        return ret
+        
     def mavlink_get_camera_settings(self, the_connection):
         #if self.mavlink10():
-        the_connection.mav.command_long_send(
-            the_connection.target_system,  # target_system
-            the_connection.target_component, # target_component
-            mavutil.mavlink.MAV_CMD_REQUEST_CAMERA_SETTINGS, # command
-            0, # Confirmation
-            1, # param1
-            0, # param2
-            0, # param3 
-            0, # param4
-            0, # param5
-            0, # param6
-            0) # param7 
-
+        try:
+            the_connection.mav.command_long_send(
+                the_connection.target_system,  # target_system
+                the_connection.target_component, # target_component
+                mavutil.mavlink.MAV_CMD_REQUEST_CAMERA_SETTINGS, # command
+                0, # Confirmation
+                1, # param1
+                0, # param2
+                0, # param3 
+                0, # param4
+                0, # param5
+                0, # param6
+                0) # param7 
+            ret = True
+        except Exception as err_msg:
+            print("Failed to get cam settings using command long : %s" % (err_msg))
+            ret = False
+        return ret
+        
     def mavlink_get_storage_info(self, the_connection, StoId):
         #if self.mavlink10():
-        the_connection.mav.command_long_send(
-            the_connection.target_system,  # target_system
-            the_connection.target_component, # target_component
-            mavutil.mavlink.MAV_CMD_REQUEST_STORAGE_INFORMATION, # command
-            0, # Confirmation
-            StoId, # param1
-            1, # param2
-            0, # param3 
-            0, # param4
-            0, # param5
-            0, # param6
-            0) # param7 
+        try:
+            the_connection.mav.command_long_send(
+                the_connection.target_system,  # target_system
+                the_connection.target_component, # target_component
+                mavutil.mavlink.MAV_CMD_REQUEST_STORAGE_INFORMATION, # command
+                0, # Confirmation
+                StoId, # param1
+                1, # param2
+                0, # param3 
+                0, # param4
+                0, # param5
+                0, # param6
+                0) # param7 
+            ret = True
+        except Exception as err_msg:
+            print("Failed to get storage info using command long : %s" % (err_msg))
+            ret = False
+        return ret
+        
 
     def mavlink_get_capture_status(self, the_connection):
         #if self.mavlink10():
-        the_connection.mav.command_long_send(
-            the_connection.target_system,  # target_system
-            the_connection.target_component, # target_component
-            mavutil.mavlink.MAV_CMD_REQUEST_CAMERA_CAPTURE_STATUS, # command
-            0, # Confirmation
-            1, # param1
-            0, # param2
-            0, # param3 
-            0, # param4
-            0, # param5
-            0, # param6
-            0) # param7 
-
+        try:
+            the_connection.mav.command_long_send(
+                the_connection.target_system,  # target_system
+                the_connection.target_component, # target_component
+                mavutil.mavlink.MAV_CMD_REQUEST_CAMERA_CAPTURE_STATUS, # command
+                0, # Confirmation
+                1, # param1
+                0, # param2
+                0, # param3 
+                0, # param4
+                0, # param5
+                0, # param6
+                0) # param7 
+            ret = True
+        except Exception as err_msg:
+            print("Failed to get capture status using command long : %s" % (err_msg))
+            ret = False
+        return ret
+        
     def mavlink_get_stream_info(self, the_connection):
         #if self.mavlink10():
-        the_connection.mav.command_long_send(
-            the_connection.target_system,  # target_system
-            the_connection.target_component, # target_component
-            mavutil.mavlink.MAV_CMD_REQUEST_VIDEO_STREAM_INFORMATION, # command
-            0, # Confirmation
-            1, # param1
-            0, # param2
-            0, # param3 
-            0, # param4
-            0, # param5
-            0, # param6
-            0) # param7 
-
+        try:
+            the_connection.mav.command_long_send(
+                the_connection.target_system,  # target_system
+                the_connection.target_component, # target_component
+                mavutil.mavlink.MAV_CMD_REQUEST_VIDEO_STREAM_INFORMATION, # command
+                0, # Confirmation
+                1, # param1
+                0, # param2
+                0, # param3 
+                0, # param4
+                0, # param5
+                0, # param6
+                0) # param7 
+            ret = True
+        except Exception as err_msg:
+            print("Failed to get stream info using command long : %s" % (err_msg))
+            ret = False
+        return ret
+        
     def mavlink_reset_camera(self, the_connection):
         #if self.mavlink10():
-        the_connection.mav.command_long_send(
-            the_connection.target_system,  # target_system
-            the_connection.target_component, # target_component
-            mavutil.mavlink.MAV_CMD_RESET_CAMERA_SETTINGS, # command
-            0, # Confirmation
-            1, # param1
-            0, # param2
-            0, # param3 
-            0, # param4
-            0, # param5
-            0, # param6
-            0) # param7 
-
+        try:
+            the_connection.mav.command_long_send(
+                the_connection.target_system,  # target_system
+                the_connection.target_component, # target_component
+                mavutil.mavlink.MAV_CMD_RESET_CAMERA_SETTINGS, # command
+                0, # Confirmation
+                1, # param1
+                0, # param2
+                0, # param3 
+                0, # param4
+                0, # param5
+                0, # param6
+                0) # param7 
+            ret = True
+        except Exception as err_msg:
+            print("Failed to reset camera using command long : %s" % (err_msg))
+            ret = False
+        return ret
+        
     def mavlink_set_camera_trig_interval(self, the_connection, camTriggerCycle, camShutterIntegration):
         #if self.mavlink10():
-        the_connection.mav.command_long_send(
-            the_connection.target_system,  # target_system
-            the_connection.target_component, # target_component
-            mavutil.mavlink.MAV_CMD_DO_SET_CAM_TRIGG_INTERVAL, # command
-            0, # Confirmation
-            camTriggerCycle, # param1
-            camShutterIntegration, # param2
-            0, # param3 
-            0, # param4
-            0, # param5
-            0, # param6
-            0) # param7 
-
+        try:        
+            the_connection.mav.command_long_send(
+                the_connection.target_system,  # target_system
+                the_connection.target_component, # target_component
+                mavutil.mavlink.MAV_CMD_DO_SET_CAM_TRIGG_INTERVAL, # command
+                0, # Confirmation
+                camTriggerCycle, # param1
+                camShutterIntegration, # param2
+                0, # param3 
+                0, # param4
+                0, # param5
+                0, # param6
+                0) # param7 
+            ret = True
+        except Exception as err_msg:
+            print("Failed to set camera trip interval using command long : %s" % (err_msg))
+            ret = False
+        return ret
+        
     def mavlink_set_camera_to_quaternion(self, the_connection, q1, q2, q3, q4):
         #if self.mavlink10():
-        the_connection.mav.command_long_send(
-            the_connection.target_system,  # target_system
-            the_connection.target_component, # target_component
-            mavutil.mavlink.MAV_CMD_DO_MOUNT_CONTROL_QUAT, # command
-            0, # Confirmation
-            q1, # param1
-            q2, # param2
-            q3, # param3 
-            q4, # param4
-            0, # param5
-            0, # param6
-            0) # param7 
-
+        try:        
+            the_connection.mav.command_long_send(
+                the_connection.target_system,  # target_system
+                the_connection.target_component, # target_component
+                mavutil.mavlink.MAV_CMD_DO_MOUNT_CONTROL_QUAT, # command
+                0, # Confirmation
+                q1, # param1
+                q2, # param2
+                q3, # param3 
+                q4, # param4
+                0, # param5
+                0, # param6
+                0) # param7 
+            ret = True
+        except Exception as err_msg:
+            print("Failed to set camera to quartenion using command long : %s" % (err_msg))
+            ret = False
+        return ret
+        
     def mavlink_send_camera_information(self, the_connection):
         #if self.mavlink10():
-        the_connection.mav.camera_information_send(
-            the_connection.target_system,                                      # target_system
-            the_connection.target_component,                                   # target_component
-            mavutil.mavlink.MAV_CMD_CAMERA_INFORMATION,                        # command
-            self.time_boot_ms,
-            self.firmware_version,
-            self.focal_length,
-            self.sensor_size_h,
-            self.sensor_size_v,
-            self.flags,
-            self.resolution_h,
-            self.resolution_v,
-            self.cam_definition_version,
-            self.vendor_name, 
-            self.model_name, 
-            self.lens_id,
-            self.cam_definition_uri)
-
+        try:    
+            the_connection.mav.camera_information_send(
+                self.time_boot_ms,
+                self.vendor_name, 
+                self.model_name, 
+                self.firmware_version, 
+                self.focal_length, 
+                self.sensor_size_h, 
+                self.sensor_size_v, 
+                self.resolution_h, 
+                self.resolution_v, 
+                self.lens_id, 
+                self.flags, 
+                self.cam_definition_version, 
+                self.cam_definition_uri)
+            ret = True
+        except Exception as err_msg:
+            print("Failed to send camera information message : %s" % (err_msg))
+            ret = False
+        return ret
+        
     def mavlink_send_camera_settings(self, the_connection):
         #if self.mavlink10():
-        the_connection.mav.camera_settings_send(
-            the_connection.target_system,                                       # target_system
-            the_connection.target_component,                                    # target_component
-            mavutil.mavlink.MAV_CMD_CAMERA_SETTINGS,                            # command
-            self.time_boot_ms,
-            self.mode_id,                                                       #  Camera mode
-            self.zoomLevel,                                                     #  Current zoom level (0.0 to 100.0, NaN if not known)*/
-            self.focusLevel)  
-
+        try:    
+            the_connection.mav.camera_settings_send(
+                self.time_boot_ms,
+                self.mode_id,                                                       #  Camera mode
+                self.zoomLevel,                                                     #  Current zoom level (0.0 to 100.0, NaN if not known)*/
+                self.focusLevel)  
+            ret = True
+        except Exception as err_msg:
+            print("Failed to send camera settings message : %s" % (err_msg))
+            ret = False
+        return ret
+        
     def mavlink_send_storage_information(self, the_connection):
         #if self.mavlink10():
-        the_connection.mav.storage_information_send(
-            the_connection.target_system,                                      # target_system
-            the_connection.target_component,                                   # target_component
-            mavutil.mavlink.MAV_CMD_STORAGE_INFORMATION,                       # command
-            self.time_boot_ms,
-            self.total_capacity,                                               #  [MiB] Total capacity. If storage is not ready (STORAGE_STATUS_READY) value will be ignored.
-            self.used_capacity,                                                #  [MiB] Used capacity. If storage is not ready (STORAGE_STATUS_READY) value will be ignored.
-            self.available_capacity,                                           #  [MiB] Available storage capacity. If storage is not ready (STORAGE_STATUS_READY) value will be ignored.
-            self.read_speed,                                                   #  [MiB/s] Read speed.
-            self.write_speed,                                                  #  [MiB/s] Write speed.
-            self.storage_id,                                                   #  Storage ID (1 for first, 2 for second, etc.)
-            self.storage_count,                                                #  Number of storage devices
-            self.status) 
-
+        try:    
+            the_connection.mav.storage_information_send(
+                self.time_boot_ms, 
+                self.storage_id, 
+                self.storage_count, 
+                self.status, 
+                self.total_capacity, 
+                self.used_capacity, 
+                self.available_capacity, 
+                self.read_speed, 
+                self.write_speed)
+            ret = True
+        except Exception as err_msg:
+            print("Failed to send storage information message : %s" % (err_msg))
+            ret = False
+        return ret
+        
     def mavlink_send_camera_capture_status(self, the_connection):
-        #if self.mavlink10():
-        the_connection.mav.camera_capture_status_send(
-            the_connection.target_system,                                      # target_system
-            the_connection.target_component,                                   # target_component
-            mavutil.mavlink.MAV_CMD_CAMERA_CAPTURE_STATUS,                     # command
-            self.time_boot_ms,                                                 # [ms] Timestamp (time since system boot).*/
-            self.image_interval,                                               # [s] Image capture interval*/
-            self.recording_time_ms,                                            # [ms] Time since recording started*/
-            self.available_capacity,                                           # [MiB] Available storage capacity.*/
-            self.image_status,                                                 # Current status of image capturing (0: idle, 1: capture in progress, 2: interval set but idle, 3: interval set and capture in progress)*/
-            self.video_status,                                                 # Current status of video capturing (0: idle, 1: capture in progress)*/
-            self.image_count) 
- 
+       
+        try:           
+            the_connection.mav.camera_capture_status_send(
+                self.time_boot_ms, 
+                self.image_status, 
+                self.video_status, 
+                self.image_interval, 
+                self.recording_time_ms, 
+                self.available_capacity,
+                self.image_count) 
+            ret = True
+        except Exception as err_msg:
+            print("Failed to send camera capture status message : %s" % (err_msg))
+            ret = False
+        return ret
+        
     def mavlink_send_video_stream_information(self, the_connection):
         #if self.mavlink10():
         print("    !!! sending the video stream information   !!! \n")
-        the_connection.mav.video_stream_information_send(
-            the_connection.target_system,                                      # target_system
-            the_connection.target_component,                                   # target_component
-            mavutil.mavlink.MAV_CMD_VIDEO_STREAM_INFORMATION,                  # command
-            self.framerate,                                                    #/*< [Hz] Frame rate.
-            self.bitrate,                                                      #/*< [bits/s] Bit rate.
-            self.flags,                                                        #/*<  Bitmap of stream status flags.
-            self.resolution_h,                                                 #/*< [pix] Horizontal resolution.
-            self.resolution_v,                                                 #/*< [pix] Vertical resolution.
-            self.rotation,                                                     #/*< [deg] Video image rotation clockwise.
-            self.hfov,                                                         #/*< [deg] Horizontal Field of view.
-            self.stream_id,                                                    #/*<  Video Stream ID (1 for first, 2 for second, etc.)
-            self.count,                                                        #/*<  Number of streams available.
-            self.type,                                                         #/*<  Type of stream.
-            self.videoname,
-            self.video_uri)
-
+        try:             
+            the_connection.mav.video_stream_information_send(
+                self.stream_id, 
+                self.count, 
+                self.stream_type, 
+                self.Vflags, 
+                self.framerate, 
+                self.Vresolution_h, 
+                self.Vresolution_v, 
+                self.bitrate, 
+                self.rotation, 
+                self.hfov, 
+                self.videoname, 
+                self.video_uri) 
+            ret = True
+        except Exception as err_msg:
+            print("Failed to send video stream information message : %s" % (err_msg))
+            ret = False
+        return ret
+        
     def mavlink_send_camera_image_captured(self, the_connection):
         #if self.mavlink10():
-        the_connection.mav.video_stream_information_send(
-            the_connection.target_system,                                      # target_system
-            the_connection.target_component,                                   # target_component
-            mavutil.mavlink.MAV_CMD_CAMERA_IMAGE_CAPTURED,                     # command
-            self.time_utc,                                                     # [us] Timestamp (time since UNIX epoch) in UTC. 0 for unknown.
-            self.time_boot_ms,                                                 # [ms] Timestamp (time since system boot).
-            self.lat,                                                          # [degE7] Latitude where image was taken
-            self.lon,                                                          # [degE7] Longitude where capture was taken
-            self.alt,                                                          # [mm] Altitude (MSL) where image was taken
-            self.relative_alt,                                                 # [mm] Altitude above ground
-            self.q[0],                                                         #  Quaternion of camera orientation (w, x, y, z order, zero-rotation is 0, 0, 0, 0)
-            self.q[1],
-            self.q[2],
-            self.q[3],
-            self.image_index,                                                  #  Zero based index of this image (image count since armed -1)
-            self.camera_id,                                                    #  Camera ID (1 for first, 2 for second, etc.)
-            self.capture_result,                                               #  Boolean indicating success (1) or failure (0) while capturing this image.
-            self.file_url)
-
-            
+        try:  
+            the_connection.mav.camera_image_captured_send(
+                self.time_boot_ms, 
+                self.time_utc, 
+                self.camera_id, 
+                self.lat, 
+                self.lon, 
+                self.alt, 
+                self.relative_alt, 
+                self.q, 
+                self.image_index, 
+                self.capture_result, 
+                self.file_url)
+            ret = True
+        except Exception as err_msg:
+            print("Failed to send camera image captured message : %s" % (err_msg))
+            ret = False
+        return ret
+ 
+    def mavlink_send_camera_feedback(self, the_connection):
+        #if self.mavlink10():
+        try:  
+            the_connection.mav.camera_feedback_send( 
+                self.time_usec, 
+                the_connection.target_system, 
+                self.cam_idx, 
+                self.img_idx, 
+                self.lat, 
+                self.lng, 
+                self.alt_msl, 
+                self.alt_rel, 
+                self.roll,
+                self.pitch, 
+                self.yaw, 
+                self.foc_len, 
+                self.CFflags)
+            ret = True
+        except Exception as err_msg:
+            print("Failed to send camera image captured message : %s" % (err_msg))
+            ret = False
+        return ret
+        
     # process the incoming messages received
     #
     def process_messages_from_connection(self, fra, the_connection):
@@ -1167,7 +1363,9 @@ class MAVFrame():
             #
             # These are test messages to check the receive end !!!!
             #
-            the_connection.mav.camera_feedback_send( 1000, 1, 1, 22, 21, 10, 30, 21, 2, 3, 5, 2, 3)
+            self.mavlink_send_camera_feedback( the_connection )
+            self.mavlink_send_camera_information(the_connection)
+            #the_connection.mav.camera_feedback_send( 1000, 1, 1, 22, 21, 10, 30, 21, 2, 3, 5, 2, 3)
             #the_connection.mav.gps_raw_int_send( 1000, self.g_count, 77, 66, 76, 3, 1, 2, 3, 5)
             #the_connection.mav.vibration_send( 1000, 1, 1, 22, 21, 10, 30 )
             #print("FTP request for XML file .... I'm sending it as my payload")
@@ -1217,16 +1415,19 @@ class MAVFrame():
                             self.type_of_msg = 0
                     elif (self.RCV_COMMAND == mavutil.mavlink.MAV_CMD_REQUEST_CAMERA_INFORMATION):
                          print("request camera Info OLD MESSAGE.....")
-                         fra.mavlink_send_camera_information(the_connection)
+                         #
+                         # hack here as it doesnt send param 1 (it should ??!!)
+                         #
+                         self.mavlink_send_camera_information(the_connection)
                          if (msg.param1 == 1):
                              self.type_of_msg = mavutil.mavlink.MAV_CMD_REQUEST_CAMERA_INFORMATION
                              print("=========== !! send to QGround Camera Information !! ==========")
-                             fra.mavlink_send_camera_information(the_connection)
+                             self.mavlink_send_camera_information(the_connection)
                     elif (self.RCV_COMMAND == mavutil.mavlink.MAV_CMD_REQUEST_VIDEO_STREAM_INFORMATION):
                          print("request video stream Info OLD MESSAGE.....")
                          self.type_of_msg = mavutil.mavlink.MAV_CMD_REQUEST_VIDEO_STREAM_INFORMATION
                          print("=========== !! send to QGround VideoStream !! ==========")
-                         fra.mavlink_send_video_stream_information(the_connection)
+                         self.mavlink_send_video_stream_information(the_connection)
                     elif (self.RCV_COMMAND == mavutil.mavlink.MAV_CMD_DO_SET_RELAY):
                         self.type_of_msg = mavutil.mavlink.MAV_CMD_DO_SET_RELAY;
                         self.Got_Param1 = msg.param1
@@ -1347,8 +1548,8 @@ class MAVFrame():
                 print("lat %u lon %u alt %u\n" % (msg.lat, msg.lon, msg.alt)) 
                 print("URL %u)\n" % (msg.file_url))                    
             elif msg.get_type() == 'GPS_RAW_INT':
-                #the_connection.mav.gps_raw_int_send( 1000, 1, 22, 21, 1, 3, 1, 2, 3, 5)
-                fra.mavlink_send_camera_information(the_connection)
+                the_connection.mav.gps_raw_int_send( 1000, 1, 22, 21, 1, 3, 1, 2, 3, 5)
+                #retParam = self.mavlink_send_camera_information(the_connection)
             elif msg.get_type() == 'CAMERA_FEEDBACK':
                 print("Camera Feedback")
                 the_connection.mav.camera_feedback_send( 1000, 1, 1, 22, 21, 10, 30, 21, 2, 3, 5, 2, 3)
@@ -2083,5 +2284,8 @@ if __name__ == '__main__':
 # ===================== Main Multi-Thread send/rcv Task ============================
 #
     asyncio.run(main())
+
+
+
 
 
