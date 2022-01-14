@@ -1,4 +1,3 @@
-# mavlink_camera_tests.py
 #
 # Air Cam Pro 2021
 # This is tests for python mavlink for camera control 
@@ -92,6 +91,10 @@ from mavlink_python_libs import com1 as commonV1
 import com1 as mavdefs
 import math
 import time
+import array as arr
+
+from my_python_libs import com1 as commonV1_2
+#import com1 as mavdefs2
 
 from mypymavlink import mavutilcust as custommav
 
@@ -102,6 +105,7 @@ import asyncio
 import time
 
 import numpy as np
+import os
 
 # ============== control Raspberry Pi IO ===============
 # sudo apt-get install rpi.gpio
@@ -144,8 +148,12 @@ class MAVFrame():
     resolution_h = 300
     resolution_v = 400
     cam_definition_version = 2
-    vendor_name = np.dtype([('s',np.uint8)])
-    model_name = np.dtype([('a',np.uint8)])
+    #vendor_name_nd = np.dtype([('A',np.uint8)])
+    #model_name_nd = np.dtype([('B',np.uint8)])
+    #vendor_name_list = [65] 
+    #model_name_list = [67]
+    #vendor_name = "A" 
+    #model_name = "B"
     lens_id = 1
     cam_definition_uri = "http://10.0.2.51/cam_defs"
                                            
@@ -162,7 +170,8 @@ class MAVFrame():
     write_speed = 0.76                                                         #  [MiB/s] Write speed.
     storage_id = 1                                                             #  Storage ID (1 for first, 2 for second, etc.)
     storage_count = 2                                                          #  Number of storage devices
-    status = mavutil.mavlink.STORAGE_STATUS_READY 
+    status = 0 
+    #status = mavutil.mavlink.STORAGE_STATUS_READY 
 
     # camera capture status
     image_interval = 3.3                                                      #  [s] Image capture interval
@@ -233,7 +242,33 @@ class MAVFrame():
     # defines for camera ID file
     CAM_XML_FILE =  "alpha_cam_new.xml"
     NETWORK_ID = 1
-    
+
+    #
+    # check our operating system
+    #
+    def check_os( self ):
+        if ((sys.platform=='linux2') or (sys.platform=='linux')): return 1
+        elif  sys.platform=='win32': return 2
+        else: return 3
+ 
+    def update_utc_label( self ):
+        if (self.check_os() == 1):
+            cmd = "data +%s"
+            self.time_utc = os.popen(cmd).read()
+
+    def update_uptime_label( self ):
+        if (self.check_os() == 1):
+            cmd = "uptime"
+            upTimStr = os.popen(cmd).read().split(",")
+            dd = upTimStr[0].split()
+            days = int(dd[2])
+            xx = dd[0].split(":")
+            hours = int(xx[0])
+            mins = int(xx[1])
+            secs = int(xx[2])
+            self.time_boot_ms = (days*60*60*24) + (hours*60*60) + (mins*60) + secs
+            #print(f"boot tim {self.time_boot_ms} { (days*60*60*24) + (hours*60*60) + (mins*60) + secs }")
+
     def on_click_connect(self,e):
         #"""
         #Process a click on the CONNECT button
@@ -395,7 +430,7 @@ class MAVFrame():
         print("\033[33m %s : %6.3f %6.3f %6.3f"%(text,value1,value2,value3))
 
     def print_3_blue(self,text,value1,value2,value3):
-        print("\033[33m %s %6.3f %6.3f %6.3f"%(text,value1,value2,value3))
+        print("\033[34m %s %6.3f %6.3f %6.3f"%(text,value1,value2,value3))
         
     def print_blue(self,text,value):
         print("\033[34m %s : %6.3f"%(text,value))
@@ -1197,27 +1232,241 @@ class MAVFrame():
             ret = False
         return ret
         
+    #
+    # send cmaera information 
+    # (under test)
+    #
     def mavlink_send_camera_information(self, the_connection):
-        #if self.mavlink10():
+
+	        #self.time_boot_ms,
+                #self.vendor_name, 
+                #self.model_name, 
+                #self.firmware_version, 
+                #self.focal_length, 
+                #self.sensor_size_h, 
+                #self.sensor_size_v, 
+                #self.resolution_h, 
+                #self.resolution_v, 
+                #self.lens_id, 
+                #self.flags, 
+                #self.cam_definition_version, 
+                #self.cam_definition_uri)
+        vendor_name_nd = np.dtype([('ABB',np.uint8)])
+        model_name_nd = np.dtype([('BAC',np.uint8)])
+        vendor_name_list = [65,66,66] 
+        model_name_list = [66,65,67]
+        vendor_name = "ABB" 
+        model_name = "BAC"
+        #
+        # convert string to ascii list and make numpy array
+        #
+        vn = []
+        mn = []
+        j = 0
+        for j in range(len(model_name)):
+            mn.append(ord(model_name[j]))
+        k = 0
+        for k in range(len(vendor_name)):
+            vn.append(ord(vendor_name[k]))
+        u8_model_name = np.array(mn, np.uint8)
+        u8_vendor_name = np.array(vn, np.uint8)
+        mn_u8 = u8_model_name.astype(np.uint8)
+        vn_u8 = u8_vendor_name.astype(np.uint8)
+
+        #
+        # defined as arrays of bytes
+        #
+        arr_vendor = arr.array('B', [65,66,66])
+        arr_model = arr.array('B', [66,65,67])
+        arr2_vendor = arr.array('B', vn)
+        arr2_model = arr.array('B', mn)
+        print("\033[31m >>>>>>>>>>>> should be using 8bit byte array <<<<<<<<<<<<<<< ")
+        print(f"\033[32m model {arr_model} {type(arr_model)} vendor {arr_vendor} {type(arr_vendor)} ")
         try:    
             the_connection.mav.camera_information_send(
-                self.time_boot_ms,
-                self.vendor_name, 
-                self.model_name, 
-                self.firmware_version, 
-                self.focal_length, 
-                self.sensor_size_h, 
-                self.sensor_size_v, 
-                self.resolution_h, 
-                self.resolution_v, 
-                self.lens_id, 
-                self.flags, 
-                self.cam_definition_version, 
-                self.cam_definition_uri)
+                100,
+                arr_vendor, 
+                arr_model, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                "a")
             ret = True
         except Exception as err_msg:
             print("Failed to send camera information message : %s" % (err_msg))
             ret = False
+        print(f" model {arr2_model} {type(arr2_model)} vendor {arr2_vendor} {type(arr2_vendor)} ")
+        try:    
+            the_connection.mav.camera_information_send(
+                100,
+                arr2_vendor, 
+                arr2_model, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                "a")
+            ret = True
+        except Exception as err_msg:
+            print("Failed to send camera information message : %s" % (err_msg))
+            ret = False
+        print(" \033[31m >>>>>>>>>>>>>>>>> using list <<<<<<<<<<<<<<<<<<<<<<< ")
+        print(f" \033[34m model {model_name_list} {type(model_name_list)} {vendor_name_list} {type(vendor_name_list)} ")
+        try:    
+            the_connection.mav.camera_information_send(
+                100,
+                vendor_name_list, 
+                model_name_list, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                "a")
+            ret = True
+        except Exception as err_msg:
+            print("Failed to send camera information message : %s" % (err_msg))
+            ret = False
+        print(" \033[31m >>>>>>>>>>>>>>> numpy dtype <<<<<<<<<<<<<<<<<<<<<<< ")
+        print(f"\033[33m model {vendor_name_nd} {type(vendor_name_nd)} {model_name_nd} {type(model_name_nd)} ")
+        try:    
+            the_connection.mav.camera_information_send(
+                100,
+                vendor_name_nd, 
+                model_name_nd, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                "a")
+            ret = True
+        except Exception as err_msg:
+            print("Failed to send camera information message : %s" % (err_msg))
+            ret = False
+        print(" \033[31m >>>>>>> using ord and numpy <<<<<<<< ")
+        print(f"\033[36m model {vn} {type(vn)} {u8_model_name} vendor {mn} {type(mn)}")
+        try:    
+            the_connection.mav.camera_information_send(
+                100,
+                vn, 
+                mn, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                "a")
+            ret = True
+        except Exception as err_msg:
+            print("Failed to send camera information message : %s" % (err_msg))
+            ret = False
+        print(f" vendor {u8_vendor_name} {type(u8_vendor_name)} model {u8_model_name} {type(u8_model_name)} ")
+        try:    
+            the_connection.mav.camera_information_send(
+                100,
+                u8_vendor_name, 
+                u8_model_name, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                "a")
+            ret = True
+        except Exception as err_msg:
+            print("Failed to send camera information message : %s" % (err_msg))
+            ret = False
+        print(f" vendor {vn_u8} {type(vn_u8)} model {mn_u8} {type(mn_u8)} ")
+        try:    
+            the_connection.mav.camera_information_send(
+                100,
+                vn_u8, 
+                mn_u8, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                "a")
+            ret = True
+        except Exception as err_msg:
+            print("Failed to send camera information message : %s" % (err_msg))
+            ret = False
+        #exit(1)
+        print(f" vendor {vendor_name} {type(vendor_name)} model {model_name} {type(model_name)} ")
+        try:    
+            the_connection.mav.camera_information_send(
+                100,
+                vendor_name, 
+                model_name, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                "a")
+            ret = True
+        except Exception as err_msg:
+            print("Failed to send camera information message : %s" % (err_msg))
+        b = bytearray(b'ABB')
+        b1 = bytearray(b'BAC')
+        print(f"\033[37m vendor {b} {type(b)} model {b1} {type(b1)} ")
+        try:    
+            the_connection.mav.camera_information_send(
+                100,
+                b, 
+                b1, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                "a")
+            ret = True
+        except Exception as err_msg:
+            print("Failed to send camera information message : %s" % (err_msg))
+            ret = False
+        print("\033[35m end>>>>>>>>>>>>>")
         return ret
         
     def mavlink_send_camera_settings(self, the_connection):
@@ -1236,6 +1485,23 @@ class MAVFrame():
         
     def mavlink_send_storage_information(self, the_connection):
         #if self.mavlink10():
+        #
+        # This is a byte array of the string 
+        #
+        b = bytearray(b'ABB')
+        #
+        # forced uint8 with numpy
+        #
+        b8_numpy = np.array(b, np.uint8)
+        #
+        # ascii string encoded
+        #
+        nm = "storenm"
+        try:
+            u8_model_name = (nm).encode("ascii")
+        except Exception as err_msg:
+            print("\033[32m Failed to SET storage information message : %s " % (err_msg))
+        print(f" sending storage info {u8_model_name} type {type(u8_model_name)}")
         try:    
             the_connection.mav.storage_information_send(
                 self.time_boot_ms, 
@@ -1246,10 +1512,13 @@ class MAVFrame():
                 self.used_capacity, 
                 self.available_capacity, 
                 self.read_speed, 
-                self.write_speed)
+                self.write_speed,
+                1,
+                np.array(u8_model_name,np.uint8),
+                2)
             ret = True
         except Exception as err_msg:
-            print("Failed to send storage information message : %s" % (err_msg))
+            print("\033[32m Failed to send storage information message : %s type is %s" % (err_msg,type(u8_model_name)))
             ret = False
         return ret
         
@@ -1285,8 +1554,9 @@ class MAVFrame():
                 self.bitrate, 
                 self.rotation, 
                 self.hfov, 
-                self.videoname, 
-                self.video_uri) 
+                #self.videoname, 
+                (self.videoname).encode('ascii'),
+                (self.video_uri).encode('ascii'))
             ret = True
         except Exception as err_msg:
             print("Failed to send video stream information message : %s" % (err_msg))
@@ -1295,6 +1565,8 @@ class MAVFrame():
         
     def mavlink_send_camera_image_captured(self, the_connection):
         #if self.mavlink10():
+        b = bytearray(b'[2,3,4,5]')
+        print(f"sending cam image cap {self.time_boot_ms}")
         try:  
             the_connection.mav.camera_image_captured_send(
                 self.time_boot_ms, 
@@ -1304,7 +1576,7 @@ class MAVFrame():
                 self.lon, 
                 self.alt, 
                 self.relative_alt, 
-                self.q, 
+                b, 
                 self.image_index, 
                 self.capture_result, 
                 self.file_url)
@@ -1347,6 +1619,9 @@ class MAVFrame():
         loop = 2
         while loop >= 1:
             print("im receiving.............")
+
+            self.update_uptime_label( )
+            self.update_utc_label( )
             # wait heartbeat (only the GCS does this )
             # m = the_connection.recv_match(type="HEARTBEAT", blocking=True, timeout=5)
             #
@@ -1364,7 +1639,11 @@ class MAVFrame():
             # These are test messages to check the receive end !!!!
             #
             self.mavlink_send_camera_feedback( the_connection )
-            self.mavlink_send_camera_information(the_connection)
+            #self.mavlink_send_camera_information(the_connection)
+            #self.mavlink_send_storage_information(the_connection)
+            #self.mavlink_send_camera_capture_status(the_connection)
+            print(f" video stream returned {self.mavlink_send_video_stream_information(the_connection)}")
+            self.mavlink_send_camera_image_captured(the_connection)
             #the_connection.mav.camera_feedback_send( 1000, 1, 1, 22, 21, 10, 30, 21, 2, 3, 5, 2, 3)
             #the_connection.mav.gps_raw_int_send( 1000, self.g_count, 77, 66, 76, 3, 1, 2, 3, 5)
             #the_connection.mav.vibration_send( 1000, 1, 1, 22, 21, 10, 30 )
@@ -2284,6 +2563,7 @@ if __name__ == '__main__':
 # ===================== Main Multi-Thread send/rcv Task ============================
 #
     asyncio.run(main())
+
 
 
 
