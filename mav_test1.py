@@ -91,7 +91,6 @@ MAV_SOURCE = 30
 #
 # from mavlink_python_libs import com1 as commonV1
 # import com1 as mavdefs
-#
 from mavlink_python_libs import com2 as commonV1
 import com2 as mavdefs
 import math
