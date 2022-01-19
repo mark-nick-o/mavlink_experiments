@@ -91,6 +91,7 @@ MAV_SOURCE = 30
 #
 # from mavlink_python_libs import com1 as commonV1
 # import com1 as mavdefs
+#
 from mavlink_python_libs import com2 as commonV1
 import com2 as mavdefs
 import math
@@ -1586,6 +1587,7 @@ class MAVFrame():
  
     def mavlink_send_camera_feedback(self, the_connection):
         #if self.mavlink10():
+        print("\033[32m sending camera feedback")
         try:  
             the_connection.mav.camera_feedback_send( 
                 self.time_usec, 
@@ -1603,7 +1605,7 @@ class MAVFrame():
                 self.CFflags)
             ret = True
         except Exception as err_msg:
-            print("Failed to send camera image captured message : %s" % (err_msg))
+            print("Failed to send camera feedback message : %s" % (err_msg))
             ret = False
         return ret
         
@@ -1672,6 +1674,16 @@ class MAVFrame():
                 print("in cmd long ... ACK RES %s %u \n" % (self.ACK_RESULT,mavutil.mavlink.MAV_CMD_REQUEST_CAMERA_INFORMATION))
                 print("Command %u p1 %u p2 %u p3 %u p4 %u \n" % (msg.command, msg.param1, msg.param2, msg.param3, msg.param4))
                 print("p5 %u p6 %u p7 %u \n" % (msg.param5, msg.param6, msg.param7))  
+
+                # print(msg.get_payload())
+                # print(msg.get_msgbuf())
+                # print(msg.get_fieldnames())
+                # print(msg.get_type())
+                #
+                # print the message recieved in json
+                #
+                print(msg.to_dict())
+
                 if not (self.ACK_RESULT == mavutil.mavlink.MAV_RESULT_ACCEPTED):
                     self.RCV_COMMAND = msg.command
                     print(f"\033[35m IN LOOP :: self ACK RES {self.ACK_RESULT} RCV {self.RCV_COMMAND} {mavutil.mavlink.MAV_CMD_DO_DIGICAM_CONTROL}")
@@ -1696,7 +1708,7 @@ class MAVFrame():
                     elif (self.RCV_COMMAND == mavutil.mavlink.MAV_CMD_REQUEST_CAMERA_INFORMATION):
                         print("request camera Info OLD MESSAGE.....")
                         #
-                        # hack here as it doesnt send param 1 (it should ??!!)
+                        # Send camera information
                         #
                         self.mavlink_send_camera_information(the_connection)
                         if (msg.param1 == 1):
@@ -1759,13 +1771,22 @@ class MAVFrame():
                     elif (self.RCV_COMMAND == mavutil.mavlink.MAV_CMD_DO_DIGICAM_CONTROL):
                         self.type_of_msg = mavutil.mavlink.MAV_CMD_DO_DIGICAM_CONTROL
                         print(f"\033[33m DO DIGICAM CONTROL {msg.param1} {msg.param1}")
-                        try:
-                            if (redCam.redEdgeCaptureFivePictures() == 1):
-                                print("saved the pictures")
-                            else:
-                                print("error saving the pictures")
-                        except Exception as e:
-                            print(f" Tried to take picture ERROR:: {e}")                             
+                        if ((int(msg.param5) == 1) and (int(msg.param7) == 1)):
+                            try:
+                                if (redCam.redEdgeCaptureFivePicturesNoUpload() == 1):
+                                    print("Took the micasense pictures on SD Card")
+                                else:
+                                    print("Error taking pictures with the micasense camera")
+                            except Exception as e:
+                                print(f" Tried to take picture ERROR:: {e}") 
+                        elif ((int(msg.param5) == 1) and (int(msg.param7) == 0)):
+                             try:
+                                if (redCam.redEdgeCaptureFivePictures() == 1):
+                                    print("saved the pictures to the raspberry Pi")
+                                else:
+                                    print("error saving the pictures to the raspberry Pi")
+                             except Exception as e:
+                                print(f" Tried to take picture ERROR:: {e}") 
                         self.Got_Param1 = msg.param1
                         self.Got_Param2 = msg.param2
                         self.Got_Param3 = msg.param3
@@ -1843,7 +1864,7 @@ class MAVFrame():
                 #retParam = self.mavlink_send_camera_information(the_connection)
             elif msg.get_type() == 'CAMERA_FEEDBACK':
                 print("Camera Feedback")
-                the_connection.mav.camera_feedback_send( 1000, 1, 1, 22, 21, 10, 30, 21, 2, 3, 5, 2, 3)
+                #the_connection.mav.camera_feedback_send( 1000, 1, 1, 22, 21, 10, 30, 21, 2, 3, 5, 2, 3)
             elif msg.get_type() == 'FILE_TRANSFER_PROTOCOL':
                 print("FTP request for XML file .... I'm sending it as my payloads in chunks of 251 bytes")
                 lab = []
@@ -1867,16 +1888,54 @@ class MAVFrame():
             loop = loop - 1
 
     def mavlink_send_ack_command(self, the_connection, cmd, rpm2, pro, res):
-        #if self.mavlink10():
-        print(f"\033[31m sending an ACK {pro}")
-        the_connection.mav.command_ack_send(
-            the_connection.target_system,                       # target_system
-            the_connection.target_component,                    # target_component
-            cmd,                                                # command
-            rpm2,                                               # result_param2
-            pro,                                                # progress
-            res)                                                # result
-        print(f"ACK sent {rpm2} {res}")
+        if (self.mavlink20(the_connection) == True):
+            print(f"\033[31m sending an ACK {pro}")
+            try:
+                the_connection.mav.command_ack_send(
+                    cmd,                                                # command
+                    res,                                                # result
+                    pro,                                                # progress
+                    rpm2,                                               # result_param2
+                    the_connection.target_system,                       # target_system
+                    the_connection.target_component)                    # target_component
+                print(f"ACK sent {rpm2} {res}")
+                ret = True
+            except Exception as err_msg:
+                print("Failed 1st ACK message : %s" % (err_msg))
+                try:
+                    the_connection.mav.command_ack_send(
+                         cmd,                                                # command
+                         res)                                                # result
+                    print(f"ACK sent {rpm2} {res}")
+                    ret = True
+                except Exception as err_msg:
+                    print("Failed 2nd ACK message : %s" % (err_msg))
+                    ret = False
+            return ret
+        elif (self.mavlink10(the_connection) == True):
+            print(f"\033[31m sending an ACK {pro}")
+            try:
+                the_connection.mav.command_ack_send(
+                    cmd,                                                # command
+                    res)                                                # result
+                print(f"ACK sent {rpm2} {res}")
+                ret = True
+            except Exception as err_msg:
+                print("Failed 1st ACK message : %s" % (err_msg))
+                try:
+                    the_connection.mav.command_ack_send(
+                        cmd,                                                # command
+                        res,                                                # result
+                        pro,                                                # progress
+                        rpm2,                                               # result_param2
+                        the_connection.target_system,                       # target_system
+                        the_connection.target_component)                    # target_component
+                    print(f"ACK sent {rpm2} {res}")
+                    ret = True
+                except Exception as err_msg:
+                    print("Failed 2nd ACK message : %s" % (err_msg))
+                    ret = False
+            return ret
 
     def raspberry_pi3_set_relay(self, rNum, rState):
         #if self.mavlink10():
@@ -2103,7 +2162,11 @@ class micaSenseCamera():
     NTP_TIME_SYNC_ENABLE = 1                             # enable if 1 to use ntp timesync :: Internet conenction required (GPRS)
 
     CALIBRATE_USING_PANEL = True                         # when passed to the CaptureFivePictures method enters calibration sequence 
-    
+
+    def __del__(self):  
+        class_name = self.__class__.__name__  
+        print('{} Deleted'.format(class_name))     
+ 
     # globals used by the class
     #
     ntp_sync_freq = 0 
@@ -2268,6 +2331,7 @@ class micaSenseCamera():
                 ret = -3
             except KeyboardInterrupt:
                 print("Someone closed the program")
+                ret = -6
             
             if (ret == 1):
                 retries = -1
@@ -2330,6 +2394,7 @@ class micaSenseCamera():
                 ret = -3 
             except KeyboardInterrupt:
                 print("Someone closed the program")
+                ret = -6
                 
             if (ret == 1):
                 retries = -1
@@ -2387,7 +2452,6 @@ class micaSenseCamera():
             self.print_myJson( capture_data )
         else:
             print("Capture Failed")
-            exit(1)
         return capture_data.status_code,capture_data         
 
     # Post a message to the RedEdge camera commanding a capture, block until complete if no conenction attempt re-connect the wifi
@@ -2955,6 +3019,54 @@ class micaSenseCamera():
             print("====== error ========")
             return -1
 
+
+    # Take a picture and wait for completion status and DO NOT save them to you're hard drive.
+    # 
+    def redEdgeCaptureFivePicturesNoUpload( self, calibON=False ):
+
+        if (calibON == False):
+            stat, jso = self.redEdgeCapture()
+        else:
+            stat, jso = self.redEdgeCapture( 3, True )
+        if (stat >= 200) and (stat <= 299):
+            print("in function >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+            jsonStat = jso.json()
+            statTxt = jsonStat['status']
+            if ((calibON == True) and not (statTxt.find("complete") == -1)):
+                print("Calibration Completed")
+                return 2
+            id = jsonStat['id']
+            loop_timeout = 3
+            while ((statTxt.find("complete") == -1) and (loop_timeout >= 0)) :
+                print(f"doing {jsonStat['id']}")
+                stat, js = self.redEdgeCaptureStatus( jsonStat['id'] )
+                if (stat >= 200) and (stat <= 299):
+                    statusOut = js.json()
+                    statTxt = statusOut['status']
+                elif not (stat == 0):
+                    print(f"stat returned was {stat}")
+                    statusOut = js.json()
+                    print(statusOut) 
+                    statTxt = statusOut['status']
+                else:
+                    print("invalid stat was returned !!!")
+                loop_timeout -= 1
+                print(f"status returned was {statTxt} stat is {stat}")
+                
+            if (loop_timeout <= 0):
+                print("------- request failed on timeout---------")
+                return -1
+            elif not ((stat >= 200) and (stat <= 299)):
+                print(f"------- returned a stat of {stat} ------")
+                return -2
+
+            print(f"success..... {statTxt}")
+            return 1
+            exit(1)
+        else:
+            print("====== error ========")
+            return -1
+            exit(-1)
 #
 # The heartbeat task
 #
@@ -2969,7 +3081,7 @@ async def sendMavlinkHeartBeat(fm, cID, sleep):
 # The continuos reading thread
 #
 async def readMavlinkIncomingData(fm, cID, redCam=0):
-    fm.process_messages_from_connection(fm,cID, redCam)
+    fm.process_messages_from_connection(fm,cID,redCam)
 
 #
 # The ACK send thread
@@ -3006,7 +3118,7 @@ async def processMavlinkMessageData(fm, cID, sleep, sonycam=0, caminst=0, redeye
     mySonyCamera = 2
     mySonyCameraContShoot = 3 
    
-    print("=================================== !!!!! in process !!!!!! ========================")
+    print(f"=================================== !!!!! in process !!!!!! ======================== {fm.type_of_msg}")
  
     if (fm.type_of_msg == 65000):
         #
@@ -3409,7 +3521,7 @@ async def main():
 
     # micasense redEye class
     #
-    myRedCam = micaSenseCamera()
+    redEdgeCam = micaSenseCamera()
     
     frame.RCV_COMMAND = 0
     frame.RPM2 = 0
@@ -3419,7 +3531,7 @@ async def main():
     print("started reader")
     
     while True: 
-        read_task_1 = asyncio.create_task(readMavlinkIncomingData(frame, cID, myRedCam))
+        read_task_1 = asyncio.create_task(readMavlinkIncomingData(frame, cID, redEdgeCam))
         #await read_task_1 
         print(f"Started in main : {time.strftime('%X')}")
         
