@@ -211,7 +211,11 @@ class MAVFrame():
     
     # used to decide what is being requested from the calling (GCS) station
     type_of_msg = 0
-    
+
+    def __del__(self):  
+        class_name = self.__class__.__name__  
+        print('{} Deleted'.format(class_name)) 
+
     def on_click_connect(self,e):
         #"""
         #Process a click on the CONNECT button
@@ -846,170 +850,206 @@ class MAVFrame():
 
     def mavlink_video_set_camera_focus(self, the_connection, camFocusType, camFocusValue):
         #if self.mavlink10():
-        the_connection.mav.command_long_send(
-            the_connection.target_system,  # target_system
-            the_connection.target_component, # target_component
-            mavdefs.MAV_CMD_SET_CAMERA_FOCUS, # command
-            0, # Confirmation
-            camFocusType, # param1
-            camFocusValue, # param2
-            0, # param3 
-            0, # param4
-            0, # param5
-            0, # param6
-            0) # param7
-
+        try:
+            the_connection.mav.command_long_send(
+                the_connection.target_system,  # target_system
+                the_connection.target_component, # target_component
+                mavdefs.MAV_CMD_SET_CAMERA_FOCUS, # command
+                0, # Confirmation
+                camFocusType, # param1
+                camFocusValue, # param2
+                0, # param3 
+                0, # param4
+                0, # param5
+                0, # param6
+                0) # param7
+        except Exception as err_msg:
+                print("Failed to send message to set focus : %s" % (err_msg))
+                
     def mavlink_do_digicam_configure(self, the_connection, camMode, camShutterSpeed, camAperture, camISO, camExposure, camCommandIdentity, camEngineCutOff):
         #if self.mavlink10():
-        the_connection.mav.command_long_send(
-            the_connection.target_system,  # target_system
-            the_connection.target_component, # target_component
-            mavutil.mavlink.MAV_CMD_DO_DIGICAM_CONFIGURE, # command
-            0, # Confirmation
-            camMode, # param1
-            camShutterSpeed, # param2
-            camAperture, # param3 
-            camISO, # param4
-            camExposure, # param5
-            camCommandIdentity, # param6
-            camEngineCutOff) # param7
-
+        try:
+            the_connection.mav.command_long_send(
+                the_connection.target_system,  # target_system
+                the_connection.target_component, # target_component
+                mavutil.mavlink.MAV_CMD_DO_DIGICAM_CONFIGURE, # command
+                0, # Confirmation
+                camMode, # param1
+                camShutterSpeed, # param2
+                camAperture, # param3 
+                camISO, # param4
+                camExposure, # param5
+                camCommandIdentity, # param6
+                camEngineCutOff) # param7
+        except Exception as err_msg:
+                print("Failed to send message to configure digicam : %s" % (err_msg))
+                
     def mavlink_do_digicam_control(self, the_connection, camSessionControl, camZoomAbsolute, camZoomRelative, camFocus, camShootCommand, camCommandIdentity, camShotID):
         #if self.mavlink10():
-        the_connection.mav.command_long_send(
-            the_connection.target_system,  # target_system
-            the_connection.target_component, # target_component
-            mavutil.mavlink.MAV_CMD_DO_DIGICAM_CONTROL, # command
-            0, # Confirmation
-            camSessionControl, # param1
-            camZoomAbsolute, # param2
-            camZoomRelative, # param3 
-            camFocus, # param4
-            camShootCommand, # param5
-            camCommandIdentity, # param6
-            camShotID) # param7
-
+        try:
+            the_connection.mav.command_long_send(
+                the_connection.target_system,  # target_system
+                the_connection.target_component, # target_component
+                mavutil.mavlink.MAV_CMD_DO_DIGICAM_CONTROL, # command
+                0, # Confirmation
+                camSessionControl, # param1
+                camZoomAbsolute, # param2
+                camZoomRelative, # param3 
+                camFocus, # param4
+                camShootCommand, # param5
+                camCommandIdentity, # param6
+                camShotID) # param7
+        except Exception as err_msg:
+                print("Failed to send do_digicam_control : %s" % (err_msg))
+                
+                
     def mavlink_do_video_control(self, the_connection, camID, camTransmission, camInterval, camRecording):
         #if self.mavlink10():
-        the_connection.mav.command_long_send(
-            the_connection.target_system,  # target_system
-            the_connection.target_component, # target_component
-            mavutil.mavlink.MAV_CMD_DO_CONTROL_VIDEO, # command
-            0, # Confirmation
-            camID, # param1
-            camTransmission, # param2
-            camInterval, # param3 
-            camRecording, # param4
-            0, # param5
-            0, # param6
-            0) # param7 
-
+        try:
+            the_connection.mav.command_long_send(
+                the_connection.target_system,  # target_system
+                the_connection.target_component, # target_component
+                mavutil.mavlink.MAV_CMD_DO_CONTROL_VIDEO, # command
+                0, # Confirmation
+                camID, # param1
+                camTransmission, # param2
+                camInterval, # param3 
+                camRecording, # param4
+                0, # param5
+                0, # param6
+                0) # param7 
+        except Exception as err_msg:
+                print("Failed to send do_video_control : %s" % (err_msg))
+                
     def mavlink_get_camera_settings(self, the_connection):
         #if self.mavlink10():
-        the_connection.mav.command_long_send(
-            the_connection.target_system,  # target_system
-            the_connection.target_component, # target_component
-            mavutil.mavlink.MAV_CMD_REQUEST_CAMERA_SETTINGS, # command
-            0, # Confirmation
-            1, # param1
-            0, # param2
-            0, # param3 
-            0, # param4
-            0, # param5
-            0, # param6
-            0) # param7 
-
+        try:
+            the_connection.mav.command_long_send(
+                the_connection.target_system,  # target_system
+                the_connection.target_component, # target_component
+                mavutil.mavlink.MAV_CMD_REQUEST_CAMERA_SETTINGS, # command
+                0, # Confirmation
+                1, # param1
+                0, # param2
+                0, # param3 
+                0, # param4
+                0, # param5
+                0, # param6
+                0) # param7 
+        except Exception as err_msg:
+                print("Failed to send command long for camera_settings : %s" % (err_msg))
+                
     def mavlink_get_new_camera_data(self, the_connection):
         #if self.mavlink10():
-        print("to sys %s comp %s"%(the_connection.target_system,the_connection.target_component))
-        the_connection.mav.command_long_send(
-            the_connection.target_system,  # target_system
-            the_connection.target_component, # target_component
-            mavutil.mavlink.MAV_CMD_REQUEST_MESSAGE, # command
-            0, # Confirmation
-            259, # param1
-            0, # param2
-            0, # param3 
-            0, # param4
-            0, # param5
-            0, # param6
-            0) # param7 
+        print("MAV_CMD_REQUEST message sent to sys %s comp 100"%(the_connection.target_system))
+        #the_connection.target_component, # target_component
+        try:
+            the_connection.mav.command_long_send(
+                the_connection.target_system,                 # target_system
+                100,                                          # target_component
+                mavutil.mavlink.MAV_CMD_REQUEST_MESSAGE,      # command
+                0,                                            # Confirmation
+                259,                                          # param1
+                0,                                            # param2
+                0,                                            # param3 
+                0,                                            # param4
+                0,                                            # param5
+                0,                                            # param6
+                0)                                            # param7 
+            print("sent the camera data........................ request")
+        except Exception as err_msg:
+                print("Failed to send command long for camera_information : %s" % (err_msg))
             
     def mavlink_get_storage_info(self, the_connection, StoId):
         #if self.mavlink10():
-        the_connection.mav.command_long_send(
-            the_connection.target_system,  # target_system
-            the_connection.target_component, # target_component
-            mavutil.mavlink.MAV_CMD_REQUEST_STORAGE_INFORMATION, # command
-            0, # Confirmation
-            StoId, # param1
-            1, # param2
-            0, # param3 
-            0, # param4
-            0, # param5
-            0, # param6
-            0) # param7 
-
+        try:
+            the_connection.mav.command_long_send(
+                the_connection.target_system,  # target_system
+                the_connection.target_component, # target_component
+                mavutil.mavlink.MAV_CMD_REQUEST_STORAGE_INFORMATION, # command
+                0, # Confirmation
+                StoId, # param1
+                1, # param2
+                0, # param3 
+                0, # param4
+                0, # param5
+                0, # param6
+                0) # param7 
+        except Exception as err_msg:
+                print("Failed to send command long for storage_information : %s" % (err_msg))
+                
     def mavlink_get_capture_status(self, the_connection):
         #if self.mavlink10():
-        the_connection.mav.command_long_send(
-            the_connection.target_system,  # target_system
-            the_connection.target_component, # target_component
-            mavutil.mavlink.MAV_CMD_REQUEST_CAMERA_CAPTURE_STATUS, # command
-            0, # Confirmation
-            1, # param1
-            0, # param2
-            0, # param3 
-            0, # param4
-            0, # param5
-            0, # param6
-            0) # param7 
-
+        try:
+            the_connection.mav.command_long_send(
+                the_connection.target_system,  # target_system
+                the_connection.target_component, # target_component
+                mavutil.mavlink.MAV_CMD_REQUEST_CAMERA_CAPTURE_STATUS, # command
+                0, # Confirmation
+                1, # param1
+                0, # param2
+                0, # param3 
+                0, # param4
+                0, # param5
+                0, # param6
+                0) # param7 
+        except Exception as err_msg:
+                print("Failed to send command long for capture_status_information : %s" % (err_msg))
+                
     def mavlink_get_stream_info(self, the_connection):
         #if self.mavlink10():
-        the_connection.mav.command_long_send(
-            the_connection.target_system,  # target_system
-            the_connection.target_component, # target_component
-            mavutil.mavlink.MAV_CMD_REQUEST_VIDEO_STREAM_INFORMATION, # command
-            0, # Confirmation
-            1, # param1
-            0, # param2
-            0, # param3 
-            0, # param4
-            0, # param5
-            0, # param6
-            0) # param7 
-
+        try:
+            the_connection.mav.command_long_send(
+                the_connection.target_system,  # target_system
+                the_connection.target_component, # target_component
+                mavutil.mavlink.MAV_CMD_REQUEST_VIDEO_STREAM_INFORMATION, # command
+                0, # Confirmation
+                1, # param1
+                0, # param2
+                0, # param3 
+                0, # param4
+                0, # param5
+                0, # param6
+                0) # param7 
+        except Exception as err_msg:
+                print("Failed to send command long for video_stream_information : %s" % (err_msg))
+                
     def mavlink_reset_camera(self, the_connection):
         #if self.mavlink10():
-        the_connection.mav.command_long_send(
-            the_connection.target_system,  # target_system
-            the_connection.target_component, # target_component
-            mavutil.mavlink.MAV_CMD_RESET_CAMERA_SETTINGS, # command
-            0, # Confirmation
-            1, # param1
-            0, # param2
-            0, # param3 
-            0, # param4
-            0, # param5
-            0, # param6
-            0) # param7 
-
+        try:
+            the_connection.mav.command_long_send(
+                the_connection.target_system,  # target_system
+                the_connection.target_component, # target_component
+                mavutil.mavlink.MAV_CMD_RESET_CAMERA_SETTINGS, # command
+                0, # Confirmation
+                1, # param1
+                0, # param2
+                0, # param3 
+                0, # param4
+                0, # param5
+                0, # param6
+                0) # param7 
+        except Exception as err_msg:
+                print("Failed to send command long for reset_camera : %s" % (err_msg))
+                
     def mavlink_set_camera_trig_interval(self, the_connection, camTriggerCycle, camShutterIntegration):
         #if self.mavlink10():
-        the_connection.mav.command_long_send(
-            the_connection.target_system,  # target_system
-            the_connection.target_component, # target_component
-            mavutil.mavlink.MAV_CMD_DO_SET_CAM_TRIGG_INTERVAL, # command
-            0, # Confirmation
-            camTriggerCycle, # param1
-            camShutterIntegration, # param2
-            0, # param3 
-            0, # param4
-            0, # param5
-            0, # param6
-            0) # param7 
-
+        try:
+            the_connection.mav.command_long_send(
+                the_connection.target_system,  # target_system
+                the_connection.target_component, # target_component
+                mavutil.mavlink.MAV_CMD_DO_SET_CAM_TRIGG_INTERVAL, # command
+                0, # Confirmation
+                camTriggerCycle, # param1
+                camShutterIntegration, # param2
+                0, # param3 
+                0, # param4
+                0, # param5
+                0, # param6
+                0) # param7 
+        except Exception as err_msg:
+                print("Failed to send command long for camera_trig_interval : %s" % (err_msg))
+                
     def mavlink_set_camera_to_quaternion(self, the_connection, q1, q2, q3, q4):
         #if self.mavlink10():
         the_connection.mav.command_long_send(
@@ -1134,7 +1174,7 @@ class MAVFrame():
         #This runs continuously. The mavutil.recv_match() function will call mavutil.post_message()
         #any time a new message is received, and will notify all functions in the master.message_hooks list.
         #"""
-        loop = 10
+        loop = 4 
         while loop >= 1:
             print("im receiving.............")
             # wait heartbeat (only the GCS does this )
@@ -1500,13 +1540,116 @@ class redEye():
 #
 # Send the Camera Request
 #
-async def sendCameraRequest(fm, cID, sleep):
+async def sendCameraRequest(fm, cID, sleep=0):
+    print("sending the camera request 2")
     fm.mavlink_get_new_camera_data(cID)
+    print("sending the camera request 3")
     while sleep > 0:
         await asyncio.sleep(1)
         print(f'{sleep} seconds')
         sleep -= 1    
 
+#
+# Send the Stream Info Request
+#
+async def sendStreamInfoRequest(fm, cID, sleep=0):
+    fm.mavlink_get_stream_info(cID)
+    while sleep > 0:
+        await asyncio.sleep(1)
+        print(f'{sleep} seconds')
+        sleep -= 1 
+
+#
+# Send the Capture Status Request
+#
+async def sendCapStatusRequest(fm, cID, sleep=0):
+    fm.mavlink_get_capture_status(cID)
+    while sleep > 0:
+        await asyncio.sleep(1)
+        print(f'{sleep} seconds')
+        sleep -= 1 
+ 
+#
+# Send the Camera Settings Request
+#
+async def sendCamSettingsRequest(fm, cID, sleep=0):
+    fm.mavlink_get_camera_settings(cID)
+    while sleep > 0:
+        await asyncio.sleep(1)
+        print(f'{sleep} seconds')
+        sleep -= 1 
+        
+#
+# Send the Storage Info Request
+#
+async def sendStorageInfoRequest(fm, cID, sID=1, sleep=0):
+    fm.mavlink_get_storage_info(cID, sID)
+    while sleep > 0:
+        await asyncio.sleep(1)
+        print(f'{sleep} seconds')
+        sleep -= 1   
+        
+#
+# Send the Video Info Request
+#
+async def sendVideoControlRequest(fm, cID, camID, camTransmission=1, camInterval=2, camRecording=3, sleep=0):
+    fm.mavlink_do_video_control(cID, camID, camTransmission, camInterval, camRecording)    
+    while sleep > 0:
+        await asyncio.sleep(1)
+        print(f'{sleep} seconds')
+        sleep -= 1  
+        
+#
+# Send the Camera Trig Request
+#
+async def sendCamTrigRequest(fm, cID, camTriggerCycle=5, camShutterIntegration=4, sleep=0): 
+    fm.mavlink_set_camera_trig_interval(cID, camTriggerCycle, camShutterIntegration)
+    while sleep > 0:
+        await asyncio.sleep(1)
+        print(f'{sleep} seconds')
+        sleep -= 1   
+        
+#
+# Send the Reset Cam Request
+#
+async def sendResetCamRequest(fm, cID, sleep=0):
+    fm.mavlink_reset_camera(cID) 
+    while sleep > 0:
+        await asyncio.sleep(1)
+        print(f'{sleep} seconds')
+        sleep -= 1   
+
+#
+# Send the video focus
+#
+async def sendVideoFocusRequest(fm, cID, camFocusType=9, camFocusValue=300, sleep=0):
+    fm.mavlink_video_set_camera_focus(cID, camFocusType, camFocusValue)
+    while sleep > 0:
+        await asyncio.sleep(1)
+        print(f'{sleep} seconds')
+        sleep -= 1   
+
+#
+# Send the digicam configure
+#
+async def sendDigiCamConfigureRequest(fm, cID, camMode=2, camShutterSpeed=3, camAperture=4, camISO=5, camExposure=6, camCommandIdentity=7, camEngineCutOff=8, sleep=0):
+    fm.mavlink_do_digicam_configure(cID, camMode, camShutterSpeed, camAperture, camISO, camExposure, camCommandIdentity, camEngineCutOff)
+    while sleep > 0:
+        await asyncio.sleep(1)
+        print(f'{sleep} seconds')
+        sleep -= 1 
+
+#
+# Send the digicam control
+#
+async def sendDigiCamControlRequest(fm, cID, camSessionControl=11, camZoomAbsolute=12, camZoomRelative=13, camFocus=14, camShootCommand=15, camCommandIdentity=16, camShotID=666, sleep=0):
+    fm.mavlink_do_digicam_control(cID, camSessionControl, camZoomAbsolute, camZoomRelative, camFocus, camShootCommand, camCommandIdentity, camShotID)
+    while sleep > 0:
+        await asyncio.sleep(1)
+        print(f'{sleep} seconds')
+        sleep -= 1 
+
+        
 #
 # The continuos reading thread
 #
@@ -1946,11 +2089,52 @@ async def main():
         print(f"Started in main : {time.strftime('%X')}")
         
         snd_task_1 = asyncio.create_task(sendCameraRequest(frame, cID, 1))
-        print(".................................  sending request   ....................................................................")
+        print(".................................  sending camera request   ....................................................................")
         await snd_task_1   
-           
+        
+        #snd_task_2 = asyncio.create_task(sendStreamInfoRequest(frame, cID, 1))
+        #print(".................................  sending stream request   ....................................................................")
+        #await snd_task_2
+
+        #snd_task_3 = asyncio.create_task(sendCapStatusRequest(frame, cID, 1))
+        #print(".................................  sending cap status request   ....................................................................")
+        #await snd_task_3
+
+        #snd_task_4 = asyncio.create_task(sendCamSettingsRequest(frame, cID, 1))
+        #print(".................................  sending cam settings request   ....................................................................")
+        #await snd_task_4
+
+        #snd_task_5 = asyncio.create_task(sendStorageInfoRequest(frame, cID, 8, 1))
+        #print(".................................  sending storage info request   ....................................................................")
+        #await snd_task_5
+
+        #snd_task_6 = asyncio.create_task(sendVideoControlRequest(frame, cID, 1, 2, 3, 1))
+        #print(".................................  sending video control request   ....................................................................")
+        #await snd_task_6
+
+        #snd_task_7 = asyncio.create_task(sendCamTrigRequest(frame, cID, 15, 14, 1))
+        #print(".................................  sending cam trigg request   ....................................................................")
+        #await snd_task_7
+
+        #snd_task_8 = asyncio.create_task(sendResetCamRequest(frame, cID, 1))
+        #print(".................................  sending cam reset camera request   ....................................................................")
+        #await snd_task_8
+
+        #snd_task_9 = asyncio.create_task(sendVideoFocusRequest(frame, cID, 9, 300, 1))
+        #print(".................................  sending video focus request   ....................................................................")
+        #await snd_task_9
+
+        #snd_task_10 = asyncio.create_task(sendDigiCamConfigureRequest(frame, cID, 12, 13, 14, 15, 16, 17, 18, 1))
+        #print(".................................  sending digi cam configure request   ....................................................................")
+        #await snd_task_10
+
+        #snd_task_11 = asyncio.create_task(sendDigiCamControlRequest(frame, cID, 211, 212, 213, 214, 215, 216, 666, 1))
+        #print(".................................  sending digi cam control request   ....................................................................")
+        #await snd_task_11
+        
         read_task_1.cancel()
-        print(f"Ended: {time.strftime('%X')}")
+        print(f"Ended: {time.strftime('%X')}")        
+
 
 if __name__ == '__main__':
     
