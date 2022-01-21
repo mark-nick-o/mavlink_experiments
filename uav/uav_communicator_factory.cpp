@@ -15,7 +15,7 @@
 #include "send_gps_raw_handler.h"
 #include "send_camera_info_handler.hpp"
 #include "send_camera_settings_handler.hpp"
-//#include "send_camera_ack_handler.hpp"
+#include "send_camera_ack_handler.hpp"
 //#include "send_camera_cancel_handler.hpp"
 //#include "cmd_req_handler.hpp"
 //#include "send_video_stream_handler.hpp"
@@ -44,7 +44,7 @@ MavLinkCommunicator* UavCommunicatorFactory::create()
     new domain::SendHomePositionHandler(communicator, m_model);
     new domain::SendGpsRawHandler(communicator, m_model);
     new domain::SendCameraInfoHandler(communicator, m_model);
-    //new domain::SendCameraAckHandler(communicator, m_model);
+    new domain::SendCameraAckHandler(communicator, m_model);
     //new domain::SendCameraCancelHandler(communicator, m_model);
     new domain::SendCameraSettingsHandler(communicator, m_model);
     //new domain::SendVideoStreamInfoHandler(communicator, m_model);
