@@ -205,9 +205,12 @@ std::int8_t UavModel::get_sendState() const
     return m_sendState;       
 }
 
-std::uint16_t UavModel::get_reject() const
+std::int32_t UavModel::get_disk1data() const
 {
-    return m_reject;       
+    return m_disk1_count_of_images;
 }
 
-
+std::int32_t UavModel::get_disk2data() const
+{
+    return m_disk2_count_of_images;
+}
