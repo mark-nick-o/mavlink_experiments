@@ -205,7 +205,7 @@ std::int8_t UavModel::get_sendState() const
     return m_sendState;       
 }
 
-std::int8_t UavModel::get_reject() const
+std::uint16_t UavModel::get_reject() const
 {
     return m_reject;       
 }
