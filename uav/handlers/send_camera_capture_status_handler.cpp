@@ -1,3 +1,4 @@
+#include "camera_status_data.h"
 #include "send_camera_capture_status_handler.hpp"
 
 // MAVLink
@@ -30,13 +31,13 @@ void SendCameraCaptureStatusHandler::timerEvent(QTimerEvent* event)
 {
     Q_UNUSED(event)
 
-    if ((m_substate == DO_SENDING_ACK) && (m_sendState == SENS_CCS))
+    if ((m_model->get_substate() == DO_SENDING_ACK) && (m_model->get_sendState() == SENS_CCS))
     {
         std::uint16_t len=0u;
         mavlink_message_t message;
-        mavlink_camera_capture_status_t com = NULL;                                       /*< Command Type */
+        mavlink_camera_capture_status_t com;                                       /*< Command Type */
 
-        m_sendState = SEND_CCS;
+        //m_sendState = SEND_CCS;
         /*
             now get the data from the camera 
             com = getCamCapStatDataFromCam();
@@ -58,11 +59,11 @@ void SendCameraCaptureStatusHandler::timerEvent(QTimerEvent* event)
         com.available_capacity = 0.34f; /*< [MiB] Available storage capacity.*/
         com.image_status = 1; /*<  Current status of image capturing (0: idle, 1: capture in progress, 2: interval set but idle, 3: interval set and capture in progress)*/
         com.video_status = 1; /*<  Current status of video capturing (0: idle, 1: capture in progress)*/
-        com.image_count = m_disk1_count_of_images + m_disk2_count_of_images;
+        com.image_count = m_model->get_disk1data() + m_model->get_disk2data();
 	    
         len = mavlink_msg_camera_capture_status_encode(m_communicator->systemId(), m_communicator->componentId(), &message, &com);
 
         m_communicator->sendMessageOnLastReceivedLink(message);
-        m_sendState = SENT_CCS;
+        //m_sendState = SENT_CCS;
     }
 }
