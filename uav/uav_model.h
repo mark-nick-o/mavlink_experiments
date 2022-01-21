@@ -37,7 +37,9 @@ namespace domain
         std::int8_t get_sendState() const;
         std::int8_t get_substate() const;
         std::uint16_t get_reject() const;
-	
+        std::int32_t get_disk1data() const;
+        std::int32_t get_disk2data() const;
+
         QGeoCoordinate position() const;
         QGeoCoordinate homePosition() const;
 
