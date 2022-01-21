@@ -1,3 +1,4 @@
+#include "camera_status_data.h"
 #include "send_camera_info_handler.hpp"
 
 // MAVLink
@@ -30,13 +31,13 @@ void SendCameraInfoHandler::timerEvent(QTimerEvent* event)
 {
     Q_UNUSED(event)
 
-    if ((m_substate == DO_SENDING_ACK) && (m_sendState == SENS_CI))
+    if ((m_model->get_substate() == DO_SENDING_ACK) && (m_model->get_sendState() == SENS_CI))
     {
         std::uint16_t len=0u;
         mavlink_message_t message;
-        mavlink_camera_information_t com = NULL;                                                                   /* Command Type */
+        mavlink_camera_information_t com;                                                                   /* Command Type */
 
-        m_sendState = SEND_CI;
+        //m_sendState = SEND_CI;
         /*
             now get the data from the camera 
             com = getInfoDataFromCam();
@@ -59,14 +60,14 @@ void SendCameraInfoHandler::timerEvent(QTimerEvent* event)
         com.resolution_h = 100;                                                                                    /*< [pix] Horizontal image resolution*/
         com.resolution_v = 200;                                                                                    /*< [pix] Vertical image resolution*/
         com.cam_definition_version = 250;                                                                          /*<  Camera definition version (iteration)*/
-        strcpy(&com.vendor_name, "sony", 4);                                                                       /*<  Name of the camera vendor*/
-        strcpy(&com.model_name, "alpha-750", 9);                                                                   /*<  Name of the camera model*/
-        com.lens_id = ci_data->lensId;                                                                             /*<  Reserved for a lens ID*/
-        strcpy(&com.cam_definition_uri, "http:121.1.2.4/cam_pics/1.jpg", strlen("http:121.1.2.4/cam_pics/1.jpg")); 
+        memcpy(&com.vendor_name[0],"sony", 4);                                                                       /*<  Name of the camera vendor*/
+        memcpy(&com.model_name[0], "alpha", 5);                                                                   /*<  Name of the camera model*/
+        com.lens_id = 12;                                                                             /*<  Reserved for a lens ID*/
+        strcpy(com.cam_definition_uri, "http:121.1.2.4/cam_pics/1.jpg"); 
 
         len = mavlink_msg_camera_information_encode(m_communicator->systemId(), m_communicator->componentId(), &message, &com);
 
         m_communicator->sendMessageOnLastReceivedLink(message);
-        m_sendState = SENT_CI;
+        //m_sendState = SENT_CI;
     }
 }
