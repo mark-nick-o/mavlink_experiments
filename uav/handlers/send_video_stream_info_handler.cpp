@@ -1,3 +1,4 @@
+#include "camera_status_data.h"
 #include "send_video_stream_handler.hpp"
 
 // MAVLink
@@ -30,13 +31,13 @@ void SendVideoStreamInfoHandler::timerEvent(QTimerEvent* event)
 {
     Q_UNUSED(event)
 
-    if ((m_substate == DO_SENDING_ACK) && (m_sendState == SENS_VS))
+    if ((m_model->get_substate() == DO_SENDING_ACK) && (m_model->get_sendState() == SENS_VS))
     {
         std::uint16_t len=0u;
         mavlink_message_t message;
-        mavlink_video_stream_information_t com = NULL;                                       /*< Command Type */
+        mavlink_video_stream_information_t com;                                       /*< Command Type */
 
-        m_sendState = SEND_VS;
+        //m_sendState = SEND_VS;
         /*
             now get the data from the camera 
             com = getVideoStreamDataFromCam();
@@ -62,12 +63,12 @@ void SendVideoStreamInfoHandler::timerEvent(QTimerEvent* event)
         com.stream_id = 2; /*<  Video Stream ID (1 for first, 2 for second, etc.)*/
         com.count = 4; /*<  Number of streams available.*/
         com.type = VIDEO_STREAM_TYPE_MPEG_TS_H264; /*<  Type of stream.*/
-        strcpy(&com.name,"vid01",5); /*<  Stream name.*/
-        strcpy(&com.uri,"http://10.1.2.4/vids/01.mov",strlen("http://10.1.2.4/vids/01.mov")); /*<  Video stream URI (TCP or RTSP URI ground station should connect to) or port number (UDP port ground station should listen to).*/
+        strcpy(com.name,"vid01"); /*<  Stream name.*/
+        strcpy(com.uri,"http://10.1.2.4/vids/01.mov"); /*<  Video stream URI (TCP or RTSP URI ground station should connect to) or port number (UDP port ground station should listen to).*/
  
         len = mavlink_msg_video_stream_information_encode(m_communicator->systemId(), m_communicator->componentId(), &message, &com);
 
         m_communicator->sendMessageOnLastReceivedLink(message);
-        m_sendState = SENT_VS;
+        //m_sendState = SENT_VS;
     }
 }
