@@ -1,3 +1,4 @@
+#include "camera_status_data.h"
 #include "send_camera_storage_info_handler.hpp"
 
 // MAVLink
@@ -30,13 +31,13 @@ void SendCameraStorageInfoHandler::timerEvent(QTimerEvent* event)
 {
     Q_UNUSED(event)
 
-    if ((m_substate == DO_SENDING_ACK) && (m_sendState == SENS_SI))
+    if ((m_model->get_substate() == DO_SENDING_ACK) && (m_model->get_sendState() == SENS_SI))
     {
         std::uint16_t len=0u;
         mavlink_message_t message;
-        mavlink_storage_information_t com = NULL;                                       /*< Command Type */
+        mavlink_storage_information_t com;                                       /*< Command Type */
 
-        m_sendState = SEND_SI;
+        //m_sendState = SEND_SI;
         /*
             now get the data from the camera 
             com = getSettingsDataFromCam();
@@ -72,6 +73,6 @@ void SendCameraStorageInfoHandler::timerEvent(QTimerEvent* event)
         len = mavlink_msg_storage_information_encode(m_communicator->systemId(), m_communicator->componentId(), &message, &com);
 
         m_communicator->sendMessageOnLastReceivedLink(message);
-        m_sendState = SENT_SI;
+        //m_sendState = SENT_SI;
     }
 }
