@@ -23,3 +23,5 @@ namespace domain
         UavModel* m_model;
     };
 }
+
+#endif // SEND_CAM_IMG_CAP_HANDLER_H
