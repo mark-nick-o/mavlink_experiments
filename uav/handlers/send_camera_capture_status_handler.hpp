@@ -23,3 +23,4 @@ namespace domain
         UavModel* m_model;
     };
 }
+#endif
