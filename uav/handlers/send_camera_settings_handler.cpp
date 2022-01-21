@@ -1,3 +1,4 @@
+#include "camera_status_data.h"
 #include "send_camera_settings_handler.hpp"
 
 // MAVLink
@@ -30,13 +31,13 @@ void SendCameraSettingsHandler::timerEvent(QTimerEvent* event)
 {
     Q_UNUSED(event)
 
-    if ((m_substate == DO_SENDING_ACK) && (m_sendState == SENS_CS))
+    if ((m_model->get_substate() == DO_SENDING_ACK) && (m_model->get_sendState() == SENS_CS))
     {
         std::uint16_t len=0u;
         mavlink_message_t message;
-        mavlink_camera_settings_t com = NULL;                                                                   /* Command Type */
+        mavlink_camera_settings_t com;                                                                   /* Command Type */
 
-        m_sendState = SEND_CS;
+        //m_sendState = SEND_CS;
         /*
             now get the data from the camera 
             com = getSettingsDataFromCam();
@@ -58,6 +59,6 @@ void SendCameraSettingsHandler::timerEvent(QTimerEvent* event)
         len = mavlink_msg_camera_settings_encode(m_communicator->systemId(), m_communicator->componentId(), &message, &com);
 
         m_communicator->sendMessageOnLastReceivedLink(message);
-        m_sendState = SENT_CS;
+        //m_model->get_sendState = SENT_CS;
     }
 }
