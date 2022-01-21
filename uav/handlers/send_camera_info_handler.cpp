@@ -62,7 +62,7 @@ void SendCameraInfoHandler::timerEvent(QTimerEvent* event)
         strcpy(&com.vendor_name, "sony", 4);                                                                       /*<  Name of the camera vendor*/
         strcpy(&com.model_name, "alpha-750", 9);                                                                   /*<  Name of the camera model*/
         com.lens_id = ci_data->lensId;                                                                             /*<  Reserved for a lens ID*/
-        strcpy(&com.cam_definition_uri, "http:121.1.2.4/cam_pics/1.jpg", sizeof("http:121.1.2.4/cam_pics/1.jpg")); 
+        strcpy(&com.cam_definition_uri, "http:121.1.2.4/cam_pics/1.jpg", strlen("http:121.1.2.4/cam_pics/1.jpg")); 
 
         len = mavlink_msg_camera_information_encode(m_communicator->systemId(), m_communicator->componentId(), &message, &com);
 
