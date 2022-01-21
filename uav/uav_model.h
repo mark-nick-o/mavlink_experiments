@@ -36,7 +36,8 @@ namespace domain
         std::uint8_t* cam_definition_uri() const;  
         std::int8_t get_sendState() const;
         std::int8_t get_substate() const;
-
+        std::uint16_t get_reject() const;
+	
         QGeoCoordinate position() const;
         QGeoCoordinate homePosition() const;
 
