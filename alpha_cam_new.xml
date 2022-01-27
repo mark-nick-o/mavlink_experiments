@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <mavlinkcamera>
-<definition version=7>
+<definition version="7">
 <model>ILCE-7C or DSC-RX0M2</model>
 <vendor>SONY EUROPE B.V - AiRobotics</vendor>
 </definition>
  <parameters>
-  <parameters>
 <parameter name="CrCommandId" type="uint32" default="0">
     <description>enum CrCommandId</description>
     <options>
@@ -873,6 +872,626 @@
     </parameters>
     <localization>
     <locale name="en_EN">
+    <strings original="enum CrDevicePropertyCode" translated="Code to perform the designated action" />
+    <strings original="enum CrLiveViewPropertyCode" translated="Live View State" />
+    <strings original="enum CrLockIndicator : CrInt16u" translated="Lock Indicator" />
+    <strings original="enum CrPropValueSet : CrInt16" translated="Prop value set" />
+    <strings original="enum CrFnumberSet : CrInt16u" translated="Set F Number" />
+    <strings original="enum CrShutterSpeedSet : CrInt32u" translated="Shutter Speed Set" />
+    <strings original="enum CrISOMode : CrInt32u" translated="ISO Mode" />
+    <strings original="enum CrExposureProgram : CrInt32u" translated="Exposure Program" />
+    <strings original="enum CrFileType : CrInt16u" translated="File Type" />
+    <strings original="enum CrJpegQuality : CrInt16u" translated="JPEG Quality" />
+    <strings original="enum CrWhiteBalanceSetting : CrInt16u" translated="White Balance Setting" />
+    <strings original="enum CrFocusMode : CrInt16u" translated="Focus Mode" />
+    <strings original="enum CrMeteringMode : CrInt16u" translated="Metering Mode" />
+    <strings original="enum CrFlashMode : CrInt16u" translated="Flash Mode" />
+    <strings original="enum CrWirelessFlash : CrInt16u" translated="Wireless Flash" />
+    <strings original="enum CrRedEyeReduction : CrInt16u" translated="Red Eye Reduction" />
+    <strings original="enum CrMediaFormat : CrInt8u" translated="Format media" />
+    <strings original="enum CrCancelMediaFormat : CrInt8u" translated="Cancel Media Format" />
+    <strings original="enum CrDriveMode : CrInt32u" translated="Drive Mode" />
+    <strings original="enum CrDRangeOptimizer : CrInt16u" translated="Range Optimizer" />
+    <strings original="enum CrImageSize: CrInt16u" translated="Image Size" />
+    <strings original="enum CrAspectRatioIndex : CrInt16u" translated="Aspect Ratio Index" />
+    <strings original="enum CrPictureEffect : CrInt32u" translated="Picture Effect " />
+    <strings original="enum CrMovie_Recording_State : CrInt16u" translated="Recording State" />
+    <strings original="enum CrFocusArea : CrInt16u" translated="Focus Area" />
+    <strings original="enum CrColortemp : CrInt16u" translated="Color Temp" />
+    <strings original="enum CrColorTuning : CrInt8u" translated="Color Tuning" />
+    <strings original="enum CrLiveViewDisplayEffect : CrInt16u" translated="Live View Display Effect" />
+    <strings original="enum CrStillImageStoreDestination : CrInt16u" translated="Still Image Store Destination" />
+    <strings original="enum CrNearFarEnableStatus : CrInt16u" translated="Near Far Enable Status" />
+    <strings original="enum CrIntervalRecMode : CrInt16u" translated="Interval Record Mode" />
+    <strings original="enum CrBatteryLevel : CrInt32u" translated="Battery Level" />
+    <strings original="enum CrWhiteBalanceInitialize : CrInt16u" translated="White Balance Initialize" />
+    <strings original="enum CrLiveViewStatus: CrInt16u" translated="Live View Status" />
+    <strings original="enum CrIntervalRecStatus : CrInt16u" translated="Interval Record Status" />
+    <strings original="enum CrFocusIndicator : CrInt32u" translated="Focus Indicator" />
+    <strings original="enum CrSlotStatus : CrInt16u" translated="Slot Status" />
+    <strings original="enum CrPriorityKeySettings : CrInt16u" translated="Priority Key Settings" />
+    <strings original="enum CrFocusFrameType : CrInt16u" translated="Focus Frame Type" />
+    <strings original="enum CrFocusFrameState : CrInt16u" translated="Focus Frame State" />
+    <strings original="enum CrFrameInfoType : CrInt16u" translated="Frame Info Type" />
+    <strings original="enum CrPropertyEnableFlag : CrInt16" translated="Property Enable Flag" />
+    <strings original="enum CrPropertyVariableFlag : CrInt16u" translated="Property Variable Flag" />
+    <strings original="enum CrPropertyStillImageTransSize : CrInt16u" translated="Still Image Transfer Size" />
+    <strings original="enum CrPropertyRAWJPCSaveImage : CrInt16u" translated="RAW JPC Save Image" />
+    <strings original="enum CrPropertyLiveViewImageQuality : CrInt16u" translated="Live View Image Quality" />
+    <strings original="enum CrPropertyCustomWBOperation : CrInt16u" translated="Custom WB Operation" />
+    <strings original="enum CrPropertyCustomWBExecutionState : CrInt16u" translated="Custom WB Execution State" />
+    <strings original="enum CrPropertyCustomWBCaptureButton : CrInt16u" translated="Custom WB Capture Button" />
+    <strings original="enum CrFileFormatMovie : CrInt8u" translated="File Format Movie" />
+    <strings original="enum CrRecordingSettingMovie : CrInt16u" translated="Movie Record Setting" />
+    <strings original="enum CrRecordingFrameRateSettingMovie : CrInt8u" translated="Movie Recording Frame Rate" />
+    <strings original="enum CrCompressionFileFormat : CrInt8u" translated="Compression File Format" />
+    <strings original="enum CrZoomOperationEnableStatus : CrInt8u" translated="Zoom Operatiuon Enable Status" />
+    <strings original="enum CrZoomSettingType : CrInt8u" translated="Zoom Setting Type" />
+    <strings original="enum CrZoomTypeStatus : CrInt8u" translated="Zoom Status Type" />
+    <strings original="enum CrZoomOperation : CrInt8" translated="Zoom Operation" />
+    <strings original="enum CrRAWFileCompressionType : CrInt16" translated="RAW File Compression Type" />
+    <strings original="enum CrCommandId" translated="RAW Camera Command" />
+    <strings original="enum CrCommandParam : CrInt16u" translated="Commanded State" />
+    </locale>
+    <locale name="en_US">
+    <strings original="enum CrDevicePropertyCode" translated="Code to perform the designated action" />
+    <strings original="enum CrLiveViewPropertyCode" translated="Live View State" />
+    <strings original="enum CrLockIndicator : CrInt16u" translated="Lock Indicator" />
+    <strings original="enum CrPropValueSet : CrInt16" translated="Prop value set" />
+    <strings original="enum CrFnumberSet : CrInt16u" translated="Set F Number" />
+    <strings original="enum CrShutterSpeedSet : CrInt32u" translated="Shutter Speed Set" />
+    <strings original="enum CrISOMode : CrInt32u" translated="ISO Mode" />
+    <strings original="enum CrExposureProgram : CrInt32u" translated="Exposure Program" />
+    <strings original="enum CrFileType : CrInt16u" translated="File Type" />
+    <strings original="enum CrJpegQuality : CrInt16u" translated="JPEG Quality" />
+    <strings original="enum CrWhiteBalanceSetting : CrInt16u" translated="White Balance Setting" />
+    <strings original="enum CrFocusMode : CrInt16u" translated="Focus Mode" />
+    <strings original="enum CrMeteringMode : CrInt16u" translated="Metering Mode" />
+    <strings original="enum CrFlashMode : CrInt16u" translated="Flash Mode" />
+    <strings original="enum CrWirelessFlash : CrInt16u" translated="Wireless Flash" />
+    <strings original="enum CrRedEyeReduction : CrInt16u" translated="Red Eye Reduction" />
+    <strings original="enum CrMediaFormat : CrInt8u" translated="Format media" />
+    <strings original="enum CrCancelMediaFormat : CrInt8u" translated="Cancel Media Format" />
+    <strings original="enum CrDriveMode : CrInt32u" translated="Drive Mode" />
+    <strings original="enum CrDRangeOptimizer : CrInt16u" translated="Range Optimizer" />
+    <strings original="enum CrImageSize: CrInt16u" translated="Image Size" />
+    <strings original="enum CrAspectRatioIndex : CrInt16u" translated="Aspect Ratio Index" />
+    <strings original="enum CrPictureEffect : CrInt32u" translated="Picture Effect " />
+    <strings original="enum CrMovie_Recording_State : CrInt16u" translated="Recording State" />
+    <strings original="enum CrFocusArea : CrInt16u" translated="Focus Area" />
+    <strings original="enum CrColortemp : CrInt16u" translated="Color Temp" />
+    <strings original="enum CrColorTuning : CrInt8u" translated="Color Tuning" />
+    <strings original="enum CrLiveViewDisplayEffect : CrInt16u" translated="Live View Display Effect" />
+    <strings original="enum CrStillImageStoreDestination : CrInt16u" translated="Still Image Store Destination" />
+    <strings original="enum CrNearFarEnableStatus : CrInt16u" translated="Near Far Enable Status" />
+    <strings original="enum CrIntervalRecMode : CrInt16u" translated="Interval Record Mode" />
+    <strings original="enum CrBatteryLevel : CrInt32u" translated="Battery Level" />
+    <strings original="enum CrWhiteBalanceInitialize : CrInt16u" translated="White Balance Initialize" />
+    <strings original="enum CrLiveViewStatus: CrInt16u" translated="Live View Status" />
+    <strings original="enum CrIntervalRecStatus : CrInt16u" translated="Interval Record Status" />
+    <strings original="enum CrFocusIndicator : CrInt32u" translated="Focus Indicator" />
+    <strings original="enum CrSlotStatus : CrInt16u" translated="Slot Status" />
+    <strings original="enum CrPriorityKeySettings : CrInt16u" translated="Priority Key Settings" />
+    <strings original="enum CrFocusFrameType : CrInt16u" translated="Focus Frame Type" />
+    <strings original="enum CrFocusFrameState : CrInt16u" translated="Focus Frame State" />
+    <strings original="enum CrFrameInfoType : CrInt16u" translated="Frame Info Type" />
+    <strings original="enum CrPropertyEnableFlag : CrInt16" translated="Property Enable Flag" />
+    <strings original="enum CrPropertyVariableFlag : CrInt16u" translated="Property Variable Flag" />
+    <strings original="enum CrPropertyStillImageTransSize : CrInt16u" translated="Still Image Transfer Size" />
+    <strings original="enum CrPropertyRAWJPCSaveImage : CrInt16u" translated="RAW JPC Save Image" />
+    <strings original="enum CrPropertyLiveViewImageQuality : CrInt16u" translated="Live View Image Quality" />
+    <strings original="enum CrPropertyCustomWBOperation : CrInt16u" translated="Custom WB Operation" />
+    <strings original="enum CrPropertyCustomWBExecutionState : CrInt16u" translated="Custom WB Execution State" />
+    <strings original="enum CrPropertyCustomWBCaptureButton : CrInt16u" translated="Custom WB Capture Button" />
+    <strings original="enum CrFileFormatMovie : CrInt8u" translated="File Format Movie" />
+    <strings original="enum CrRecordingSettingMovie : CrInt16u" translated="Movie Record Setting" />
+    <strings original="enum CrRecordingFrameRateSettingMovie : CrInt8u" translated="Movie Recording Frame Rate" />
+    <strings original="enum CrCompressionFileFormat : CrInt8u" translated="Compression File Format" />
+    <strings original="enum CrZoomOperationEnableStatus : CrInt8u" translated="Zoom Operatiuon Enable Status" />
+    <strings original="enum CrZoomSettingType : CrInt8u" translated="Zoom Setting Type" />
+    <strings original="enum CrZoomTypeStatus : CrInt8u" translated="Zoom Status Type" />
+    <strings original="enum CrZoomOperation : CrInt8" translated="Zoom Operation" />
+    <strings original="enum CrRAWFileCompressionType : CrInt16" translated="RAW File Compression Type" />
+    <strings original="enum CrCommandId" translated="RAW Camera Command" />
+    <strings original="enum CrCommandParam : CrInt16u" translated="Commanded State" />
+    </locale>
+    <locale name="en_AU">
+    <strings original="enum CrDevicePropertyCode" translated="Code to perform the designated action" />
+    <strings original="enum CrLiveViewPropertyCode" translated="Live View State" />
+    <strings original="enum CrLockIndicator : CrInt16u" translated="Lock Indicator" />
+    <strings original="enum CrPropValueSet : CrInt16" translated="Prop value set" />
+    <strings original="enum CrFnumberSet : CrInt16u" translated="Set F Number" />
+    <strings original="enum CrShutterSpeedSet : CrInt32u" translated="Shutter Speed Set" />
+    <strings original="enum CrISOMode : CrInt32u" translated="ISO Mode" />
+    <strings original="enum CrExposureProgram : CrInt32u" translated="Exposure Program" />
+    <strings original="enum CrFileType : CrInt16u" translated="File Type" />
+    <strings original="enum CrJpegQuality : CrInt16u" translated="JPEG Quality" />
+    <strings original="enum CrWhiteBalanceSetting : CrInt16u" translated="White Balance Setting" />
+    <strings original="enum CrFocusMode : CrInt16u" translated="Focus Mode" />
+    <strings original="enum CrMeteringMode : CrInt16u" translated="Metering Mode" />
+    <strings original="enum CrFlashMode : CrInt16u" translated="Flash Mode" />
+    <strings original="enum CrWirelessFlash : CrInt16u" translated="Wireless Flash" />
+    <strings original="enum CrRedEyeReduction : CrInt16u" translated="Red Eye Reduction" />
+    <strings original="enum CrMediaFormat : CrInt8u" translated="Format media" />
+    <strings original="enum CrCancelMediaFormat : CrInt8u" translated="Cancel Media Format" />
+    <strings original="enum CrDriveMode : CrInt32u" translated="Drive Mode" />
+    <strings original="enum CrDRangeOptimizer : CrInt16u" translated="Range Optimizer" />
+    <strings original="enum CrImageSize: CrInt16u" translated="Image Size" />
+    <strings original="enum CrAspectRatioIndex : CrInt16u" translated="Aspect Ratio Index" />
+    <strings original="enum CrPictureEffect : CrInt32u" translated="Picture Effect " />
+    <strings original="enum CrMovie_Recording_State : CrInt16u" translated="Recording State" />
+    <strings original="enum CrFocusArea : CrInt16u" translated="Focus Area" />
+    <strings original="enum CrColortemp : CrInt16u" translated="Color Temp" />
+    <strings original="enum CrColorTuning : CrInt8u" translated="Color Tuning" />
+    <strings original="enum CrLiveViewDisplayEffect : CrInt16u" translated="Live View Display Effect" />
+    <strings original="enum CrStillImageStoreDestination : CrInt16u" translated="Still Image Store Destination" />
+    <strings original="enum CrNearFarEnableStatus : CrInt16u" translated="Near Far Enable Status" />
+    <strings original="enum CrIntervalRecMode : CrInt16u" translated="Interval Record Mode" />
+    <strings original="enum CrBatteryLevel : CrInt32u" translated="Battery Level" />
+    <strings original="enum CrWhiteBalanceInitialize : CrInt16u" translated="White Balance Initialize" />
+    <strings original="enum CrLiveViewStatus: CrInt16u" translated="Live View Status" />
+    <strings original="enum CrIntervalRecStatus : CrInt16u" translated="Interval Record Status" />
+    <strings original="enum CrFocusIndicator : CrInt32u" translated="Focus Indicator" />
+    <strings original="enum CrSlotStatus : CrInt16u" translated="Slot Status" />
+    <strings original="enum CrPriorityKeySettings : CrInt16u" translated="Priority Key Settings" />
+    <strings original="enum CrFocusFrameType : CrInt16u" translated="Focus Frame Type" />
+    <strings original="enum CrFocusFrameState : CrInt16u" translated="Focus Frame State" />
+    <strings original="enum CrFrameInfoType : CrInt16u" translated="Frame Info Type" />
+    <strings original="enum CrPropertyEnableFlag : CrInt16" translated="Property Enable Flag" />
+    <strings original="enum CrPropertyVariableFlag : CrInt16u" translated="Property Variable Flag" />
+    <strings original="enum CrPropertyStillImageTransSize : CrInt16u" translated="Still Image Transfer Size" />
+    <strings original="enum CrPropertyRAWJPCSaveImage : CrInt16u" translated="RAW JPC Save Image" />
+    <strings original="enum CrPropertyLiveViewImageQuality : CrInt16u" translated="Live View Image Quality" />
+    <strings original="enum CrPropertyCustomWBOperation : CrInt16u" translated="Custom WB Operation" />
+    <strings original="enum CrPropertyCustomWBExecutionState : CrInt16u" translated="Custom WB Execution State" />
+    <strings original="enum CrPropertyCustomWBCaptureButton : CrInt16u" translated="Custom WB Capture Button" />
+    <strings original="enum CrFileFormatMovie : CrInt8u" translated="File Format Movie" />
+    <strings original="enum CrRecordingSettingMovie : CrInt16u" translated="Movie Record Setting" />
+    <strings original="enum CrRecordingFrameRateSettingMovie : CrInt8u" translated="Movie Recording Frame Rate" />
+    <strings original="enum CrCompressionFileFormat : CrInt8u" translated="Compression File Format" />
+    <strings original="enum CrZoomOperationEnableStatus : CrInt8u" translated="Zoom Operatiuon Enable Status" />
+    <strings original="enum CrZoomSettingType : CrInt8u" translated="Zoom Setting Type" />
+    <strings original="enum CrZoomTypeStatus : CrInt8u" translated="Zoom Status Type" />
+    <strings original="enum CrZoomOperation : CrInt8" translated="Zoom Operation" />
+    <strings original="enum CrRAWFileCompressionType : CrInt16" translated="RAW File Compression Type" />
+    <strings original="enum CrCommandId" translated="RAW Camera Command" />
+    <strings original="enum CrCommandParam : CrInt16u" translated="Commanded State" />
+    </locale>
+    <locale name="en_GB">
+    <strings original="enum CrDevicePropertyCode" translated="Code to perform the designated action" />
+    <strings original="enum CrLiveViewPropertyCode" translated="Live View State" />
+    <strings original="enum CrLockIndicator : CrInt16u" translated="Lock Indicator" />
+    <strings original="enum CrPropValueSet : CrInt16" translated="Prop value set" />
+    <strings original="enum CrFnumberSet : CrInt16u" translated="Set F Number" />
+    <strings original="enum CrShutterSpeedSet : CrInt32u" translated="Shutter Speed Set" />
+    <strings original="enum CrISOMode : CrInt32u" translated="ISO Mode" />
+    <strings original="enum CrExposureProgram : CrInt32u" translated="Exposure Program" />
+    <strings original="enum CrFileType : CrInt16u" translated="File Type" />
+    <strings original="enum CrJpegQuality : CrInt16u" translated="JPEG Quality" />
+    <strings original="enum CrWhiteBalanceSetting : CrInt16u" translated="White Balance Setting" />
+    <strings original="enum CrFocusMode : CrInt16u" translated="Focus Mode" />
+    <strings original="enum CrMeteringMode : CrInt16u" translated="Metering Mode" />
+    <strings original="enum CrFlashMode : CrInt16u" translated="Flash Mode" />
+    <strings original="enum CrWirelessFlash : CrInt16u" translated="Wireless Flash" />
+    <strings original="enum CrRedEyeReduction : CrInt16u" translated="Red Eye Reduction" />
+    <strings original="enum CrMediaFormat : CrInt8u" translated="Format media" />
+    <strings original="enum CrCancelMediaFormat : CrInt8u" translated="Cancel Media Format" />
+    <strings original="enum CrDriveMode : CrInt32u" translated="Drive Mode" />
+    <strings original="enum CrDRangeOptimizer : CrInt16u" translated="Range Optimizer" />
+    <strings original="enum CrImageSize: CrInt16u" translated="Image Size" />
+    <strings original="enum CrAspectRatioIndex : CrInt16u" translated="Aspect Ratio Index" />
+    <strings original="enum CrPictureEffect : CrInt32u" translated="Picture Effect " />
+    <strings original="enum CrMovie_Recording_State : CrInt16u" translated="Recording State" />
+    <strings original="enum CrFocusArea : CrInt16u" translated="Focus Area" />
+    <strings original="enum CrColortemp : CrInt16u" translated="Color Temp" />
+    <strings original="enum CrColorTuning : CrInt8u" translated="Color Tuning" />
+    <strings original="enum CrLiveViewDisplayEffect : CrInt16u" translated="Live View Display Effect" />
+    <strings original="enum CrStillImageStoreDestination : CrInt16u" translated="Still Image Store Destination" />
+    <strings original="enum CrNearFarEnableStatus : CrInt16u" translated="Near Far Enable Status" />
+    <strings original="enum CrIntervalRecMode : CrInt16u" translated="Interval Record Mode" />
+    <strings original="enum CrBatteryLevel : CrInt32u" translated="Battery Level" />
+    <strings original="enum CrWhiteBalanceInitialize : CrInt16u" translated="White Balance Initialize" />
+    <strings original="enum CrLiveViewStatus: CrInt16u" translated="Live View Status" />
+    <strings original="enum CrIntervalRecStatus : CrInt16u" translated="Interval Record Status" />
+    <strings original="enum CrFocusIndicator : CrInt32u" translated="Focus Indicator" />
+    <strings original="enum CrSlotStatus : CrInt16u" translated="Slot Status" />
+    <strings original="enum CrPriorityKeySettings : CrInt16u" translated="Priority Key Settings" />
+    <strings original="enum CrFocusFrameType : CrInt16u" translated="Focus Frame Type" />
+    <strings original="enum CrFocusFrameState : CrInt16u" translated="Focus Frame State" />
+    <strings original="enum CrFrameInfoType : CrInt16u" translated="Frame Info Type" />
+    <strings original="enum CrPropertyEnableFlag : CrInt16" translated="Property Enable Flag" />
+    <strings original="enum CrPropertyVariableFlag : CrInt16u" translated="Property Variable Flag" />
+    <strings original="enum CrPropertyStillImageTransSize : CrInt16u" translated="Still Image Transfer Size" />
+    <strings original="enum CrPropertyRAWJPCSaveImage : CrInt16u" translated="RAW JPC Save Image" />
+    <strings original="enum CrPropertyLiveViewImageQuality : CrInt16u" translated="Live View Image Quality" />
+    <strings original="enum CrPropertyCustomWBOperation : CrInt16u" translated="Custom WB Operation" />
+    <strings original="enum CrPropertyCustomWBExecutionState : CrInt16u" translated="Custom WB Execution State" />
+    <strings original="enum CrPropertyCustomWBCaptureButton : CrInt16u" translated="Custom WB Capture Button" />
+    <strings original="enum CrFileFormatMovie : CrInt8u" translated="File Format Movie" />
+    <strings original="enum CrRecordingSettingMovie : CrInt16u" translated="Movie Record Setting" />
+    <strings original="enum CrRecordingFrameRateSettingMovie : CrInt8u" translated="Movie Recording Frame Rate" />
+    <strings original="enum CrCompressionFileFormat : CrInt8u" translated="Compression File Format" />
+    <strings original="enum CrZoomOperationEnableStatus : CrInt8u" translated="Zoom Operatiuon Enable Status" />
+    <strings original="enum CrZoomSettingType : CrInt8u" translated="Zoom Setting Type" />
+    <strings original="enum CrZoomTypeStatus : CrInt8u" translated="Zoom Status Type" />
+    <strings original="enum CrZoomOperation : CrInt8" translated="Zoom Operation" />
+    <strings original="enum CrRAWFileCompressionType : CrInt16" translated="RAW File Compression Type" />
+    <strings original="enum CrCommandId" translated="RAW Camera Command" />
+    <strings original="enum CrCommandParam : CrInt16u" translated="Commanded State" />
+    </locale>
+    <locale name="en_IE">
+    <strings original="enum CrDevicePropertyCode" translated="Code to perform the designated action" />
+    <strings original="enum CrLiveViewPropertyCode" translated="Live View State" />
+    <strings original="enum CrLockIndicator : CrInt16u" translated="Lock Indicator" />
+    <strings original="enum CrPropValueSet : CrInt16" translated="Prop value set" />
+    <strings original="enum CrFnumberSet : CrInt16u" translated="Set F Number" />
+    <strings original="enum CrShutterSpeedSet : CrInt32u" translated="Shutter Speed Set" />
+    <strings original="enum CrISOMode : CrInt32u" translated="ISO Mode" />
+    <strings original="enum CrExposureProgram : CrInt32u" translated="Exposure Program" />
+    <strings original="enum CrFileType : CrInt16u" translated="File Type" />
+    <strings original="enum CrJpegQuality : CrInt16u" translated="JPEG Quality" />
+    <strings original="enum CrWhiteBalanceSetting : CrInt16u" translated="White Balance Setting" />
+    <strings original="enum CrFocusMode : CrInt16u" translated="Focus Mode" />
+    <strings original="enum CrMeteringMode : CrInt16u" translated="Metering Mode" />
+    <strings original="enum CrFlashMode : CrInt16u" translated="Flash Mode" />
+    <strings original="enum CrWirelessFlash : CrInt16u" translated="Wireless Flash" />
+    <strings original="enum CrRedEyeReduction : CrInt16u" translated="Red Eye Reduction" />
+    <strings original="enum CrMediaFormat : CrInt8u" translated="Format media" />
+    <strings original="enum CrCancelMediaFormat : CrInt8u" translated="Cancel Media Format" />
+    <strings original="enum CrDriveMode : CrInt32u" translated="Drive Mode" />
+    <strings original="enum CrDRangeOptimizer : CrInt16u" translated="Range Optimizer" />
+    <strings original="enum CrImageSize: CrInt16u" translated="Image Size" />
+    <strings original="enum CrAspectRatioIndex : CrInt16u" translated="Aspect Ratio Index" />
+    <strings original="enum CrPictureEffect : CrInt32u" translated="Picture Effect " />
+    <strings original="enum CrMovie_Recording_State : CrInt16u" translated="Recording State" />
+    <strings original="enum CrFocusArea : CrInt16u" translated="Focus Area" />
+    <strings original="enum CrColortemp : CrInt16u" translated="Color Temp" />
+    <strings original="enum CrColorTuning : CrInt8u" translated="Color Tuning" />
+    <strings original="enum CrLiveViewDisplayEffect : CrInt16u" translated="Live View Display Effect" />
+    <strings original="enum CrStillImageStoreDestination : CrInt16u" translated="Still Image Store Destination" />
+    <strings original="enum CrNearFarEnableStatus : CrInt16u" translated="Near Far Enable Status" />
+    <strings original="enum CrIntervalRecMode : CrInt16u" translated="Interval Record Mode" />
+    <strings original="enum CrBatteryLevel : CrInt32u" translated="Battery Level" />
+    <strings original="enum CrWhiteBalanceInitialize : CrInt16u" translated="White Balance Initialize" />
+    <strings original="enum CrLiveViewStatus: CrInt16u" translated="Live View Status" />
+    <strings original="enum CrIntervalRecStatus : CrInt16u" translated="Interval Record Status" />
+    <strings original="enum CrFocusIndicator : CrInt32u" translated="Focus Indicator" />
+    <strings original="enum CrSlotStatus : CrInt16u" translated="Slot Status" />
+    <strings original="enum CrPriorityKeySettings : CrInt16u" translated="Priority Key Settings" />
+    <strings original="enum CrFocusFrameType : CrInt16u" translated="Focus Frame Type" />
+    <strings original="enum CrFocusFrameState : CrInt16u" translated="Focus Frame State" />
+    <strings original="enum CrFrameInfoType : CrInt16u" translated="Frame Info Type" />
+    <strings original="enum CrPropertyEnableFlag : CrInt16" translated="Property Enable Flag" />
+    <strings original="enum CrPropertyVariableFlag : CrInt16u" translated="Property Variable Flag" />
+    <strings original="enum CrPropertyStillImageTransSize : CrInt16u" translated="Still Image Transfer Size" />
+    <strings original="enum CrPropertyRAWJPCSaveImage : CrInt16u" translated="RAW JPC Save Image" />
+    <strings original="enum CrPropertyLiveViewImageQuality : CrInt16u" translated="Live View Image Quality" />
+    <strings original="enum CrPropertyCustomWBOperation : CrInt16u" translated="Custom WB Operation" />
+    <strings original="enum CrPropertyCustomWBExecutionState : CrInt16u" translated="Custom WB Execution State" />
+    <strings original="enum CrPropertyCustomWBCaptureButton : CrInt16u" translated="Custom WB Capture Button" />
+    <strings original="enum CrFileFormatMovie : CrInt8u" translated="File Format Movie" />
+    <strings original="enum CrRecordingSettingMovie : CrInt16u" translated="Movie Record Setting" />
+    <strings original="enum CrRecordingFrameRateSettingMovie : CrInt8u" translated="Movie Recording Frame Rate" />
+    <strings original="enum CrCompressionFileFormat : CrInt8u" translated="Compression File Format" />
+    <strings original="enum CrZoomOperationEnableStatus : CrInt8u" translated="Zoom Operatiuon Enable Status" />
+    <strings original="enum CrZoomSettingType : CrInt8u" translated="Zoom Setting Type" />
+    <strings original="enum CrZoomTypeStatus : CrInt8u" translated="Zoom Status Type" />
+    <strings original="enum CrZoomOperation : CrInt8" translated="Zoom Operation" />
+    <strings original="enum CrRAWFileCompressionType : CrInt16" translated="RAW File Compression Type" />
+    <strings original="enum CrCommandId" translated="RAW Camera Command" />
+    <strings original="enum CrCommandParam : CrInt16u" translated="Commanded State" />
+    </locale>
+    <locale name="en_GB.ISO-8859-15">
+    <strings original="enum CrDevicePropertyCode" translated="Code to perform the designated action" />
+    <strings original="enum CrLiveViewPropertyCode" translated="Live View State" />
+    <strings original="enum CrLockIndicator : CrInt16u" translated="Lock Indicator" />
+    <strings original="enum CrPropValueSet : CrInt16" translated="Prop value set" />
+    <strings original="enum CrFnumberSet : CrInt16u" translated="Set F Number" />
+    <strings original="enum CrShutterSpeedSet : CrInt32u" translated="Shutter Speed Set" />
+    <strings original="enum CrISOMode : CrInt32u" translated="ISO Mode" />
+    <strings original="enum CrExposureProgram : CrInt32u" translated="Exposure Program" />
+    <strings original="enum CrFileType : CrInt16u" translated="File Type" />
+    <strings original="enum CrJpegQuality : CrInt16u" translated="JPEG Quality" />
+    <strings original="enum CrWhiteBalanceSetting : CrInt16u" translated="White Balance Setting" />
+    <strings original="enum CrFocusMode : CrInt16u" translated="Focus Mode" />
+    <strings original="enum CrMeteringMode : CrInt16u" translated="Metering Mode" />
+    <strings original="enum CrFlashMode : CrInt16u" translated="Flash Mode" />
+    <strings original="enum CrWirelessFlash : CrInt16u" translated="Wireless Flash" />
+    <strings original="enum CrRedEyeReduction : CrInt16u" translated="Red Eye Reduction" />
+    <strings original="enum CrMediaFormat : CrInt8u" translated="Format media" />
+    <strings original="enum CrCancelMediaFormat : CrInt8u" translated="Cancel Media Format" />
+    <strings original="enum CrDriveMode : CrInt32u" translated="Drive Mode" />
+    <strings original="enum CrDRangeOptimizer : CrInt16u" translated="Range Optimizer" />
+    <strings original="enum CrImageSize: CrInt16u" translated="Image Size" />
+    <strings original="enum CrAspectRatioIndex : CrInt16u" translated="Aspect Ratio Index" />
+    <strings original="enum CrPictureEffect : CrInt32u" translated="Picture Effect " />
+    <strings original="enum CrMovie_Recording_State : CrInt16u" translated="Recording State" />
+    <strings original="enum CrFocusArea : CrInt16u" translated="Focus Area" />
+    <strings original="enum CrColortemp : CrInt16u" translated="Color Temp" />
+    <strings original="enum CrColorTuning : CrInt8u" translated="Color Tuning" />
+    <strings original="enum CrLiveViewDisplayEffect : CrInt16u" translated="Live View Display Effect" />
+    <strings original="enum CrStillImageStoreDestination : CrInt16u" translated="Still Image Store Destination" />
+    <strings original="enum CrNearFarEnableStatus : CrInt16u" translated="Near Far Enable Status" />
+    <strings original="enum CrIntervalRecMode : CrInt16u" translated="Interval Record Mode" />
+    <strings original="enum CrBatteryLevel : CrInt32u" translated="Battery Level" />
+    <strings original="enum CrWhiteBalanceInitialize : CrInt16u" translated="White Balance Initialize" />
+    <strings original="enum CrLiveViewStatus: CrInt16u" translated="Live View Status" />
+    <strings original="enum CrIntervalRecStatus : CrInt16u" translated="Interval Record Status" />
+    <strings original="enum CrFocusIndicator : CrInt32u" translated="Focus Indicator" />
+    <strings original="enum CrSlotStatus : CrInt16u" translated="Slot Status" />
+    <strings original="enum CrPriorityKeySettings : CrInt16u" translated="Priority Key Settings" />
+    <strings original="enum CrFocusFrameType : CrInt16u" translated="Focus Frame Type" />
+    <strings original="enum CrFocusFrameState : CrInt16u" translated="Focus Frame State" />
+    <strings original="enum CrFrameInfoType : CrInt16u" translated="Frame Info Type" />
+    <strings original="enum CrPropertyEnableFlag : CrInt16" translated="Property Enable Flag" />
+    <strings original="enum CrPropertyVariableFlag : CrInt16u" translated="Property Variable Flag" />
+    <strings original="enum CrPropertyStillImageTransSize : CrInt16u" translated="Still Image Transfer Size" />
+    <strings original="enum CrPropertyRAWJPCSaveImage : CrInt16u" translated="RAW JPC Save Image" />
+    <strings original="enum CrPropertyLiveViewImageQuality : CrInt16u" translated="Live View Image Quality" />
+    <strings original="enum CrPropertyCustomWBOperation : CrInt16u" translated="Custom WB Operation" />
+    <strings original="enum CrPropertyCustomWBExecutionState : CrInt16u" translated="Custom WB Execution State" />
+    <strings original="enum CrPropertyCustomWBCaptureButton : CrInt16u" translated="Custom WB Capture Button" />
+    <strings original="enum CrFileFormatMovie : CrInt8u" translated="File Format Movie" />
+    <strings original="enum CrRecordingSettingMovie : CrInt16u" translated="Movie Record Setting" />
+    <strings original="enum CrRecordingFrameRateSettingMovie : CrInt8u" translated="Movie Recording Frame Rate" />
+    <strings original="enum CrCompressionFileFormat : CrInt8u" translated="Compression File Format" />
+    <strings original="enum CrZoomOperationEnableStatus : CrInt8u" translated="Zoom Operatiuon Enable Status" />
+    <strings original="enum CrZoomSettingType : CrInt8u" translated="Zoom Setting Type" />
+    <strings original="enum CrZoomTypeStatus : CrInt8u" translated="Zoom Status Type" />
+    <strings original="enum CrZoomOperation : CrInt8" translated="Zoom Operation" />
+    <strings original="enum CrRAWFileCompressionType : CrInt16" translated="RAW File Compression Type" />
+    <strings original="enum CrCommandId" translated="RAW Camera Command" />
+    <strings original="enum CrCommandParam : CrInt16u" translated="Commanded State" />
+    </locale>
+    <locale name="en_US.ISO-8859-15">
+    <strings original="enum CrDevicePropertyCode" translated="Code to perform the designated action" />
+    <strings original="enum CrLiveViewPropertyCode" translated="Live View State" />
+    <strings original="enum CrLockIndicator : CrInt16u" translated="Lock Indicator" />
+    <strings original="enum CrPropValueSet : CrInt16" translated="Prop value set" />
+    <strings original="enum CrFnumberSet : CrInt16u" translated="Set F Number" />
+    <strings original="enum CrShutterSpeedSet : CrInt32u" translated="Shutter Speed Set" />
+    <strings original="enum CrISOMode : CrInt32u" translated="ISO Mode" />
+    <strings original="enum CrExposureProgram : CrInt32u" translated="Exposure Program" />
+    <strings original="enum CrFileType : CrInt16u" translated="File Type" />
+    <strings original="enum CrJpegQuality : CrInt16u" translated="JPEG Quality" />
+    <strings original="enum CrWhiteBalanceSetting : CrInt16u" translated="White Balance Setting" />
+    <strings original="enum CrFocusMode : CrInt16u" translated="Focus Mode" />
+    <strings original="enum CrMeteringMode : CrInt16u" translated="Metering Mode" />
+    <strings original="enum CrFlashMode : CrInt16u" translated="Flash Mode" />
+    <strings original="enum CrWirelessFlash : CrInt16u" translated="Wireless Flash" />
+    <strings original="enum CrRedEyeReduction : CrInt16u" translated="Red Eye Reduction" />
+    <strings original="enum CrMediaFormat : CrInt8u" translated="Format media" />
+    <strings original="enum CrCancelMediaFormat : CrInt8u" translated="Cancel Media Format" />
+    <strings original="enum CrDriveMode : CrInt32u" translated="Drive Mode" />
+    <strings original="enum CrDRangeOptimizer : CrInt16u" translated="Range Optimizer" />
+    <strings original="enum CrImageSize: CrInt16u" translated="Image Size" />
+    <strings original="enum CrAspectRatioIndex : CrInt16u" translated="Aspect Ratio Index" />
+    <strings original="enum CrPictureEffect : CrInt32u" translated="Picture Effect " />
+    <strings original="enum CrMovie_Recording_State : CrInt16u" translated="Recording State" />
+    <strings original="enum CrFocusArea : CrInt16u" translated="Focus Area" />
+    <strings original="enum CrColortemp : CrInt16u" translated="Color Temp" />
+    <strings original="enum CrColorTuning : CrInt8u" translated="Color Tuning" />
+    <strings original="enum CrLiveViewDisplayEffect : CrInt16u" translated="Live View Display Effect" />
+    <strings original="enum CrStillImageStoreDestination : CrInt16u" translated="Still Image Store Destination" />
+    <strings original="enum CrNearFarEnableStatus : CrInt16u" translated="Near Far Enable Status" />
+    <strings original="enum CrIntervalRecMode : CrInt16u" translated="Interval Record Mode" />
+    <strings original="enum CrBatteryLevel : CrInt32u" translated="Battery Level" />
+    <strings original="enum CrWhiteBalanceInitialize : CrInt16u" translated="White Balance Initialize" />
+    <strings original="enum CrLiveViewStatus: CrInt16u" translated="Live View Status" />
+    <strings original="enum CrIntervalRecStatus : CrInt16u" translated="Interval Record Status" />
+    <strings original="enum CrFocusIndicator : CrInt32u" translated="Focus Indicator" />
+    <strings original="enum CrSlotStatus : CrInt16u" translated="Slot Status" />
+    <strings original="enum CrPriorityKeySettings : CrInt16u" translated="Priority Key Settings" />
+    <strings original="enum CrFocusFrameType : CrInt16u" translated="Focus Frame Type" />
+    <strings original="enum CrFocusFrameState : CrInt16u" translated="Focus Frame State" />
+    <strings original="enum CrFrameInfoType : CrInt16u" translated="Frame Info Type" />
+    <strings original="enum CrPropertyEnableFlag : CrInt16" translated="Property Enable Flag" />
+    <strings original="enum CrPropertyVariableFlag : CrInt16u" translated="Property Variable Flag" />
+    <strings original="enum CrPropertyStillImageTransSize : CrInt16u" translated="Still Image Transfer Size" />
+    <strings original="enum CrPropertyRAWJPCSaveImage : CrInt16u" translated="RAW JPC Save Image" />
+    <strings original="enum CrPropertyLiveViewImageQuality : CrInt16u" translated="Live View Image Quality" />
+    <strings original="enum CrPropertyCustomWBOperation : CrInt16u" translated="Custom WB Operation" />
+    <strings original="enum CrPropertyCustomWBExecutionState : CrInt16u" translated="Custom WB Execution State" />
+    <strings original="enum CrPropertyCustomWBCaptureButton : CrInt16u" translated="Custom WB Capture Button" />
+    <strings original="enum CrFileFormatMovie : CrInt8u" translated="File Format Movie" />
+    <strings original="enum CrRecordingSettingMovie : CrInt16u" translated="Movie Record Setting" />
+    <strings original="enum CrRecordingFrameRateSettingMovie : CrInt8u" translated="Movie Recording Frame Rate" />
+    <strings original="enum CrCompressionFileFormat : CrInt8u" translated="Compression File Format" />
+    <strings original="enum CrZoomOperationEnableStatus : CrInt8u" translated="Zoom Operatiuon Enable Status" />
+    <strings original="enum CrZoomSettingType : CrInt8u" translated="Zoom Setting Type" />
+    <strings original="enum CrZoomTypeStatus : CrInt8u" translated="Zoom Status Type" />
+    <strings original="enum CrZoomOperation : CrInt8" translated="Zoom Operation" />
+    <strings original="enum CrRAWFileCompressionType : CrInt16" translated="RAW File Compression Type" />
+    <strings original="enum CrCommandId" translated="RAW Camera Command" />
+    <strings original="enum CrCommandParam : CrInt16u" translated="Commanded State" />
+    </locale>
+    <locale name="en_GB.UTF-8">
+    <strings original="enum CrDevicePropertyCode" translated="Code to perform the designated action" />
+    <strings original="enum CrLiveViewPropertyCode" translated="Live View State" />
+    <strings original="enum CrLockIndicator : CrInt16u" translated="Lock Indicator" />
+    <strings original="enum CrPropValueSet : CrInt16" translated="Prop value set" />
+    <strings original="enum CrFnumberSet : CrInt16u" translated="Set F Number" />
+    <strings original="enum CrShutterSpeedSet : CrInt32u" translated="Shutter Speed Set" />
+    <strings original="enum CrISOMode : CrInt32u" translated="ISO Mode" />
+    <strings original="enum CrExposureProgram : CrInt32u" translated="Exposure Program" />
+    <strings original="enum CrFileType : CrInt16u" translated="File Type" />
+    <strings original="enum CrJpegQuality : CrInt16u" translated="JPEG Quality" />
+    <strings original="enum CrWhiteBalanceSetting : CrInt16u" translated="White Balance Setting" />
+    <strings original="enum CrFocusMode : CrInt16u" translated="Focus Mode" />
+    <strings original="enum CrMeteringMode : CrInt16u" translated="Metering Mode" />
+    <strings original="enum CrFlashMode : CrInt16u" translated="Flash Mode" />
+    <strings original="enum CrWirelessFlash : CrInt16u" translated="Wireless Flash" />
+    <strings original="enum CrRedEyeReduction : CrInt16u" translated="Red Eye Reduction" />
+    <strings original="enum CrMediaFormat : CrInt8u" translated="Format media" />
+    <strings original="enum CrCancelMediaFormat : CrInt8u" translated="Cancel Media Format" />
+    <strings original="enum CrDriveMode : CrInt32u" translated="Drive Mode" />
+    <strings original="enum CrDRangeOptimizer : CrInt16u" translated="Range Optimizer" />
+    <strings original="enum CrImageSize: CrInt16u" translated="Image Size" />
+    <strings original="enum CrAspectRatioIndex : CrInt16u" translated="Aspect Ratio Index" />
+    <strings original="enum CrPictureEffect : CrInt32u" translated="Picture Effect " />
+    <strings original="enum CrMovie_Recording_State : CrInt16u" translated="Recording State" />
+    <strings original="enum CrFocusArea : CrInt16u" translated="Focus Area" />
+    <strings original="enum CrColortemp : CrInt16u" translated="Color Temp" />
+    <strings original="enum CrColorTuning : CrInt8u" translated="Color Tuning" />
+    <strings original="enum CrLiveViewDisplayEffect : CrInt16u" translated="Live View Display Effect" />
+    <strings original="enum CrStillImageStoreDestination : CrInt16u" translated="Still Image Store Destination" />
+    <strings original="enum CrNearFarEnableStatus : CrInt16u" translated="Near Far Enable Status" />
+    <strings original="enum CrIntervalRecMode : CrInt16u" translated="Interval Record Mode" />
+    <strings original="enum CrBatteryLevel : CrInt32u" translated="Battery Level" />
+    <strings original="enum CrWhiteBalanceInitialize : CrInt16u" translated="White Balance Initialize" />
+    <strings original="enum CrLiveViewStatus: CrInt16u" translated="Live View Status" />
+    <strings original="enum CrIntervalRecStatus : CrInt16u" translated="Interval Record Status" />
+    <strings original="enum CrFocusIndicator : CrInt32u" translated="Focus Indicator" />
+    <strings original="enum CrSlotStatus : CrInt16u" translated="Slot Status" />
+    <strings original="enum CrPriorityKeySettings : CrInt16u" translated="Priority Key Settings" />
+    <strings original="enum CrFocusFrameType : CrInt16u" translated="Focus Frame Type" />
+    <strings original="enum CrFocusFrameState : CrInt16u" translated="Focus Frame State" />
+    <strings original="enum CrFrameInfoType : CrInt16u" translated="Frame Info Type" />
+    <strings original="enum CrPropertyEnableFlag : CrInt16" translated="Property Enable Flag" />
+    <strings original="enum CrPropertyVariableFlag : CrInt16u" translated="Property Variable Flag" />
+    <strings original="enum CrPropertyStillImageTransSize : CrInt16u" translated="Still Image Transfer Size" />
+    <strings original="enum CrPropertyRAWJPCSaveImage : CrInt16u" translated="RAW JPC Save Image" />
+    <strings original="enum CrPropertyLiveViewImageQuality : CrInt16u" translated="Live View Image Quality" />
+    <strings original="enum CrPropertyCustomWBOperation : CrInt16u" translated="Custom WB Operation" />
+    <strings original="enum CrPropertyCustomWBExecutionState : CrInt16u" translated="Custom WB Execution State" />
+    <strings original="enum CrPropertyCustomWBCaptureButton : CrInt16u" translated="Custom WB Capture Button" />
+    <strings original="enum CrFileFormatMovie : CrInt8u" translated="File Format Movie" />
+    <strings original="enum CrRecordingSettingMovie : CrInt16u" translated="Movie Record Setting" />
+    <strings original="enum CrRecordingFrameRateSettingMovie : CrInt8u" translated="Movie Recording Frame Rate" />
+    <strings original="enum CrCompressionFileFormat : CrInt8u" translated="Compression File Format" />
+    <strings original="enum CrZoomOperationEnableStatus : CrInt8u" translated="Zoom Operatiuon Enable Status" />
+    <strings original="enum CrZoomSettingType : CrInt8u" translated="Zoom Setting Type" />
+    <strings original="enum CrZoomTypeStatus : CrInt8u" translated="Zoom Status Type" />
+    <strings original="enum CrZoomOperation : CrInt8" translated="Zoom Operation" />
+    <strings original="enum CrRAWFileCompressionType : CrInt16" translated="RAW File Compression Type" />
+    <strings original="enum CrCommandId" translated="RAW Camera Command" />
+    <strings original="enum CrCommandParam : CrInt16u" translated="Commanded State" />
+    </locale>
+    <locale name="en_US.UTF-8">
+    <strings original="enum CrDevicePropertyCode" translated="Code to perform the designated action" />
+    <strings original="enum CrLiveViewPropertyCode" translated="Live View State" />
+    <strings original="enum CrLockIndicator : CrInt16u" translated="Lock Indicator" />
+    <strings original="enum CrPropValueSet : CrInt16" translated="Prop value set" />
+    <strings original="enum CrFnumberSet : CrInt16u" translated="Set F Number" />
+    <strings original="enum CrShutterSpeedSet : CrInt32u" translated="Shutter Speed Set" />
+    <strings original="enum CrISOMode : CrInt32u" translated="ISO Mode" />
+    <strings original="enum CrExposureProgram : CrInt32u" translated="Exposure Program" />
+    <strings original="enum CrFileType : CrInt16u" translated="File Type" />
+    <strings original="enum CrJpegQuality : CrInt16u" translated="JPEG Quality" />
+    <strings original="enum CrWhiteBalanceSetting : CrInt16u" translated="White Balance Setting" />
+    <strings original="enum CrFocusMode : CrInt16u" translated="Focus Mode" />
+    <strings original="enum CrMeteringMode : CrInt16u" translated="Metering Mode" />
+    <strings original="enum CrFlashMode : CrInt16u" translated="Flash Mode" />
+    <strings original="enum CrWirelessFlash : CrInt16u" translated="Wireless Flash" />
+    <strings original="enum CrRedEyeReduction : CrInt16u" translated="Red Eye Reduction" />
+    <strings original="enum CrMediaFormat : CrInt8u" translated="Format media" />
+    <strings original="enum CrCancelMediaFormat : CrInt8u" translated="Cancel Media Format" />
+    <strings original="enum CrDriveMode : CrInt32u" translated="Drive Mode" />
+    <strings original="enum CrDRangeOptimizer : CrInt16u" translated="Range Optimizer" />
+    <strings original="enum CrImageSize: CrInt16u" translated="Image Size" />
+    <strings original="enum CrAspectRatioIndex : CrInt16u" translated="Aspect Ratio Index" />
+    <strings original="enum CrPictureEffect : CrInt32u" translated="Picture Effect " />
+    <strings original="enum CrMovie_Recording_State : CrInt16u" translated="Recording State" />
+    <strings original="enum CrFocusArea : CrInt16u" translated="Focus Area" />
+    <strings original="enum CrColortemp : CrInt16u" translated="Color Temp" />
+    <strings original="enum CrColorTuning : CrInt8u" translated="Color Tuning" />
+    <strings original="enum CrLiveViewDisplayEffect : CrInt16u" translated="Live View Display Effect" />
+    <strings original="enum CrStillImageStoreDestination : CrInt16u" translated="Still Image Store Destination" />
+    <strings original="enum CrNearFarEnableStatus : CrInt16u" translated="Near Far Enable Status" />
+    <strings original="enum CrIntervalRecMode : CrInt16u" translated="Interval Record Mode" />
+    <strings original="enum CrBatteryLevel : CrInt32u" translated="Battery Level" />
+    <strings original="enum CrWhiteBalanceInitialize : CrInt16u" translated="White Balance Initialize" />
+    <strings original="enum CrLiveViewStatus: CrInt16u" translated="Live View Status" />
+    <strings original="enum CrIntervalRecStatus : CrInt16u" translated="Interval Record Status" />
+    <strings original="enum CrFocusIndicator : CrInt32u" translated="Focus Indicator" />
+    <strings original="enum CrSlotStatus : CrInt16u" translated="Slot Status" />
+    <strings original="enum CrPriorityKeySettings : CrInt16u" translated="Priority Key Settings" />
+    <strings original="enum CrFocusFrameType : CrInt16u" translated="Focus Frame Type" />
+    <strings original="enum CrFocusFrameState : CrInt16u" translated="Focus Frame State" />
+    <strings original="enum CrFrameInfoType : CrInt16u" translated="Frame Info Type" />
+    <strings original="enum CrPropertyEnableFlag : CrInt16" translated="Property Enable Flag" />
+    <strings original="enum CrPropertyVariableFlag : CrInt16u" translated="Property Variable Flag" />
+    <strings original="enum CrPropertyStillImageTransSize : CrInt16u" translated="Still Image Transfer Size" />
+    <strings original="enum CrPropertyRAWJPCSaveImage : CrInt16u" translated="RAW JPC Save Image" />
+    <strings original="enum CrPropertyLiveViewImageQuality : CrInt16u" translated="Live View Image Quality" />
+    <strings original="enum CrPropertyCustomWBOperation : CrInt16u" translated="Custom WB Operation" />
+    <strings original="enum CrPropertyCustomWBExecutionState : CrInt16u" translated="Custom WB Execution State" />
+    <strings original="enum CrPropertyCustomWBCaptureButton : CrInt16u" translated="Custom WB Capture Button" />
+    <strings original="enum CrFileFormatMovie : CrInt8u" translated="File Format Movie" />
+    <strings original="enum CrRecordingSettingMovie : CrInt16u" translated="Movie Record Setting" />
+    <strings original="enum CrRecordingFrameRateSettingMovie : CrInt8u" translated="Movie Recording Frame Rate" />
+    <strings original="enum CrCompressionFileFormat : CrInt8u" translated="Compression File Format" />
+    <strings original="enum CrZoomOperationEnableStatus : CrInt8u" translated="Zoom Operatiuon Enable Status" />
+    <strings original="enum CrZoomSettingType : CrInt8u" translated="Zoom Setting Type" />
+    <strings original="enum CrZoomTypeStatus : CrInt8u" translated="Zoom Status Type" />
+    <strings original="enum CrZoomOperation : CrInt8" translated="Zoom Operation" />
+    <strings original="enum CrRAWFileCompressionType : CrInt16" translated="RAW File Compression Type" />
+    <strings original="enum CrCommandId" translated="RAW Camera Command" />
+    <strings original="enum CrCommandParam : CrInt16u" translated="Commanded State" />
+    </locale>
+    <locale name="en_ZA">
+    <strings original="enum CrDevicePropertyCode" translated="Code to perform the designated action" />
+    <strings original="enum CrLiveViewPropertyCode" translated="Live View State" />
+    <strings original="enum CrLockIndicator : CrInt16u" translated="Lock Indicator" />
+    <strings original="enum CrPropValueSet : CrInt16" translated="Prop value set" />
+    <strings original="enum CrFnumberSet : CrInt16u" translated="Set F Number" />
+    <strings original="enum CrShutterSpeedSet : CrInt32u" translated="Shutter Speed Set" />
+    <strings original="enum CrISOMode : CrInt32u" translated="ISO Mode" />
+    <strings original="enum CrExposureProgram : CrInt32u" translated="Exposure Program" />
+    <strings original="enum CrFileType : CrInt16u" translated="File Type" />
+    <strings original="enum CrJpegQuality : CrInt16u" translated="JPEG Quality" />
+    <strings original="enum CrWhiteBalanceSetting : CrInt16u" translated="White Balance Setting" />
+    <strings original="enum CrFocusMode : CrInt16u" translated="Focus Mode" />
+    <strings original="enum CrMeteringMode : CrInt16u" translated="Metering Mode" />
+    <strings original="enum CrFlashMode : CrInt16u" translated="Flash Mode" />
+    <strings original="enum CrWirelessFlash : CrInt16u" translated="Wireless Flash" />
+    <strings original="enum CrRedEyeReduction : CrInt16u" translated="Red Eye Reduction" />
+    <strings original="enum CrMediaFormat : CrInt8u" translated="Format media" />
+    <strings original="enum CrCancelMediaFormat : CrInt8u" translated="Cancel Media Format" />
+    <strings original="enum CrDriveMode : CrInt32u" translated="Drive Mode" />
+    <strings original="enum CrDRangeOptimizer : CrInt16u" translated="Range Optimizer" />
+    <strings original="enum CrImageSize: CrInt16u" translated="Image Size" />
+    <strings original="enum CrAspectRatioIndex : CrInt16u" translated="Aspect Ratio Index" />
+    <strings original="enum CrPictureEffect : CrInt32u" translated="Picture Effect " />
+    <strings original="enum CrMovie_Recording_State : CrInt16u" translated="Recording State" />
+    <strings original="enum CrFocusArea : CrInt16u" translated="Focus Area" />
+    <strings original="enum CrColortemp : CrInt16u" translated="Color Temp" />
+    <strings original="enum CrColorTuning : CrInt8u" translated="Color Tuning" />
+    <strings original="enum CrLiveViewDisplayEffect : CrInt16u" translated="Live View Display Effect" />
+    <strings original="enum CrStillImageStoreDestination : CrInt16u" translated="Still Image Store Destination" />
+    <strings original="enum CrNearFarEnableStatus : CrInt16u" translated="Near Far Enable Status" />
+    <strings original="enum CrIntervalRecMode : CrInt16u" translated="Interval Record Mode" />
+    <strings original="enum CrBatteryLevel : CrInt32u" translated="Battery Level" />
+    <strings original="enum CrWhiteBalanceInitialize : CrInt16u" translated="White Balance Initialize" />
+    <strings original="enum CrLiveViewStatus: CrInt16u" translated="Live View Status" />
+    <strings original="enum CrIntervalRecStatus : CrInt16u" translated="Interval Record Status" />
+    <strings original="enum CrFocusIndicator : CrInt32u" translated="Focus Indicator" />
+    <strings original="enum CrSlotStatus : CrInt16u" translated="Slot Status" />
+    <strings original="enum CrPriorityKeySettings : CrInt16u" translated="Priority Key Settings" />
+    <strings original="enum CrFocusFrameType : CrInt16u" translated="Focus Frame Type" />
+    <strings original="enum CrFocusFrameState : CrInt16u" translated="Focus Frame State" />
+    <strings original="enum CrFrameInfoType : CrInt16u" translated="Frame Info Type" />
+    <strings original="enum CrPropertyEnableFlag : CrInt16" translated="Property Enable Flag" />
+    <strings original="enum CrPropertyVariableFlag : CrInt16u" translated="Property Variable Flag" />
+    <strings original="enum CrPropertyStillImageTransSize : CrInt16u" translated="Still Image Transfer Size" />
+    <strings original="enum CrPropertyRAWJPCSaveImage : CrInt16u" translated="RAW JPC Save Image" />
+    <strings original="enum CrPropertyLiveViewImageQuality : CrInt16u" translated="Live View Image Quality" />
+    <strings original="enum CrPropertyCustomWBOperation : CrInt16u" translated="Custom WB Operation" />
+    <strings original="enum CrPropertyCustomWBExecutionState : CrInt16u" translated="Custom WB Execution State" />
+    <strings original="enum CrPropertyCustomWBCaptureButton : CrInt16u" translated="Custom WB Capture Button" />
+    <strings original="enum CrFileFormatMovie : CrInt8u" translated="File Format Movie" />
+    <strings original="enum CrRecordingSettingMovie : CrInt16u" translated="Movie Record Setting" />
+    <strings original="enum CrRecordingFrameRateSettingMovie : CrInt8u" translated="Movie Recording Frame Rate" />
+    <strings original="enum CrCompressionFileFormat : CrInt8u" translated="Compression File Format" />
+    <strings original="enum CrZoomOperationEnableStatus : CrInt8u" translated="Zoom Operatiuon Enable Status" />
+    <strings original="enum CrZoomSettingType : CrInt8u" translated="Zoom Setting Type" />
+    <strings original="enum CrZoomTypeStatus : CrInt8u" translated="Zoom Status Type" />
+    <strings original="enum CrZoomOperation : CrInt8" translated="Zoom Operation" />
+    <strings original="enum CrRAWFileCompressionType : CrInt16" translated="RAW File Compression Type" />
+    <strings original="enum CrCommandId" translated="RAW Camera Command" />
+    <strings original="enum CrCommandParam : CrInt16u" translated="Commanded State" />
+    </locale>
+    <locale name="en_IL">
     <strings original="enum CrDevicePropertyCode" translated="Code to perform the designated action" />
     <strings original="enum CrLiveViewPropertyCode" translated="Live View State" />
     <strings original="enum CrLockIndicator : CrInt16u" translated="Lock Indicator" />
