@@ -37,7 +37,7 @@ void SendCameraCaptureStatusHandler::timerEvent(QTimerEvent* event)
         mavlink_message_t message;
         mavlink_camera_capture_status_t com;                                       /*< Command Type */
 
-        //m_sendState = SEND_CCS;
+        m_model->set_sendState(SEND_CCS);
         /*
             now get the data from the camera 
             com = getCamCapStatDataFromCam();
@@ -64,6 +64,6 @@ void SendCameraCaptureStatusHandler::timerEvent(QTimerEvent* event)
         len = mavlink_msg_camera_capture_status_encode(m_communicator->systemId(), m_communicator->componentId(), &message, &com);
 
         m_communicator->sendMessageOnLastReceivedLink(message);
-        //m_sendState = SENT_CCS;
+        m_model->set_sendState(SENT_CCS);
     }
 }
