@@ -37,7 +37,7 @@ void SendCameraStorageInfoHandler::timerEvent(QTimerEvent* event)
         mavlink_message_t message;
         mavlink_storage_information_t com;                                       /*< Command Type */
 
-        //m_sendState = SEND_SI;
+        m_model->set_sendState(SEND_SI);
         /*
             now get the data from the camera 
             com = getSettingsDataFromCam();
@@ -73,6 +73,6 @@ void SendCameraStorageInfoHandler::timerEvent(QTimerEvent* event)
         len = mavlink_msg_storage_information_encode(m_communicator->systemId(), m_communicator->componentId(), &message, &com);
 
         m_communicator->sendMessageOnLastReceivedLink(message);
-        //m_sendState = SENT_SI;
+        m_model->set_sendState(SENT_SI);
     }
 }
