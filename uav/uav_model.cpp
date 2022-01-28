@@ -200,9 +200,19 @@ std::int8_t UavModel::get_substate() const
     return m_substate;       
 }
 
+void UavModel::set_substate( std::int8_t dataVal ) 
+{
+    m_substate = dataVal;       
+}
+
 std::int8_t UavModel::get_sendState() const
 {
     return m_sendState;       
+}
+
+void UavModel::set_sendState( std::int8_t dataVal ) 
+{
+    m_sendState = dataVal;       
 }
 
 std::int32_t UavModel::get_disk1data() const
