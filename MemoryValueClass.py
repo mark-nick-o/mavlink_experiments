@@ -152,6 +152,4 @@ if __name__ == '__main__':
     del FocusSetpoint
     del SonyWhiteBalance
     
-    
-                            self.Got_Param1 = msg.param1
-                        self.Got_Param2 = msg.param2
+
