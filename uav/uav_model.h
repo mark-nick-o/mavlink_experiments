@@ -36,6 +36,8 @@ namespace domain
         std::uint8_t* cam_definition_uri() const;  
         std::int8_t get_sendState() const;
         std::int8_t get_substate() const;
+        void set_sendState( std::int8_t dataVal );
+        void set_substate( std::int8_t dataVal );
         std::uint16_t get_reject() const;
         std::int32_t get_disk1data() const;
         std::int32_t get_disk2data() const;
