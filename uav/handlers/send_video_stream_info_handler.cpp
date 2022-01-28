@@ -37,7 +37,7 @@ void SendVideoStreamInfoHandler::timerEvent(QTimerEvent* event)
         mavlink_message_t message;
         mavlink_video_stream_information_t com;                                       /*< Command Type */
 
-        //m_sendState = SEND_VS;
+        m_model->set_sendState(SEND_VS);
         /*
             now get the data from the camera 
             com = getVideoStreamDataFromCam();
@@ -69,6 +69,6 @@ void SendVideoStreamInfoHandler::timerEvent(QTimerEvent* event)
         len = mavlink_msg_video_stream_information_encode(m_communicator->systemId(), m_communicator->componentId(), &message, &com);
 
         m_communicator->sendMessageOnLastReceivedLink(message);
-        //m_sendState = SENT_VS;
+        m_model->set_sendState(SENT_VS);
     }
 }
