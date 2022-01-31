@@ -16,6 +16,9 @@ import multiprocessing
 # for debug
 import logging
 
+# for signal interypt handling
+import signal
+
 class mavlinkSonyCamWriteVals():
 
     STATE_INIT = 99
@@ -2370,7 +2373,7 @@ class MAVFrame():
     #
     def makeMAVlinkConn(self):
         try:
-            the_conection = mavutil.mavlink_connection('udpin:0.0.0.0:14550',autoreconnect=True)
+            the_conection = mavutil.mavlink_connection('udpin:0.0.0.0:14560',autoreconnect=True)
             #the_conection = mavutil.mavlink_connection('udpin:0.0.0.0:14550',autoreconnect=True)
             return the_conection,True
         except Exception as err_msg:
@@ -2379,7 +2382,7 @@ class MAVFrame():
 
     def makeNewMAVlinkConn(self,id):
         try:
-            the_conection = mavutil.mavlink_connection('udpin:0.0.0.0:14550',autoreconnect=True, source_system=id)
+            the_conection = mavutil.mavlink_connection('udpin:0.0.0.0:14560',autoreconnect=True, source_system=id)
             #the_conection = mavutil.mavlink_connection('udpin:0.0.0.0:14550',autoreconnect=True, source_system=id)
             return the_conection,True
         except Exception as err_msg:
@@ -3847,9 +3850,52 @@ def run_process_messages_from_connection(fra, the_connection, redCam=0):
     print ('Starting:', p.name, p.pid) 
     fra.process_messages_from_connection( the_connection, redCam )
     print ('Exiting :', multiprocessing.current_process().name)
+
+#
+# ================ signal handlers ==============================
+#
+
+#
+# from a signal.alarm
+#
+def raised_signal_handler(a,b):
+    print("\033[32m ============ Take Picture ==================")
+    # do the action here
+
+#
+# CTL-C
+#
+def ctlc_handler(signum, frame): 
+    print("Signal Number:", signum, " Frame: ", frame) 
+
+#
+# CTL-Z
+#   
+def exit_handler(signum, frame): 
+    print('Exiting....') 
+    exit(0)
+
+#
+# on getting kill -SIGUSR1 
+#
+def sigusr1_handler(signum, frame):
+    print("signal hander with a kill -SIGUSR1 (signal.SIGUSR1)")
+    # what we want to do on that external signal
     
 if __name__ == '__main__':
 
+    # Register the alarm signal with our handler signal. signal(signal. SIGALRM, alarm_handler)
+    signal.signal(signal.SIGALRM, raised_signal_handler)
+    # to raise this insert this anywhere in code
+    # signal.alarm(1)
+
+    # Register our signal handler with `SIGINT`(CTRL + C) 
+    signal.signal(signal. SIGINT, ctlc_handler) 
+    # Register the exit handler with `SIGTSTP` (Ctrl + Z) 
+    signal.signal(signal. SIGTSTP, exit_handler)
+    # external signal handler
+    signal.signal(signal.SIGUSR1, sigusr1_handler)
+    
     frame = MAVFrame()
     state = False
     while (state == False):
@@ -3924,38 +3970,65 @@ if __name__ == '__main__':
     #
     # run the process managing the cmaera
     #
+    #
+    # run the process managing the cmaera
+    #
     a = True
     while a:
         p0 = multiprocessing.Process(name='run_process_mavlink', target=run_process_messages_from_connection, args=(frame, cID,)).start()   
         p1 = multiprocessing.Process(name='manageAlphaCameraExpro', target=manageAlphaCameraExpro, args=(mySonyCamNo1, gcsWrites2Sony, expro,)).start()
+        #time.sleep(0.1)
         p3 = multiprocessing.Process(name='manageAlphaCameraAperture', target=manageAlphaCameraAperture, args=(mySonyCamNo1, gcsWrites2Sony, aper,)).start()
+        #time.sleep(0.1)
         p5 = multiprocessing.Process(name='manageAlphaCameraFocusData', target=manageAlphaCameraFocusData, args=(mySonyCamNo1, gcsWrites2Sony, focusdata, focusarea,)).start()
+        #time.sleep(0.1)
         p7 = multiprocessing.Process(name='manageAlphaCameraIso', target=manageAlphaCameraIso, args=(mySonyCamNo1, gcsWrites2Sony, iso,)).start()
+        #time.sleep(0.1)
         p9 = multiprocessing.Process(name='manageAlphaCameraShutSpd', target=manageAlphaCameraShutSpd, args=(mySonyCamNo1, gcsWrites2Sony, shut_sp,)).start()
+        #time.sleep(0.1)
         p11 = multiprocessing.Process(name='manageAlphaWhiteBala', target=manageAlphaWhiteBala, args=(mySonyCamNo1, gcsWrites2Sony, whitebal,)).start()
+        #time.sleep(0.1)
         p13 = multiprocessing.Process(name='manageAlphaCameraStillCap', target=manageAlphaCameraStillCap, args=(mySonyCamNo1, gcsWrites2Sony, stillcap,)).start()
-        p1.join()
-        p3.join()
-        p5.join()
-        p7.join()
-        p9.join()
-        p11.join()  
-        p13.join()     
+        #time.sleep(0.1)
+        if p1 is not None:
+            p1.join()
+        if p3 is not None:            
+            p3.join()
+        if p5 is not None:              
+            p5.join()
+        if p7 is not None:  
+            p7.join()
+        if p9 is not None:              
+            p9.join()
+        if p11 is not None:                
+            p11.join()  
+        if p13 is not None:               
+            p13.join()     
         p2 = multiprocessing.Process(name='sendMavExpro', target=sendMavExpro, args=(mySonyCamNo1, expro, cID,)).start()
         p4 = multiprocessing.Process(name='sendMavAper', target=sendMavAper, args=(mySonyCamNo1, aper, cID,)).start()
         p6 = multiprocessing.Process(name='sendMavFocusData', target=sendMavFocusData, args=(mySonyCamNo1, focusdata, focusarea, cID, )).start()
         p8 = multiprocessing.Process(name='sendMavIso', target=sendMavIso, args=(mySonyCamNo1, iso, cID, )).start()
         p10 = multiprocessing.Process(name='sendMavShutSpd', target=sendMavShutSpd, args=(mySonyCamNo1, shut_sp, cID, )).start()
         p12 = multiprocessing.Process(name='sendMavWhiteBala', target=sendMavWhiteBala, args=(mySonyCamNo1, shut_sp, cID, )).start()
-        p14 = multiprocessing.Process(name='sendMavStillCap', target=sendMavStillCap, args=(mySonyCamNo1, shut_sp, cID, )).start()   
-        p2.join()
-        p4.join()
-        p6.join()
-        p8.join()
-        p10.join()
-        p12.join()  
-        p14.join() 
-        p0.join()
+        p14 = multiprocessing.Process(name='sendMavStillCap', target=sendMavStillCap, args=(mySonyCamNo1, shut_sp, cID, )).start() 
+        if p2 is not None:        
+            p2.join()
+        if p4 is not None:              
+            p4.join()
+        if p6 is not None:          
+            p6.join()
+        if p8 is not None:          
+            p8.join()
+        if p10 is not None:          
+            p10.join()
+        if p12 is not None:          
+            p12.join()  
+        if p14 is not None:          
+            p14.join() 
+        if p0 is not None:           
+           #p0.join()
+           if p0.is_alive() == True:
+               p0.terminate()
     
     #
     # alternative if we want in main to program we can use daemon (procs) as shown here
