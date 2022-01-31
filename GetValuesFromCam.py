@@ -260,11 +260,11 @@ class mavlinkSonyCamWriteVals():
 
         if (timeCnt < timeout):
             self.state = YourID
-            print('value: {} previous: {}'.format(self.set_sony_white_bal,self.prev_sony_still_white_bal))
+            print('value: {} previous: {}'.format(self.set_sony_white_bal,self.prev_sony_white_bal))
             self.state = mavlinkSonyCamWriteVals.STATE_READY
-            return self.set_sony_white_bal,self.prev_sony_still_white_bal,True
+            return self.set_sony_white_bal,self.prev_sony_white_bal,True
         else:
-            return self.set_sony_white_bal,self.prev_sony_still_white_bal,False
+            return self.set_sony_white_bal,self.prev_sony_white_bal,False
             
     def setVal_sony_still_cap_mode(self,value,myId,mode=0,timeout=20):
         timeCnt = 0
@@ -1243,7 +1243,7 @@ class sonyAlphaNewCamera():
         SonyObject.updateNeeded = True              
         return SonyObject        
 
-    def getSonyCamFocusData( self, mem ):
+    def getSonyCamFocusAreaData( self, mem ):
     
         ret = False
         ans = self.get_sony_focus_area( )
@@ -3559,7 +3559,7 @@ def manageAlphaCameraAperture( mySonyCam, mav2SonyVals, aper ):
     # check to see if mavlink wrote something if so write to cam
     # and update the update flag to get the mavlink send
     #            
-    success = mySonyCam.setSonyApertureData( aper, mav2SonyVals )
+    success = mySonyCam.setSonyCamApertureData( aper, mav2SonyVals )
 
     #
     # Time enabled reading to poll on time_delta
@@ -3606,11 +3606,11 @@ def manageAlphaCameraFocusData( mySonyCam, mav2SonyVals, focusdata, focusarea ):
     # timenow = my.uptime() 
     #        
     if ((timenow - focusdata.timestamp) > time_delta):
-        mySonyCam.getSonyFocusDataData( focusdata )
+        mySonyCam.getSonyCamFocusDataData( focusdata )
         focusdata.timestamp = timenow
 
     if ((timenow - focusarea.timestamp) > time_delta):
-        mySonyCam.getSonyFocusArea( focusarea )
+        mySonyCam.getSonyCamFocusArea( focusarea )
         focusarea.timestamp = timenow
     print ('Exiting :', multiprocessing.current_process().name)
     
