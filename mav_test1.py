@@ -78,6 +78,7 @@ from pymavlink import mavutil   # ref:- https://www.ardusub.com/developers/pymav
 # pip install --upgrade --pre -f https://wxpython.org/Phoenix/snapshot-builds/ wxPython
 #
 import wx
+# pip3 install pyserial
 import sys, serial, glob, threading
 # for serial message out packing
 import struct
@@ -97,7 +98,7 @@ BUTTON_ARM = 20
 
 # ethernet UDP communication and joystick
 #
-# python3 -m pip install -U pygame --user
+#  python3 -m pip install -U pygame --user
 import socket
 import pygame
 JOYSTICK_UDP_PORT = 14556
