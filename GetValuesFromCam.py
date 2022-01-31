@@ -321,7 +321,7 @@ class memoryValue():
         self.nextpointer = None                                                            # pointer for chain if needed
         self.name = name                                                                   # name as a string
         self.timestamp = 0                                                                 # timestamp
-		self.updateNeeded = False                                                          # update required
+        self.updateNeeded = False                                                          # update required
         memoryValue.numberOfVals += 1                                                      # global counter of the number of values
     
     def __del__(self):  
@@ -372,7 +372,7 @@ class memoryValue():
             return self.name,self.signal,self.prev,False
 
     def set_update_flag( stateSent, myId ):
-	    if (self.state == memoryValue.STATE_READY):
+        if (self.state == memoryValue.STATE_READY):
             self.state = myId
             self.updateNeeded = stateSent
             self.state = memoryValue.STATE_READY
@@ -1167,10 +1167,10 @@ class sonyAlphaNewCamera():
         ans = self.get_sony_ex_pro( )
         if not (ans is None):
             print(f" Exposure Prog Mode = {ans}")
-	        SonyObject = memoryValue('sonyExProMode',int(ans[0]))
+            SonyObject = memoryValue('sonyExProMode',int(ans[0]))
         else:
             print("Cant get Exposure Prog Mode ")
-	        SonyObject = memoryValue('sonyExProMode',0)) 
+            SonyObject = memoryValue('sonyExProMode',0)
         SonyObject.updateNeeded = True            
         return SonyObject
 
@@ -1190,10 +1190,10 @@ class sonyAlphaNewCamera():
         ans = self.get_sony_aperture( )
         if not (ans is None):
             print(f" Aperture = {ans}")
-	        SonyObject = memoryValue('sonyAperture',int(ans[0]))
+            SonyObject = memoryValue('sonyAperture',int(ans[0]))
         else:
             print("Cant get Aperture ")
-	        SonyObject = memoryValue('sonyAperture',0))   
+            SonyObject = memoryValue('sonyAperture',0)  
         SonyObject.updateNeeded = True              
         return SonyObject
 
@@ -1213,10 +1213,10 @@ class sonyAlphaNewCamera():
         ans = self.get_sony_focus( )
         if not (ans is None):
             print(f" Focus Mode = {ans}")
-	        SonyObject = memoryValue('sonyFocusMode',int(ans[0]))
+            SonyObject = memoryValue('sonyFocusMode',int(ans[0]))
         else:
             print("Cant get Focus Mode ")
-	        SonyExProModeObject = memoryValue('sonyFocusMode',0))  
+            SonyObject = memoryValue('sonyFocusMode',0)  
         SonyObject.updateNeeded = True              
         return SonyObject
 
@@ -1236,10 +1236,10 @@ class sonyAlphaNewCamera():
         ans = self.get_sony_focus_area( )
         if not (ans is None):
             print(f" Focus Area = {ans}")
-	        SonyObject = memoryValue('sonyFocusArea',int(ans[0]))
+            SonyObject = memoryValue('sonyFocusArea',int(ans[0]))
         else:
             print("Cant get Focus Mode ")
-	        SonyExProModeObject = memoryValue('sonyFocusArea',0))    
+            SonyObject = memoryValue('sonyFocusArea',0)    
         SonyObject.updateNeeded = True              
         return SonyObject        
 
@@ -1259,10 +1259,10 @@ class sonyAlphaNewCamera():
         ans = self.get_sony_iso( )
         if not (ans is None):
             print(f" ISO = {ans}")
-	        SonyObject = memoryValue('sonyISO',int(ans[0]))
+            SonyObject = memoryValue('sonyISO',int(ans[0]))
         else:
             print("Cant get ISO ")
-	        SonyExProModeObject = memoryValue('sonyISO',0))        
+            SonyObject = memoryValue('sonyISO',0)     
         SonyObject.updateNeeded = True  
         return SonyObject      
 
@@ -1282,10 +1282,10 @@ class sonyAlphaNewCamera():
         ans = self.get_sony_shut_spd( )
         if not (ans is None):
             print(f" Shutter Speed = {ans}")
-	        SonyObject = memoryValue('sonyShutSpd',int(ans[0]))
+            SonyObject = memoryValue('sonyShutSpd',int(ans[0]))
         else:
             print("Cant get Shutter Speed ")
-	        SonyExProModeObject = memoryValue('sonyShutSpd',0)) 
+            SonyObject = memoryValue('sonyShutSpd',0)
         SonyObject.updateNeeded = True              
         return SonyObject 
 
@@ -1305,10 +1305,10 @@ class sonyAlphaNewCamera():
         ans = self.get_sony_white_balance( )
         if not (ans is None):
             print(f" White Balance = {ans}")
-	        SonyObject = memoryValue('sonyWhiteBalance',int(ans[0]))
+            SonyObject = memoryValue('sonyWhiteBalance',int(ans[0]))
         else:
             print("Cant get Shutter Speed ")
-	        SonyExProModeObject = memoryValue('sonyWhiteBalance',0)) 
+            SonyObject = memoryValue('sonyWhiteBalance',0) 
         SonyObject.updateNeeded = True              
         return SonyObject 
 
@@ -1328,10 +1328,10 @@ class sonyAlphaNewCamera():
         ans = self.get_sony_still_cap_mode( )
         if not (ans is None):
             print(f" Still Capture Mode = {ans}")
-	        SonyObject = memoryValue('sonyStillCapMode',int(ans[0]))
+            SonyObject = memoryValue('sonyStillCapMode',int(ans[0]))
         else:
             print("Cant get Still Capture Mode ")
-	        SonyExProModeObject = memoryValue('sonyStillCapMode',0)) 
+            SonyObject = memoryValue('sonyStillCapMode',0)
         SonyObject.updateNeeded = True              
         return SonyObject 
 
@@ -3510,7 +3510,7 @@ class MAVFrame():
 def manageAlphaCameraExpro( mySonyCam, mav2SonyVals, expro ):
 
     p = multiprocessing.current_process()
-    print 'Starting:', p.name, p.pid
+    print ('Starting:', p.name, p.pid)
     #
     # initialise general program control flags
     #
@@ -3534,18 +3534,18 @@ def manageAlphaCameraExpro( mySonyCam, mav2SonyVals, expro ):
     if ((timenow - expro.timestamp) > time_delta):
         mySonyCam.getSonyCamExProData( expro )
         expro.timestamp = timenow
-    print 'Exiting :', multiprocessing.current_process().name
+    print ('Exiting :', multiprocessing.current_process().name)
     
 def sendMavExpro( mySonyCam, expro, ConnID ):
     p = multiprocessing.current_process()
-    print 'Starting:', p.name, p.pid
+    print ('Starting:', p.name, p.pid)
     success = mySonyCam.sendMavlinkMessageForObject( expro, connID )
-    print 'Exiting :', multiprocessing.current_process().name             
+    print ('Exiting :', multiprocessing.current_process().name)             
 
 def manageAlphaCameraAperture( mySonyCam, mav2SonyVals, aper ):
 
     p = multiprocessing.current_process()
-    print 'Starting:', p.name, p.pid
+    print ('Starting:', p.name, p.pid)
     #
     # initialise general program control flags
     #
@@ -3570,16 +3570,18 @@ def manageAlphaCameraAperture( mySonyCam, mav2SonyVals, aper ):
     if ((timenow - aper.timestamp) > time_delta):
         mySonyCam.getSonyApertureDataData( aper )
         aper.timestamp = timenow
-    print 'Exiting :', multiprocessing.current_process().name
+    print ('Exiting :', multiprocessing.current_process().name)
     
 def sendMavAper( mySonyCam, aper, ConnID ):
+    p = multiprocessing.current_process()
+    print ('Starting:', p.name, p.pid)
     success = mySonyCam.sendMavlinkMessageForObject( aper, connID )
-    print 'Exiting :', multiprocessing.current_process().name
+    print ('Exiting :', multiprocessing.current_process().name)
     
 def manageAlphaCameraFocusData( mySonyCam, mav2SonyVals, focusdata, focusarea ):
 
     p = multiprocessing.current_process()
-    print 'Starting:', p.name, p.pid
+    print ('Starting:', p.name, p.pid)
     #
     # initialise general program control flags
     #
@@ -3608,24 +3610,24 @@ def manageAlphaCameraFocusData( mySonyCam, mav2SonyVals, focusdata, focusarea ):
     if ((timenow - focusarea.timestamp) > time_delta):
         mySonyCam.getSonyFocusArea( focusarea )
         focusarea.timestamp = timenow
-    print 'Exiting :', multiprocessing.current_process().name
+    print ('Exiting :', multiprocessing.current_process().name)
     
 def sendMavFocusData( mySonyCam, focusdata, focusarea, ConnID ):
 
     p = multiprocessing.current_process()
-    print 'Starting:', p.name, p.pid
+    print ('Starting:', p.name, p.pid)
     #
     # check to see if mavlink wrote something if so write to cam
     # and update the update flag to get the mavlink send
     #     
     success = mySonyCam.sendMavlinkMessageForObject( focusdata, connID )
     success = mySonyCam.sendMavlinkMessageForObject( focusarea, connID )
-    print 'Exiting :', multiprocessing.current_process().name
+    print ('Exiting :', multiprocessing.current_process().name)
 
 def manageAlphaCameraIso( mySonyCam, mav2SonyVals, iso ):
 
     p = multiprocessing.current_process()
-    print 'Starting:', p.name, p.pid
+    print ('Starting:', p.name, p.pid)
     #
     # initialise general program control flags
     #
@@ -3649,23 +3651,23 @@ def manageAlphaCameraIso( mySonyCam, mav2SonyVals, iso ):
     if ((timenow - iso.timestamp) > time_delta):
         mySonyCam.getSonyCamISOData( iso )
         iso.timestamp = timenow
-    print 'Exiting :', multiprocessing.current_process().name
+    print ('Exiting :', multiprocessing.current_process().name)
     
 def sendMavIso( mySonyCam, iso, ConnID ):
 
     p = multiprocessing.current_process()
-    print 'Starting:', p.name, p.pid
+    print ('Starting:', p.name, p.pid)
     #
     # check to see if mavlink wrote something if so write to cam
     # and update the update flag to get the mavlink send
     #     
     success = mySonyCam.sendMavlinkMessageForObject( iso, connID )
-    print 'Exiting :', multiprocessing.current_process().name   
+    print ('Exiting :', multiprocessing.current_process().name)   
     
 def manageAlphaCameraShutSpd( mySonyCam, mav2SonyVals, shut_sp ):
 
     p = multiprocessing.current_process()
-    print 'Starting:', p.name, p.pid
+    print ('Starting:', p.name, p.pid)
     
     #
     # initialise general program control flags
@@ -3690,23 +3692,23 @@ def manageAlphaCameraShutSpd( mySonyCam, mav2SonyVals, shut_sp ):
     if ((timenow - shut_sp.timestamp) > time_delta):
         mySonyCam.getSonyCamShutSpdData( shut_sp )
         shut_sp.timestamp = timenow            
-    print 'Exiting :', multiprocessing.current_process().name
+    print ('Exiting :', multiprocessing.current_process().name)
     
 def sendMavShutSpd( mySonyCam, shut_sp, ConnID ):
 
     p = multiprocessing.current_process()
-    print 'Starting:', p.name, p.pid
+    print ('Starting:', p.name, p.pid)
     #
     # check to see if mavlink wrote something if so write to cam
     # and update the update flag to get the mavlink send
     #     
     success = mySonyCam.sendMavlinkMessageForObject( shut_sp, connID )
-    print 'Exiting :', multiprocessing.current_process().name
+    print ('Exiting :', multiprocessing.current_process().name)
     
 def manageAlphaWhiteBala( mySonyCam, mav2SonyVals, whitebal ):
 
     p = multiprocessing.current_process()
-    print 'Starting:', p.name, p.pid
+    print ('Starting:', p.name, p.pid)
     
     #
     # initialise general program control flags
@@ -3731,12 +3733,14 @@ def manageAlphaWhiteBala( mySonyCam, mav2SonyVals, whitebal ):
     if ((timenow - whitebal.timestamp) > time_delta):
         mySonyCam.getSonyCamWhiteBalaData( whitebal )
         whitebal.timestamp = timenow 
+
+    print ('Exiting :', multiprocessing.current_process().name)
     
 def sendMavWhiteBala( mySonyCam, shut_sp, ConnID ):
     p = multiprocessing.current_process()
-    print 'Starting:', p.name, p.pid
+    print ('Starting:', p.name, p.pid)
     success = mySonyCam.sendMavlinkMessageForObject( whitebal, connID )     
-    print 'Exiting :', multiprocessing.current_process().name    
+    print ('Exiting :', multiprocessing.current_process().name)    
     
 def manageAlphaCameraStillCap( mySonyCam, mav2SonyVals, stillcap ):
 
@@ -3749,7 +3753,7 @@ def manageAlphaCameraStillCap( mySonyCam, mav2SonyVals, stillcap ):
 
     # use this if you want ot make a daemon proc
     p = multiprocessing.current_process()
-    print 'Starting:', p.name, p.pid
+    print ('Starting:', p.name, p.pid)
     #
     
     #
@@ -3768,16 +3772,19 @@ def manageAlphaCameraStillCap( mySonyCam, mav2SonyVals, stillcap ):
     # and update the update flag to get the mavlink send
     #                
     success = mySonyCam.setSonyCamStillCapModeData( stillcap, mav2SonyVals ) 
-    print 'Exiting :', multiprocessing.current_process().name
+    print ('Exiting :', multiprocessing.current_process().name)
     
 def sendMavStillCap( mySonyCam, shut_sp, ConnID ): 
     p = multiprocessing.current_process()
-    print 'Starting:', p.name, p.pid   
+    print ('Starting:', p.name, p.pid)   
     success = mySonyCam.sendMavlinkMessageForObject( stillcap, connID )     
-    print 'Exiting :', multiprocessing.current_process().name#
+    print ('Exiting :', multiprocessing.current_process().name) #
 
 def run_process_messages_from_connection(fra, the_connection, redCam=0):
+    p = multiprocessing.current_process()
+    print ('Starting:', p.name, p.pid) 
     fra.process_messages_from_connection( the_connection, redCam )
+    print ('Exiting :', multiprocessing.current_process().name)
     
 if __name__ == '__main__':
 
