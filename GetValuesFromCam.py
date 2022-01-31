@@ -45,7 +45,7 @@ class mavlinkSonyCamWriteVals():
         self.prev_sony_shutter = mavlinkSonyCamWriteVals.STATE_INIT
         self.prev_sony_white_bal = mavlinkSonyCamWriteVals.STATE_INIT
         self.prev_sony_still_cap_mode = mavlinkSonyCamWriteVals.STATE_INIT
-        self.state = STATE_INIT
+        self.state = mavlinkSonyCamWriteVals.STATE_INIT
         mavlinkSonyCamWriteVals.numberOfVals += 1                                                      # global counter of the number of values
     
     def __del__(self):  
@@ -1661,7 +1661,7 @@ class sonyAlphaNewCamera():
 # X-Box 360 Controller (name: "Controller (XBOX 360 For Windows)")
 #  
 from pymavlink import mavutil   # ref:- https://www.ardusub.com/developers/pymavlink.html
-import wx
+#import wx
 import sys, serial, glob, threading
 # for serial message out packing
 import struct
@@ -1701,14 +1701,14 @@ MAV_SOURCE = 30
 # from mavlink_python_libs import com1 as commonV1
 # import com1 as mavdefs
 #
-from mavlink_python_libs import com2 as commonV1
+#from mavlink_python_libs import com2 as commonV1
 #from my_python_libs import com2 as commonV1
-import com2 as mavdefs
+#import com2 as mavdefs
 import math
 import time
 import array as arr
 
-from mypymavlink import mavutilcust as custommav
+#from mypymavlink import mavutilcust as custommav
 
 #
 # multithreading control via asyncio
@@ -1722,7 +1722,7 @@ import os
 # ============== control Raspberry Pi IO ===============
 # sudo apt-get install rpi.gpio
 #
-import RPi.GPIO as GPIO
+#import RPi.GPIO as GPIO
  
 # to use Raspberry Pi board pin numbers
 #GPIO.setmode(GPIO.BOARD)
@@ -1862,6 +1862,7 @@ class MAVFrame():
     type_of_msg = 0
    
     g_count = 0
+    pin_no = 0
 
     # defines for camera ID file
     #
@@ -1869,8 +1870,9 @@ class MAVFrame():
     NETWORK_ID = 1
 
     def __init__(self, pinNum=26):
-        self.setUPPiRelayNumBCM()
-        self.setPinINput(pinNum)
+        #self.setUPPiRelayNumBCM()
+        #self.setPinINput(pinNum)
+        MAVFrame.pin_no=pinNum
 
     def __del__(self):  
         class_name = self.__class__.__name__  
@@ -2308,7 +2310,7 @@ class MAVFrame():
     #
     def makeMAVlinkConn(self):
         try:
-            the_conection = custommav.mavlink_connection('udpin:0.0.0.0:14550',autoreconnect=True)
+            the_conection = mavutil.mavlink_connection('udpin:0.0.0.0:14550',autoreconnect=True)
             #the_conection = mavutil.mavlink_connection('udpin:0.0.0.0:14550',autoreconnect=True)
             return the_conection,True
         except Exception as err_msg:
@@ -2317,7 +2319,7 @@ class MAVFrame():
 
     def makeNewMAVlinkConn(self,id):
         try:
-            the_conection = custommav.mavlink_connection('udpin:0.0.0.0:14550',autoreconnect=True, source_system=id)
+            the_conection = mavutil.mavlink_connection('udpin:0.0.0.0:14550',autoreconnect=True, source_system=id)
             #the_conection = mavutil.mavlink_connection('udpin:0.0.0.0:14550',autoreconnect=True, source_system=id)
             return the_conection,True
         except Exception as err_msg:
@@ -3803,8 +3805,9 @@ if __name__ == '__main__':
     xx = 1
     while xx == 1:
         m = cID.recv_match(type="HEARTBEAT", blocking=True, timeout=5)
-        if not ( m.autopilot == mavutil.mavlink.MAV_AUTOPILOT_INVALID ):
-            xx = 2
+        if not (m == None):
+            if not ( m.autopilot == mavutil.mavlink.MAV_AUTOPILOT_INVALID ):
+                xx = 2
     id = m.get_srcSystem() 
     if not ( m.get_srcSystem() == frame.DEFAULT_SYS_ID ) :
         print("-------- new id found --------")
@@ -3844,14 +3847,14 @@ if __name__ == '__main__':
     # Initialise all shared object data between
     # camera and mavlink processes
     #        
-    expro = mySonyCam.initSonyCamExProData(  )
-    aper = mySonyCam.initSonyApertureData(  )        
-    focusdata = mySonyCam.initSonyCamFocusData(  )       
-    focusarea = mySonyCam.initSonyCamFocusAreaData(  )
-    iso = mySonyCam.initSonyCamISOData(  )        
-    shut_sp = mySonyCam.initSonyCamShutSpdData(  ) 
-    whitebal = mySonyCam.initSonyCamWhiteBalaData(  )       
-    stillcap = mySonyCam.initSonyCamStillCapModeData(  )
+    expro = mySonyCamNo1.initSonyCamExProData(  )
+    aper = mySonyCamNo1.initSonyApertureData(  )        
+    focusdata = mySonyCamNo1.initSonyCamFocusData(  )       
+    focusarea = mySonyCamNo1.initSonyCamFocusAreaData(  )
+    iso = mySonyCamNo1.initSonyCamISOData(  )        
+    shut_sp = mySonyCamNo1.initSonyCamShutSpdData(  ) 
+    whitebal = mySonyCamNo1.initSonyCamWhiteBalaData(  )       
+    stillcap = mySonyCamNo1.initSonyCamStillCapModeData(  )
 
     #
     # run the process managing the cmaera
