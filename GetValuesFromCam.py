@@ -56,6 +56,10 @@ class mavlinkSonyCamWriteVals():
         print('mavlink to sony writes has %d set-points' % (mavlinkSonyCamWriteVals.numberOfVals))
         return mavlinkSonyCamWriteVals.numberOfVals	
 
+    def init_class_state( self ):
+        if (self.state == mavlinkSonyCamWriteVals.STATE_INIT):
+            self.state = mavlinkSonyCamWriteVals.STATE_READY
+            
     def setVal_sony_iso(self,value,myId,mode=0,timeout=20):
         timeCnt = 0
         while (not (self.state == mavlinkSonyCamWriteVals.STATE_READY)) and (timeCnt < timeout):
@@ -1403,145 +1407,201 @@ class sonyAlphaNewCamera():
             enum_num = 0
         return num
 
-    def setSonyCamISOData( self, mem, mavObj ):
+    def setSonyCamISOData( self, mem, mavObj, timeout1=100, timeout2=50, no_timeout1_retry=1, no_timeout2_retry=1 ):
     
         ret = False
         readSuccess = False
-        while (readSuccess == False):
-            reqDat, prevDat, readSuccess  = mavObj.getVal_sony_iso(mavObj.STATE_CAM_READING,100)
+        # 
+        timeout1 = timeout1 * no_timeout1_retry
+        timeout2 = timeout2 * no_timeout2_retry
+        #
+        while (readSuccess == False) and (timeout1 > 0):
+            reqDat, prevDat, readSuccess  = mavObj.getVal_sony_iso(mavObj.STATE_CAM_READING,timeout1)
+            timeout1 -= timeout1                                          # no retries
             
         if (not (reqDat == mavlinkSonyCamWriteVals.STATE_INIT) and not (reqDat == prevDat)):
             ans = self.set_sony_iso( self.enumerate_iso(reqDat) ) 
             if not (ans is None):            # 
                 writeSuccess = False
-                while (writeSuccess == False):                
-                    writeSuccess = mavObj.setVal_sony_iso(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,50) 
+                while (writeSuccess == False) and (timeout2 > 0):               
+                    writeSuccess = mavObj.setVal_sony_iso(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,timeout2) 
+                    timeout2 -= timeout2                                  # no retries
+                    
                 ret = ( ans[1] == reqDat )   
                 if ( ret == True ):
                     ret = self.setSonyObjData( mem, int(ans[1]) )                  
         return ret
 
-    def setSonyCamApertureData( self, mem, mavObj ):
+    def setSonyCamApertureData( self, mem, mavObj, timeout1=100, timeout2=50, no_timeout1_retry=1, no_timeout2_retry=1 ):
     
         ret = False
         readSuccess = False
-        while (readSuccess == False):
-            reqDat, prevDat, readSuccess  = mavObj.getVal_sony_aperture(mavObj.STATE_CAM_READING,100)
+        # 
+        timeout1 = timeout1 * no_timeout1_retry
+        timeout2 = timeout2 * no_timeout2_retry
+        #
+        while (readSuccess == False) and (timeout1 > 0):
+            reqDat, prevDat, readSuccess  = mavObj.getVal_sony_aperture(mavObj.STATE_CAM_READING,timeout1)
+            timeout1 -= timeout1                                          # no retries
             
         if (not (reqDat == mavObj.STATE_INIT) and not (reqDat == prevDat)):
             ans = self.set_sony_aperture( self.enumerate_still_cap(reqDat) ) 
             if not (ans is None):            # 
                 writeSuccess = False
-                while (writeSuccess == False):                
-                    writeSuccess = mavObj.setVal_sony_aperture(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,50) 
+                while (writeSuccess == False) and (timeout2 > 0):                
+                    writeSuccess = mavObj.setVal_sony_aperture(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,timeout2) 
+                    timeout2 -= timeout2                                  # no retries
+                    
                 ret = ( ans[1] == reqDat ) 
                 if ( ret == True ):
                     ret = self.setSonyObjData( mem, int(ans[1]) )                
         return ret 
 
-    def setSonyCamExProData( self, mem, mavObj ):
+    def setSonyCamExProData( self, mem, mavObj, timeout1=100, timeout2=50, no_timeout1_retry=1, no_timeout2_retry=1 ):
     
         ret = False
         readSuccess = False
-        while (readSuccess == False):
-            reqDat, prevDat, readSuccess  = mavObj.getVal_sony_ex_pro(mavObj.STATE_CAM_READING,100)
+        # 
+        timeout1 = timeout1 * no_timeout1_retry
+        timeout2 = timeout2 * no_timeout2_retry
+        #
+        while (readSuccess == False) and (timeout1 > 0):
+            reqDat, prevDat, readSuccess  = mavObj.getVal_sony_ex_pro(mavObj.STATE_CAM_READING,timeout1)
+            timeout1 -= timeout1
             
         if (not (reqDat == mavObj.STATE_INIT) and not (reqDat == prevDat)):
             ans = self.set_sony_ex_pro( self.enumerate_still_cap(reqDat) ) 
             if not (ans is None):            # 
                 writeSuccess = False
-                while (writeSuccess == False):                
-                    writeSuccess = mavObj.setVal_sony_ex_pro(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,50) 
+                while (writeSuccess == False) and (timeout2 > 0):               
+                    writeSuccess = mavObj.setVal_sony_ex_pro(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,timeout2) 
+                    timeout2 -= timeout2
+                    
                 ret = ( ans[1] == reqDat ) 
                 if ( ret == True ):
                     ret = self.setSonyObjData( mem, int(ans[1]) )                
         return ret
 
-    def setSonyCamFocusData( self, mem, mavObj ):
+    def setSonyCamFocusData( self, mem, mavObj, timeout1=100, timeout2=50, no_timeout1_retry=1, no_timeout2_retry=1 ):
     
         ret = False
         readSuccess = False
-        while (readSuccess == False):
-            reqDat, prevDat, readSuccess  = mavObj.getVal_sony_focus(mavObj.STATE_CAM_READING,100)
+        # 
+        timeout1 = timeout1 * no_timeout1_retry
+        timeout2 = timeout2 * no_timeout2_retry
+        #
+        while (readSuccess == False) and (timeout1 > 0):
+            reqDat, prevDat, readSuccess  = mavObj.getVal_sony_focus(mavObj.STATE_CAM_READING,timeout1)
+            timeout1 -= timeout1
             
         if (not (reqDat == mavObj.STATE_INIT) and not (reqDat == prevDat)):
             ans = self.set_sony_focus( self.enumerate_still_cap(reqDat) ) 
             if not (ans is None):            # 
                 writeSuccess = False
-                while (writeSuccess == False):                
-                    writeSuccess = mavObj.setVal_sony_focus(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,50) 
+                while (writeSuccess == False) and (timeout2 > 0):                
+                    writeSuccess = mavObj.setVal_sony_focus(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,timeout2) 
+                    timeout2 -= timeout2
+                    
                 ret = ( ans[1] == reqDat ) 
                 if ( ret == True ):
                     ret = self.setSonyObjData( mem, int(ans[1]) )                
         return ret
 
-    def setSonyCamFocusAreaData( self, mem, mavObj ):
+    def setSonyCamFocusAreaData( self, mem, mavObj, timeout1=100, timeout2=50, no_timeout1_retry=1, no_timeout2_retry=1 ):
     
         ret = False
         readSuccess = False
-        while (readSuccess == False):
-            reqDat, prevDat, readSuccess  = mavObj.getVal_sony_focus_area(mavObj.STATE_CAM_READING,100)
+        # 
+        timeout1 = timeout1 * no_timeout1_retry
+        timeout2 = timeout2 * no_timeout2_retry
+        #
+        while (readSuccess == False) and (timeout1 > 0):
+            reqDat, prevDat, readSuccess  = mavObj.getVal_sony_focus_area(mavObj.STATE_CAM_READING,timeout1)
+            timeout1 -= timeout1
             
         if (not (reqDat == mavObj.STATE_INIT) and not (reqDat == prevDat)):
             ans = self.set_sony_focus_area( self.enumerate_still_cap(reqDat) ) 
             if not (ans is None):            # 
                 writeSuccess = False
-                while (writeSuccess == False):                
-                    writeSuccess = mavObj.setVal_sony_focus_area(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,50) 
+                while (writeSuccess == False) and (timeout2 > 0):                
+                    writeSuccess = mavObj.setVal_sony_focus_area(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,timeout2) 
+                    timeout2 -= timeout2
+                    
                 ret = ( ans[1] == reqDat ) 
                 if ( ret == True ):
                     ret = self.setSonyObjData( mem, int(ans[1]) )                
         return ret
 
-    def setSonyCamShutSpdData( self, mem, mavObj ):
+    def setSonyCamShutSpdData( self, mem, mavObj, timeout1=100, timeout2=50, no_timeout1_retry=1, no_timeout2_retry=1 ):
     
         ret = False
         readSuccess = False
-        while (readSuccess == False):
-            reqDat, prevDat, readSuccess  = mavObj.getVal_sony_shutter(mavObj.STATE_CAM_READING,100)
+        # 
+        timeout1 = timeout1 * no_timeout1_retry
+        timeout2 = timeout2 * no_timeout2_retry
+        #
+        while (readSuccess == False) and (timeout1 > 0):
+            reqDat, prevDat, readSuccess  = mavObj.getVal_sony_shutter(mavObj.STATE_CAM_READING,timeout1)
+            timeout1 -= timeout1
             
         if (not (reqDat == mavObj.STATE_INIT) and not (reqDat == prevDat)):
             ans = self.set_sony_shutter( self.enumerate_still_cap(reqDat) ) 
             if not (ans is None):            # 
                 writeSuccess = False
-                while (writeSuccess == False):                
-                    writeSuccess = mavObj.setVal_sony_shutter(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,50) 
+                while (writeSuccess == False) and (timeout2 > 0):                
+                    writeSuccess = mavObj.setVal_sony_shutter(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,timeout2) 
+                    timeout2 -= timeout2
+            
                 ret = ( ans[1] == reqDat ) 
                 if ( ret == True ):
                     ret = self.setSonyObjData( mem, int(ans[1]) )                
         return ret
 
-    def setSonyCamWhiteBalaData( self, mem, mavObj ):
+    def setSonyCamWhiteBalaData( self, mem, mavObj, timeout1=100, timeout2=50, no_timeout1_retry=1, no_timeout2_retry=1 ):
     
         ret = False
         readSuccess = False
-        while (readSuccess == False):
-            reqDat, prevDat, readSuccess  = mavObj.getVal_sony_white_bal(mavObj.STATE_CAM_READING,100)
+        # 
+        timeout1 = timeout1 * no_timeout1_retry
+        timeout2 = timeout2 * no_timeout2_retry
+        #
+        while (readSuccess == False) and (timeout1 > 0):
+            reqDat, prevDat, readSuccess  = mavObj.getVal_sony_white_bal(mavObj.STATE_CAM_READING,timeout1)
+            timeout1 -= timeout1
             
         if (not (reqDat == mavObj.STATE_INIT) and not (reqDat == prevDat)):
             ans = self.set_sony_white_bal( self.enumerate_still_cap(reqDat) ) 
             if not (ans is None):            # 
                 writeSuccess = False
-                while (writeSuccess == False):                
-                    writeSuccess = mavObj.setVal_sony_white_bal(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,50) 
+                while (writeSuccess == False) and (timeout2 > 0):                
+                    writeSuccess = mavObj.setVal_sony_white_bal(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,timeout2) 
+                    timeout2 -= timeout2
+                    
                 ret = ( ans[1] == reqDat ) 
                 if ( ret == True ):
                     ret = self.setSonyObjData( mem, int(ans[1]) )                
         return ret
         
-    def setSonyCamStillCapModeData( self, mem, mavObj ):
+    def setSonyCamStillCapModeData( self, mem, mavObj, timeout1=100, timeout2=50, no_timeout1_retry=1, no_timeout2_retry=1 ):
     
         ret = False
         readSuccess = False
-        while (readSuccess == False):
-            reqDat, prevDat, readSuccess  = mavObj.getVal_sony_still_cap_mode(mavObj.STATE_CAM_READING,100)
+        # 
+        timeout1 = timeout1 * no_timeout1_retry
+        timeout2 = timeout2 * no_timeout2_retry
+        #
+        while (readSuccess == False) and (timeout1 > 0):
+            reqDat, prevDat, readSuccess  = mavObj.getVal_sony_still_cap_mode(mavObj.STATE_CAM_READING,timeout1)
+            timeout1 -= timeout1
             
         if (not (reqDat == mavObj.STATE_INIT) and not (reqDat == prevDat)):
             ans = self.set_sony_still_cap( self.enumerate_still_cap(reqDat) ) 
             if not (ans is None):            # 
                 writeSuccess = False
-                while (writeSuccess == False):                
-                    writeSuccess = mavObj.setVal_sony_still_cap_mode(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,50) 
+                while (writeSuccess == False) and (timeout2 > 0):                
+                    writeSuccess = mavObj.setVal_sony_still_cap_mode(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,timeout2) 
+                    timeout2 -= timeout2
+                    
                 ret = ( ans[1] == reqDat ) 
                 if ( ret == True ):
                     ret = self.setSonyObjData( mem, int(ans[1]) )                
@@ -3857,9 +3917,15 @@ if __name__ == '__main__':
     stillcap = mySonyCamNo1.initSonyCamStillCapModeData(  )
 
     #
+    # now set the class to be initialised
+    #
+    gcsWrites2Sony.init_class_state()
+    
+    #
     # run the process managing the cmaera
     #
-    while True:
+    a = True
+    while a:
         p0 = multiprocessing.Process(name='run_process_mavlink', target=run_process_messages_from_connection, args=(frame, cID,)).start()   
         p1 = multiprocessing.Process(name='manageAlphaCameraExpro', target=manageAlphaCameraExpro, args=(mySonyCamNo1, gcsWrites2Sony, expro,)).start()
         p3 = multiprocessing.Process(name='manageAlphaCameraAperture', target=manageAlphaCameraAperture, args=(mySonyCamNo1, gcsWrites2Sony, aper,)).start()
