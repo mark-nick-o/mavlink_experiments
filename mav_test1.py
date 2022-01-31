@@ -46,6 +46,23 @@
 # sudo apt-get install libxml++2.6-dev
 # sudo pip install dronekit
 
+# for the full pymavlink install guide please refer to this https://www.ardusub.com/developers/pymavlink.html
+#
+# e.g on Rasp pi
+# Update list of available packages
+# sudo apt update
+# sudo apt -y upgrade
+#
+# Install some dependencies
+# sudo apt install -y python3-pip
+#
+# Install mavproxy module and everything else needed
+# pip3 install mavproxy
+#
+# pip install pymavlink
+#
+# to list pip list | grep link or pip3 list | grep link
+
 # ================== Compatible Joysticks =========================================
 # X-Box 360 Controller (name: "Xbox 360 Controller")
 # Playstation 4 Controller (name: "PS4 Controller")
