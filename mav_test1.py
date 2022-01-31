@@ -69,6 +69,14 @@
 # X-Box 360 Controller (name: "Controller (XBOX 360 For Windows)")
 #  
 from pymavlink import mavutil   # ref:- https://www.ardusub.com/developers/pymavlink.html
+
+# wx python is supported under python2 I've left this in the class to test GUI from base station
+# most of the code is python3 so a TODO:: is to make it compatible with python2 and 3 and be able to use the 
+# WX HMI controls, to install it follow these instructions
+#
+# sudo apt-get install dpkg-dev build-essential python2.7-dev python3.5-dev python3.6-dev libgstreamer-plugins-base1.0-dev libnotify-dev libwebkitgtk-3.0-dev libwebkit-dev libwebkitgtk-dev libjpeg-dev libtiff-dev libgtk2.0-dev libsdl1.2-dev libgstreamer-plugins-base0.10-dev freeglut3 freeglut3-dev
+# pip install --upgrade --pre -f https://wxpython.org/Phoenix/snapshot-builds/ wxPython
+#
 import wx
 import sys, serial, glob, threading
 # for serial message out packing
