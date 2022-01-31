@@ -375,7 +375,7 @@ class memoryValue():
         else:
             return self.name,self.signal,self.prev,False
 
-    def set_update_flag( stateSent, myId ):
+    def set_update_flag( self, stateSent, myId ):
         if (self.state == memoryValue.STATE_READY):
             self.state = myId
             self.updateNeeded = stateSent
@@ -1682,11 +1682,11 @@ class sonyAlphaNewCamera():
                     ret = False
                 if (ret == True):
                     writeSuccess = False
-                    Timecount = 0
+                    TimeCount = 0
                     while (writeSuccess == False) and (Timeout > TimeCount):
                         # obj.updateNeeded = False
                         writeSuccess = obj.set_update_flag( False, obj.STATE_MAV_WRITING )
-                        Timecount += 1
+                        TimeCount += 1
                 return ret
 
 #
@@ -3601,7 +3601,7 @@ def manageAlphaCameraExpro( mySonyCam, mav2SonyVals, expro ):
 def sendMavExpro( mySonyCam, expro, ConnID ):
     p = multiprocessing.current_process()
     print ('Starting:', p.name, p.pid)
-    success = mySonyCam.sendMavlinkMessageForObject( expro, connID )
+    success = mySonyCam.sendMavlinkMessageForObject( expro, ConnID )
     print ('Exiting :', multiprocessing.current_process().name)             
 
 def manageAlphaCameraAperture( mySonyCam, mav2SonyVals, aper ):
@@ -3637,7 +3637,7 @@ def manageAlphaCameraAperture( mySonyCam, mav2SonyVals, aper ):
 def sendMavAper( mySonyCam, aper, ConnID ):
     p = multiprocessing.current_process()
     print ('Starting:', p.name, p.pid)
-    success = mySonyCam.sendMavlinkMessageForObject( aper, connID )
+    success = mySonyCam.sendMavlinkMessageForObject( aper, ConnID )
     print ('Exiting :', multiprocessing.current_process().name)
     
 def manageAlphaCameraFocusData( mySonyCam, mav2SonyVals, focusdata, focusarea ):
@@ -3682,8 +3682,8 @@ def sendMavFocusData( mySonyCam, focusdata, focusarea, ConnID ):
     # check to see if mavlink wrote something if so write to cam
     # and update the update flag to get the mavlink send
     #     
-    success = mySonyCam.sendMavlinkMessageForObject( focusdata, connID )
-    success = mySonyCam.sendMavlinkMessageForObject( focusarea, connID )
+    success = mySonyCam.sendMavlinkMessageForObject( focusdata, ConnID )
+    success = mySonyCam.sendMavlinkMessageForObject( focusarea, ConnID )
     print ('Exiting :', multiprocessing.current_process().name)
 
 def manageAlphaCameraIso( mySonyCam, mav2SonyVals, iso ):
@@ -3723,7 +3723,7 @@ def sendMavIso( mySonyCam, iso, ConnID ):
     # check to see if mavlink wrote something if so write to cam
     # and update the update flag to get the mavlink send
     #     
-    success = mySonyCam.sendMavlinkMessageForObject( iso, connID )
+    success = mySonyCam.sendMavlinkMessageForObject( iso, ConnID )
     print ('Exiting :', multiprocessing.current_process().name)   
     
 def manageAlphaCameraShutSpd( mySonyCam, mav2SonyVals, shut_sp ):
@@ -3764,7 +3764,7 @@ def sendMavShutSpd( mySonyCam, shut_sp, ConnID ):
     # check to see if mavlink wrote something if so write to cam
     # and update the update flag to get the mavlink send
     #     
-    success = mySonyCam.sendMavlinkMessageForObject( shut_sp, connID )
+    success = mySonyCam.sendMavlinkMessageForObject( shut_sp, ConnID )
     print ('Exiting :', multiprocessing.current_process().name)
     
 def manageAlphaWhiteBala( mySonyCam, mav2SonyVals, whitebal ):
@@ -3798,10 +3798,10 @@ def manageAlphaWhiteBala( mySonyCam, mav2SonyVals, whitebal ):
 
     print ('Exiting :', multiprocessing.current_process().name)
     
-def sendMavWhiteBala( mySonyCam, shut_sp, ConnID ):
+def sendMavWhiteBala( mySonyCam, whitebal, ConnID ):
     p = multiprocessing.current_process()
     print ('Starting:', p.name, p.pid)
-    success = mySonyCam.sendMavlinkMessageForObject( whitebal, connID )     
+    success = mySonyCam.sendMavlinkMessageForObject( whitebal, ConnID )     
     print ('Exiting :', multiprocessing.current_process().name)    
     
 def manageAlphaCameraStillCap( mySonyCam, mav2SonyVals, stillcap ):
@@ -3836,10 +3836,10 @@ def manageAlphaCameraStillCap( mySonyCam, mav2SonyVals, stillcap ):
     success = mySonyCam.setSonyCamStillCapModeData( stillcap, mav2SonyVals ) 
     print ('Exiting :', multiprocessing.current_process().name)
     
-def sendMavStillCap( mySonyCam, shut_sp, ConnID ): 
+def sendMavStillCap( mySonyCam, stillcap, ConnID ): 
     p = multiprocessing.current_process()
     print ('Starting:', p.name, p.pid)   
-    success = mySonyCam.sendMavlinkMessageForObject( stillcap, connID )     
+    success = mySonyCam.sendMavlinkMessageForObject( stillcap, ConnID )     
     print ('Exiting :', multiprocessing.current_process().name) #
 
 def run_process_messages_from_connection(fra, the_connection, redCam=0):
