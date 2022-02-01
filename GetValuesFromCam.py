@@ -1,4 +1,3 @@
-
 # ===============================================================================================================================
 #
 # Name : mavlinkSonyCamWriteVals.py
@@ -18,7 +17,7 @@ import logging
 
 # for signal interypt handling
 import signal
-
+       
 class mavlinkSonyCamWriteVals():
 
     STATE_INIT = 99
@@ -30,6 +29,16 @@ class mavlinkSonyCamWriteVals():
     numberOfVals = 0
     WRITE_PREV_DATA = 1
     DONT_WRITE_PREV_DATA = 0
+
+    MAV_REQ_ALL_PARAM = 255
+    ParamStillCap = 1
+    ParamWhiteBala = 2
+    ParamShutSpd = 4
+    ParamIso = 8
+    ParamFocus = 16
+    ParamFocusArea = 32
+    ParamAperture = 64
+    ParamExPro = 128
     
     def __init__ (self):
         self.set_sony_iso = mavlinkSonyCamWriteVals.STATE_INIT
@@ -48,6 +57,7 @@ class mavlinkSonyCamWriteVals():
         self.prev_sony_shutter = mavlinkSonyCamWriteVals.STATE_INIT
         self.prev_sony_white_bal = mavlinkSonyCamWriteVals.STATE_INIT
         self.prev_sony_still_cap_mode = mavlinkSonyCamWriteVals.STATE_INIT
+        self.mav_req_all_param = 0
         self.state = mavlinkSonyCamWriteVals.STATE_INIT
         mavlinkSonyCamWriteVals.numberOfVals += 1                                                      # global counter of the number of values
     
@@ -533,7 +543,8 @@ class sonyAlphaNewCamera():
                     else:
                         if not (xx.isdigit()):
                             if xx.find("AUTO") > -1:
-                                xx = 0     
+                                xx = 0
+                        xx = xx.replace(",","")                                
                         vv = xx.strip("}")                       # caters for a case in testing where i have closing bracket 34}                                
                         answers.append(vv)
                         idx = 99999
@@ -578,6 +589,7 @@ class sonyAlphaNewCamera():
                         if not (xx.isdigit()):
                             if xx.find("AUTO") > -1:
                                 xx = 0     
+                        xx = xx.replace(",","")     
                         vv = xx.strip("}")                       # caters for a case in testing where i have closing bracket 34}                                
                         answers.append(vv)
                         idx = 99999
@@ -621,7 +633,8 @@ class sonyAlphaNewCamera():
                     else:
                         if not (xx.isdigit()):
                             if xx.find("AUTO") > -1:
-                                xx = 0     
+                                xx = 0   
+                        xx = xx.replace(",","")                                     
                         vv = xx.strip("}")                       # caters for a case in testing where i have closing bracket 34}                                
                         answers.append(vv)
                         idx = 99999
@@ -666,6 +679,7 @@ class sonyAlphaNewCamera():
                         if not (xx.isdigit()):
                             if xx.find("AUTO") > -1:
                                 xx = 0     
+                        xx = xx.replace(",","")     
                         vv = xx.strip("}")                       # caters for a case in testing where i have closing bracket 34}                                
                         answers.append(vv)
                         idx = 99999
@@ -710,6 +724,7 @@ class sonyAlphaNewCamera():
                         if not (xx.isdigit()):
                             if xx.find("AUTO") > -1:
                                 xx = 0     
+                        xx = xx.replace(",","")     
                         vv = xx.strip("}")                       # caters for a case in testing where i have closing bracket 34}                                
                         answers.append(vv)
                         idx = 99999
@@ -754,6 +769,7 @@ class sonyAlphaNewCamera():
                         if not (xx.isdigit()):
                             if xx.find("AUTO") > -1:
                                 xx = 0     
+                        xx = xx.replace(",","")     
                         vv = xx.strip("}")                       # caters for a case in testing where i have closing bracket 34}                                
                         answers.append(vv)
                         idx = 99999
@@ -797,7 +813,8 @@ class sonyAlphaNewCamera():
                     else:
                         if not (xx.isdigit()):
                             if xx.find("AUTO") > -1:
-                                xx = 0     
+                                xx = 0 
+                        xx = xx.replace(",","")                                     
                         vv = xx.strip("}")                       # caters for a case in testing where i have closing bracket 34}                                
                         answers.append(vv)
                         idx = 99999
@@ -840,7 +857,8 @@ class sonyAlphaNewCamera():
                     else:
                         if not (xx.isdigit()):
                             if xx.find("AUTO") > -1:
-                                xx = 0     
+                                xx = 0   
+                        xx = xx.replace(",","")                                     
                         vv = xx.strip("}")                       # caters for a case in testing where i have closing bracket 34}                                
                         answers.append(vv)
                         idx = 99999
@@ -884,6 +902,7 @@ class sonyAlphaNewCamera():
                         if not (xx.isdigit()):
                             if xx.find("AUTO") > -1:
                                 xx = 0     
+                        xx = xx.replace(",","")     
                         vv = xx.strip("}")                       # caters for a case in testing where i have closing bracket 34}                                
                         answers.append(vv)
                         idx = 99999
@@ -927,6 +946,7 @@ class sonyAlphaNewCamera():
                         if not (xx.isdigit()):
                             if xx.find("AUTO") > -1:
                                 xx = 0     
+                        xx = xx.replace(",","")     
                         vv = xx.strip("}")                       # caters for a case in testing where i have closing bracket 34}                                
                         answers.append(vv)
                         idx = 99999
@@ -969,7 +989,8 @@ class sonyAlphaNewCamera():
                     else:
                         if not (xx.isdigit()):
                             if xx.find("AUTO") > -1:
-                                xx = 0     
+                                xx = 0   
+                        xx = xx.replace(",","")                                     
                         vv = xx.strip("}")                       # caters for a case in testing where i have closing bracket 34}                                
                         answers.append(vv)
                         idx = 99999
@@ -1012,7 +1033,8 @@ class sonyAlphaNewCamera():
                     else:
                         if not (xx.isdigit()):
                             if xx.find("AUTO") > -1:
-                                xx = 0     
+                                xx = 0   
+                        xx = xx.replace(",","")                                     
                         vv = xx.strip("}")                       # caters for a case in testing where i have closing bracket 34}                                
                         answers.append(vv)
                         idx = 99999
@@ -1057,6 +1079,7 @@ class sonyAlphaNewCamera():
                         if not (xx.isdigit()):
                             if xx.find("AUTO") > -1:
                                 xx = 0     
+                        xx = xx.replace(",","")     
                         vv = xx.strip("}")                       # caters for a case in testing where i have closing bracket 34}                                
                         answers.append(vv)
                         idx = 99999
@@ -1099,7 +1122,8 @@ class sonyAlphaNewCamera():
                     else:
                         if not (xx.isdigit()):
                             if xx.find("AUTO") > -1:
-                                xx = 0     
+                                xx = 0    
+                        xx = xx.replace(",","")                                     
                         vv = xx.strip("}")                       # caters for a case in testing where i have closing bracket 34}                                
                         answers.append(vv)
                         idx = 99999
@@ -1143,6 +1167,7 @@ class sonyAlphaNewCamera():
                         if not (xx.isdigit()):
                             if xx.find("AUTO") > -1:
                                 xx = 0     
+                        xx = xx.replace(",","")     
                         vv = xx.strip("}")                       # caters for a case in testing where i have closing bracket 34}                                
                         answers.append(vv)
                         idx = 99999
@@ -1186,6 +1211,7 @@ class sonyAlphaNewCamera():
                         if not (xx.isdigit()):
                             if xx.find("AUTO") > -1:
                                 xx = 0     
+                        xx = xx.replace(",","")     
                         vv = xx.strip("}")                       # caters for a case in testing where i have closing bracket 34}                                
                         answers.append(vv)
                         idx = 99999
@@ -2406,8 +2432,8 @@ class MAVFrame():
     #
     def makeMAVlinkConn(self):
         try:
-            the_conection = mavutil.mavlink_connection('udpin:0.0.0.0:14560',autoreconnect=True)
-            #the_conection = mavutil.mavlink_connection('udpin:0.0.0.0:14550',autoreconnect=True)
+            #the_conection = mavutil.mavlink_connection('udpin:0.0.0.0:14560',autoreconnect=True)
+            the_conection = mavutil.mavlink_connection('udpin:0.0.0.0:14550',autoreconnect=True)
             return the_conection,True
         except Exception as err_msg:
             print("Failed to connect : %s" % (err_msg))
@@ -2415,8 +2441,8 @@ class MAVFrame():
 
     def makeNewMAVlinkConn(self,id):
         try:
-            the_conection = mavutil.mavlink_connection('udpin:0.0.0.0:14560',autoreconnect=True, source_system=id)
-            #the_conection = mavutil.mavlink_connection('udpin:0.0.0.0:14550',autoreconnect=True, source_system=id)
+            #the_conection = mavutil.mavlink_connection('udpin:0.0.0.0:14560',autoreconnect=True, source_system=id)
+            the_conection = mavutil.mavlink_connection('udpin:0.0.0.0:14550',autoreconnect=True, source_system=id)
             return the_conection,True
         except Exception as err_msg:
             print("Failed to connect : %s" % (err_msg))
@@ -3259,7 +3285,7 @@ class MAVFrame():
         
     # process the incoming messages received
     #
-    def process_messages_from_connection(self, fra, the_connection, redCam=0):
+    def process_messages_from_connection(self, fra, the_connection, sharedObj, redCam=0):
         #"""
         #This runs continuously. The mavutil.recv_match() function will call mavutil.post_message()
         #any time a new message is received, and will notify all functions in the master.message_hooks list.
@@ -3316,9 +3342,42 @@ class MAVFrame():
                     sys.stdout.write(msg.data)
                     sys.stdout.flush()
             elif msg.get_type() == 'PARAM_REQUEST_LIST':
-                self.mavlink_send_param_value(the_connection)
-                print("PARAM_REQUEST_LIST was sent")
+                # this i will now try from the class  objects
+                #
+                # self.mavlink_send_param_value(the_connection)
+                #
+                sharedObj.mav_req_all_param = MAV_REQ_ALL_PARAM
+                print("\033[35m PARAM_REQUEST_LIST was sent - shared object set to %d" % (sharedObj.mav_req_all_param))
                 # trap was found taken it out..... exit(97)
+                exit(99)
+            elif msg.get_type() == 'PARAM_SET':
+                # this i will now try from the class  objects
+                #
+                # self.mavlink_send_param_value(the_connection)
+                #
+                sharedObj.mav_req_all_param = MAV_REQ_ALL_PARAM
+                print("\033[35m PARAM_SET was sent for %s %d"%(msg.param_id,int(msg.param_value)))
+                # ===== TRAP =====
+                exit(97)
+            elif msg.get_type() == 'PARAM_EXT_VALUE':
+                # this i will now try from the class  objects
+                #
+                # self.mavlink_send_param_value(the_connection)
+                #
+                sharedObj.mav_req_all_param = MAV_REQ_ALL_PARAM
+                print("\033[35m PARAM_EXT_VALUE was sent for %s %d"%(msg.param_id,int(msg.param_value)))
+                # ===== TRAP =====
+                exit(96)
+            elif msg.get_type() == 'PARAM_EXT_SET':
+                # this i will now try from the class  objects
+                #
+                # self.mavlink_send_param_value(the_connection)
+                #
+                sharedObj.mav_req_all_param = MAV_REQ_ALL_PARAM
+                print("\033[35m PARAM_EXT_SET was sent for %s %d"%(msg.param_id,int(msg.param_value)))
+                # ===== TRAP =====
+                exit(95)
+                PARAM_EXT_SET
             elif msg.get_type() == 'RC_CHANNELS':
                 print("RC Channel message (system %u component %u)\n" % (the_connection.target_system, the_connection.target_component))
             elif msg.get_type() == 'COMMAND_LONG':
@@ -3632,8 +3691,8 @@ def manageAlphaCameraExpro( mySonyCam, mav2SonyVals, expro, tm_upd_disable=False
         timenow = mySonyCam.my_timestamp()      
     #        
     if ((timenow - expro.timestamp) > time_delta):
-        mySonyCam.getSonyCamExProData( expro )
-        expro.timestamp = timenow
+        if (mySonyCam.getSonyCamExProData( expro )==True):
+            expro.timestamp = timenow
         #print(f"\033[36m Time Delta occurred {timenow} {expro.timestamp}")
     #else:
         #print(f"\033[34m No time diff {timenow} {expro.timestamp}")
@@ -3654,7 +3713,6 @@ def manageAlphaCameraAperture( mySonyCam, mav2SonyVals, aper, tm_upd_disable=Fal
     #
     success = False
     timenow = 0
-    time_delta = 10000
 
     #
     # check to see if mavlink wrote something if so write to cam
@@ -3672,8 +3730,8 @@ def manageAlphaCameraAperture( mySonyCam, mav2SonyVals, aper, tm_upd_disable=Fal
     #        
 
     if ((timenow - aper.timestamp) > time_delta):
-        mySonyCam.getSonyApertureDataData( aper )
-        aper.timestamp = timenow
+        if (mySonyCam.getSonyApertureData( aper )==True):
+            aper.timestamp = timenow
     print ('Exiting :', multiprocessing.current_process().name)
     
 def sendMavAper( mySonyCam, aper, ConnID ):
@@ -3691,7 +3749,6 @@ def manageAlphaCameraFocusData( mySonyCam, mav2SonyVals, focusdata, focusarea, t
     #
     success = False
     timenow = 0
-    time_delta = 10000
 
     #
     # check to see if mavlink wrote something if so write to cam
@@ -3709,12 +3766,12 @@ def manageAlphaCameraFocusData( mySonyCam, mav2SonyVals, focusdata, focusarea, t
         timenow = mySonyCam.my_timestamp()   
     #        
     if ((timenow - focusdata.timestamp) > time_delta):
-        mySonyCam.getSonyCamFocusDataData( focusdata )
-        focusdata.timestamp = timenow
+        if (mySonyCam.getSonyCamFocusData( focusdata )==True):
+            focusdata.timestamp = timenow
 
     if ((timenow - focusarea.timestamp) > time_delta):
-        mySonyCam.getSonyCamFocusArea( focusarea )
-        focusarea.timestamp = timenow
+        if (mySonyCam.getSonyCamFocusAreaData( focusarea )==True):
+            focusarea.timestamp = timenow
     print ('Exiting :', multiprocessing.current_process().name)
     
 def sendMavFocusData( mySonyCam, focusdata, focusarea, ConnID ):
@@ -3738,7 +3795,6 @@ def manageAlphaCameraIso( mySonyCam, mav2SonyVals, iso, tm_upd_disable=False, ti
     #
     success = False
     timenow = 0
-    time_delta = 10000
 
     #
     # check to see if mavlink wrote something if so write to cam
@@ -3755,8 +3811,8 @@ def manageAlphaCameraIso( mySonyCam, mav2SonyVals, iso, tm_upd_disable=False, ti
         timenow = mySonyCam.my_timestamp()  
     #        
     if ((timenow - iso.timestamp) > time_delta):
-        mySonyCam.getSonyCamISOData( iso )
-        iso.timestamp = timenow
+        if (mySonyCam.getSonyCamISOData( iso )==True):
+            iso.timestamp = timenow
     print ('Exiting :', multiprocessing.current_process().name)
     
 def sendMavIso( mySonyCam, iso, ConnID ):
@@ -3780,7 +3836,6 @@ def manageAlphaCameraShutSpd( mySonyCam, mav2SonyVals, shut_sp, tm_upd_disable=F
     #
     success = False
     timenow = 0
-    time_delta = 10000
 
     #
     # check to see if mavlink wrote something if so write to cam
@@ -3797,8 +3852,8 @@ def manageAlphaCameraShutSpd( mySonyCam, mav2SonyVals, shut_sp, tm_upd_disable=F
         timenow = mySonyCam.my_timestamp()  
     #        
     if ((timenow - shut_sp.timestamp) > time_delta):
-        mySonyCam.getSonyCamShutSpdData( shut_sp )
-        shut_sp.timestamp = timenow            
+        if (mySonyCam.getSonyCamShutSpdData( shut_sp )==True):
+            shut_sp.timestamp = timenow            
     print ('Exiting :', multiprocessing.current_process().name)
     
 def sendMavShutSpd( mySonyCam, shut_sp, ConnID ):
@@ -3822,7 +3877,6 @@ def manageAlphaWhiteBala( mySonyCam, mav2SonyVals, whitebal, tm_upd_disable=Fals
     #
     success = False
     timenow = 0
-    time_delta = 10000
 
     #
     # check to see if mavlink wrote something if so write to cam
@@ -3839,8 +3893,8 @@ def manageAlphaWhiteBala( mySonyCam, mav2SonyVals, whitebal, tm_upd_disable=Fals
         timenow = mySonyCam.my_timestamp()  
     #                    
     if ((timenow - whitebal.timestamp) > time_delta):
-        mySonyCam.getSonyCamWhiteBalaData( whitebal )
-        whitebal.timestamp = timenow 
+        if (mySonyCam.getSonyCamWhiteBalaData( whitebal )==True):
+            whitebal.timestamp = timenow 
 
     print ('Exiting :', multiprocessing.current_process().name)
     
@@ -3857,12 +3911,17 @@ def manageAlphaCameraStillCap( mySonyCam, mav2SonyVals, stillcap, tm_upd_disable
     #
     success = False
     timenow = 0
-    time_delta = 10000
 
     # use this if you want ot make a daemon proc
     p = multiprocessing.current_process()
     print ('Starting:', p.name, p.pid)
     #
+
+    #
+    # check to see if mavlink wrote something if so write to cam
+    # and update the update flag to get the mavlink send
+    #                
+    success = mySonyCam.setSonyCamStillCapModeData( stillcap, mav2SonyVals ) 
     
     #
     # Time enabled reading to poll on time_delta
@@ -3873,22 +3932,103 @@ def manageAlphaCameraStillCap( mySonyCam, mav2SonyVals, stillcap, tm_upd_disable
         timenow = mySonyCam.my_timestamp()   
     #        
     if ((timenow - stillcap.timestamp) > time_delta):
-        mySonyCam.getSonyCamExProData( stillcap )
-        stillcap.timestamp = timenow 
+        if (mySonyCam.getSonyCamExProData( stillcap )==True):
+            stillcap.timestamp = timenow 
 
-    #
-    # check to see if mavlink wrote something if so write to cam
-    # and update the update flag to get the mavlink send
-    #                
-    success = mySonyCam.setSonyCamStillCapModeData( stillcap, mav2SonyVals ) 
     print ('Exiting :', multiprocessing.current_process().name)
-    
+
+   
 def sendMavStillCap( mySonyCam, stillcap, ConnID ): 
     p = multiprocessing.current_process()
     print ('Starting:', p.name, p.pid)   
     success = mySonyCam.sendMavlinkMessageForObject( stillcap, ConnID )     
     print ('Exiting :', multiprocessing.current_process().name) #
 
+def mavlinkReqGetParamStillCap(  mySonyCam, mav2SonyVals, obj ):
+    if (mySonyCam.getSonyCamExProData( obj )==True):
+        obj.timestamp = mySonyCam.my_timestamp()
+        return True
+    else:
+        return False
+        
+def mavlinkReqGetParamWhiteBala(  mySonyCam, mav2SonyVals, obj ):
+    if (mySonyCam.getSonyCamWhiteBalaData( obj )==True):
+        obj.timestamp = mySonyCam.my_timestamp()
+        return True
+    else:
+        return False
+        
+def mavlinkReqGetParamShutSpd(  mySonyCam, mav2SonyVals, obj ):
+    if (mySonyCam.getSonyCamShutSpdData( obj )==True):
+        obj.timestamp = mySonyCam.my_timestamp()
+        return True
+    else:
+        return False
+        
+def mavlinkReqGetParamIso(  mySonyCam, mav2SonyVals, obj ):
+    if (mySonyCam.getSonyCamISOData( obj )==True):
+        obj.timestamp = mySonyCam.my_timestamp() 
+        return True
+    else:
+        return False
+        
+def mavlinkReqGetParamFocus(  mySonyCam, mav2SonyVals, obj ):
+    if (mySonyCam.getSonyCamFocusData( obj )==True):
+        obj.timestamp = mySonyCam.my_timestamp() 
+        return True
+    else:
+        return False
+        
+def mavlinkReqGetParamFocusArea(  mySonyCam, mav2SonyVals, obj ):
+    if (mySonyCam.getSonyCamFocusAreaData( obj )==True):
+        obj.timestamp = mySonyCam.my_timestamp() 
+        return True
+    else:
+        return False
+        
+def mavlinkReqGetParamAperture(  mySonyCam, mav2SonyVals, obj ):
+    if (mySonyCam.getSonyApertureData( obj )==True):
+        obj.timestamp = mySonyCam.my_timestamp() 
+        return True
+    else:
+        return False
+        
+def mavlinkReqGetParamExPro(  mySonyCam, mav2SonyVals, obj ):
+    if (mySonyCam.getSonyCamExProData( obj )==True):
+        obj.timestamp = mySonyCam.my_timestamp() 
+        return True
+    else:
+        return False
+        
+def serviceParamRequests( mySonyCam, mav2SonyVals, stcap, wb, ss, iso, pf, pfa, pa, expro ):
+
+    if not (mav2SonyVals.mav_req_all_param == 0):
+        if not ((int(mav2SonyVals.mav_req_all_param) & int(mav2SonyVals.ParamStillCap)) == 0):   
+            if (mavlinkReqGetParamStillCap(  mySonyCam, mav2SonyVals, stcap ) == True):
+                mav2SonyVals.mav_req_all_param = mav2SonyVals.mav_req_all_param & ~mav2SonyVals.ParamStillCap  
+                # param_ack ?                
+        if not ((int(mav2SonyVals.mav_req_all_param) & int(mav2SonyVals.ParamWhiteBala)) == 0):   
+            if (mavlinkReqGetParamWhiteBala(  mySonyCam, mav2SonyVals, wb ) == True):
+                mav2SonyVals.mav_req_all_param = mav2SonyVals.mav_req_all_param & ~mav2SonyVals.ParamWhiteBala               
+        if not ((int(mav2SonyVals.mav_req_all_param) & int(mav2SonyVals.ParamShutSpd)) == 0):   
+            if (mavlinkReqGetParamShutSpd(  mySonyCam, mav2SonyVals, ss ) == True):
+                mav2SonyVals.mav_req_all_param = mav2SonyVals.mav_req_all_param & ~mav2SonyVals.ParamShutSpd             
+        if not ((int(mav2SonyVals.mav_req_all_param) & int(mav2SonyVals.ParamIso)) == 0):   
+            if (mavlinkReqGetParamIso(  mySonyCam, mav2SonyVals, iso ) == True):
+                mav2SonyVals.mav_req_all_param = mav2SonyVals.mav_req_all_param & ~mav2SonyVals.ParamIso 
+        if not ((int(mav2SonyVals.mav_req_all_param) & int(mav2SonyVals.ParamFocus)) == 0):   
+            if (mavlinkReqGetParamFocus(  mySonyCam, mav2SonyVals, pf ) == True):
+                mav2SonyVals.mav_req_all_param = mav2SonyVals.mav_req_all_param & ~mav2SonyVals.ParamFocus 
+        if not ((int(mav2SonyVals.mav_req_all_param) & int(mav2SonyVals.ParamFocusArea)) == 0):   
+            if (mavlinkReqGetParamFocusArea(  mySonyCam, mav2SonyVals, pfa ) == True):
+                mav2SonyVals.mav_req_all_param = mav2SonyVals.mav_req_all_param & ~mav2SonyVals.ParamFocusArea 
+        if not ((int(mav2SonyVals.mav_req_all_param) & int(mav2SonyVals.ParamAperture)) == 0):   
+            if (mavlinkReqGetParamAperture(  mySonyCam, mav2SonyVals, pa ) == True):
+                mav2SonyVals.mav_req_all_param = mav2SonyVals.mav_req_all_param & ~mav2SonyVals.ParamAperture 
+        if not ((int(mav2SonyVals.mav_req_all_param) & int(mav2SonyVals.ParamExPro)) == 0):   
+            if (mavlinkReqGetParamExPro(  mySonyCam, mav2SonyVals, expro ) == True):
+                mav2SonyVals.mav_req_all_param = mav2SonyVals.mav_req_all_param & ~mav2SonyVals.ParamExPro
+                
 def run_process_messages_from_connection(fra, the_connection, redCam=0):
     p = multiprocessing.current_process()
     print ('Starting:', p.name, p.pid) 
@@ -4019,7 +4159,14 @@ if __name__ == '__main__':
     #
     a = True
     while a:
-        p0 = multiprocessing.Process(name='run_process_mavlink', target=run_process_messages_from_connection, args=(frame, cID,)).start()   
+        p0 = multiprocessing.Process(name='run_process_mavlink', target=run_process_messages_from_connection, args=(frame, cID, gcsWrites2Sony,))
+        p0.daemon = True
+        if not p0.is_alive() == True:
+            p0.start() 
+        p00 = multiprocessing.Process(name='serviceParamRequests', target=serviceParamRequests, args=(mySonyCamNo1, gcsWrites2Sony, stillcap, whitebal, shut_sp, iso, focusdata, focusarea, expro))      
+        p00.daemon = True
+        if not p00.is_alive() == True:
+            p00.start()            
         p1 = multiprocessing.Process(name='manageAlphaCameraExpro', target=manageAlphaCameraExpro, args=(mySonyCamNo1, gcsWrites2Sony, expro,)).start()
         #time.sleep(0.1)
         p3 = multiprocessing.Process(name='manageAlphaCameraAperture', target=manageAlphaCameraAperture, args=(mySonyCamNo1, gcsWrites2Sony, aper,)).start()
@@ -4053,8 +4200,8 @@ if __name__ == '__main__':
         p6 = multiprocessing.Process(name='sendMavFocusData', target=sendMavFocusData, args=(mySonyCamNo1, focusdata, focusarea, cID, )).start()
         p8 = multiprocessing.Process(name='sendMavIso', target=sendMavIso, args=(mySonyCamNo1, iso, cID, )).start()
         p10 = multiprocessing.Process(name='sendMavShutSpd', target=sendMavShutSpd, args=(mySonyCamNo1, shut_sp, cID, )).start()
-        p12 = multiprocessing.Process(name='sendMavWhiteBala', target=sendMavWhiteBala, args=(mySonyCamNo1, shut_sp, cID, )).start()
-        p14 = multiprocessing.Process(name='sendMavStillCap', target=sendMavStillCap, args=(mySonyCamNo1, shut_sp, cID, )).start() 
+        p12 = multiprocessing.Process(name='sendMavWhiteBala', target=sendMavWhiteBala, args=(mySonyCamNo1, whitebal, cID, )).start()
+        p14 = multiprocessing.Process(name='sendMavStillCap', target=sendMavStillCap, args=(mySonyCamNo1, stillcap, cID, )).start() 
         if p2 is not None:        
             p2.join()
         if p4 is not None:              
@@ -4069,10 +4216,10 @@ if __name__ == '__main__':
             p12.join()  
         if p14 is not None:          
             p14.join() 
-        if p0 is not None:           
+        #if p0 is not None:           
            #p0.join()
-           if p0.is_alive() == True:
-               p0.terminate()
+        #   if p0.is_alive() == True:
+        #       p0.terminate()
     
     #
     # alternative if we want in main to program we can use daemon (procs) as shown here
