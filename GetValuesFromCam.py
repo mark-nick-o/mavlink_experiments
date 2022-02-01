@@ -479,6 +479,23 @@ import shlex, subprocess, pprint
 
 class sonyAlphaNewCamera():
 
+    def __init__ (self, name = 'sonyAlphaCamClass'):
+        self.name = name                                                                   # name as a string
+    
+    def __del__(self):  
+        class_name = self.__class__.__name__  
+        print('{} Deleted'.format(class_name))
+        
+    def check_my_os( self ):
+        if ((sys.platform=='linux2') or (sys.platform=='linux')): return 1
+        elif  sys.platform=='win32': return 2
+        else: return 3
+
+    def my_timestamp( self ):
+        if (self.check_my_os() == 1):
+            cmd = "date +%s"
+            return( int(os.popen(cmd).read()) )
+            
     def set_sony_iso( self, isoVal ):
 
         # run the API command in the shell and look for the descriptor for the field
@@ -504,21 +521,22 @@ class sonyAlphaNewCamera():
         # we get the value fields before and after and return that list
         #
         itemNo = 0
-        idx = 0
+        idx = 99999
         answers = []
         for xx in a:
             if xx.find('ISO_Format') > -1:
                 idx = itemNo
             else:
-                if (idx != 0):
+                if (idx != 99999):
                     if xx.find(':') > -1:
                         idx = itemNo
                     else:
                         if not (xx.isdigit()):
                             if xx.find("AUTO") > -1:
                                 xx = 0     
-                        answers.append(xx)
-                        idx = 0
+                        vv = xx.strip("}")                       # caters for a case in testing where i have closing bracket 34}                                
+                        answers.append(vv)
+                        idx = 99999
             itemNo += 1
         return answers	
 
@@ -547,21 +565,22 @@ class sonyAlphaNewCamera():
         # we get the value fields before and after and return that list
         #
         itemNo = 0
-        idx = 0
+        idx = 99999
         answers = []
         for xx in a:
             if xx.find('Aperture_Val') > -1:
                 idx = itemNo
             else:
-                if (idx != 0):
+                if (idx != 99999):
                     if xx.find(':') > -1:
                         idx = itemNo
                     else:
                         if not (xx.isdigit()):
                             if xx.find("AUTO") > -1:
                                 xx = 0     
-                        answers.append(xx)
-                        idx = 0
+                        vv = xx.strip("}")                       # caters for a case in testing where i have closing bracket 34}                                
+                        answers.append(vv)
+                        idx = 99999
             itemNo += 1
         return answers	
 
@@ -590,21 +609,22 @@ class sonyAlphaNewCamera():
         # we get the value fields before and after and return that list
         #
         itemNo = 0
-        idx = 0
+        idx = 99999
         answers = []
         for xx in a:
             if xx.find('Exposure_Program_Value') > -1:
                 idx = itemNo
             else:
-                if (idx != 0):
+                if (idx != 99999):
                     if xx.find(':') > -1:
                         idx = itemNo
                     else:
                         if not (xx.isdigit()):
                             if xx.find("AUTO") > -1:
                                 xx = 0     
-                        answers.append(xx)
-                        idx = 0
+                        vv = xx.strip("}")                       # caters for a case in testing where i have closing bracket 34}                                
+                        answers.append(vv)
+                        idx = 99999
             itemNo += 1
         return answers	
 
@@ -633,21 +653,22 @@ class sonyAlphaNewCamera():
         # we get the value fields before and after and return that list
         #
         itemNo = 0
-        idx = 0
+        idx = 99999
         answers = []
         for xx in a:
             if xx.find('Focus_Val') > -1:
                 idx = itemNo
             else:
-                if (idx != 0):
+                if (idx != 99999):
                     if xx.find(':') > -1:
                         idx = itemNo
                     else:
                         if not (xx.isdigit()):
                             if xx.find("AUTO") > -1:
                                 xx = 0     
-                        answers.append(xx)
-                        idx = 0
+                        vv = xx.strip("}")                       # caters for a case in testing where i have closing bracket 34}                                
+                        answers.append(vv)
+                        idx = 99999
             itemNo += 1
         return answers
 
@@ -676,21 +697,22 @@ class sonyAlphaNewCamera():
         # we get the value fields before and after and return that list
         #
         itemNo = 0
-        idx = 0
+        idx = 99999
         answers = []
         for xx in a:
             if xx.find('Focus_Area_Val') > -1:
                 idx = itemNo
             else:
-                if (idx != 0):
+                if (idx != 99999):
                     if xx.find(':') > -1:
                         idx = itemNo
                     else:
                         if not (xx.isdigit()):
                             if xx.find("AUTO") > -1:
                                 xx = 0     
-                        answers.append(xx)
-                        idx = 0
+                        vv = xx.strip("}")                       # caters for a case in testing where i have closing bracket 34}                                
+                        answers.append(vv)
+                        idx = 99999
             itemNo += 1
         return answers
 
@@ -719,21 +741,22 @@ class sonyAlphaNewCamera():
         # we get the value fields before and after and return that list
         #
         itemNo = 0
-        idx = 0
+        idx = 99999
         answers = []
         for xx in a:
             if xx.find('Shutter_Value') > -1:
                 idx = itemNo
             else:
-                if (idx != 0):
+                if (idx != 99999):
                     if xx.find(':') > -1:
                         idx = itemNo
                     else:
                         if not (xx.isdigit()):
                             if xx.find("AUTO") > -1:
                                 xx = 0     
-                        answers.append(xx)
-                        idx = 0
+                        vv = xx.strip("}")                       # caters for a case in testing where i have closing bracket 34}                                
+                        answers.append(vv)
+                        idx = 99999
             itemNo += 1
         return answers
 
@@ -762,21 +785,22 @@ class sonyAlphaNewCamera():
         # we get the value fields before and after and return that list
         #
         itemNo = 0
-        idx = 0
+        idx = 99999
         answers = []
         for xx in a:
             if xx.find('White_Bal_Val') > -1:
                 idx = itemNo
             else:
-                if (idx != 0):
+                if (idx != 99999):
                     if xx.find(':') > -1:
                         idx = itemNo
                     else:
                         if not (xx.isdigit()):
                             if xx.find("AUTO") > -1:
                                 xx = 0     
-                        answers.append(xx)
-                        idx = 0
+                        vv = xx.strip("}")                       # caters for a case in testing where i have closing bracket 34}                                
+                        answers.append(vv)
+                        idx = 99999
             itemNo += 1
         return answers
 
@@ -804,21 +828,22 @@ class sonyAlphaNewCamera():
         # we get the value fields before and after and return that list
         #
         itemNo = 0
-        idx = 0
+        idx = 99999
         answers = []
         for xx in a:
             if xx.find('Still_Capture_Val') > -1:
                 idx = itemNo
             else:
-                if (idx != 0):
+                if (idx != 99999):
                     if xx.find(':') > -1:
                         idx = itemNo
                     else:
                         if not (xx.isdigit()):
                             if xx.find("AUTO") > -1:
                                 xx = 0     
-                        answers.append(xx)
-                        idx = 0
+                        vv = xx.strip("}")                       # caters for a case in testing where i have closing bracket 34}                                
+                        answers.append(vv)
+                        idx = 99999
             itemNo += 1
         return answers
 
@@ -846,21 +871,22 @@ class sonyAlphaNewCamera():
         # we get the value fields before and after and return that list
         #
         itemNo = 0
-        idx = 0
+        idx = 99999
         answers = []
         for xx in a:
             if xx.find('White_Bal_Val') > -1:
                 idx = itemNo
             else:
-                if (idx != 0):
+                if (idx != 99999):
                     if xx.find(':') > -1:
                         idx = itemNo
                     else:
                         if not (xx.isdigit()):
                             if xx.find("AUTO") > -1:
                                 xx = 0     
-                        answers.append(xx)
-                        idx = 0
+                        vv = xx.strip("}")                       # caters for a case in testing where i have closing bracket 34}                                
+                        answers.append(vv)
+                        idx = 99999
             itemNo += 1
         return answers
 
@@ -888,21 +914,22 @@ class sonyAlphaNewCamera():
         # we get the value fields before and after and return that list
         #
         itemNo = 0
-        idx = 0
+        idx = 99999
         answers = []
         for xx in a:
             if xx.find('Exposure_Program_Value') > -1:
                 idx = itemNo
             else:
-                if (idx != 0):
+                if (idx != 99999):
                     if xx.find(':') > -1:
                         idx = itemNo
                     else:
                         if not (xx.isdigit()):
                             if xx.find("AUTO") > -1:
                                 xx = 0     
-                        answers.append(xx)
-                        idx = 0
+                        vv = xx.strip("}")                       # caters for a case in testing where i have closing bracket 34}                                
+                        answers.append(vv)
+                        idx = 99999
             itemNo += 1
         return answers
 
@@ -930,21 +957,22 @@ class sonyAlphaNewCamera():
         # we get the value fields before and after and return that list
         #
         itemNo = 0
-        idx = 0
+        idx = 99999
         answers = []
         for xx in a:
             if xx.find('Aperture_Val') > -1:
                 idx = itemNo
             else:
-                if (idx != 0):
+                if (idx != 99999):
                     if xx.find(':') > -1:
                         idx = itemNo
                     else:
                         if not (xx.isdigit()):
                             if xx.find("AUTO") > -1:
                                 xx = 0     
-                        answers.append(xx)
-                        idx = 0
+                        vv = xx.strip("}")                       # caters for a case in testing where i have closing bracket 34}                                
+                        answers.append(vv)
+                        idx = 99999
             itemNo += 1
         return answers
 
@@ -972,21 +1000,22 @@ class sonyAlphaNewCamera():
         # we get the value fields before and after and return that list
         #
         itemNo = 0
-        idx = 0
+        idx = 99999
         answers = []
         for xx in a:
             if xx.find('Focus_Val') > -1:
                 idx = itemNo
             else:
-                if (idx != 0):
+                if (idx != 99999):
                     if xx.find(':') > -1:
                         idx = itemNo
                     else:
                         if not (xx.isdigit()):
                             if xx.find("AUTO") > -1:
                                 xx = 0     
-                        answers.append(xx)
-                        idx = 0
+                        vv = xx.strip("}")                       # caters for a case in testing where i have closing bracket 34}                                
+                        answers.append(vv)
+                        idx = 99999
             itemNo += 1
         return answers
 
@@ -1015,21 +1044,22 @@ class sonyAlphaNewCamera():
         # we get the value fields before and after and return that list
         #
         itemNo = 0
-        idx = 0
+        idx = 99999
         answers = []
         for xx in a:
             if xx.find('Still_Capture_Val') > -1:
                 idx = itemNo
             else:
-                if (idx != 0):
+                if (idx != 99999):
                     if xx.find(':') > -1:
                         idx = itemNo
                     else:
                         if not (xx.isdigit()):
                             if xx.find("AUTO") > -1:
                                 xx = 0     
-                        answers.append(xx)
-                        idx = 0
+                        vv = xx.strip("}")                       # caters for a case in testing where i have closing bracket 34}                                
+                        answers.append(vv)
+                        idx = 99999
             itemNo += 1
         return answers
 
@@ -1057,21 +1087,22 @@ class sonyAlphaNewCamera():
         # we get the value fields before and after and return that list
         #
         itemNo = 0
-        idx = 0
+        idx = 99999
         answers = []
         for xx in a:
             if xx.find('Focus_Area_Val') > -1:
                 idx = itemNo
             else:
-                if (idx != 0):
+                if (idx != 99999):
                     if xx.find(':') > -1:
                         idx = itemNo
                     else:
                         if not (xx.isdigit()):
                             if xx.find("AUTO") > -1:
                                 xx = 0     
-                        answers.append(xx)
-                        idx = 0
+                        vv = xx.strip("}")                       # caters for a case in testing where i have closing bracket 34}                                
+                        answers.append(vv)
+                        idx = 99999
             itemNo += 1
         return answers
 
@@ -1099,21 +1130,22 @@ class sonyAlphaNewCamera():
         # we get the value fields before and after and return that list
         #
         itemNo = 0
-        idx = 0
+        idx = 99999
         answers = []
         for xx in a:
             if xx.find('ISO_Format') > -1:
                 idx = itemNo
             else:
-                if (idx != 0):
+                if (idx != 99999):
                     if xx.find(':') > -1:
                         idx = itemNo
                     else:
                         if not (xx.isdigit()):
                             if xx.find("AUTO") > -1:
                                 xx = 0     
-                        answers.append(xx)
-                        idx = 0
+                        vv = xx.strip("}")                       # caters for a case in testing where i have closing bracket 34}                                
+                        answers.append(vv)
+                        idx = 99999
             itemNo += 1
         return answers
 
@@ -1141,21 +1173,22 @@ class sonyAlphaNewCamera():
         # we get the value fields before and after and return that list
         #
         itemNo = 0
-        idx = 0
+        idx = 99999
         answers = []
         for xx in a:
             if xx.find('Shutter_Value') > -1:
                 idx = itemNo
             else:
-                if (idx != 0):
+                if (idx != 99999):
                     if xx.find(':') > -1:
                         idx = itemNo
                     else:
                         if not (xx.isdigit()):
                             if xx.find("AUTO") > -1:
                                 xx = 0     
-                        answers.append(xx)
-                        idx = 0
+                        vv = xx.strip("}")                       # caters for a case in testing where i have closing bracket 34}                                
+                        answers.append(vv)
+                        idx = 99999
             itemNo += 1
         return answers
         
@@ -1966,7 +1999,7 @@ class MAVFrame():
             secs = int(xx[2])
             self.time_boot_ms = (days*60*60*24) + (hours*60*60) + (mins*60) + secs
             #print(f"boot tim {self.time_boot_ms} { (days*60*60*24) + (hours*60*60) + (mins*60) + secs }")
-
+        
     def on_click_connect(self,e):
         #"""
         #Process a click on the CONNECT button
@@ -3571,8 +3604,10 @@ class MAVFrame():
 
 #
 # ============================================================= multi-process threads =====================================================================
-#            
-def manageAlphaCameraExpro( mySonyCam, mav2SonyVals, expro ):
+# 
+
+        
+def manageAlphaCameraExpro( mySonyCam, mav2SonyVals, expro, tm_upd_disable=False, time_delta = 1000 ):
 
     p = multiprocessing.current_process()
     print ('Starting:', p.name, p.pid)
@@ -3581,8 +3616,7 @@ def manageAlphaCameraExpro( mySonyCam, mav2SonyVals, expro ):
     #
     success = False
     timenow = 0
-    time_delta = 10000
-
+    
     #
     # check to see if mavlink wrote something if so write to cam
     # and update the update flag to get the mavlink send
@@ -3594,11 +3628,15 @@ def manageAlphaCameraExpro( mySonyCam, mav2SonyVals, expro ):
     # when this data is written the mavlink task 
     # should send it to the GCS via mavlink messages
     #   
-    # timenow = my.uptime() 
+    if not (tm_upd_disable == True):    
+        timenow = mySonyCam.my_timestamp()      
     #        
     if ((timenow - expro.timestamp) > time_delta):
         mySonyCam.getSonyCamExProData( expro )
         expro.timestamp = timenow
+        #print(f"\033[36m Time Delta occurred {timenow} {expro.timestamp}")
+    #else:
+        #print(f"\033[34m No time diff {timenow} {expro.timestamp}")
     print ('Exiting :', multiprocessing.current_process().name)
     
 def sendMavExpro( mySonyCam, expro, ConnID ):
@@ -3607,7 +3645,7 @@ def sendMavExpro( mySonyCam, expro, ConnID ):
     success = mySonyCam.sendMavlinkMessageForObject( expro, ConnID )
     print ('Exiting :', multiprocessing.current_process().name)             
 
-def manageAlphaCameraAperture( mySonyCam, mav2SonyVals, aper ):
+def manageAlphaCameraAperture( mySonyCam, mav2SonyVals, aper, tm_upd_disable=False, time_delta = 1000 ):
 
     p = multiprocessing.current_process()
     print ('Starting:', p.name, p.pid)
@@ -3629,7 +3667,8 @@ def manageAlphaCameraAperture( mySonyCam, mav2SonyVals, aper ):
     # when this data is written the mavlink task 
     # should send it to the GCS via mavlink messages
     #   
-    # timenow = my.uptime() 
+    if not (tm_upd_disable == True):    
+        timenow = mySonyCam.my_timestamp()  
     #        
 
     if ((timenow - aper.timestamp) > time_delta):
@@ -3643,7 +3682,7 @@ def sendMavAper( mySonyCam, aper, ConnID ):
     success = mySonyCam.sendMavlinkMessageForObject( aper, ConnID )
     print ('Exiting :', multiprocessing.current_process().name)
     
-def manageAlphaCameraFocusData( mySonyCam, mav2SonyVals, focusdata, focusarea ):
+def manageAlphaCameraFocusData( mySonyCam, mav2SonyVals, focusdata, focusarea, tm_upd_disable=False, time_delta = 1000 ):
 
     p = multiprocessing.current_process()
     print ('Starting:', p.name, p.pid)
@@ -3666,7 +3705,8 @@ def manageAlphaCameraFocusData( mySonyCam, mav2SonyVals, focusdata, focusarea ):
     # when this data is written the mavlink task 
     # should send it to the GCS via mavlink messages
     #   
-    # timenow = my.uptime() 
+    if not (tm_upd_disable == True):    
+        timenow = mySonyCam.my_timestamp()   
     #        
     if ((timenow - focusdata.timestamp) > time_delta):
         mySonyCam.getSonyCamFocusDataData( focusdata )
@@ -3689,7 +3729,7 @@ def sendMavFocusData( mySonyCam, focusdata, focusarea, ConnID ):
     success = mySonyCam.sendMavlinkMessageForObject( focusarea, ConnID )
     print ('Exiting :', multiprocessing.current_process().name)
 
-def manageAlphaCameraIso( mySonyCam, mav2SonyVals, iso ):
+def manageAlphaCameraIso( mySonyCam, mav2SonyVals, iso, tm_upd_disable=False, time_delta = 1000 ):
 
     p = multiprocessing.current_process()
     print ('Starting:', p.name, p.pid)
@@ -3711,7 +3751,8 @@ def manageAlphaCameraIso( mySonyCam, mav2SonyVals, iso ):
     # when this data is written the mavlink task 
     # should send it to the GCS via mavlink messages
     #   
-    # timenow = my.uptime() 
+    if not (tm_upd_disable == True):    
+        timenow = mySonyCam.my_timestamp()  
     #        
     if ((timenow - iso.timestamp) > time_delta):
         mySonyCam.getSonyCamISOData( iso )
@@ -3729,7 +3770,7 @@ def sendMavIso( mySonyCam, iso, ConnID ):
     success = mySonyCam.sendMavlinkMessageForObject( iso, ConnID )
     print ('Exiting :', multiprocessing.current_process().name)   
     
-def manageAlphaCameraShutSpd( mySonyCam, mav2SonyVals, shut_sp ):
+def manageAlphaCameraShutSpd( mySonyCam, mav2SonyVals, shut_sp, tm_upd_disable=False, time_delta = 1000 ):
 
     p = multiprocessing.current_process()
     print ('Starting:', p.name, p.pid)
@@ -3752,7 +3793,8 @@ def manageAlphaCameraShutSpd( mySonyCam, mav2SonyVals, shut_sp ):
     # when this data is written the mavlink task 
     # should send it to the GCS via mavlink messages
     #   
-    # timenow = my.uptime() 
+    if not (tm_upd_disable == True):    
+        timenow = mySonyCam.my_timestamp()  
     #        
     if ((timenow - shut_sp.timestamp) > time_delta):
         mySonyCam.getSonyCamShutSpdData( shut_sp )
@@ -3770,7 +3812,7 @@ def sendMavShutSpd( mySonyCam, shut_sp, ConnID ):
     success = mySonyCam.sendMavlinkMessageForObject( shut_sp, ConnID )
     print ('Exiting :', multiprocessing.current_process().name)
     
-def manageAlphaWhiteBala( mySonyCam, mav2SonyVals, whitebal ):
+def manageAlphaWhiteBala( mySonyCam, mav2SonyVals, whitebal, tm_upd_disable=False, time_delta = 1000 ):
 
     p = multiprocessing.current_process()
     print ('Starting:', p.name, p.pid)
@@ -3793,7 +3835,8 @@ def manageAlphaWhiteBala( mySonyCam, mav2SonyVals, whitebal ):
     # when this data is written the mavlink task 
     # should send it to the GCS via mavlink messages
     #   
-    # timenow = my.uptime() 
+    if not (tm_upd_disable == True):    
+        timenow = mySonyCam.my_timestamp()  
     #                    
     if ((timenow - whitebal.timestamp) > time_delta):
         mySonyCam.getSonyCamWhiteBalaData( whitebal )
@@ -3807,7 +3850,7 @@ def sendMavWhiteBala( mySonyCam, whitebal, ConnID ):
     success = mySonyCam.sendMavlinkMessageForObject( whitebal, ConnID )     
     print ('Exiting :', multiprocessing.current_process().name)    
     
-def manageAlphaCameraStillCap( mySonyCam, mav2SonyVals, stillcap ):
+def manageAlphaCameraStillCap( mySonyCam, mav2SonyVals, stillcap, tm_upd_disable=False, time_delta = 1000 ):
 
     #
     # initialise general program control flags
@@ -3826,7 +3869,8 @@ def manageAlphaCameraStillCap( mySonyCam, mav2SonyVals, stillcap ):
     # when this data is written the mavlink task 
     # should send it to the GCS via mavlink messages
     #   
-    # timenow = my.uptime() 
+    if not (tm_upd_disable == True):    
+        timenow = mySonyCam.my_timestamp()   
     #        
     if ((timenow - stillcap.timestamp) > time_delta):
         mySonyCam.getSonyCamExProData( stillcap )
@@ -3890,9 +3934,9 @@ if __name__ == '__main__':
     # signal.alarm(1)
 
     # Register our signal handler with `SIGINT`(CTRL + C) 
-    signal.signal(signal. SIGINT, ctlc_handler) 
+    signal.signal(signal.SIGINT, ctlc_handler) 
     # Register the exit handler with `SIGTSTP` (Ctrl + Z) 
-    signal.signal(signal. SIGTSTP, exit_handler)
+    signal.signal(signal.SIGTSTP, exit_handler)
     # external signal handler
     signal.signal(signal.SIGUSR1, sigusr1_handler)
     
