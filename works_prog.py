@@ -1839,6 +1839,45 @@ class sonyAlphaNewCamera():
             enum_num = 0
         return enum_num
 
+    #def setSonyCamISOData( self, mem, mavObj, timeout1=100, timeout2=50, no_timeout1_retry=1, no_timeout2_retry=1 ):
+    
+    #    ret = False
+    #    readSuccess = False
+    #    print(" =========== sony cam iso ================ ")
+        
+        # 
+    #    timeout1 = timeout1 * no_timeout1_retry
+    #    timeout2 = timeout2 * no_timeout2_retry
+        #
+    #    while (readSuccess == False) and (timeout1 > 0):
+    #        reqDat, prevDat, readSuccess  = mavObj.getVal_sony_iso(mavObj.STATE_CAM_READING,timeout1)
+    #        timeout1 -= timeout1                                          # no retries
+    #        print("Why !!!!!!!! {readSuccess} {reqDat} {prevDat}")
+            
+    #    print(f"set to ISO {reqDat} {prevDat} {timeout1} {mavObj.state}")
+        
+    #    if ((not (reqDat == mavlinkSonyCamWriteVals.STATE_INIT) and not (reqDat == prevDat)) and not(timeout1 <= 0)):
+    #        ee = self.enumerate_iso_sony_a7(reqDat)
+    #        print(f"enumeration value for iso {ee} req {reqDat}")
+    #        ans = self.set_sony_iso( ee ) 
+    #        print(ans)
+    #        exit(90)
+    #        if not (ans is None):  
+    #            if (len(ans)==0):
+    #                print("length of command return was zero")
+    #                return ret                
+    #            writeSuccess = False
+    #            while (writeSuccess == False) and (timeout2 > 0): 
+    #                try:
+    #                    writeSuccess = mavObj.setVal_sony_iso(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,timeout2) 
+    #                    ret = ( ans[1] == reqDat ) 
+    #                except Exception as err_msg:                
+    #                    print("write sony iso failed to set iso")
+    #                timeout2 -= timeout2                                  # no retries                
+    #            if ( ret == True ):
+    #                ret = self.setSonyObjData( mem, int(ans[1]) ) 
+        #exit(200)                    
+    #    return ret
     def setSonyCamISOData( self, mem, mavObj, timeout1=100, timeout2=50, no_timeout1_retry=1, no_timeout2_retry=1 ):
     
         ret = False
@@ -1847,38 +1886,39 @@ class sonyAlphaNewCamera():
         
         # 
         timeout1 = timeout1 * no_timeout1_retry
+        print(f"timeout1 set to {timeout1}")
         timeout2 = timeout2 * no_timeout2_retry
         #
         while (readSuccess == False) and (timeout1 > 0):
             reqDat, prevDat, readSuccess  = mavObj.getVal_sony_iso(mavObj.STATE_CAM_READING,timeout1)
-            timeout1 -= timeout1                                          # no retries
-            print("Why !!!!!!!! {readSuccess} {reqDat} {prevDat}")
+            timeout1 -= 1                                          # no retries
+            print(f"In iterator {readSuccess} {reqDat} {prevDat}")
             
-        print(f"set to ISO {reqDat} {prevDat} {timeout1} {mavObj.state}")
+        print(f"set to ISO {reqDat} {prevDat} time={timeout1} state={mavObj.state}")
         
-        if ((not (reqDat == mavlinkSonyCamWriteVals.STATE_INIT) and not (reqDat == prevDat)) and not(timeout1 <= 0)):
+        if ((not (reqDat == mavlinkSonyCamWriteVals.STATE_INIT) and not (reqDat == prevDat)) and (timeout1 > 0)):
             ee = self.enumerate_iso_sony_a7(reqDat)
             print(f"enumeration value for iso {ee} req {reqDat}")
             ans = self.set_sony_iso( ee ) 
-            print(ans)
-            exit(90)
-            if not (ans is None):  
+            # exit(90)
+            if not (ans is None):
+                print(ans)            
                 if (len(ans)==0):
                     print("length of command return was zero")
                     return ret                
                 writeSuccess = False
-                while (writeSuccess == False) and (timeout2 > 0): 
-                    try:
-                        writeSuccess = mavObj.setVal_sony_iso(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,timeout2) 
-                        ret = ( ans[1] == reqDat ) 
-                    except Exception as err_msg:                
-                        print("write sony iso failed to set iso")
-                    timeout2 -= timeout2                                  # no retries                
-                if ( ret == True ):
+                try:
+                    if ( ans[1] == reqDat ) :
+                        while (writeSuccess == False) and (timeout2 > 0): 
+                            writeSuccess = mavObj.setVal_sony_iso(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,timeout2) 
+                            timeout2 -= 1                                  # no retries  
+                except Exception as err_msg:                
+                   print("write sony iso failed to set iso")                    
+                if ( writeSuccess == True ):
                     ret = self.setSonyObjData( mem, int(ans[1]) ) 
         #exit(200)                    
         return ret
-
+        
     def setSonyCamApertureData( self, mem, mavObj, timeout1=100, timeout2=50, no_timeout1_retry=1, no_timeout2_retry=1 ):
     
         ret = False
@@ -2547,13 +2587,18 @@ class MAVFrame():
         self._mgr.UnInit()
         self.Close()
 
+"""" if you want this then uncomment these lines for the android kivy libraries as well (instructions to install are above)
+
+    #`from kivy.utils import platform
+    # from kvserial.driver import CdcAcmSerialPort
+
     def serial_ports(self):
-    #"""Lists all available serial ports
+    # Lists all available serial ports
     #:raises EnvironmentError:
     #    On unsupported or unknown platforms
     #:returns:
     #    A list of available serial ports
-    #"""
+    #
         if 'ANDROID_BOOTLOGO' in os.environ:                                # detect android first as if using sys alone, it returns linux
         #if platform == 'android':                                          using kivy instead  
             ports = '/dev/ttyACM0'
@@ -2588,6 +2633,7 @@ class MAVFrame():
                 except (OSError, serial.SerialException):
                     pass
         return result
+"""
 
     def print_red(self,text,value):
         print("\033[31m %s : %6.3f"%(text,value))
@@ -2652,21 +2698,21 @@ class MAVFrame():
 
     def blockMouseDown(self,block_flag):
         if block_flag:
-            pygame.event.set_blocked(MOUSEBUTTONDOWN)
+            pygame.event.set_blocked(pygame.MOUSEBUTTONDOWN)
         else:
-            pygame.event.set_allowed(MOUSEBUTTONDOWN)
+            pygame.event.set_allowed(pygame.MOUSEBUTTONDOWN)
 
     def blockMouseUp(self,block_flag):
         if block_flag:
-            pygame.event.set_blocked(MOUSEBUTTONUP)
+            pygame.event.set_blocked(pygame.MOUSEBUTTONUP)
         else:
-            pygame.event.set_allowed(MOUSEBUTTONUP)
+            pygame.event.set_allowed(pygame.MOUSEBUTTONUP)
 
     def checkMouseDwnBlock(self):
-        print ('MOUSEBUTTONDOWN is block: ', pygame.event.get_blocked(MOUSEBUTTONDOWN))
+        print ('MOUSEBUTTONDOWN is block: ', pygame.event.get_blocked(pygame.MOUSEBUTTONDOWN))
 
     def checkMouseUpBlock(self):
-        print ('MOUSEBUTTONUP is block: ', pygame.event.get_blocked(MOUSEBUTTONUP))
+        print ('MOUSEBUTTONUP is block: ', pygame.event.get_blocked(pygame.MOUSEBUTTONUP))
 
     def write_mav_serial_data(self, serial, x ):
         serial.write(struct.pack(x))
@@ -2729,25 +2775,25 @@ class MAVFrame():
                 if event.type == pygame.QUIT:
                     done=True
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    print_2_yellow("Mouse button down pressed.",event.button,event.pos)
+                    self.print_2_yellow("Mouse button down pressed.",event.button,event.pos)
                 elif event.type == pygame.MOUSEBUTTONUP:
-                    print_2_yellow("Mouse button up pressed.",event.button,event.pos)
+                    self.print_2_yellow("Mouse button up pressed.",event.button,event.pos)
                 elif event.type == pygame.JOYBUTTONDOWN:
-                    print_2_yellow("Joystick button down pressed.",event.button,event.joy)
+                    self.print_2_yellow("Joystick button down pressed.",event.button,event.joy)
                 elif event.type == pygame.JOYBUTTONUP:
-                    print_2_yellow("Joystick button up released.",event.button,event.joy)
+                    self.print_2_yellow("Joystick button up released.",event.button,event.joy)
                 elif event.type == pygame.JOYAXISMOTION:
-                    print_3_yellow("Joystick axis motion.",event.joy,event.axis,event.value)
+                    self.print_3_yellow("Joystick axis motion.",event.joy,event.axis,event.value)
                 elif event.type == pygame.JOYBALLMOTION:
-                    print_3_yellow("Joystick ball motion.",event.joy,event.ball,event.rel)
+                    self.print_3_yellow("Joystick ball motion.",event.joy,event.ball,event.rel)
                 elif event.type == pygame.JOYHATMOTION:
-                    print_3_yellow("Joystick hat motion",event.joy,event.hat,event.value)
+                    self.print_3_yellow("Joystick hat motion",event.joy,event.hat,event.value)
                 elif event.type == pygame.VIDEORESIZE:
-                    print_3_blue("video re-size.",event.size,event.w,event.h)
+                    self.print_3_blue("video re-size.",event.size,event.w,event.h)
                 elif event.type == pygame.KEYDOWN:
-                    print_3_yellow("key down ",event.unicode,event.key,event.mod)
+                    self.print_3_yellow("key down ",event.unicode,event.key,event.mod)
                 elif event.type == pygame.KEYUP:
-                    print_2_yellow("key up ",event.key,event.mod)
+                    self.print_2_yellow("key up ",event.key,event.mod)
 
                 # Get the name from the OS for the controller/joystick
                 name = joystick.get_name()
@@ -2779,11 +2825,11 @@ class MAVFrame():
                 thr =  (joystick.get_axis(5) + 1) / 2
                 brk = -(joystick.get_axis(2) + 1) / 2
                 thrust = thr + brk
-                print_yellow("Thrust value ",thrust)
+                self.print_yellow("Thrust value ",thrust)
 
                 # this is the x axis
                 rudder = joystick.get_axis(0)
-                print_blue("Rudder value ",rudder)
+                self.print_blue("Rudder value ",rudder)
 
                 # now collect all buttons
                 btns = 0
@@ -3132,7 +3178,7 @@ class MAVFrame():
                 mavutil.mavlink.MAV_CMD_SET_CAMERA_MODE, # command
                 0, # Confirmation
                 0, # param1
-                CamMode, # param2
+                camMode, # param2
                 0, # param3 
                 0, # param4
                 0, # param5
@@ -3159,8 +3205,8 @@ class MAVFrame():
                 the_connection.target_component, # target_component
                 mavutil.mavlink.MAV_CMD_SET_CAMERA_MODE, # command
                 0, # Confirmation
-                CamZoomType, # param1
-                CamZoomValue, # param2
+                camZoomType, # param1
+                camZoomValue, # param2
                 0, # param3 
                 0, # param4
                 0, # param5
@@ -4351,14 +4397,14 @@ class MAVFrame():
                 #
                 self.mavlink_send_param_value(the_connection)
                 #
-                sharedObj.mav_req_all_param = sharedObj.MAV_REQ_ALL_PARAM
+                sharedObj.mav_req_all_param = mavlinkSonyCamWriteVals.MAV_REQ_ALL_PARAM
                 print("\033[35m PARAM_REQUEST_LIST was sent - shared object set to %d" % (sharedObj.mav_req_all_param))
                 # ===== TRAP ======
                 #exit(99)
             elif msg.get_type() == 'PARAM_EXT_REQUEST_LIST':
                 #
                 #
-                sharedObj.mav_ext_req_all_param = sharedObj.MAV_REQ_ALL_PARAM
+                sharedObj.mav_ext_req_all_param = mavlinkSonyCamWriteVals.MAV_REQ_ALL_PARAM
                 print("\033[35m PARAM_EXT_REQUEST_LIST was sent - shared object set to %d" % (sharedObj.mav_ext_req_all_param))  
                 # ===== TRAP ======
                 #exit(99)                
@@ -4488,7 +4534,7 @@ class MAVFrame():
                         self.type_of_msg = mavutil.mavlink.MAV_CMD_VIDEO_START_STREAMING
                         self.Got_Param1 = msg.param1
                     elif (self.RCV_COMMAND == mavutil.mavlink.MAV_CMD_VIDEO_STOP_STREAMING):
-                        self.type_of_msg = MAV_CMD_VIDEO_STOP_STREAMING
+                        self.type_of_msg = mavutil.mavlink.MAV_CMD_VIDEO_STOP_STREAMING
                         self.Got_Param1 = msg.param1
                     elif (self.RCV_COMMAND == mavutil.mavlink.MAV_CMD_SET_CAMERA_MODE):
                         self.type_of_msg = mavutil.mavlink.MAV_CMD_SET_CAMERA_MODE
