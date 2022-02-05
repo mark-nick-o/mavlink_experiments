@@ -5168,10 +5168,10 @@ def run_process_messages_from_connection(fra, the_connect, sharedObj, redCam=0):
 #
 def reset_usb_camlink():
     p = os.popen('sudo /home/pi/cams/SonyTEST32/uhubctl/uhubctl -l 1-1 -a 0')
-    print(p)
+    print(p.read())
     time.sleep(2)
     p = os.popen('sudo /home/pi/cams/SonyTEST32/uhubctl/uhubctl -l 1-1 -a 1')
-    print(p)
+    print(p.read())
     time.sleep(2)
     
 #
