@@ -2636,7 +2636,7 @@ class MAVFrame():
         self._mgr.UnInit()
         self.Close()
 
-"""" if you want this then uncomment these lines for the android kivy libraries as well (instructions to install are above)
+    # if you want this then uncomment these lines for the android kivy libraries as well (instructions to install are above)
 
     #`from kivy.utils import platform
     # from kvserial.driver import CdcAcmSerialPort
@@ -2682,7 +2682,7 @@ class MAVFrame():
                 except (OSError, serial.SerialException):
                     pass
         return result
-"""
+
 
     def print_red(self,text,value):
         print("\033[31m %s : %6.3f"%(text,value))
@@ -5466,4 +5466,3 @@ if __name__ == '__main__':
     del shut_sp
     del whitebal
     del stillcap
-    
