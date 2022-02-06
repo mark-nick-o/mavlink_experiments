@@ -4390,6 +4390,8 @@ class MAVFrame():
         #"""
         loop = 5
         while loop >= 1:
+# for multi-tasking uncomment below and comment above
+#       while True:
             print("im receiving.............")
 
             #self.update_uptime_label( )
@@ -5075,7 +5077,7 @@ def manageAlphaCameraStillCap( mySonyCam, mav2SonyVals, stillcap, tm_upd_disable
         timenow = mySonyCam.my_timestamp()   
     #        
     if ((timenow - stillcap.timestamp) > time_delta):
-        if (mySonyCam.getSonyCamExProData( stillcap )==True):
+        if (mySonyCam.getSonyCamStillCapModeData( stillcap )==True):
             stillcap.timestamp = timenow 
 
     print ('Exiting Still Capture :', multiprocessing.current_process().name)
@@ -5089,7 +5091,7 @@ def sendMavStillCap( mySonyCam, stillcap, ConnID ):
     print ('Exiting Mavlink Still Capture :', multiprocessing.current_process().name) #
 
 def mavlinkReqGetParamStillCap(  mySonyCam, obj ):
-    if (mySonyCam.getSonyCamExProData( obj )==True):
+    if (mySonyCam.getSonyCamStillCapModeData( obj )==True):
         obj.timestamp = mySonyCam.my_timestamp()
         return True
     else:
@@ -5369,41 +5371,71 @@ if __name__ == '__main__':
     # run the process managing the cmaera
     #
     a = True
+    p0 = multiprocessing.Process(name='run_process_mavlink', target=run_process_messages_from_connection, args=(frame, cID, gcsWrites2Sony,))
+    p0.daemon = True
+    if not p0.is_alive() == True:
+        p0.start() 
+    p00 = multiprocessing.Process(name='serviceParamRequests', target=serviceParamRequests, args=(mySonyCamNo1, gcsWrites2Sony, stillcap, whitebal, shut_sp, iso, focusdata, focusarea, expro))      
+    p00.daemon = True
+    if not p00.is_alive() == True:
+        p00.start()  
+    
     while a:
         #resetUsb = multiprocessing.Process(name='run_process_mavlink', target=reset_usb_camlink, args=())
         #if (USB_ERROR):
         #    resetUsb.start()
         #    resetUsb.join()
-        p0 = multiprocessing.Process(name='run_process_mavlink', target=run_process_messages_from_connection, args=(frame, cID, gcsWrites2Sony,))
-        p0.daemon = True
         if not p0.is_alive() == True:
+            p0 = multiprocessing.Process(name='run_process_mavlink', target=run_process_messages_from_connection, args=(frame, cID, gcsWrites2Sony,))
+            p0.daemon = True
             p0.start() 
-        p00 = multiprocessing.Process(name='serviceParamRequests', target=serviceParamRequests, args=(mySonyCamNo1, gcsWrites2Sony, stillcap, whitebal, shut_sp, iso, focusdata, focusarea, expro))      
-        p00.daemon = True
+
         if not p00.is_alive() == True:
-            p00.start()            
-        p1 = multiprocessing.Process(name='manageAlphaCameraExpro', target=manageAlphaCameraExpro, args=(mySonyCamNo1, gcsWrites2Sony, expro,)).start()
-        if p1 is not None:
-            p1.join()
-        p3 = multiprocessing.Process(name='manageAlphaCameraAperture', target=manageAlphaCameraAperture, args=(mySonyCamNo1, gcsWrites2Sony, aper,)).start()
-        if p3 is not None:            
-            p3.join()
-        p5 = multiprocessing.Process(name='manageAlphaCameraFocusData', target=manageAlphaCameraFocusData, args=(mySonyCamNo1, gcsWrites2Sony, focusdata, focusarea,)).start()
-        if p5 is not None:              
-            p5.join()
-        p7 = multiprocessing.Process(name='manageAlphaCameraIso', target=manageAlphaCameraIso, args=(mySonyCamNo1, gcsWrites2Sony, iso,)).start()
-        if p7 is not None:  
-            p7.join()
-        p9 = multiprocessing.Process(name='manageAlphaCameraShutSpd', target=manageAlphaCameraShutSpd, args=(mySonyCamNo1, gcsWrites2Sony, shut_sp,)).start()
-        if p9 is not None:              
-            p9.join()
-        p11 = multiprocessing.Process(name='manageAlphaWhiteBala', target=manageAlphaWhiteBala, args=(mySonyCamNo1, gcsWrites2Sony, whitebal,)).start()
-        if p11 is not None:                
-            p11.join() 
-        p13 = multiprocessing.Process(name='manageAlphaCameraStillCap', target=manageAlphaCameraStillCap, args=(mySonyCamNo1, gcsWrites2Sony, stillcap,)).start()
-        #time.sleep(0.1) 
-        if p13 is not None:               
-            p13.join()     
+            p00 = multiprocessing.Process(name='serviceParamRequests', target=serviceParamRequests, args=(mySonyCamNo1, gcsWrites2Sony, stillcap, whitebal, shut_sp, iso, focusdata, focusarea, expro))      
+            p00.daemon = True
+            p00.start() 
+
+        # ============= check for write actions to the camera (wait until a change of state has been made by the GCS)
+        #
+        v,p,st = gcsWrites2Sony.getVal_sony_ex_pro(gcsWrites2Sony.STATE_CAM_READING)
+        if ((not (v == gcsWrites2Sony.STATE_INIT)) and (st == True)):            
+            p1 = multiprocessing.Process(name='manageAlphaCameraExpro', target=manageAlphaCameraExpro, args=(mySonyCamNo1, gcsWrites2Sony, expro,)).start()
+            if p1 is not None:
+                p1.join()             
+        v,p,st = gcsWrites2Sony.getVal_sony_aperture(gcsWrites2Sony.STATE_CAM_READING)                
+        if ((not (v == gcsWrites2Sony.STATE_INIT)) and (st == True)):     
+            p3 = multiprocessing.Process(name='manageAlphaCameraAperture', target=manageAlphaCameraAperture, args=(mySonyCamNo1, gcsWrites2Sony, aper,)).start()
+            if p3 is not None:            
+                p3.join()                
+        v,p,st = gcsWrites2Sony.getVal_sony_focus(gcsWrites2Sony.STATE_CAM_READING)                  
+        if ((not (v == gcsWrites2Sony.STATE_INIT)) and (st == True)):    
+            p5 = multiprocessing.Process(name='manageAlphaCameraFocusData', target=manageAlphaCameraFocusData, args=(mySonyCamNo1, gcsWrites2Sony, focusdata, focusarea,)).start()
+            if p5 is not None:              
+                p5.join()
+        v,p,st = gcsWrites2Sony.getVal_sony_iso(gcsWrites2Sony.STATE_CAM_READING)                
+        if ((not (v == gcsWrites2Sony.STATE_INIT)) and (st == True)):   
+            p7 = multiprocessing.Process(name='manageAlphaCameraIso', target=manageAlphaCameraIso, args=(mySonyCamNo1, gcsWrites2Sony, iso,)).start()
+            if p7 is not None:  
+                p7.join()
+        v,p,st = gcsWrites2Sony.getVal_sony_shutter(gcsWrites2Sony.STATE_CAM_READING)                
+        if ((not (v == gcsWrites2Sony.STATE_INIT)) and (st == True)):   
+            p9 = multiprocessing.Process(name='manageAlphaCameraShutSpd', target=manageAlphaCameraShutSpd, args=(mySonyCamNo1, gcsWrites2Sony, shut_sp,)).start()
+            if p9 is not None:              
+                p9.join()
+        v,p,st = gcsWrites2Sony.getVal_sony_white_bal(gcsWrites2Sony.STATE_CAM_READING)                
+        if ((not (v == gcsWrites2Sony.STATE_INIT)) and (st == True)):  
+            p11 = multiprocessing.Process(name='manageAlphaWhiteBala', target=manageAlphaWhiteBala, args=(mySonyCamNo1, gcsWrites2Sony, whitebal,)).start()
+            if p11 is not None:                
+                p11.join() 
+        v,p,st = gcsWrites2Sony.getVal_sony_still_cap_mode(gcsWrites2Sony.STATE_CAM_READING)                
+        if ((not (v == gcsWrites2Sony.STATE_INIT)) and (st == True)):                   
+            p13 = multiprocessing.Process(name='manageAlphaCameraStillCap', target=manageAlphaCameraStillCap, args=(mySonyCamNo1, gcsWrites2Sony, stillcap,)).start()
+            #time.sleep(0.1) 
+            if p13 is not None:               
+                p13.join()
+
+        # ========== send back to GCS via mavlink if a new change of state has been detected or polled if requested 
+        #        
         p2 = multiprocessing.Process(name='sendMavExpro', target=sendMavExpro, args=(mySonyCamNo1, expro, cID,)).start()
         p4 = multiprocessing.Process(name='sendMavAper', target=sendMavAper, args=(mySonyCamNo1, aper, cID,)).start()
         p6 = multiprocessing.Process(name='sendMavFocusData', target=sendMavFocusData, args=(mySonyCamNo1, focusdata, focusarea, cID, )).start()
@@ -5425,6 +5457,9 @@ if __name__ == '__main__':
             p12.join()  
         if p14 is not None:          
             p14.join() 
+        #
+        # a = False
+        #
         #if p0 is not None:           
            #p0.join()
         #   if p0.is_alive() == True:
