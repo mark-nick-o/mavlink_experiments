@@ -17,19 +17,25 @@ import logging
 
 # for signal interypt handling
 import signal
+
+import time
        
 class mavlinkSonyCamWriteVals():
 
+    # state for multi-process object
     STATE_INIT = 99
     STATE_READY = 1
     STATE_CAM_WRITING = 2
     STATE_MAV_READING = 3
     STATE_MAV_WRITING = 4
     STATE_CAM_READING = 5
+    # global counter for values
     numberOfVals = 0
+    # flags to incdicate write action
     WRITE_PREV_DATA = 1
     DONT_WRITE_PREV_DATA = 0
 
+    # mavlink write actions
     MAV_REQ_ALL_PARAM = 255
     ParamStillCap = 1
     ParamWhiteBala = 2
@@ -64,6 +70,7 @@ class mavlinkSonyCamWriteVals():
     
     def __del__(self):  
         class_name = self.__class__.__name__  
+        mavlinkSonyCamWriteVals.numberOfVals -= 1                                                      # global counter of the number of values
         print('{} Deleted'.format(class_name))
 
     def get_value_counter(self):  
@@ -74,7 +81,7 @@ class mavlinkSonyCamWriteVals():
         if (self.state == mavlinkSonyCamWriteVals.STATE_INIT):
             self.state = mavlinkSonyCamWriteVals.STATE_READY
             
-    def setVal_sony_iso(self,value,myId,mode=0,timeout=20):
+    def setVal_sony_iso(self,value,myId,mode=0,timeout=20,reset_state=False):
         timeCnt = 0
         while (not (self.state == mavlinkSonyCamWriteVals.STATE_READY)) and (timeCnt < timeout):
             time.sleep(0.1)
@@ -86,15 +93,16 @@ class mavlinkSonyCamWriteVals():
                 self.prev_sony_iso = self.set_sony_iso
             self.set_sony_iso = value
             self.state = mavlinkSonyCamWriteVals.STATE_READY
-            print(f"\033[37m wrote the value {value} to {self.prev_sony_iso} {self.set_sony_iso}")
+            print(f"\033[37m wrote the value {value} to {self.prev_sony_iso} {self.set_sony_iso} \033[0m")
             #exit(99)
             return True
         else:
-            self.state = mavlinkSonyCamWriteVals.STATE_READY
+            if (reset_state == True):
+                self.state = mavlinkSonyCamWriteVals.STATE_READY
             #exit(90)
             return False 
 
-    def getVal_sony_iso(self,YourID,timeout=20):  
+    def getVal_sony_iso(self,YourID,timeout=20,reset_state=False):  
         timeCnt = 0
         while (not (self.state == mavlinkSonyCamWriteVals.STATE_READY)) and (timeCnt < timeout):
             time.sleep(0.1)
@@ -106,10 +114,11 @@ class mavlinkSonyCamWriteVals():
             self.state = mavlinkSonyCamWriteVals.STATE_READY
             return self.set_sony_iso,self.prev_sony_iso,True
         else:
-            #self.state = mavlinkSonyCamWriteVals.STATE_READY
+            if (reset_state == True):
+                self.state = mavlinkSonyCamWriteVals.STATE_READY
             return self.set_sony_iso,self.prev_sony_iso,False
             
-    def setVal_sony_aperture(self,value,myId,mode=0,timeout=20):
+    def setVal_sony_aperture(self,value,myId,mode=0,timeout=20,reset_state=False):
         timeCnt = 0
         while (not (self.state == mavlinkSonyCamWriteVals.STATE_READY)) and (timeCnt < timeout):
             time.sleep(0.1)
@@ -123,10 +132,11 @@ class mavlinkSonyCamWriteVals():
             self.state = mavlinkSonyCamWriteVals.STATE_READY
             return True
         else:
-            self.state = mavlinkSonyCamWriteVals.STATE_READY
+            if (reset_state == True):
+                self.state = mavlinkSonyCamWriteVals.STATE_READY
             return False 
 
-    def getVal_sony_aperture(self,YourID,timeout=20):  
+    def getVal_sony_aperture(self,YourID,timeout=20,reset_state=False):  
         timeCnt = 0
         while (not (self.state == mavlinkSonyCamWriteVals.STATE_READY)) and (timeCnt < timeout):
             time.sleep(0.1)
@@ -138,10 +148,11 @@ class mavlinkSonyCamWriteVals():
             self.state = mavlinkSonyCamWriteVals.STATE_READY
             return self.set_sony_aperture,self.prev_sony_aperture,True
         else:
-            self.state = mavlinkSonyCamWriteVals.STATE_READY
+            if (reset_state == True):
+                self.state = mavlinkSonyCamWriteVals.STATE_READY
             return self.set_sony_aperture,self.prev_sony_aperture,False
             
-    def setVal_sony_ex_pro(self,value,myId,mode=0,timeout=20):
+    def setVal_sony_ex_pro(self,value,myId,mode=0,timeout=20,reset_state=False):
         timeCnt = 0
         while (not (self.state == mavlinkSonyCamWriteVals.STATE_READY)) and (timeCnt < timeout):
             time.sleep(0.1)
@@ -155,10 +166,11 @@ class mavlinkSonyCamWriteVals():
             self.state = mavlinkSonyCamWriteVals.STATE_READY
             return True
         else:
-            self.state = mavlinkSonyCamWriteVals.STATE_READY
+            if (reset_state == True):
+                self.state = mavlinkSonyCamWriteVals.STATE_READY
             return False 
 
-    def getVal_sony_ex_pro(self,YourID,timeout=20):  
+    def getVal_sony_ex_pro(self,YourID,timeout=20,reset_state=False):  
         timeCnt = 0
         while (not (self.state == mavlinkSonyCamWriteVals.STATE_READY)) and (timeCnt < timeout):
             time.sleep(0.1)
@@ -170,10 +182,11 @@ class mavlinkSonyCamWriteVals():
             self.state = mavlinkSonyCamWriteVals.STATE_READY
             return self.set_sony_ex_pro,self.prev_sony_ex_pro,True
         else:
-            self.state = mavlinkSonyCamWriteVals.STATE_READY
+            if (reset_state == True):
+                self.state = mavlinkSonyCamWriteVals.STATE_READY
             return self.set_sony_ex_pro,self.prev_sony_ex_pro,False
             
-    def setVal_sony_focus_area(self,value,myId,mode=0,timeout=20):
+    def setVal_sony_focus_area(self,value,myId,mode=0,timeout=20,reset_state=False):
         timeCnt = 0
         while (not (self.state == mavlinkSonyCamWriteVals.STATE_READY)) and (timeCnt < timeout):
             time.sleep(0.1)
@@ -187,10 +200,11 @@ class mavlinkSonyCamWriteVals():
             self.state = mavlinkSonyCamWriteVals.STATE_READY
             return True
         else:
-            self.state = mavlinkSonyCamWriteVals.STATE_READY
+            if (reset_state == True):
+                self.state = mavlinkSonyCamWriteVals.STATE_READY
             return False 
 
-    def getVal_sony_focus_area(self,YourID,timeout=20):  
+    def getVal_sony_focus_area(self,YourID,timeout=20,reset_state=False):  
         timeCnt = 0
         while (not (self.state == mavlinkSonyCamWriteVals.STATE_READY)) and (timeCnt < timeout):
             time.sleep(0.1)
@@ -202,10 +216,11 @@ class mavlinkSonyCamWriteVals():
             self.state = mavlinkSonyCamWriteVals.STATE_READY
             return self.set_sony_focus_area,self.prev_sony_focus_area,True
         else:
-            self.state = mavlinkSonyCamWriteVals.STATE_READY
+            if (reset_state == True):
+                self.state = mavlinkSonyCamWriteVals.STATE_READY
             return self.set_sony_focus_area,self.prev_sony_focus_area,False
             
-    def setVal_sony_focus(self,value,myId,mode=0,timeout=20):
+    def setVal_sony_focus(self,value,myId,mode=0,timeout=20,reset_state=False):
         timeCnt = 0
         while (not (self.state == mavlinkSonyCamWriteVals.STATE_READY)) and (timeCnt < timeout):
             time.sleep(0.1)
@@ -219,10 +234,11 @@ class mavlinkSonyCamWriteVals():
             self.state = mavlinkSonyCamWriteVals.STATE_READY
             return True
         else:
-            self.state = mavlinkSonyCamWriteVals.STATE_READY
+            if (reset_state == True):        
+                self.state = mavlinkSonyCamWriteVals.STATE_READY
             return False 
 
-    def getVal_sony_focus(self,YourID,timeout=20):  
+    def getVal_sony_focus(self,YourID,timeout=20,reset_state=False):  
         timeCnt = 0
         while (not (self.state == mavlinkSonyCamWriteVals.STATE_READY)) and (timeCnt < timeout):
             time.sleep(0.1)
@@ -234,10 +250,11 @@ class mavlinkSonyCamWriteVals():
             self.state = mavlinkSonyCamWriteVals.STATE_READY
             return self.set_sony_focus,self.prev_sony_focus,True
         else:
-            self.state = mavlinkSonyCamWriteVals.STATE_READY
+            if (reset_state == True):      
+                self.state = mavlinkSonyCamWriteVals.STATE_READY
             return self.set_sony_focus,self.prev_sony_focus,False
             
-    def setVal_sony_shutter(self,value,myId,mode=0,timeout=20):
+    def setVal_sony_shutter(self,value,myId,mode=0,timeout=20,reset_state=False):
         timeCnt = 0
         while (not (self.state == mavlinkSonyCamWriteVals.STATE_READY)) and (timeCnt < timeout):
             time.sleep(0.1)
@@ -251,10 +268,11 @@ class mavlinkSonyCamWriteVals():
             self.state = mavlinkSonyCamWriteVals.STATE_READY
             return True
         else:
-            self.state = mavlinkSonyCamWriteVals.STATE_READY
+            if (reset_state == True):  
+                self.state = mavlinkSonyCamWriteVals.STATE_READY
             return False
 
-    def getVal_sony_shutter(self,YourID,timeout=20):  
+    def getVal_sony_shutter(self,YourID,timeout=20,reset_state=False):  
         timeCnt = 0
         while (not (self.state == mavlinkSonyCamWriteVals.STATE_READY)) and (timeCnt < timeout):
             time.sleep(0.1)
@@ -266,10 +284,11 @@ class mavlinkSonyCamWriteVals():
             self.state = mavlinkSonyCamWriteVals.STATE_READY
             return self.set_sony_shutter,self.prev_sony_shutter,True
         else:
-            self.state = mavlinkSonyCamWriteVals.STATE_READY
+            if (reset_state == True): 
+                self.state = mavlinkSonyCamWriteVals.STATE_READY
             return self.set_sony_shutter,self.prev_sony_shutter,False
             
-    def setVal_sony_white_bal(self,value,myId,mode=0,timeout=20):
+    def setVal_sony_white_bal(self,value,myId,mode=0,timeout=20,reset_state=False):
         timeCnt = 0
         while (not (self.state == mavlinkSonyCamWriteVals.STATE_READY)) and (timeCnt < timeout):
             time.sleep(0.1)
@@ -283,10 +302,11 @@ class mavlinkSonyCamWriteVals():
             self.state = mavlinkSonyCamWriteVals.STATE_READY
             return True
         else:
-            self.state = mavlinkSonyCamWriteVals.STATE_READY
+            if (reset_state == True): 
+                self.state = mavlinkSonyCamWriteVals.STATE_READY
             return False
 
-    def getVal_sony_white_bal(self,YourID,timeout=20):  
+    def getVal_sony_white_bal(self,YourID,timeout=20,reset_state=False):  
         timeCnt = 0
         while (not (self.state == mavlinkSonyCamWriteVals.STATE_READY)) and (timeCnt < timeout):
             time.sleep(0.1)
@@ -298,10 +318,11 @@ class mavlinkSonyCamWriteVals():
             self.state = mavlinkSonyCamWriteVals.STATE_READY
             return self.set_sony_white_bal,self.prev_sony_white_bal,True
         else:
-            self.state = mavlinkSonyCamWriteVals.STATE_READY
+            if (reset_state == True): 
+                self.state = mavlinkSonyCamWriteVals.STATE_READY
             return self.set_sony_white_bal,self.prev_sony_white_bal,False
             
-    def setVal_sony_still_cap_mode(self,value,myId,mode=0,timeout=20):
+    def setVal_sony_still_cap_mode(self,value,myId,mode=0,timeout=20,reset_state=False):
         timeCnt = 0
         while (not (self.state == mavlinkSonyCamWriteVals.STATE_READY)) and (timeCnt < timeout):
             time.sleep(0.1)
@@ -315,10 +336,11 @@ class mavlinkSonyCamWriteVals():
             self.state = mavlinkSonyCamWriteVals.STATE_READY
             return True
         else:
-            self.state = mavlinkSonyCamWriteVals.STATE_READY
+            if (reset_state == True): 
+                self.state = mavlinkSonyCamWriteVals.STATE_READY
             return False
 
-    def getVal_sony_still_cap_mode(self,YourID,timeout=20):  
+    def getVal_sony_still_cap_mode(self,YourID,timeout=20,reset_state=False):  
         timeCnt = 0
         while (not (self.state == mavlinkSonyCamWriteVals.STATE_READY)) and (timeCnt < timeout):
             time.sleep(0.1)
@@ -330,7 +352,8 @@ class mavlinkSonyCamWriteVals():
             self.state = mavlinkSonyCamWriteVals.STATE_READY
             return self.set_sony_still_cap_mode,self.prev_sony_still_cap_mode,True
         else:
-            self.state = mavlinkSonyCamWriteVals.STATE_READY
+            if (reset_state == True): 
+                self.state = mavlinkSonyCamWriteVals.STATE_READY
             return self.set_sony_still_cap_mode,self.prev_sony_still_cap_mode,False
 
     def setMavIsoModeData( self, dataRcv ):
@@ -456,11 +479,13 @@ import time
         
 class memoryValue():
 
+    # multi process thread status of object
     STATE_READY = 1
     STATE_CAM_WRITING = 2
     STATE_MAV_READING = 3
     STATE_MAV_WRITING = 4
     STATE_CAM_READING = 5
+    # number of objects created
     numberOfVals = 0
 
     def __init__ (self, name = 'value_name_not_set', signal = None,  prev = None,  state = STATE_READY):
@@ -477,6 +502,7 @@ class memoryValue():
     
     def __del__(self):  
         class_name = self.__class__.__name__  
+        memoryValue.numberOfVals -= 1                                                      # global counter of the number of values
         print('{} Deleted'.format(class_name))
 
     def get_value_counter(self):  
@@ -1400,17 +1426,17 @@ class sonyAlphaNewCamera():
             if (len(ans) > 0):
                 print(f" Exposure Prog Mode = {ans}")
                 try:
-                    SonyObject = memoryValue('sonyExProMode',int(ans[0]))
+                    SonyObject = memoryValue('S_EX_PRO_MODE',int(ans[0]))
                     SonyObject.updateNeeded = True 
                 except Exception as err_msg:
-                    print("Failed set the object to initial value : %s" % (err_msg))
-                    SonyObject = memoryValue('sonyExProMode',0) 
+                    print("\033[31m Failed set the object to initial value : %s \033[0m" % (err_msg))
+                    SonyObject = memoryValue('S_EX_PRO_MODE',0) 
             else:
-                print("Failed get the camera ExPro")
-                SonyObject = memoryValue('sonyExProMode',0)             
+                print("\033[31m Failed get the camera ExPro \033[0m")
+                SonyObject = memoryValue('S_EX_PRO_MODE',0)             
         else:
-            print("Cant get Exposure Prog Mode ")
-            SonyObject = memoryValue('sonyExProMode',0)
+            print("\033[31m Cant get Exposure Prog Mode \033[0m")
+            SonyObject = memoryValue('S_EX_PRO_MODE',0)
 
         SonyObject.index = memoryValue.numberOfVals 
         print(f"Expro : created object number : {SonyObject.index}")
@@ -1426,11 +1452,11 @@ class sonyAlphaNewCamera():
                 try:
                     ret = self.setSonyObjData( mem, int(ans[0]) ) 
                 except Exception as err_msg:
-                    print("Failed set the object to initial value : %s" % (err_msg))
+                    print("\033[31m Failed set the object to initial value : %s \033[0m" % (err_msg))
             else:
-                print("Failed get the exposure program mode")
+                print("\033[31m Failed get the exposure program mode\033[0m ")
         else:
-            print("Cant get Exposure Prog Mode ")          
+            print("\033[31m Cant get Exposure Prog Mode \033[0m")          
         return ret
         
     def initSonyApertureData( self ):
@@ -1440,17 +1466,17 @@ class sonyAlphaNewCamera():
             if (len(ans) > 0):
                 print(f" Aperture = {ans}")
                 try:
-                    SonyObject = memoryValue('sonyAperture',int(ans[0]))
+                    SonyObject = memoryValue('S_APERTURE',int(ans[0]))
                     SonyObject.updateNeeded = True 
                 except Exception as err_msg:
-                    print("Failed set the object to initial value : %s" % (err_msg))
-                    SonyObject = memoryValue('sonyAperture',0) 
+                    print("\033[31m Failed set the object to initial value : %s \033[0m" % (err_msg))
+                    SonyObject = memoryValue('S_APERTURE',0) 
             else:
-                print("Failed get the camera aperture")
-                SonyObject = memoryValue('sonyAperture',0)  
+                print("\033[31m Failed get the camera aperture \033[0m")
+                SonyObject = memoryValue('S_APERTURE',0)  
         else:
-            print("Cant get Aperture ")
-            SonyObject = memoryValue('sonyAperture',0)  
+            print("\033[31m Cant get Aperture \033[0m")
+            SonyObject = memoryValue('S_APERTURE',0)  
 
         SonyObject.index = memoryValue.numberOfVals 
         print(f"Aperture : created object number : {SonyObject.index}")             
@@ -1466,11 +1492,11 @@ class sonyAlphaNewCamera():
                 try:
                     ret = self.setSonyObjData( mem, int(ans[0]) ) 
                 except Exception as err_msg:
-                    print("Failed set the object to initial value : %s" % (err_msg))
+                    print("\033[31m Failed set the object to initial value : %s \033[0m" % (err_msg))
             else:
-                print("Failed get the aperture")
+                print("\033[31m Failed get the aperture \033[0m")
         else:
-            print("Cant get aperture ")          
+            print("\033[31m Cant get aperture \033[0m")          
         return ret
         
     def initSonyCamFocusData( self ):                         ###### @@11
@@ -1480,17 +1506,17 @@ class sonyAlphaNewCamera():
             if (len(ans) > 0):
                 print(f" Focus Mode = {ans}")
                 try:
-                    SonyObject = memoryValue('sonyFocusMode',int(ans[0]))
+                    SonyObject = memoryValue('S_FOCUS_MODE',int(ans[0]))
                     SonyObject.updateNeeded = True  
                 except Exception as err_msg:
-                    print("Failed set the object to initial value : %s" % (err_msg))
-                    SonyObject = memoryValue('sonyFocusMode',0) 
+                    print("\033[31m Failed set the object to initial value : %s \033[0m" % (err_msg))
+                    SonyObject = memoryValue('S_FOCUS_MODE',0) 
             else:
-                print("Failed get the camera focus mode")
-                SonyObject = memoryValue('sonyFocusMode',0) 
+                print("\033[31m Failed get the camera focus mode \033[0m")
+                SonyObject = memoryValue('S_FOCUS_MODE',0) 
         else:
-            print("Cant get Focus Mode ")
-            SonyObject = memoryValue('sonyFocusMode',0) 
+            print("\033[31m Cant get Focus Mode \033[0m")
+            SonyObject = memoryValue('S_FOCUS_MODE',0) 
 
         SonyObject.index = memoryValue.numberOfVals 
         print(f"FocusData : created object number : {SonyObject.index}")            
@@ -1506,11 +1532,11 @@ class sonyAlphaNewCamera():
                 try:
                     ret = self.setSonyObjData( mem, int(ans[0]) ) 
                 except Exception as err_msg:
-                    print("Failed set the object to initial value : %s" % (err_msg))
+                    print("\033[31m Failed set the focus mode object to initial value : %s \033[0m" % (err_msg))
             else:
-                print("Failed get the focus")
+                print("\033[31m Failed get the focus mode \033[0m")
         else:
-            print("Cant get focus ")          
+            print("\033[31m Cant get focus mode \033[0m")          
         return ret
         
     def initSonyCamFocusAreaData( self ):
@@ -1521,17 +1547,17 @@ class sonyAlphaNewCamera():
             if (len(ans) > 0):
                 print(f" Focus Area = {ans}")
                 try:
-                    SonyObject = memoryValue('sonyFocusArea',int(ans[0]))
+                    SonyObject = memoryValue('S_FOCUS_AREA',int(ans[0]))
                     SonyObject.updateNeeded = True  
                 except Exception as err_msg:
-                    print("Failed set the object to initial value : %s" % (err_msg))
-                    SonyObject = memoryValue('sonyFocusArea',0) 
+                    print("\033[31m Failed set the focus area object to initial value : %s \033[0m" % (err_msg))
+                    SonyObject = memoryValue('S_FOCUS_AREA',0) 
             else:
-                print("Failed get the camera focus area")
-                SonyObject = memoryValue('sonyFocusArea',0) 
+                print("\033[31m Failed get the camera focus area \033[0m")
+                SonyObject = memoryValue('S_FOCUS_AREA',0) 
         else:
-            print("Cant get Focus Mode ")
-            SonyObject = memoryValue('sonyFocusArea',0) 
+            print("\033[31m Cant get Focus Mode \033[0m")
+            SonyObject = memoryValue('S_FOCUS_AREA',0) 
 
         SonyObject.index = memoryValue.numberOfVals 
         print(f"Focus Area : created object number : {SonyObject.index}")            
@@ -1543,15 +1569,15 @@ class sonyAlphaNewCamera():
         ans = self.get_sony_focus_area( )
         if not (ans is None):
             if (len(ans) > 0):
-                print(f" ISO =  {ans}")
+                print(f"\033[33m FOCUS AREA =  {ans} \033[0m")
                 try:
                     ret = self.setSonyObjData( mem, int(ans[0]) ) 
                 except Exception as err_msg:
-                    print("Failed set the object to initial value : %s" % (err_msg))
+                    print("\033[31m Failed set the focus area object to initial value : %s \033[0m" % (err_msg))
             else:
-                print("Failed get the iso")
+                print("\033[31m Failed get the focus area \033[0m")
         else:
-            print("Cant get focus area ")          
+            print("\033[31m Cant get focus area ")          
         return ret
         
     def initSonyCamISOData( self ):
@@ -1561,17 +1587,17 @@ class sonyAlphaNewCamera():
             if (len(ans) > 0):
                 print(f" ISO = {ans}")
                 try:
-                    SonyObject = memoryValue('sonyISO',int(ans[0]))
+                    SonyObject = memoryValue('S_ISO',int(ans[0]))
                     SonyObject.updateNeeded = True  
                 except Exception as err_msg:
-                    print("Failed set the object to initial value : %s" % (err_msg))
-                    SonyObject = memoryValue('sonyISO',0) 
+                    print("\033[31m Failed set the iso object to initial value : %s \033[0m" % (err_msg))
+                    SonyObject = memoryValue('S_ISO',0) 
             else:
-                print("Failed get the camera iso")
-                SonyObject = memoryValue('sonyISO',0) 
+                print("\033[31m Failed get the camera iso \033[0m")
+                SonyObject = memoryValue('S_ISO',0) 
         else:
-            print("Cant get ISO ")
-            SonyObject = memoryValue('sonyISO',0) 
+            print("\033[31m Cant get ISO \033[0m")
+            SonyObject = memoryValue('S_ISO',0) 
 
         SonyObject.index = memoryValue.numberOfVals 
         print(f"ISO : created object number : {SonyObject.index}")            
@@ -1587,11 +1613,11 @@ class sonyAlphaNewCamera():
                 try:
                     ret = self.setSonyObjData( mem, int(ans[0]) ) 
                 except Exception as err_msg:
-                    print("Failed set the object to initial value : %s" % (err_msg))
+                    print("\033[31m Failed set the iso object to initial value : %s \033[0m" % (err_msg))
             else:
-                print("Failed get the iso")
+                print("\033[31m Failed get the iso \033[0m")
         else:
-            print("Cant get iso ")          
+            print("\033[31m Cant get iso \033[0m")          
         return ret
         
     def initSonyCamShutSpdData( self ):
@@ -1601,17 +1627,17 @@ class sonyAlphaNewCamera():
             if (len(ans) > 0):
                 print(f" Shutter Speed =  {ans}")
                 try:
-                    SonyObject = memoryValue('sonyShutSpd',int(ans[0]))
+                    SonyObject = memoryValue('S_SHUT_SPD',int(ans[0]))
                     SonyObject.updateNeeded = True  
                 except Exception as err_msg:
-                    print("Failed set the object to initial value : %s" % (err_msg))
-                    SonyObject = memoryValue('sonyShutSpd',0) 
+                    print("\033[31m Failed set the shut spd object to initial value : %s \033[0m" % (err_msg))
+                    SonyObject = memoryValue('S_SHUT_SPD',0) 
             else:
-                print("Failed get the camera iso")
-                SonyObject = memoryValue('sonyShutSpd',0) 
+                print("\033[31m Failed get the camera shutter speed \033[0m")
+                SonyObject = memoryValue('S_SHUT_SPD',0) 
         else:
-            print("Cant get Shutter Speed ")
-            SonyObject = memoryValue('sonyShutSpd',0)
+            print("\033[31m Cant get Shutter Speed \033[0m")
+            SonyObject = memoryValue('S_SHUT_SPD',0)
             
         SonyObject.index = memoryValue.numberOfVals 
         print(f"Shut Speed : created object number : {SonyObject.index}")              
@@ -1627,11 +1653,11 @@ class sonyAlphaNewCamera():
                 try:
                     ret = self.setSonyObjData( mem, int(ans[0]) ) 
                 except Exception as err_msg:
-                    print("Failed set the object to initial value : %s" % (err_msg))
+                    print("\033[31m Failed set the object to initial value : %s \033[0m" % (err_msg))
             else:
-                print("Failed get the shutter speed")
+                print("\033[31m Failed get the shutter speed \033[0m")
         else:
-            print("Cant get shutter speed ")          
+            print("\033[31m Cant get shutter speed \033[0m")          
         return ret
         
     def initSonyCamWhiteBalaData( self ):
@@ -1641,17 +1667,17 @@ class sonyAlphaNewCamera():
             if (len(ans) > 0):
                 print(f" White Balance =  {ans}")
                 try:
-                    SonyObject = memoryValue('sonyWhiteBalance',int(ans[0]))
+                    SonyObject = memoryValue('S_WHITE_BAL',int(ans[0]))
                     SonyObject.updateNeeded = True  
                 except Exception as err_msg:
-                    print("Failed set the object to initial value : %s" % (err_msg))
-                    SonyObject = memoryValue('sonyWhiteBalance',0) 
+                    print("\033[31m Failed set the object to initial value : %s \033[0m" % (err_msg))
+                    SonyObject = memoryValue('S_WHITE_BAL',0) 
             else:
-                print("Failed get the camera white balance")
-                SonyObject = memoryValue('sonyWhiteBalance',0)         
+                print("\033[31m Failed get the camera white balance \033[0m")
+                SonyObject = memoryValue('S_WHITE_BAL',0)         
         else:
-            print("Cant get Shutter Speed ")
-            SonyObject = memoryValue('sonyWhiteBalance',0)    
+            print("\033[31m Cant get Shutter Speed \033[0m")
+            SonyObject = memoryValue('S_WHITE_BAL',0)    
 
         SonyObject.index = memoryValue.numberOfVals 
         print(f"White Balance : created object number : {SonyObject.index}")            
@@ -1667,11 +1693,11 @@ class sonyAlphaNewCamera():
                 try:
                     ret = self.setSonyObjData( mem, int(ans[0]) ) 
                 except Exception as err_msg:
-                    print("Failed set the object to initial value : %s" % (err_msg))
+                    print("\033[31m Failed set the white balance object to initial value : %s \033[0m" % (err_msg))
             else:
-                print("Failed get the camera white balance")
+                print("\033[31m Failed get the camera white balance \033[0m")
         else:
-            print("Cant get white balance ")          
+            print("\033[31m Cant get white balance \033[0m")          
         return ret
         
     def initSonyCamStillCapModeData( self ):
@@ -1681,17 +1707,17 @@ class sonyAlphaNewCamera():
             if (len(ans) > 0):
                 print(f" Still Cap Mode =  {ans}")
                 try:
-                    SonyObject = memoryValue('sonyStillCapMode',int(ans[0]))
+                    SonyObject = memoryValue('S_STILL_CAP',int(ans[0]))
                     SonyObject.updateNeeded = True  
                 except Exception as err_msg:
-                    print("Failed set the object to initial value : %s" % (err_msg))
-                    SonyObject = memoryValue('sonyStillCapMode',0) 
+                    print("\033[31m Failed set the object to initial value : %s \033[0m" % (err_msg))
+                    SonyObject = memoryValue('S_STILL_CAP',0) 
             else:
-                print("Failed get the camera still capture mode")
-                SonyObject = memoryValue('sonyStillCapMode',0)  
+                print("\033[31m Failed get the camera still capture mode \033[0m")
+                SonyObject = memoryValue('S_STILL_CAP',0)  
         else:
-            print("Cant get Still Capture Mode ")
-            SonyObject = memoryValue('sonyStillCapMode',0)   
+            print("\033[31m Cant get Still Capture Mode \033[0m")
+            SonyObject = memoryValue('S_STILL_CAP',0)   
 
         SonyObject.index = memoryValue.numberOfVals 
         print(f"Still Cap Mode : created object number : {SonyObject.index}")            
@@ -1707,11 +1733,11 @@ class sonyAlphaNewCamera():
                 try:
                     ret = self.setSonyObjData( mem, int(ans[0]) ) 
                 except Exception as err_msg:
-                    print("Failed set the object to initial value : %s" % (err_msg))
+                    print("\033[31m Failed set the object to initial value : %s \033[0m" % (err_msg))
             else:
-                print("Failed get the camera still capture mode")
+                print("\033[31m Failed get the camera still capture mode \033[0m")
         else:
-            print("Cant get still cap mode ")          
+            print("\033[31m Cant get still cap mode \033[0m")          
         return ret    
 
     def enumerate_still_cap_sony_a7( self, num ):
@@ -1882,40 +1908,41 @@ class sonyAlphaNewCamera():
     
         ret = False
         readSuccess = False
-        print(" =========== sony cam iso ================ ")
+        print(" =========== set sony cam iso ================ ")
         
         # 
         timeout1 = timeout1 * no_timeout1_retry
-        print(f"timeout1 set to {timeout1}")
         timeout2 = timeout2 * no_timeout2_retry
         #
         while (readSuccess == False) and (timeout1 > 0):
             reqDat, prevDat, readSuccess  = mavObj.getVal_sony_iso(mavObj.STATE_CAM_READING,timeout1)
-            timeout1 -= 1                                          # no retries
+            timeout1 -= timeout1                                          # no retries
             print(f"In iterator {readSuccess} {reqDat} {prevDat}")
             
-        print(f"set to ISO {reqDat} {prevDat} time={timeout1} state={mavObj.state}")
+        print(f"set to ISO r={reqDat} p={prevDat} time={timeout1} state={mavObj.state}")
         
-        if ((not (reqDat == mavlinkSonyCamWriteVals.STATE_INIT) and not (reqDat == prevDat)) and (timeout1 > 0)):
+        if ((not (reqDat == mavlinkSonyCamWriteVals.STATE_INIT) and not (reqDat == prevDat)) and (readSuccess == True)):
             ee = self.enumerate_iso_sony_a7(reqDat)
             print(f"enumeration value for iso {ee} req {reqDat}")
             ans = self.set_sony_iso( ee ) 
             # exit(90)
-            if not (ans is None):
-                print(ans)            
+            if not (ans is None):         
                 if (len(ans)==0):
-                    print("length of command return was zero")
-                    return ret                
+                    print("setting iso the length of command return was zero")
+                    return ret  
+                print(f" \033[32m set the ISO from/to :: {ans} \033[0m")                       
                 writeSuccess = False
                 try:
                     if ( ans[1] == reqDat ) :
                         while (writeSuccess == False) and (timeout2 > 0): 
                             writeSuccess = mavObj.setVal_sony_iso(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,timeout2) 
-                            timeout2 -= 1                                  # no retries  
+                            timeout2 -= timeout2                                  # no retries  
                 except Exception as err_msg:                
-                   print("write sony iso failed to set iso")                    
+                   print("\033[31m write sony iso failed to set iso \033[0m")                    
                 if ( writeSuccess == True ):
                     ret = self.setSonyObjData( mem, int(ans[1]) ) 
+        else:
+            print(f"\033[32m timeout error trying to set iso to \033[4;42;31m {reqDat} \033[0m")
         #exit(200)                    
         return ret
         
@@ -1923,6 +1950,8 @@ class sonyAlphaNewCamera():
     
         ret = False
         readSuccess = False
+        print(" =========== set sony cam aperture ================ ")
+        
         # 
         timeout1 = timeout1 * no_timeout1_retry
         timeout2 = timeout2 * no_timeout2_retry
@@ -1931,29 +1960,33 @@ class sonyAlphaNewCamera():
             reqDat, prevDat, readSuccess  = mavObj.getVal_sony_aperture(mavObj.STATE_CAM_READING,timeout1)
             timeout1 -= timeout1                                          # no retries
             
-        if (not (reqDat == mavObj.STATE_INIT) and not (reqDat == prevDat)):
+        if ((not (reqDat == mavObj.STATE_INIT) and not (reqDat == prevDat)) and (readSuccess == True)):
             ans = self.set_sony_aperture( self.enumerate_still_cap_sony_a7(reqDat) ) 
             if not (ans is None):
                 if (len(ans)==0):
                     print("length of command return was zero")
-                    return ret             # 
+                    return ret       
+                print(f" \033[32m set the Aperture from/to :: {ans} \033[0m")                           # 
                 writeSuccess = False
-                while (writeSuccess == False) and (timeout2 > 0): 
-                    try:                
-                        writeSuccess = mavObj.setVal_sony_aperture(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,timeout2) 
-                        ret = ( ans[1] == reqDat ) 
-                    except Exception as err_msg:                
-                        print("write sony failed to set aperture")                        
-                    timeout2 -= timeout2                                  # no retries
-                    
-                if ( ret == True ):
-                    ret = self.setSonyObjData( mem, int(ans[1]) )                
+                try:
+                    if ( ans[1] == reqDat ) :
+                        while (writeSuccess == False) and (timeout2 > 0): 
+                            writeSuccess = mavObj.setVal_sony_aperture(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,timeout2) 
+                            timeout2 -= timeout2                                  # no retries  
+                except Exception as err_msg:                
+                   print("\033[31m write sony aperture failed to set aperture \033[0m")                     
+                if ( writeSuccess == True ):
+                    ret = self.setSonyObjData( mem, int(ans[1]) ) 
+        else:
+            print(f"\033[32m timeout error trying to set aperture to \033[4;42;31m {reqDat}\033[0m")               
         return ret 
 
     def setSonyCamExProData( self, mem, mavObj, timeout1=100, timeout2=50, no_timeout1_retry=1, no_timeout2_retry=1 ):
     
         ret = False
         readSuccess = False
+        print(" =========== set sony ex pro ================ ")
+        
         # 
         timeout1 = timeout1 * no_timeout1_retry
         timeout2 = timeout2 * no_timeout2_retry
@@ -1962,29 +1995,33 @@ class sonyAlphaNewCamera():
             reqDat, prevDat, readSuccess  = mavObj.getVal_sony_ex_pro(mavObj.STATE_CAM_READING,timeout1)
             timeout1 -= timeout1
             
-        if (not (reqDat == mavObj.STATE_INIT) and not (reqDat == prevDat)):
+        if ((not (reqDat == mavObj.STATE_INIT) and not (reqDat == prevDat)) and (readSuccess == True)):
             ans = self.set_sony_ex_pro( self.enumerate_ex_pro_sony_a7(reqDat) ) 
+            print(f" \033[32m set the ex=Pro from/to :: {ans}\033[0m")   
             if not (ans is None):    
                 if (len(ans)==0):
-                    print("length of command return was zero")
+                    print("\033[31m length of command return was zero \033[0m")
                     return ret             # 
+                print(f" \033[32m set the ex=Pro from/to :: {ans} \033[0m")  
                 writeSuccess = False
-                while (writeSuccess == False) and (timeout2 > 0):  
-                    try:                
-                        writeSuccess = mavObj.setVal_sony_ex_pro(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,timeout2) 
-                        ret = ( ans[1] == reqDat ) 
-                    except Exception as err_msg:                
-                        print("write sony failed to set exposure program")
-                    timeout2 -= timeout2
-                    
-                if ( ret == True ):
-                    ret = self.setSonyObjData( mem, int(ans[1]) )                
+                try:
+                    if ( ans[1] == reqDat ) :
+                        while (writeSuccess == False) and (timeout2 > 0): 
+                            writeSuccess = mavObj.setVal_sony_ex_pro(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,timeout2) 
+                            timeout2 -= timeout2                                  # no retries  
+                except Exception as err_msg:                
+                   print("\033[31m write sony expro failed to set expro \033[0m")                    
+                if ( writeSuccess == True ):
+                    ret = self.setSonyObjData( mem, int(ans[1]) ) 
+        else:
+            print(f"\033[32m timeout error trying to set expro to \033[4;42;31m {reqDat} \033[0m")                     
         return ret
 
     def setSonyCamFocusData( self, mem, mavObj, timeout1=100, timeout2=50, no_timeout1_retry=1, no_timeout2_retry=1 ):
     
         ret = False
         readSuccess = False
+        print(" =========== set sony focus mode ================ ")
         # 
         timeout1 = timeout1 * no_timeout1_retry
         timeout2 = timeout2 * no_timeout2_retry
@@ -1993,29 +2030,32 @@ class sonyAlphaNewCamera():
             reqDat, prevDat, readSuccess  = mavObj.getVal_sony_focus(mavObj.STATE_CAM_READING,timeout1)
             timeout1 -= timeout1
             
-        if (not (reqDat == mavObj.STATE_INIT) and not (reqDat == prevDat)):
+        if ((not (reqDat == mavObj.STATE_INIT) and not (reqDat == prevDat)) and (readSuccess == True)):
             ans = self.set_sony_focus( self.enumerate_focus_sony_a7(reqDat) ) 
             if not (ans is None):  
                 if (len(ans)==0):
-                    print("length of command return was zero")
+                    print("\033[31m length of command return was zero \033[0m")
                     return ret             # 
+                print(f" \033[32m set the focus mode from/to :: {ans} \033[0m")   
                 writeSuccess = False
-                while (writeSuccess == False) and (timeout2 > 0):  
-                    try:                
-                        writeSuccess = mavObj.setVal_sony_focus(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,timeout2) 
-                        ret = ( ans[1] == reqDat ) 
-                    except Exception as err_msg:                
-                        print("write sony failed to set focus mode")
-                    timeout2 -= timeout2
-                    
-                if ( ret == True ):
-                    ret = self.setSonyObjData( mem, int(ans[1]) )                
+                try:
+                    if ( ans[1] == reqDat ) :
+                        while (writeSuccess == False) and (timeout2 > 0): 
+                            writeSuccess = mavObj.setVal_sony_focus(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,timeout2) 
+                            timeout2 -= timeout2                                  # no retries  
+                except Exception as err_msg:                
+                   print("\033[31m write sony focus mode failed to set focus mode \033[0m")                    
+                if ( writeSuccess == True ):
+                    ret = self.setSonyObjData( mem, int(ans[1]) ) 
+        else:
+            print(f"\033[32m timeout error trying to set focus mode to \033[4;42;31m {reqDat} \033[0m")                            
         return ret
 
     def setSonyCamFocusAreaData( self, mem, mavObj, timeout1=100, timeout2=50, no_timeout1_retry=1, no_timeout2_retry=1 ):
     
         ret = False
         readSuccess = False
+        print(" =========== set sony focus area ================ ")
         # 
         timeout1 = timeout1 * no_timeout1_retry
         timeout2 = timeout2 * no_timeout2_retry
@@ -2024,29 +2064,32 @@ class sonyAlphaNewCamera():
             reqDat, prevDat, readSuccess  = mavObj.getVal_sony_focus_area(mavObj.STATE_CAM_READING,timeout1)
             timeout1 -= timeout1
             
-        if (not (reqDat == mavObj.STATE_INIT) and not (reqDat == prevDat)):
+        if ((not (reqDat == mavObj.STATE_INIT) and not (reqDat == prevDat)) and (readSuccess == True)):
             ans = self.set_sony_focus_area( self.enumerate_focus_area_sony_a7(reqDat) ) 
             if not (ans is None):   
                 if (len(ans)==0):
-                    print("length of command return was zero")
+                    print("\033[31m length of command return was zero \033[0m")
                     return ret             # 
                 writeSuccess = False
-                while (writeSuccess == False) and (timeout2 > 0):  
-                    try:                
-                        writeSuccess = mavObj.setVal_sony_focus_area(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,timeout2) 
-                        ret = ( ans[1] == reqDat ) 
-                    except Exception as err_msg:                
-                        print("write sony failed to set focus area")                        
-                    timeout2 -= timeout2
-                    
-                if ( ans[1] == reqDat ) :
-                    ret = self.setSonyObjData( mem, int(ans[1]) )                
+                print(f" \033[32m set the focus area from/to :: {ans} \033[0m")   
+                try:
+                    if ( ans[1] == reqDat ) :
+                        while (writeSuccess == False) and (timeout2 > 0): 
+                            writeSuccess = mavObj.setVal_sony_focus_area(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,timeout2) 
+                            timeout2 -= timeout2                                  # no retries  
+                except Exception as err_msg:                
+                   print("\033[31m write sony focus area failed to set focus area \033[0m")                    
+                if ( writeSuccess == True ):
+                    ret = self.setSonyObjData( mem, int(ans[1]) ) 
+        else:
+            print(f"\033[32m timeout error trying to set focus area to \033[4;42;31m {reqDat} \033[0m")                
         return ret
 
     def setSonyCamShutSpdData( self, mem, mavObj, timeout1=100, timeout2=50, no_timeout1_retry=1, no_timeout2_retry=1 ):
     
         ret = False
         readSuccess = False
+        print(" =========== set sony shutter speed ================ ")
         # 
         timeout1 = timeout1 * no_timeout1_retry
         timeout2 = timeout2 * no_timeout2_retry
@@ -2055,29 +2098,32 @@ class sonyAlphaNewCamera():
             reqDat, prevDat, readSuccess  = mavObj.getVal_sony_shutter(mavObj.STATE_CAM_READING,timeout1)
             timeout1 -= timeout1
             
-        if (not (reqDat == mavObj.STATE_INIT) and not (reqDat == prevDat)):
+        if ((not (reqDat == mavObj.STATE_INIT) and not (reqDat == prevDat)) and (readSuccess == True)):
             ans = self.set_sony_shutter( self.enumerate_shutter_sony_a7(reqDat) ) 
             if not (ans is None): 
                 if (len(ans)==0):
-                    print("length of command return was zero")
+                    print("\033[31m length of command return was zero \033[0m")
                     return ret             # 
                 writeSuccess = False
-                while (writeSuccess == False) and (timeout2 > 0):   
-                    try:                
-                        writeSuccess = mavObj.setVal_sony_shutter(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,timeout2) 
-                        ret = ( ans[1] == reqDat ) 
-                    except Exception as err_msg:                
-                        print("write sony failed to set shutter speed")
-                    timeout2 -= timeout2
-            
-                if ( ret == True ):
-                    ret = self.setSonyObjData( mem, int(ans[1]) )                
+                print(f" \033[32m set the shutter speed from/to :: {ans} \033[0m")   
+                try:
+                    if ( ans[1] == reqDat ) :
+                        while (writeSuccess == False) and (timeout2 > 0): 
+                            writeSuccess = mavObj.setVal_sony_shutter(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,timeout2) 
+                            timeout2 -= timeout2                                  # no retries  
+                except Exception as err_msg:                
+                   print("\033[31m write sony shutter speed failed to set shutter speed \033[0m")                    
+                if ( writeSuccess == True ):
+                    ret = self.setSonyObjData( mem, int(ans[1]) ) 
+        else:
+            print(f"\033[32m timeout error trying to set shutter speed to \033[4;42;31m {reqDat} \033[0m")                
         return ret
 
     def setSonyCamWhiteBalaData( self, mem, mavObj, timeout1=100, timeout2=50, no_timeout1_retry=1, no_timeout2_retry=1 ):
     
         ret = False
         readSuccess = False
+        print(" =========== set sony white balance ================ ")
         # 
         timeout1 = timeout1 * no_timeout1_retry
         timeout2 = timeout2 * no_timeout2_retry
@@ -2086,29 +2132,32 @@ class sonyAlphaNewCamera():
             reqDat, prevDat, readSuccess  = mavObj.getVal_sony_white_bal(mavObj.STATE_CAM_READING,timeout1)
             timeout1 -= timeout1
             
-        if (not (reqDat == mavObj.STATE_INIT) and not (reqDat == prevDat)):
+        if ((not (reqDat == mavObj.STATE_INIT) and not (reqDat == prevDat)) and (readSuccess == True)):
             ans = self.set_sony_white_bal( self.enumerate_white_bal_sony_a7(reqDat) ) 
             if not (ans is None):   
                 if (len(ans)==0):
-                    print("length of command return was zero")
+                    print("\033[31m length of command return was zero \033[0m")
                     return ret             # 
                 writeSuccess = False
-                while (writeSuccess == False) and (timeout2 > 0):   
-                    try:                
-                        writeSuccess = mavObj.setVal_sony_white_bal(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,timeout2) 
-                        ret = ( ans[1] == reqDat ) 
-                    except Exception as err_msg:                
-                        print("write sony failed to set white balance")
-                    timeout2 -= timeout2
-                     
-                if ( ret == True ):
-                    ret = self.setSonyObjData( mem, int(ans[1]) )                
+                print(f" \033[32m set the white balance from/to :: {ans} \033[0m")   
+                try:
+                    if ( ans[1] == reqDat ) :
+                        while (writeSuccess == False) and (timeout2 > 0): 
+                            writeSuccess = mavObj.setVal_sony_white_bal(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,timeout2) 
+                            timeout2 -= timeout2                                  # no retries  
+                except Exception as err_msg:                
+                   print("\033[31m write sony white balance failed to set white balance \033[0m")                    
+                if ( writeSuccess == True ):
+                    ret = self.setSonyObjData( mem, int(ans[1]) ) 
+        else:
+            print(f"\033[32m timeout error trying to set white balance to \033[4;42;31m {reqDat} \033[0m")                    
         return ret
         
     def setSonyCamStillCapModeData( self, mem, mavObj, timeout1=100, timeout2=50, no_timeout1_retry=1, no_timeout2_retry=1 ):
     
         ret = False
         readSuccess = False
+        print(" =========== set sony still capture mode ================ ")
         # 
         timeout1 = timeout1 * no_timeout1_retry
         timeout2 = timeout2 * no_timeout2_retry
@@ -2117,29 +2166,31 @@ class sonyAlphaNewCamera():
             reqDat, prevDat, readSuccess  = mavObj.getVal_sony_still_cap_mode(mavObj.STATE_CAM_READING,timeout1)
             timeout1 -= timeout1
             
-        if (not (reqDat == mavObj.STATE_INIT) and not (reqDat == prevDat)):
+        if ((not (reqDat == mavObj.STATE_INIT) and not (reqDat == prevDat)) and (readSuccess == True)):
             ans = self.set_sony_still_cap( self.enumerate_still_cap_sony_a7(reqDat) ) 
             if not (ans is None): 
                 if (len(ans)==0):
-                    print("length of command return was zero")
+                    print("\033[31m length of command return was zero \033[0m")
                     return ret             # 
                 writeSuccess = False
-                while (writeSuccess == False) and (timeout2 > 0): 
-                    try:                
-                        writeSuccess = mavObj.setVal_sony_still_cap_mode(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,timeout2) 
-                        ret = ( ans[1] == reqDat ) 
-                    except Exception as err_msg:                
-                        print("write sony failed to set still capture mode")                        
-                    timeout2 -= timeout2
-                    
-                if ( ret == True ):
-                    ret = self.setSonyObjData( mem, int(ans[1]) )                
+                print(f" \033[32m set the still capture mode from/to :: {ans} \033[0m")   
+                try:
+                    if ( ans[1] == reqDat ) :
+                        while (writeSuccess == False) and (timeout2 > 0): 
+                            writeSuccess = mavObj.setVal_sony_white_bal(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,timeout2) 
+                            timeout2 -= timeout2                                  # no retries  
+                except Exception as err_msg:                
+                   print("\033[31m write sony still capture mode failed to set still capture mode \033[0m")                    
+                if ( writeSuccess == True ):
+                    ret = self.setSonyObjData( mem, int(ans[1]) ) 
+        else:
+            print(f"\033[32m timeout error trying to set still capture mode to \033[4;42;31m {reqDat} \033[0m")               
         return ret  
 
     #
     # would go into mavlink class if it was in multi-tasking mode
     #
-    def sendMavlinkMessageForObject( self, obj, the_connection, Timeout=5 ):
+    def sendMavlinkMessageForParamObject( self, obj, the_connection, Timeout=5 ):
 
         if (obj.updateNeeded == True):
         
@@ -2171,7 +2222,7 @@ class sonyAlphaNewCamera():
     #
     # would go into mavlink class if it was in multi-tasking mode
     #
-    def sendMavlinkMessageForExtObject( self, obj, the_connection, Timeout=5 ):
+    def sendMavlinkMessageForParamExtObject( self, obj, the_connection, Timeout=5 ):
 
         v, r = obj.get_ack_send( obj.STATE_MAV_READING )
         if ((v == True) and (r == True)):
@@ -2218,11 +2269,9 @@ class sonyAlphaNewCamera():
 # https://mavlink.io/en/mavgen_python/
 # https://github.com/ArduPilot/pymavlink/blob/master/mavutil.py
 
-# ref to multi-threading using asyncio
-#
-# https://python-scripts.com/sleep#threading-event
-# vasile.buldumac@ati.utm.md
-# 
+# multi-tasking info
+# https://ja.pymotw.com/2/multiprocessing/basics.html
+# https://techacademy.jp/magazine/20607 
 
 # sudo apt-get install python3-dev python3-opencv python3-wxgtk4.0 python3-pip python3-matplotlib python3-lxml
 # sudo apt-get install libxml++2.6-dev
@@ -3481,7 +3530,7 @@ class MAVFrame():
         d = struct.unpack('f', struct.pack('I', val))[0]
         try:
             the_connection.mav.param_value_send(
-            "sonyISO".encode('ascii'),
+            "S_ISO".encode('ascii'),
             d,
             mavutil.mavlink.MAV_PARAM_TYPE_UINT32,
             8,
@@ -3497,7 +3546,7 @@ class MAVFrame():
         d = struct.unpack('f', struct.pack('I', val))[0]
         try:
             the_connection.mav.param_value_send(
-            "sonyAperture".encode('ascii'),
+            "S_APERTURE".encode('ascii'),
             d,
             mavutil.mavlink.MAV_PARAM_TYPE_UINT32,
             8,
@@ -3513,7 +3562,7 @@ class MAVFrame():
         d = struct.unpack('f', struct.pack('I', val))[0]
         try:
             the_connection.mav.param_value_send(
-            "sonyExProMode".encode('ascii'),
+            "S_EX_PRO_MODE".encode('ascii'),
             d,
             mavutil.mavlink.MAV_PARAM_TYPE_UINT32,
             8,
@@ -3529,7 +3578,7 @@ class MAVFrame():
         d = struct.unpack('f', struct.pack('I', val))[0]           
         try:
             the_connection.mav.param_value_send(
-            "sonyFocusMode".encode('ascii'),
+            "S_FOCUS_MODE".encode('ascii'),
             d,
             mavutil.mavlink.MAV_PARAM_TYPE_UINT32,
             8,
@@ -3545,7 +3594,7 @@ class MAVFrame():
         p = struct.unpack('f', struct.pack('I', val))[0] 
         try:
             the_connection.mav.param_value_send(
-            "sonyFocusArea".encode('ascii'),
+            "S_FOCUS_AREA".encode('ascii'),
             p,
             mavutil.mavlink.MAV_PARAM_TYPE_UINT32,
             8,
@@ -3561,7 +3610,7 @@ class MAVFrame():
         d = struct.unpack('f', struct.pack('I', val))[0]
         try:
             the_connection.mav.param_value_send(
-            "sonyShutSpd".encode('ascii'),
+            "S_SHUT_SPD".encode('ascii'),
             d,
             mavutil.mavlink.MAV_PARAM_TYPE_UINT32,
             8,
@@ -3577,7 +3626,7 @@ class MAVFrame():
         d = struct.unpack('f', struct.pack('I', val))[0]
         try:
             the_connection.mav.param_value_send(
-            "sonyWhiteBalance".encode('ascii'),
+            "S_WHITE_BAL".encode('ascii'),
             d,
             mavutil.mavlink.MAV_PARAM_TYPE_UINT32,
             8,
@@ -3593,7 +3642,7 @@ class MAVFrame():
         d = struct.unpack('f', struct.pack('I', val))[0]
         try:
             the_connection.mav.param_value_send(
-            "sonyStillCapMode".encode('ascii'),
+            "S_STILL_CAP".encode('ascii'),
             d,
             mavutil.mavlink.MAV_PARAM_TYPE_UINT32,
             8,
@@ -3609,7 +3658,7 @@ class MAVFrame():
         d = str(val)
         try:
             the_connection.mav.param_ext_value_send(
-            "sonyISO".encode('ascii'),
+            "S_ISO".encode('ascii'),
             d.encode('ascii'),
             mavutil.mavlink.MAV_PARAM_EXT_TYPE_UINT32,
             8,
@@ -3625,7 +3674,7 @@ class MAVFrame():
         d = str(val)
         try:
             the_connection.mav.param_ext_value_send(
-            "sonyAperture".encode('ascii'),
+            "S_APERTURE".encode('ascii'),
             d.encode('ascii'),
             mavutil.mavlink.MAV_PARAM_EXT_TYPE_UINT32,
             8,
@@ -3641,7 +3690,7 @@ class MAVFrame():
         d = str(val)
         try:
             the_connection.mav.param_ext_value_send(
-            "sonyExProMode".encode('ascii'),
+            "S_EX_PRO_MODE".encode('ascii'),
             d.encode('ascii'),
             mavutil.mavlink.MAV_PARAM_EXT_TYPE_UINT32,
             8,
@@ -3657,7 +3706,7 @@ class MAVFrame():
         d = str(val)           
         try:
             the_connection.mav.param_ext_value_send(
-            "sonyFocusMode".encode('ascii'),
+            "S_FOCUS_MODE".encode('ascii'),
             d.encode('ascii'),
             mavutil.mavlink.MAV_PARAM_EXT_TYPE_UINT32,
             8,
@@ -3673,7 +3722,7 @@ class MAVFrame():
         p = str(val) 
         try:
             the_connection.mav.param_ext_value_send(
-            "sonyFocusArea".encode('ascii'),
+            "S_FOCUS_AREA".encode('ascii'),
             p.encode('ascii'),
             mavutil.mavlink.MAV_PARAM_EXT_TYPE_UINT32,
             8,
@@ -3689,7 +3738,7 @@ class MAVFrame():
         d = str(val)
         try:
             the_connection.mav.param_ext_value_send(
-            "sonyShutSpd".encode('ascii'),
+            "S_SHUT_SPD".encode('ascii'),
             d.encode('ascii'),
             mavutil.mavlink.MAV_PARAM_EXT_TYPE_UINT32,
             8,
@@ -3705,7 +3754,7 @@ class MAVFrame():
         d = str(val)
         try:
             the_connection.mav.param_ext_value_send(
-            "sonyWhiteBalance".encode('ascii'),
+            "S_WHITE_BAL".encode('ascii'),
             d.encode('ascii'),
             mavutil.mavlink.MAV_PARAM_EXT_TYPE_UINT32,
             8,
@@ -3721,7 +3770,7 @@ class MAVFrame():
         d = str(val)
         try:
             the_connection.mav.param_ext_value_send(
-            "sonyStillCapMode".encode('ascii'),
+            "S_STILL_CAP".encode('ascii'),
             d.encode('ascii'),
             mavutil.mavlink.MAV_PARAM_EXT_TYPE_UINT32,
             8,
@@ -3737,7 +3786,7 @@ class MAVFrame():
         d = struct.unpack('f', struct.pack('I', 1))[0]
         try:
             the_connection.mav.param_value_send(
-            "sonyISO".encode('ascii'),
+            "S_ISO".encode('ascii'),
             d,
             mavutil.mavlink.MAV_PARAM_TYPE_UINT32,
             8,
@@ -3749,7 +3798,7 @@ class MAVFrame():
         d = struct.unpack('f', struct.pack('I', 10))[0]
         try:
             the_connection.mav.param_value_send(
-            "sonyAperture".encode('ascii'),
+            "S_APERTURE".encode('ascii'),
             d,
             mavutil.mavlink.MAV_PARAM_TYPE_UINT32,
             8,
@@ -3761,7 +3810,7 @@ class MAVFrame():
         d = struct.unpack('f', struct.pack('I', 30))[0]
         try:
             the_connection.mav.param_value_send(
-            "sonyExProMode".encode('ascii'),
+            "S_EX_PRO_MODE".encode('ascii'),
             d,
             mavutil.mavlink.MAV_PARAM_TYPE_UINT32,
             8,
@@ -3773,7 +3822,7 @@ class MAVFrame():
         d = struct.unpack('f', struct.pack('I', 5))[0]           
         try:
             the_connection.mav.param_value_send(
-            "sonyFocusMode".encode('ascii'),
+            "S_FOCUS_MODE".encode('ascii'),
             d,
             mavutil.mavlink.MAV_PARAM_TYPE_UINT32,
             8,
@@ -3785,7 +3834,7 @@ class MAVFrame():
         p = struct.unpack('f', struct.pack('I', 11))[0] 
         try:
             the_connection.mav.param_value_send(
-            "sonyFocusArea".encode('ascii'),
+            "S_FOCUS_AREA".encode('ascii'),
             p,
             mavutil.mavlink.MAV_PARAM_TYPE_UINT32,
             8,
@@ -3797,7 +3846,7 @@ class MAVFrame():
         d = struct.unpack('f', struct.pack('I', 675))[0]
         try:
             the_connection.mav.param_value_send(
-            "sonyShutSpd".encode('ascii'),
+            "S_SHUT_SPD".encode('ascii'),
             d,
             mavutil.mavlink.MAV_PARAM_TYPE_UINT32,
             8,
@@ -3809,7 +3858,7 @@ class MAVFrame():
         d = struct.unpack('f', struct.pack('I', 76))[0]
         try:
             the_connection.mav.param_value_send(
-            "sonyWhiteBalance".encode('ascii'),
+            "S_WHITE_BAL".encode('ascii'),
             d,
             mavutil.mavlink.MAV_PARAM_TYPE_UINT32,
             8,
@@ -3821,7 +3870,7 @@ class MAVFrame():
         d = struct.unpack('f', struct.pack('I', 7))[0]
         try:
             the_connection.mav.param_value_send(
-            "sonyStillCapMode".encode('ascii'),
+            "S_STILL_CAP".encode('ascii'),
             d,
             mavutil.mavlink.MAV_PARAM_TYPE_UINT32,
             8,
@@ -4049,46 +4098,46 @@ class MAVFrame():
     def writeParamSetFromMavLink( self, msgString, mavObj, dataRcv, the_connection ):
 
         # must be EXACT tag match
-        #patternISO = re.compile(r"\bsonyISO\b")
-        #patternAper = re.compile(r"\bsonyAperture\b")
-        #patternExPro = re.compile(r"\bsonyExProMode\b")
-        #patternFocus = re.compile(r"\bsonyFocusMode\b")
-        #patternFocA = re.compile(r"\bsonyFocusArea\b")
-        #patternShSp = re.compile(r"\bsonyShutSpd\b")  
-        #patternWhiBal = re.compile(r"sonyWhiteBalance") 
-        #patternStCa = re.compile(r"\bsonyStillCapMode\b") 
+        #patternISO = re.compile(r"\bS_ISO\b")
+        #patternAper = re.compile(r"\bS_APERTURE\b")
+        #patternExPro = re.compile(r"\bS_EX_PRO_MODE\b")
+        #patternFocus = re.compile(r"\bS_FOCUS_MODE\b")
+        #patternFocA = re.compile(r"\bS_FOCUS_AREA\b")
+        #patternShSp = re.compile(r"\bS_SHUT_SPD\b")  
+        #patternWhiBal = re.compile(r"S_WHITE_BAL") 
+        #patternStCa = re.compile(r"\bS_STILL_CAP\b") 
         
-        if not (msgString.find("sonyISO") == -1):
+        if not (msgString.find("S_ISO") == -1):
         #if (re.search(patternISO, msgString.upper())==True): 
             print(f"saw sonISO with {dataRcv}")
             if (mavObj.setMavIsoModeData( dataRcv )==True):
                 print(f"setMavIsoModeData sonISO with {dataRcv}")
                 return (self.mavlink_send_param_value_iso( the_connection, dataRcv )) 
-        elif not (msgString.find("sonyAperture") == -1):
+        elif not (msgString.find("S_APERTURE") == -1):
         #elif (re.search(patternAper, msgString.upper())==True):
             if (mavObj.setMavApertureData( dataRcv )==True):        
                 return (self.mavlink_send_param_value_aper( the_connection, dataRcv ))          
-        elif not (msgString.find("sonyExProMode") == -1):
+        elif not (msgString.find("S_EX_PRO_MODE") == -1):
         #elif (re.search(patternExPro, msgString.upper())==True): 
             if (mavObj.setMavExProData( dataRcv )==True):        
                 return (self.mavlink_send_param_value_expro( the_connection, dataRcv ))                   
-        elif not (msgString.find("sonyFocusArea") == -1):
+        elif not (msgString.find("S_FOCUS_AREA") == -1):
         #elif (re.search(patternFocA, msgString.upper())==True): 
             if (mavObj.setMavFocusAreaData( dataRcv )==True):        
                 return (self.mavlink_send_param_value_focus_area( the_connection, dataRcv ))           
-        elif not (msgString.find("sonyFocusMode") == -1):
+        elif not (msgString.find("S_FOCUS_MODE") == -1):
         #elif (re.search(patternFocus, msgString.upper())==True):
             if (mavObj.setMavFocusData( dataRcv )==True): 
                 return (self.mavlink_send_param_value_focus( the_connection, dataRcv ))                  
-        elif not (msgString.find("sonyShutSpd") == -1):
+        elif not (msgString.find("S_SHUT_SPD") == -1):
         #elif (re.search(patternShSp, msgString.upper())==True):
             if (mavObj.setMavShutterData( dataRcv )==True):         
                 return (self.mavlink_send_param_value_shut_spd( the_connection, dataRcv ))                               
-        elif not (msgString.find("sonyWhiteBalance") == -1):
+        elif not (msgString.find("S_WHITE_BAL") == -1):
         #elif (re.search(patternWhiBal, msgString.upper())==True): 
             if (mavObj.setMavWhiteBalData( dataRcv )==True):        
                 return (self.mavlink_send_param_value_white_bal( the_connection, dataRcv ))
-        elif not (msgString.find("sonyStillCapMode") == -1):
+        elif not (msgString.find("S_STILL_CAP") == -1):
         #elif (re.search(patternStCa, msgString.upper())==True): 
             if (mavObj.setMavStillCapModeData( dataRcv )==True):        
                 return (self.mavlink_send_param_value_still_cap( the_connection, dataRcv ))        
@@ -4099,20 +4148,20 @@ class MAVFrame():
     def readParamSetFromMavLink( self, msgString, mavObj, the_connection ):
 
         # must be EXACT tag match
-        #patternISO = re.compile(r"\bsonyISO\b")
-        #patternAper = re.compile(r"\bsonyAperture\b")
-        #patternExPro = re.compile(r"\bsonyExProMode\b")
-        #patternFocus = re.compile(r"\bsonyFocusMode\b")
-        #patternFocA = re.compile(r"\bsonyFocusArea\b")
-        #patternShSp = re.compile(r"\bsonyShutSpd\b")  
-        #patternWhiBal = re.compile(r"sonyWhiteBalance") 
-        #patternStCa = re.compile(r"\bsonyStillCapMode\b") 
+        #patternISO = re.compile(r"\bS_ISO\b")
+        #patternAper = re.compile(r"\bS_APERTURE\b")
+        #patternExPro = re.compile(r"\bS_EX_PRO_MODE\b")
+        #patternFocus = re.compile(r"\bS_FOCUS_MODE\b")
+        #patternFocA = re.compile(r"\bS_FOCUS_AREA\b")
+        #patternShSp = re.compile(r"\bS_SHUT_SPD\b")  
+        #patternWhiBal = re.compile(r"S_WHITE_BAL") 
+        #patternStCa = re.compile(r"\bS_STILL_CAP\b") 
 
         v = 0
         p = 0
         r = False
                 
-        if not (msgString.find("sonyISO") == -1):
+        if not (msgString.find("S_ISO") == -1):
         #if (re.search(patternISO, msgString.upper())==True): 
             v, p, r = mavObj.getMavIsoModeData( )
             if (r == True):
@@ -4120,7 +4169,7 @@ class MAVFrame():
                 return ( self.mavlink_send_param_value_iso( the_connection, v ) )
             else:
                 return False            
-        elif not (msgString.find("sonyAperture") == -1):
+        elif not (msgString.find("S_APERTURE") == -1):
         #elif (re.search(patternAper, msgString.upper())==True): 
             v, p, r = mavObj.getMavApertureData( )
             if (r == True):
@@ -4128,7 +4177,7 @@ class MAVFrame():
                 return ( self.mavlink_send_param_value_aper( the_connection, v ) )  
             else:
                 return False                 
-        elif not (msgString.find("sonyExProMode") == -1):
+        elif not (msgString.find("S_EX_PRO_MODE") == -1):
         #elif (re.search(patternExPro, msgString.upper())==True): 
             v, p, r = mavObj.getMavExProData( )
             if (r == True):
@@ -4136,7 +4185,7 @@ class MAVFrame():
                 return ( self.mavlink_send_param_value_expro( the_connection, v ) )
             else:
                 return False                 
-        elif not (msgString.find("sonyFocusArea") == -1):
+        elif not (msgString.find("S_FOCUS_AREA") == -1):
         #elif (re.search(patternFocA, msgString.upper())==True): 
             v, p, r = mavObj.getMavFocusAreaData( )
             if (r == True):
@@ -4144,7 +4193,7 @@ class MAVFrame():
                 return ( self.mavlink_send_param_value_focus_area( the_connection, v ) ) 
             else:
                 return False                 
-        elif not (msgString.find("sonyFocusMode") == -1):
+        elif not (msgString.find("S_FOCUS_MODE") == -1):
         #elif (re.search(patternFocus, msgString.upper())==True):
             v, p, r = mavObj.getMavFocusData( )
             if (r == True):
@@ -4152,7 +4201,7 @@ class MAVFrame():
                 return ( self.mavlink_send_param_value_focus( the_connection, v ) )
             else:
                 return False                 
-        elif not (msgString.find("sonyShutSpd") == -1):
+        elif not (msgString.find("S_SHUT_SPD") == -1):
         #elif (re.search(patternShSp, msgString.upper())==True): 
             v, p, r = mavObj.getMavShutterData( )
             if (r == True):
@@ -4160,7 +4209,7 @@ class MAVFrame():
                 return ( self.mavlink_send_param_value_shut_spd( the_connection, v ) )      
             else:
                 return False                 
-        elif not (msgString.find("sonyWhiteBalance") == -1):
+        elif not (msgString.find("S_WHITE_BAL") == -1):
         #elif (re.search(patternWhiBal, msgString.upper())==True):  
             v, p, r = mavObj.getMavWhiteBalData( )
             if (r == True):
@@ -4168,7 +4217,7 @@ class MAVFrame():
                 return ( self.mavlink_send_param_value_white_bal( the_connection, v ) )        
             else:
                 return False 
-        elif not (msgString.find("sonyStillCapMode") == -1):
+        elif not (msgString.find("S_STILL_CAP") == -1):
         #elif (re.search(patternStCa, msgString.upper())==True):   
             v, p, r = mavObj.getMavStillCapModeData( )
             if (r == True):
@@ -4183,65 +4232,65 @@ class MAVFrame():
     def writeParamExtSetFromMavLink( self, msgString, mavObj, dataRcv, the_connection ):
 
         # must be EXACT tag match
-        #patternISO = re.compile(r"\bsonyISO\b")
-        #patternAper = re.compile(r"\bsonyAperture\b")
-        #patternExPro = re.compile(r"\bsonyExProMode\b")
-        #patternFocus = re.compile(r"\bsonyFocusMode\b")
-        #patternFocA = re.compile(r"\bsonyFocusArea\b")
-        #patternShSp = re.compile(r"\bsonyShutSpd\b")  
-        #patternWhiBal = re.compile(r"sonyWhiteBalance") 
-        #patternStCa = re.compile(r"\bsonyStillCapMode\b") 
+        #patternISO = re.compile(r"\bS_ISO\b")
+        #patternAper = re.compile(r"\bS_APERTURE\b")
+        #patternExPro = re.compile(r"\bS_EX_PRO_MODE\b")
+        #patternFocus = re.compile(r"\bS_FOCUS_MODE\b")
+        #patternFocA = re.compile(r"\bS_FOCUS_AREA\b")
+        #patternShSp = re.compile(r"\bS_SHUT_SPD\b")  
+        #patternWhiBal = re.compile(r"S_WHITE_BAL") 
+        #patternStCa = re.compile(r"\bS_STILL_CAP\b") 
 
         ret = False
         
-        if not (msgString.find("sonyISO") == -1):
+        if not (msgString.find("S_ISO") == -1):
         #if (re.search(patternISO, msgString.upper())==True): 
             if ((mavObj.setMavIsoModeData( dataRcv )) == True):
-                ret = self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_ACCEPTED, "sonyISO" )
+                ret = self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_ACCEPTED, "S_ISO" )
             else:
-                self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_FAILED, "sonyISO" )            
-        elif not (msgString.find("sonyAperture") == -1):
+                self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_FAILED, "S_ISO" )            
+        elif not (msgString.find("S_APERTURE") == -1):
         #elif (re.search(patternAper, msgString.upper())==True): 
             if ((mavObj.setMavApertureData( dataRcv )) == True):
-                ret = self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_ACCEPTED, "sonyAperture" )
+                ret = self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_ACCEPTED, "S_APERTURE" )
             else:
-                self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_FAILED, "sonyAperture" )   
-        elif not (msgString.find("sonyExProMode") == -1):
+                self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_FAILED, "S_APERTURE" )   
+        elif not (msgString.find("S_EX_PRO_MODE") == -1):
         #elif (re.search(patternExPro, msgString.upper())==True): 
             if ((mavObj.setMavExProData( dataRcv )) == True):
-                self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_ACCEPTED, "sonyExProMode" )
+                self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_ACCEPTED, "S_EX_PRO_MODE" )
             else:
-                self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_FAILED, "sonyExProMode" )                        
-        elif not (msgString.find("sonyFocusArea") == -1):
+                self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_FAILED, "S_EX_PRO_MODE" )                        
+        elif not (msgString.find("S_FOCUS_AREA") == -1):
         #elif (re.search(patternFocA, msgString.upper())==True):    
             if ((mavObj.setMavFocusAreaData( dataRcv )) == True):
-                ret = self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_ACCEPTED, "sonyFocusArea" )
+                ret = self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_ACCEPTED, "S_FOCUS_AREA" )
             else:
-                self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_FAILED, "sonyFocusArea" )              
-        elif not (msgString.find("sonyFocusMode") == -1):
+                self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_FAILED, "S_FOCUS_AREA" )              
+        elif not (msgString.find("S_FOCUS_MODE") == -1):
         #elif (re.search(patternFocus, msgString.upper())==True):
             if ((mavObj.setMavFocusData( dataRcv )) == True):
-                ret = self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_ACCEPTED, "sonyFocusMode" )
+                ret = self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_ACCEPTED, "S_FOCUS_MODE" )
             else:
-                self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_FAILED, "sonyFocusMode" )                 
-        elif not (msgString.find("sonyShutSpd") == -1):
+                self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_FAILED, "S_FOCUS_MODE" )                 
+        elif not (msgString.find("S_SHUT_SPD") == -1):
         #elif (re.search(patternShSp, msgString.upper())==True):   
             if ((mavObj.setMavShutterData( dataRcv )) == True):
-                ret = self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_ACCEPTED, "sonyShutSpd" )
+                ret = self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_ACCEPTED, "S_SHUT_SPD" )
             else:
-                self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_FAILED, "sonyShutSpd" )                           
-        elif not (msgString.find("sonyWhiteBalance") == -1):
+                self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_FAILED, "S_SHUT_SPD" )                           
+        elif not (msgString.find("S_WHITE_BAL") == -1):
         #elif (re.search(patternWhiBal, msgString.upper())==True):  
             if ((mavObj.setMavWhiteBalData( dataRcv )) == True):
-                ret = self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_ACCEPTED, "sonyWhiteBalance" )
+                ret = self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_ACCEPTED, "S_WHITE_BAL" )
             else:
-                self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_FAILED, "sonyWhiteBalance" )          
-        elif not (msgString.find("sonyStillCapMode") == -1):
+                self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_FAILED, "S_WHITE_BAL" )          
+        elif not (msgString.find("S_STILL_CAP") == -1):
         #elif (re.search(patternStCa, msgString.upper())==True):    
             if ((mavObj.setMavStillCapModeData( dataRcv )) == True):
-                    ret = self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_ACCEPTED, "sonyStillCapMode" )
+                    ret = self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_ACCEPTED, "S_STILL_CAP" )
             else:
-                self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_FAILED, "sonyStillCapMode" )                  
+                self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_FAILED, "S_STILL_CAP" )                  
         else:
             print("unsupported variable name %s to val=%d :: NOT SET "%(msgString,dataRcv))
             return False
@@ -4251,20 +4300,20 @@ class MAVFrame():
     def readParamExtSetFromMavLink( self, msgString, mavObj, the_connection ):
 
         # must be EXACT tag match
-        #patternISO = re.compile(r"\bsonyISO\b")
-        #patternAper = re.compile(r"\bsonyAperture\b")
-        #patternExPro = re.compile(r"\bsonyExProMode\b")
-        #patternFocus = re.compile(r"\bsonyFocusMode\b")
-        #patternFocA = re.compile(r"\bsonyFocusArea\b")
-        #patternShSp = re.compile(r"\bsonyShutSpd\b")  
-        #patternWhiBal = re.compile(r"sonyWhiteBalance") 
-        #patternStCa = re.compile(r"\bsonyStillCapMode\b") 
+        #patternISO = re.compile(r"\bS_ISO\b")
+        #patternAper = re.compile(r"\bS_APERTURE\b")
+        #patternExPro = re.compile(r"\bS_EX_PRO_MODE\b")
+        #patternFocus = re.compile(r"\bS_FOCUS_MODE\b")
+        #patternFocA = re.compile(r"\bS_FOCUS_AREA\b")
+        #patternShSp = re.compile(r"\bS_SHUT_SPD\b")  
+        #patternWhiBal = re.compile(r"S_WHITE_BAL") 
+        #patternStCa = re.compile(r"\bS_STILL_CAP\b") 
 
         v = 0
         p = 0
         r = False
         
-        if not (msgString.find("sonyISO") == -1):
+        if not (msgString.find("S_ISO") == -1):
         #if (re.search(patternISO, msgString.upper())==True): 
             v, p, r = mavObj.getMavIsoModeData( )
             if (r == True):
@@ -4272,7 +4321,7 @@ class MAVFrame():
                     mavObj.mav_ext_req_all_param |= mavObj.ParamIso                                     # >>> set the bit to enable full read of parameter
                     return r
             return False            
-        elif not (msgString.find("sonyAperture") == -1):
+        elif not (msgString.find("S_APERTURE") == -1):
         #elif (re.search(patternAper, msgString.upper())==True): 
             v, p, r = mavObj.getMavApertureData( )
             if (r == True):
@@ -4280,7 +4329,7 @@ class MAVFrame():
                     mavObj.mav_ext_req_all_param |= mavObj.ParamAperture                                # >>> set the bit to enable full read of parameter                
                     return r
             return False                 
-        elif not (msgString.find("sonyExProMode") == -1):
+        elif not (msgString.find("S_EX_PRO_MODE") == -1):
         #elif (re.search(patternExPro, msgString.upper())==True): 
             v, p, r = mavObj.getMavExProData( )
             if (r == True):
@@ -4288,7 +4337,7 @@ class MAVFrame():
                     mavObj.mav_ext_req_all_param |= mavObj.ParamExPro                                   # >>> set the bit to enable full read of parameter
                     return r
             return False                  
-        elif not (msgString.find("sonyFocusArea") == -1):
+        elif not (msgString.find("S_FOCUS_AREA") == -1):
         #elif (re.search(patternFocA, msgString.upper())==True): 
             v, p, r = mavObj.getMavFocusAreaData( )
             if (r == True):
@@ -4296,7 +4345,7 @@ class MAVFrame():
                     mavObj.mav_ext_req_all_param |= mavObj.ParamFocusArea                               # >>> set the bit to enable full read of parameter                  
                     return r
             return False                 
-        elif not (msgString.find("sonyFocusMode") == -1):
+        elif not (msgString.find("S_FOCUS_MODE") == -1):
         #elif (re.search(patternFocus, msgString.upper())==True):
             v, p, r = mavObj.getMavFocusData( )
             if (r == True):
@@ -4304,7 +4353,7 @@ class MAVFrame():
                     mavObj.mav_ext_req_all_param |= mavObj.ParamFocus                                   # >>> set the bit to enable full read of parameter 
                     return r
             return False                  
-        elif not (msgString.find("sonyShutSpd") == -1):
+        elif not (msgString.find("S_SHUT_SPD") == -1):
         #elif (re.search(patternShSp, msgString.upper())==True): 
             v, p, r = mavObj.getMavShutterData( )
             if (r == True):
@@ -4312,7 +4361,7 @@ class MAVFrame():
                     mavObj.mav_ext_req_all_param |= mavObj.ParamShutSpd                                 # >>> set the bit to enable full read of parameter                 
                     return r
             return False                     
-        elif not (msgString.find("sonyWhiteBalance") == -1):
+        elif not (msgString.find("S_WHITE_BAL") == -1):
         #elif (re.search(patternWhiBal, msgString.upper())==True):  
             v, p, r = mavObj.getMavWhiteBalData( )
             if (r == True):
@@ -4320,7 +4369,7 @@ class MAVFrame():
                    mavObj.mav_ext_req_all_param |= mavObj.ParamWhiteBala                               # >>> set the bit to enable full read of parameter                  
                    return r
             return False 
-        elif not (msgString.find("sonyStillCapMode") == -1):
+        elif not (msgString.find("S_STILL_CAP") == -1):
         #elif (re.search(patternStCa, msgString.upper())==True):   
             v, p, r = mavObj.getMavStillCapModeData( )
             if (r == True):
@@ -4334,7 +4383,7 @@ class MAVFrame():
             
     # process the incoming messages received
     #
-    def process_messages_from_connection(self, fra, the_connection, sharedObj, redCam=0):
+    def process_messages_from_connection(self, the_connection, sharedObj, redCam=0):
         #"""
         #This runs continuously. The mavutil.recv_match() function will call mavutil.post_message()
         #any time a new message is received, and will notify all functions in the master.message_hooks list.
@@ -4420,25 +4469,25 @@ class MAVFrame():
                 ee = self.mav_param_type_conv( msg.param_type, msg.param_value )
                 print(f"\033[36m Values mavlink :: {m} from func {ee}")
                 if ( self.writeParamSetFromMavLink( msg.param_id, sharedObj, ee, the_connection ) == True ):
-                    print(f"\033[33m PARAM_SET was sent for {msg.param_id} val {ee} type {msg.param_type} really sent {m}" )
+                    print(f"\033[33m PARAM_SET was sent for {msg.param_id} val {ee} type {msg.param_type} really sent {m} \033[0m" )
                 else:
-                    print("\033[31m PARAM_SET write fail for %s :: %d type %d"%( msg.param_id, ee, msg.param_type ))
+                    print("\033[31m PARAM_SET write fail for %s :: %d type %d \033[0m"%( msg.param_id, ee, msg.param_type ))
                 # ===== TRAP =====
                 #exit(97)
-            elif msg.get_type() == 'PARAM_VALUE':
+            elif msg.get_type() == 'PARAM_REQUEST_READ':
                 #
                 if ( self.readParamSetFromMavLink( msg.param_id, sharedObj, the_connection )==True):
-                    print(f"Sucess setting param {msg.param_id}")
+                    print(f"\033[34m Success reading param {msg.param_id} \033[0m")
                 else:
-                    print(f"Error sending param {msg.param_id}")
+                    print(f"\033[31;46m Error reading param {msg.param_id} \033[0m")
                 # ===== TRAP =====
                 #exit(96)
             elif msg.get_type() == 'PARAM_EXT_REQUEST_READ':
                 #
                 if ( self.readParamExtSetFromMavLink( msg.param_id, sharedObj, the_connection )==True):
-                    print(f"Sucess setting param {msg.param_id}")
+                    print(f"\033[32m Sucess reading EXT Param {msg.param_id} \033[0m")
                 else:
-                    print(f"Error sending param {msg.param_id}")                
+                    print(f"\033[31;43m Error sending param {msg.param_id} \033[0m")                
                 # ===== TRAP =====
                 #exit(96)
             elif msg.get_type() == 'PARAM_EXT_SET':
@@ -4446,7 +4495,7 @@ class MAVFrame():
                 # self.mavlink_send_param_value(the_connection)
                 #
                 if ( self.writeParamExtSetFromMavLink( msg.param_id, sharedObj, int(msg.param_value) ) == True ):
-                    print("\033[35m PARAM_EXT_SET was sent for %s :: %d"%( msg.param_id, self.mav_param_type_conv(msg.param_type, msg.param_value) ))
+                    print("\033[35m PARAM_EXT_SET was sent for %s :: %d \033[0m"%( msg.param_id, int(msg.param_value) ))
                     ## =======> send_ext_ack
                 else:
                     print("\033[31m PARAM_EXT_SET write fail for %s :: %s"%( msg.param_id, msg.param_value))
@@ -4745,7 +4794,7 @@ class MAVFrame():
 def manageAlphaCameraExpro( mySonyCam, mav2SonyVals, expro, tm_upd_disable=False, time_delta = 1000 ):
 
     p = multiprocessing.current_process()
-    print ('Starting:', p.name, p.pid)
+    print ('Starting Exposure Program :', p.name, p.pid)
     #
     # initialise general program control flags
     #
@@ -4772,19 +4821,19 @@ def manageAlphaCameraExpro( mySonyCam, mav2SonyVals, expro, tm_upd_disable=False
         #print(f"\033[36m Time Delta occurred {timenow} {expro.timestamp}")
     #else:
         #print(f"\033[34m No time diff {timenow} {expro.timestamp}")
-    print ('Exiting :', multiprocessing.current_process().name)
+    print ('Exiting Exposure Program :', multiprocessing.current_process().name)
     
 def sendMavExpro( mySonyCam, expro, ConnID ):
     p = multiprocessing.current_process()
-    print ('Starting:', p.name, p.pid)
-    success = mySonyCam.sendMavlinkMessageForObject( expro, ConnID )
-    success = mySonyCam.sendMavlinkMessageForExtObject( expro, ConnID )
-    print ('Exiting :', multiprocessing.current_process().name)             
+    print ('Starting Exposure Program:', p.name, p.pid)
+    success = mySonyCam.sendMavlinkMessageForParamObject( expro, ConnID )
+    success = mySonyCam.sendMavlinkMessageForParamExtObject( expro, ConnID )
+    print ('Exiting Exposure Program :', multiprocessing.current_process().name)             
 
 def manageAlphaCameraAperture( mySonyCam, mav2SonyVals, aper, tm_upd_disable=False, time_delta = 1000 ):
 
     p = multiprocessing.current_process()
-    print ('Starting:', p.name, p.pid)
+    print ('Starting Aperture :', p.name, p.pid)
     #
     # initialise general program control flags
     #
@@ -4809,19 +4858,19 @@ def manageAlphaCameraAperture( mySonyCam, mav2SonyVals, aper, tm_upd_disable=Fal
     if ((timenow - aper.timestamp) > time_delta):
         if (mySonyCam.getSonyApertureData( aper )==True):
             aper.timestamp = timenow
-    print ('Exiting :', multiprocessing.current_process().name)
+    print ('Exiting  Aperture :', multiprocessing.current_process().name)
     
 def sendMavAper( mySonyCam, aper, ConnID ):
     p = multiprocessing.current_process()
-    print ('Starting:', p.name, p.pid)
-    success = mySonyCam.sendMavlinkMessageForObject( aper, ConnID )
-    success = mySonyCam.sendMavlinkMessageForExtObject( aper, ConnID )
-    print ('Exiting :', multiprocessing.current_process().name)
+    print ('Starting Mavlink Aperture :', p.name, p.pid)
+    success = mySonyCam.sendMavlinkMessageForParamObject( aper, ConnID )
+    success = mySonyCam.sendMavlinkMessageForParamExtObject( aper, ConnID )
+    print ('Exiting Mavlink Aperture :', multiprocessing.current_process().name)
     
 def manageAlphaCameraFocusData( mySonyCam, mav2SonyVals, focusdata, focusarea, tm_upd_disable=False, time_delta = 1000 ):
 
     p = multiprocessing.current_process()
-    print ('Starting:', p.name, p.pid)
+    print ('Starting Focus :', p.name, p.pid)
     #
     # initialise general program control flags
     #
@@ -4850,31 +4899,31 @@ def manageAlphaCameraFocusData( mySonyCam, mav2SonyVals, focusdata, focusarea, t
     if ((timenow - focusarea.timestamp) > time_delta):
         if (mySonyCam.getSonyCamFocusAreaData( focusarea )==True):
             focusarea.timestamp = timenow
-    print ('Exiting :', multiprocessing.current_process().name)
+    print ('Exiting Focus :', multiprocessing.current_process().name)
     
 def sendMavFocusData( mySonyCam, focusdata, focusarea, ConnID ):
 
     p = multiprocessing.current_process()
-    print ('Starting:', p.name, p.pid)
+    print ('Starting Mavlink Focus Data :', p.name, p.pid)
     #
     # check to see if mavlink wrote something if so write to cam
     # and update the update flag to get the mavlink send
     #     
-    success = mySonyCam.sendMavlinkMessageForObject( focusdata, ConnID )
-    success = mySonyCam.sendMavlinkMessageForExtObject( focusarea, ConnID )
-    print ('Exiting :', multiprocessing.current_process().name)
+    success = mySonyCam.sendMavlinkMessageForParamObject( focusdata, ConnID )
+    success = mySonyCam.sendMavlinkMessageForParamExtObject( focusarea, ConnID )
+    print ('Exiting Mavlink Focus Data  :', multiprocessing.current_process().name)
 
 def manageAlphaCameraIso( mySonyCam, mav2SonyVals, iso, retries=3, tm_upd_disable=False, time_delta = 1000 ):
 
-    #p = multiprocessing.current_process()
-    #print ('Starting:', p.name, p.pid)
+    p = multiprocessing.current_process()
+    print ('Starting ISO set :', p.name, p.pid)
     #
     # initialise general program control flags
     #
     success = False
     timenow = 0
 
-    print("================== in manage function ========================")
+    print("\033[33m ================== ISO :: in manage function ======================== \033[0m")
     #
     # check to see if mavlink wrote something if so write to cam
     # and update the update flag to get the mavlink send
@@ -4882,13 +4931,15 @@ def manageAlphaCameraIso( mySonyCam, mav2SonyVals, iso, retries=3, tm_upd_disabl
     retry = 0
     while (retry < retries):    
         if (mySonyCam.setSonyCamISOData( iso, mav2SonyVals ) == True):
-            print("\033[35m sony cam iso data success")
+            print("\033[36m sony cam iso data success \033[0m")
+            break
         else:
-            print("sony cam iso data failure")
+            print("\033[31m sony cam iso data write failure \033[0m")
+            time.sleep(1)
             retry += 1
-        if (retry == retries):
-            print("having probs !!! gonna reset it")
-            reset_usb_camlink()            
+    else:
+        print("\033[31;43m having probs !!! gonna reset it \033[0m")
+        reset_usb_camlink()            
 
     #
     # Time enabled reading to poll on time_delta
@@ -4900,25 +4951,26 @@ def manageAlphaCameraIso( mySonyCam, mav2SonyVals, iso, retries=3, tm_upd_disabl
     #        
     if ((timenow - iso.timestamp) > time_delta):
         if (mySonyCam.getSonyCamISOData( iso )==True):
+            print(f"\033[36;45m ISO timeupdate required @ {iso.timestamp} {timenow}")
             iso.timestamp = timenow
-    print ('Exiting :', multiprocessing.current_process().name)
+    print ('Exiting ISO Set :', multiprocessing.current_process().name)
     
 def sendMavIso( mySonyCam, iso, ConnID ):
 
     #p = multiprocessing.current_process()
-    #print ('Starting:', p.name, p.pid)
+    #print ('Starting ISO :', p.name, p.pid)
     #
     # check to see if mavlink wrote something if so write to cam
     # and update the update flag to get the mavlink send
     #     
-    success = mySonyCam.sendMavlinkMessageForObject( iso, ConnID )
-    success = mySonyCam.sendMavlinkMessageForExtObject( iso, ConnID )
-    #print ('Exiting :', multiprocessing.current_process().name)   
+    success = mySonyCam.sendMavlinkMessageForParamObject( iso, ConnID )
+    success = mySonyCam.sendMavlinkMessageForParamExtObject( iso, ConnID )
+    #print ('Exiting ISO :', multiprocessing.current_process().name)   
     
 def manageAlphaCameraShutSpd( mySonyCam, mav2SonyVals, shut_sp, tm_upd_disable=False, time_delta = 1000 ):
 
     p = multiprocessing.current_process()
-    print ('Starting:', p.name, p.pid)
+    print ('Starting Shutter Speed :', p.name, p.pid)
     
     #
     # initialise general program control flags
@@ -4943,24 +4995,24 @@ def manageAlphaCameraShutSpd( mySonyCam, mav2SonyVals, shut_sp, tm_upd_disable=F
     if ((timenow - shut_sp.timestamp) > time_delta):
         if (mySonyCam.getSonyCamShutSpdData( shut_sp )==True):
             shut_sp.timestamp = timenow            
-    print ('Exiting :', multiprocessing.current_process().name)
+    print ('Exiting Shutter Speed :', multiprocessing.current_process().name)
     
 def sendMavShutSpd( mySonyCam, shut_sp, ConnID ):
 
     p = multiprocessing.current_process()
-    print ('Starting:', p.name, p.pid)
+    print ('Starting Mavlink Shutter Speed :', p.name, p.pid)
     #
     # check to see if mavlink wrote something if so write to cam
     # and update the update flag to get the mavlink send
     #     
-    success = mySonyCam.sendMavlinkMessageForObject( shut_sp, ConnID )
-    success = mySonyCam.sendMavlinkMessageForExtObject( shut_sp, ConnID )
-    print ('Exiting :', multiprocessing.current_process().name)
+    success = mySonyCam.sendMavlinkMessageForParamObject( shut_sp, ConnID )
+    success = mySonyCam.sendMavlinkMessageForParamExtObject( shut_sp, ConnID )
+    print ('Exiting Mavlink Shutter Speed :', multiprocessing.current_process().name)
     
 def manageAlphaWhiteBala( mySonyCam, mav2SonyVals, whitebal, tm_upd_disable=False, time_delta = 1000 ):
 
     p = multiprocessing.current_process()
-    print ('Starting:', p.name, p.pid)
+    print ('Starting White Balance :', p.name, p.pid)
     
     #
     # initialise general program control flags
@@ -4986,14 +5038,14 @@ def manageAlphaWhiteBala( mySonyCam, mav2SonyVals, whitebal, tm_upd_disable=Fals
         if (mySonyCam.getSonyCamWhiteBalaData( whitebal )==True):
             whitebal.timestamp = timenow 
 
-    print ('Exiting :', multiprocessing.current_process().name)
+    print ('Exiting White Balance :', multiprocessing.current_process().name)
     
 def sendMavWhiteBala( mySonyCam, whitebal, ConnID ):
     p = multiprocessing.current_process()
-    print ('Starting:', p.name, p.pid)
-    success = mySonyCam.sendMavlinkMessageForObject( whitebal, ConnID )  
-    success = mySonyCam.sendMavlinkMessageForExtObject( whitebal, ConnID )     
-    print ('Exiting :', multiprocessing.current_process().name)    
+    print ('Starting Mavlink White Balance :', p.name, p.pid)
+    success = mySonyCam.sendMavlinkMessageForParamObject( whitebal, ConnID )  
+    success = mySonyCam.sendMavlinkMessageForParamExtObject( whitebal, ConnID )     
+    print ('Exiting Mavlink White Balance :', multiprocessing.current_process().name)    
     
 def manageAlphaCameraStillCap( mySonyCam, mav2SonyVals, stillcap, tm_upd_disable=False, time_delta = 1000 ):
 
@@ -5005,7 +5057,7 @@ def manageAlphaCameraStillCap( mySonyCam, mav2SonyVals, stillcap, tm_upd_disable
 
     # use this if you want ot make a daemon proc
     p = multiprocessing.current_process()
-    print ('Starting:', p.name, p.pid)
+    print ('Starting Still Capture :', p.name, p.pid)
     #
 
     #
@@ -5026,15 +5078,15 @@ def manageAlphaCameraStillCap( mySonyCam, mav2SonyVals, stillcap, tm_upd_disable
         if (mySonyCam.getSonyCamExProData( stillcap )==True):
             stillcap.timestamp = timenow 
 
-    print ('Exiting :', multiprocessing.current_process().name)
+    print ('Exiting Still Capture :', multiprocessing.current_process().name)
 
    
 def sendMavStillCap( mySonyCam, stillcap, ConnID ): 
     p = multiprocessing.current_process()
-    print ('Starting:', p.name, p.pid)   
-    success = mySonyCam.sendMavlinkMessageForObject( stillcap, ConnID )  
-    success = mySonyCam.sendMavlinkMessageForExtObject( stillcap, ConnID )     
-    print ('Exiting :', multiprocessing.current_process().name) #
+    print ('Starting Mavlink Still Capture :', p.name, p.pid)   
+    success = mySonyCam.sendMavlinkMessageForParamObject( stillcap, ConnID )  
+    success = mySonyCam.sendMavlinkMessageForParamExtObject( stillcap, ConnID )     
+    print ('Exiting Mavlink Still Capture :', multiprocessing.current_process().name) #
 
 def mavlinkReqGetParamStillCap(  mySonyCam, obj ):
     if (mySonyCam.getSonyCamExProData( obj )==True):
@@ -5094,6 +5146,8 @@ def mavlinkReqGetParamExPro(  mySonyCam, obj ):
         
 def serviceParamRequests( mySonyCam, mav2SonyVals, stcap, wb, ss, iso, pf, pfa, pa, expro ):
 
+    p = multiprocessing.current_process()
+    print ('Starting Service Mavlink incoming request packets :', p.name, p.pid)
     if not (mav2SonyVals.mav_req_all_param == 0):
         if not ((int(mav2SonyVals.mav_req_all_param) & int(mav2SonyVals.ParamStillCap)) == 0):   
             if (mavlinkReqGetParamStillCap(  mySonyCam, stcap ) == True):
@@ -5155,24 +5209,28 @@ def serviceParamRequests( mySonyCam, mav2SonyVals, stcap, wb, ss, iso, pf, pfa, 
             if ( mavlinkReqGetParamExPro(  mySonyCam, expro ) == True ):
                 if ( expro.set_ack_send( True, expro.STATE_CAM_READING ) == True ):                                                      # additional PARAM_EXT_VALUE message requested               
                     mav2SonyVals.mav_ext_req_all_param = mav2SonyVals.mav_ext_req_all_param & ~mav2SonyVals.ParamExPro
-                
+
+    print ('Exiting Service Mavlink incoming packet requests :', multiprocessing.current_process().name) #
+    
 def run_process_messages_from_connection(fra, the_connect, sharedObj, redCam=0):
     p = multiprocessing.current_process()
-    print ('Starting:', p.name, p.pid) 
-    fra.process_messages_from_connection( fra, the_connect, sharedObj, redCam )
-    print ('Exiting :', multiprocessing.current_process().name)
+    print ('Starting: MavReader ', p.name, p.pid) 
+    fra.process_messages_from_connection( the_connect, sharedObj, redCam )
+    print ('Exiting MavReader :', multiprocessing.current_process().name)
 
 # ================ error handler if the camera fails (powers link on off) ============
 
 # uses https://github.com/mvp/uhubctl
 #
 def reset_usb_camlink():
+    print("\033[31m executing reset usb camera link \033[0m")
     p = os.popen('sudo /home/pi/cams/SonyTEST32/uhubctl/uhubctl -l 1-1 -a 0')
     print(p.read())
     time.sleep(2)
     p = os.popen('sudo /home/pi/cams/SonyTEST32/uhubctl/uhubctl -l 1-1 -a 1')
     print(p.read())
     time.sleep(2)
+    print("\033[31m completed reset usb camera link \033[0m")
     
 #
 # ================ signal handlers ==============================
@@ -5239,7 +5297,7 @@ if __name__ == '__main__':
                 xx = 2
     id = m.get_srcSystem() 
     if not ( m.get_srcSystem() == frame.DEFAULT_SYS_ID ) :
-        print("-------- new id found --------")
+        print(f"-------- new id found -------- {id}")
         while (state == False):
             try:
                 cID,state = frame.makeNewMAVlinkConn(id)
@@ -5290,13 +5348,18 @@ if __name__ == '__main__':
     #
     gcsWrites2Sony.init_class_state()
 
-    while True:
+    #
+    # test iso write
+    #
+    active = True
+    while active==True:
         run_process_messages_from_connection(frame, cID, gcsWrites2Sony)
         #manageAlphaCameraIso(mySonyCamNo1, gcsWrites2Sony, iso)
-        if not (gcsWrites2Sony.set_sony_iso == 99):
+        if not (gcsWrites2Sony.set_sony_iso == gcsWrites2Sony.STATE_INIT):
             print(f"on TOP LEVEL saw {gcsWrites2Sony.set_sony_iso} {gcsWrites2Sony.prev_sony_iso} {gcsWrites2Sony.mav_req_all_param}")
             manageAlphaCameraIso(mySonyCamNo1, gcsWrites2Sony, iso)
-        sendMavIso(mySonyCamNo1, iso, cID )    
+        sendMavIso(mySonyCamNo1, iso, cID ) 
+        # active = False        
         #exit(10)
     
     #
@@ -5320,31 +5383,25 @@ if __name__ == '__main__':
         if not p00.is_alive() == True:
             p00.start()            
         p1 = multiprocessing.Process(name='manageAlphaCameraExpro', target=manageAlphaCameraExpro, args=(mySonyCamNo1, gcsWrites2Sony, expro,)).start()
-        #time.sleep(0.1)
-        p3 = multiprocessing.Process(name='manageAlphaCameraAperture', target=manageAlphaCameraAperture, args=(mySonyCamNo1, gcsWrites2Sony, aper,)).start()
-        #time.sleep(0.1)
-        p5 = multiprocessing.Process(name='manageAlphaCameraFocusData', target=manageAlphaCameraFocusData, args=(mySonyCamNo1, gcsWrites2Sony, focusdata, focusarea,)).start()
-        #time.sleep(0.1)
-        p7 = multiprocessing.Process(name='manageAlphaCameraIso', target=manageAlphaCameraIso, args=(mySonyCamNo1, gcsWrites2Sony, iso,)).start()
-        #time.sleep(0.1)
-        p9 = multiprocessing.Process(name='manageAlphaCameraShutSpd', target=manageAlphaCameraShutSpd, args=(mySonyCamNo1, gcsWrites2Sony, shut_sp,)).start()
-        #time.sleep(0.1)
-        p11 = multiprocessing.Process(name='manageAlphaWhiteBala', target=manageAlphaWhiteBala, args=(mySonyCamNo1, gcsWrites2Sony, whitebal,)).start()
-        #time.sleep(0.1)
-        p13 = multiprocessing.Process(name='manageAlphaCameraStillCap', target=manageAlphaCameraStillCap, args=(mySonyCamNo1, gcsWrites2Sony, stillcap,)).start()
-        #time.sleep(0.1)
         if p1 is not None:
             p1.join()
+        p3 = multiprocessing.Process(name='manageAlphaCameraAperture', target=manageAlphaCameraAperture, args=(mySonyCamNo1, gcsWrites2Sony, aper,)).start()
         if p3 is not None:            
             p3.join()
+        p5 = multiprocessing.Process(name='manageAlphaCameraFocusData', target=manageAlphaCameraFocusData, args=(mySonyCamNo1, gcsWrites2Sony, focusdata, focusarea,)).start()
         if p5 is not None:              
             p5.join()
+        p7 = multiprocessing.Process(name='manageAlphaCameraIso', target=manageAlphaCameraIso, args=(mySonyCamNo1, gcsWrites2Sony, iso,)).start()
         if p7 is not None:  
             p7.join()
+        p9 = multiprocessing.Process(name='manageAlphaCameraShutSpd', target=manageAlphaCameraShutSpd, args=(mySonyCamNo1, gcsWrites2Sony, shut_sp,)).start()
         if p9 is not None:              
             p9.join()
+        p11 = multiprocessing.Process(name='manageAlphaWhiteBala', target=manageAlphaWhiteBala, args=(mySonyCamNo1, gcsWrites2Sony, whitebal,)).start()
         if p11 is not None:                
-            p11.join()  
+            p11.join() 
+        p13 = multiprocessing.Process(name='manageAlphaCameraStillCap', target=manageAlphaCameraStillCap, args=(mySonyCamNo1, gcsWrites2Sony, stillcap,)).start()
+        #time.sleep(0.1) 
         if p13 is not None:               
             p13.join()     
         p2 = multiprocessing.Process(name='sendMavExpro', target=sendMavExpro, args=(mySonyCamNo1, expro, cID,)).start()
@@ -5409,3 +5466,4 @@ if __name__ == '__main__':
     del shut_sp
     del whitebal
     del stillcap
+    
