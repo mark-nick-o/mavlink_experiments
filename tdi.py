@@ -109,7 +109,7 @@ for cnt in root.findall('Service'):
     status = cnt.find('Status').text
     if ( int(status) == 0 ):
         startTime = cnt.find('StartTime').text
-	      endTime = cnt.find('EndTime').text
+        endTime = cnt.find('EndTime').text
         nos = cnt.find('NumberServed').text
         so =  cnt.find('SecondsOccupied').text  
         tso = cnt.find('TotalSecondsOccupied').text    
