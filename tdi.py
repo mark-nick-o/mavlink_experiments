@@ -43,9 +43,9 @@ for cnt in root.findall('Count'):
     startTime = cnt.find('StartTime').text
     endTime = cnt.find('EndTime').text
     enters = cnt.find('Enters').text
-	  exits = cnt.find('Exits').text
-	  status = cnt.find('Status').text
-	  staff = cnt.find('Staffs').text
+    exits = cnt.find('Exits').text
+    status = cnt.find('Status').text
+    staff = cnt.find('Staffs').text
 
     VIPs = cnt.find('VIPs').text
     Male0_14 = cnt.find('Male0_14').text
@@ -65,8 +65,8 @@ for cnt in root.findall('Count'):
     mid = int(Male30_59) + int(Female30_59)
     old = int(Male60_) + int(Female60_)
 	
-	  inside = enters - exits
-	  shoppers = inside - staff
+    inside = enters - exits
+    shoppers = inside - staff
     print(startTime)
     print(endTime)
     print(" total inside = %u shoppers inside = %u\n" % (inside,shoppers)) 
@@ -75,7 +75,7 @@ for cnt in root.findall('Count'):
 
     # adds a section to the XML  (writes -1 if the data cant be trusted)  
     #
-	  if ( int(status) == 0 ):
+    if ( int(status) == 0 ):
         newKey_shoppers = shoppers
         newKey_insideBuilding = inside
     else:
