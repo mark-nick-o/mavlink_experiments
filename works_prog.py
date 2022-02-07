@@ -509,7 +509,7 @@ class memoryValue():
         print('%s: %d' % (self.name,memoryValue.numberOfVals))
         return memoryValue.numberOfVals		
   
-    def get_value_data(self,YourID,timeout):  
+    def get_value_data(self,YourID,timeout=100):  
         timeCnt = 0
         while (not (self.state == memoryValue.STATE_READY)) and (timeCnt < timeout):
             time.sleep(0.1)
@@ -523,7 +523,7 @@ class memoryValue():
         else:
             return self.name,self.signal,self.prev,False
 
-    def set_value(self,value,myId,timeout):
+    def set_value(self,value,myId,timeout=100):
         timeCnt = 0
         while (not (self.state == memoryValue.STATE_READY)) and (timeCnt < timeout):
             time.sleep(0.1)
@@ -621,7 +621,7 @@ if __name__ == '__main__':
 
     #
     # example using in mavlink sender
-	#
+    #
     mavSetPointVal = 199 #we_got_from_mavlink
     Timeout = 20
     if (SonyWhiteBalance.set_value(mavSetPointVal, memoryValue.STATE_MAV_WRITING, Timeout) == True):
@@ -1411,13 +1411,13 @@ class sonyAlphaNewCamera():
         
     # ======================= new additions to the class ================================================
 
-    def setSonyObjData( self, mem, camDataPointVal, Timeout = 20 ):
+    def setSonyObjData( self, mem, camDataPointVal, Timeout = 100 ):
 
         if not (mem.set_value(camDataPointVal, mem.STATE_CAM_WRITING, Timeout) == True):
-            print("value has not been successfully set")   
-            return True
-        else:
+            print("\033[31m value has not been successfully set \033[0m")   
             return False
+        else:
+            return True
             
     def initSonyCamExProData( self ):
     
@@ -1816,7 +1816,7 @@ class sonyAlphaNewCamera():
             enum_num = 27 
         elif num == 25600:
             enum_num = 28  
-        elif num == 38000:
+        elif num == 32000:
             enum_num = 29 
         elif num == 40000:
             enum_num = 30
@@ -1922,7 +1922,7 @@ class sonyAlphaNewCamera():
         print(f"set to ISO r={reqDat} p={prevDat} time={timeout1} state={mavObj.state}")
         
         if ((not (reqDat == mavlinkSonyCamWriteVals.STATE_INIT) and not (reqDat == prevDat)) and (readSuccess == True)):
-            ee = self.enumerate_iso_sony_a7(reqDat)
+            ee = self.enumerate_iso_sony_a7(int(reqDat))
             print(f"enumeration value for iso {ee} req {reqDat}")
             ans = self.set_sony_iso( ee ) 
             # exit(90)
@@ -1933,16 +1933,21 @@ class sonyAlphaNewCamera():
                 print(f" \033[32m set the ISO from/to :: {ans} \033[0m")                       
                 writeSuccess = False
                 try:
-                    if ( ans[1] == reqDat ) :
+                    if ( int(ans[1]) == int(reqDat) ) :
                         while (writeSuccess == False) and (timeoutS2 > 0): 
                             writeSuccess = mavObj.setVal_sony_iso(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,timeout2) 
                             timeoutS2 -= timeout2                                  # no retries  
+                            print(f" write {writeSuccess}")
+                    else:
+                        print(f" what wat {ans[1]}=={reqDat}")
                 except Exception as err_msg:                
                    print("\033[31m write sony iso failed to set iso \033[0m")                    
                 if ( writeSuccess == True ):
                     ret = self.setSonyObjData( mem, int(ans[1]) ) 
         else:
-            print(f"\033[32m timeout error trying to set iso to \033[4;42;31m {reqDat} \033[0m")
+            ret = ( int(prevDat) == int(reqDat) )
+            if ret == False:
+                print(f"\033[32m timeout error trying to set iso to \033[4;42;31m {reqDat} \033[0m")
         #exit(200)                    
         return ret
         
@@ -4390,8 +4395,9 @@ class MAVFrame():
         #"""
         loop = 5
         while loop >= 1:
+        #while True:
             print("im receiving.............")
-
+            #time.sleep(0.05)
             #self.update_uptime_label( )
             #self.update_utc_label( )
             #
@@ -4420,8 +4426,8 @@ class MAVFrame():
             #self.mavlink_send_camera_image_captured(the_connection)
             #the_connection.mav.camera_feedback_send( 1000, 1, 1, 22, 21, 10, 30, 21, 2, 3, 5, 2, 3)
             #the_connection.mav.gps_raw_int_send( 1000, self.g_count, 77, 66, 76, 3, 1, 2, 3, 5)
-            #the_connection.mav.vibration_send( 1000, 1, 1, 22, 21, 10, 30 )
-            self.mavlink_send_param_value(the_connection)
+            the_connection.mav.vibration_send( 1000, 1, 1, 22, 21, 10, 30 )
+            #self.mavlink_send_param_value(the_connection)
             #print("FTP request for XML file .... I'm sending it as my payload")
             #try:
             #    f = open(self.CAM_XML_FILE,'r')
@@ -4433,6 +4439,7 @@ class MAVFrame():
             #self.mavlink_do_ftp_send( the_connection, self.NETWORK_ID, lab)
             self.g_count = self.g_count + 1
             if not msg:
+                print("\033[31m no msg ! \033[0m")
                 return
             if msg.get_type() == "BAD_DATA":
                 self.ACK_ERROR = self.GOT_BAD
@@ -4449,14 +4456,14 @@ class MAVFrame():
                 sharedObj.mav_req_all_param = mavlinkSonyCamWriteVals.MAV_REQ_ALL_PARAM
                 print("\033[35m PARAM_REQUEST_LIST was sent - shared object set to %d" % (sharedObj.mav_req_all_param))
                 # ===== TRAP ======
-                #exit(99)
+                exit(99)
             elif msg.get_type() == 'PARAM_EXT_REQUEST_LIST':
                 #
                 #
                 sharedObj.mav_ext_req_all_param = mavlinkSonyCamWriteVals.MAV_REQ_ALL_PARAM
                 print("\033[35m PARAM_EXT_REQUEST_LIST was sent - shared object set to %d" % (sharedObj.mav_ext_req_all_param))  
                 # ===== TRAP ======
-                #exit(99)                
+                exit(99)                
             elif msg.get_type() == 'PARAM_SET':
                 #
                 # for testing...... self.mavlink_send_param_value(the_connection)
@@ -4481,7 +4488,7 @@ class MAVFrame():
                 else:
                     print(f"\033[31;46m Error reading param {msg.param_id} \033[0m")
                 # ===== TRAP =====
-                #exit(96)
+                exit(96)
             elif msg.get_type() == 'PARAM_EXT_REQUEST_READ':
                 #
                 if ( self.readParamExtSetFromMavLink( msg.param_id, sharedObj, the_connection )==True):
@@ -4489,7 +4496,7 @@ class MAVFrame():
                 else:
                     print(f"\033[31;43m Error sending param {msg.param_id} \033[0m")                
                 # ===== TRAP =====
-                #exit(96)
+                exit(96)
             elif msg.get_type() == 'PARAM_EXT_SET':
                 #
                 # self.mavlink_send_param_value(the_connection)
@@ -4500,7 +4507,7 @@ class MAVFrame():
                 else:
                     print("\033[31m PARAM_EXT_SET write fail for %s :: %s"%( msg.param_id, msg.param_value))
                 # ===== TRAP =====
-                #exit(95)
+                exit(95)
             elif msg.get_type() == 'RC_CHANNELS':
                 print("RC Channel message (system %u component %u)\n" % (the_connection.target_system, the_connection.target_component))
             elif msg.get_type() == 'COMMAND_LONG':
@@ -5213,10 +5220,10 @@ def serviceParamRequests( mySonyCam, mav2SonyVals, stcap, wb, ss, iso, pf, pfa, 
     print ('Exiting Service Mavlink incoming packet requests :', multiprocessing.current_process().name) #
     
 def run_process_messages_from_connection(fra, the_connect, sharedObj, redCam=0):
-    p = multiprocessing.current_process()
-    print ('Starting: MavReader ', p.name, p.pid) 
+    #p = multiprocessing.current_process()
+    #print ('Starting: MavReader ', p.name, p.pid) 
     fra.process_messages_from_connection( the_connect, sharedObj, redCam )
-    print ('Exiting MavReader :', multiprocessing.current_process().name)
+    #print ('Exiting MavReader :', multiprocessing.current_process().name)
 
 # ================ error handler if the camera fails (powers link on off) ============
 
@@ -5306,7 +5313,7 @@ if __name__ == '__main__':
                 
     # default logger
     #
-    multiprocessing.log_to_stderr(logging.DEBUG)
+    # multiprocessing.log_to_stderr(logging.DEBUG)
     #
     # for extra logging use this 
     # instead
@@ -5359,7 +5366,7 @@ if __name__ == '__main__':
             print(f"on TOP LEVEL saw {gcsWrites2Sony.set_sony_iso} {gcsWrites2Sony.prev_sony_iso} {gcsWrites2Sony.mav_req_all_param}")
             manageAlphaCameraIso(mySonyCamNo1, gcsWrites2Sony, iso)
         sendMavIso(mySonyCamNo1, iso, cID ) 
-        # active = False        
+        #active = False        
         #exit(10)
     
     #
@@ -5372,24 +5379,22 @@ if __name__ == '__main__':
     p0 = multiprocessing.Process(name='run_process_mavlink', target=run_process_messages_from_connection, args=(frame, cID, gcsWrites2Sony,))
     p0.daemon = True
     if not p0.is_alive() == True:
+        print("\033[32m Started Mavlink Receiver \033[0m")
         p0.start() 
-    p00 = multiprocessing.Process(name='serviceParamRequests', target=serviceParamRequests, args=(mySonyCamNo1, gcsWrites2Sony, stillcap, whitebal, shut_sp, iso, focusdata, focusarea, expro))      
+    p00 = multiprocessing.Process(name='serviceParamRequests', target=serviceParamRequests, args=(mySonyCamNo1, gcsWrites2Sony, stillcap, whitebal, shut_sp, iso, focusdata, focusarea, aper, expro))      
     p00.daemon = True
     if not p00.is_alive() == True:
+        print("Service Request Daemon Active")
         p00.start()  
     
     while a:
-        #resetUsb = multiprocessing.Process(name='run_process_mavlink', target=reset_usb_camlink, args=())
-        #if (USB_ERROR):
-        #    resetUsb.start()
-        #    resetUsb.join()
         if not p0.is_alive() == True:
             p0 = multiprocessing.Process(name='run_process_mavlink', target=run_process_messages_from_connection, args=(frame, cID, gcsWrites2Sony,))
             p0.daemon = True
             p0.start() 
 
         if not p00.is_alive() == True:
-            p00 = multiprocessing.Process(name='serviceParamRequests', target=serviceParamRequests, args=(mySonyCamNo1, gcsWrites2Sony, stillcap, whitebal, shut_sp, iso, focusdata, focusarea, expro))      
+            p00 = multiprocessing.Process(name='serviceParamRequests', target=serviceParamRequests, args=(mySonyCamNo1, gcsWrites2Sony, stillcap, whitebal, shut_sp, iso, focusdata, focusarea, aper, expro))      
             p00.daemon = True
             p00.start() 
 
@@ -5499,3 +5504,4 @@ if __name__ == '__main__':
     del shut_sp
     del whitebal
     del stillcap
+
