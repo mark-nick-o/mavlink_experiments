@@ -1911,12 +1911,12 @@ class sonyAlphaNewCamera():
         print(" =========== set sony cam iso ================ ")
         
         # 
-        timeout1 = timeout1 * no_timeout1_retry
-        timeout2 = timeout2 * no_timeout2_retry
+        timeoutS1 = timeout1 * no_timeout1_retry
+        timeoutS2 = timeout2 * no_timeout2_retry
         #
-        while (readSuccess == False) and (timeout1 > 0):
+        while (readSuccess == False) and (timeoutS1 > 0):
             reqDat, prevDat, readSuccess  = mavObj.getVal_sony_iso(mavObj.STATE_CAM_READING,timeout1)
-            timeout1 -= timeout1                                          # no retries
+            timeoutS1 -= timeout1                                          # no retries
             print(f"In iterator {readSuccess} {reqDat} {prevDat}")
             
         print(f"set to ISO r={reqDat} p={prevDat} time={timeout1} state={mavObj.state}")
@@ -1934,9 +1934,9 @@ class sonyAlphaNewCamera():
                 writeSuccess = False
                 try:
                     if ( ans[1] == reqDat ) :
-                        while (writeSuccess == False) and (timeout2 > 0): 
+                        while (writeSuccess == False) and (timeoutS2 > 0): 
                             writeSuccess = mavObj.setVal_sony_iso(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,timeout2) 
-                            timeout2 -= timeout2                                  # no retries  
+                            timeoutS2 -= timeout2                                  # no retries  
                 except Exception as err_msg:                
                    print("\033[31m write sony iso failed to set iso \033[0m")                    
                 if ( writeSuccess == True ):
@@ -1953,12 +1953,12 @@ class sonyAlphaNewCamera():
         print(" =========== set sony cam aperture ================ ")
         
         # 
-        timeout1 = timeout1 * no_timeout1_retry
-        timeout2 = timeout2 * no_timeout2_retry
+        timeoutS1 = timeout1 * no_timeout1_retry
+        timeoutS2 = timeout2 * no_timeout2_retry
         #
-        while (readSuccess == False) and (timeout1 > 0):
+        while (readSuccess == False) and (timeoutS1 > 0):
             reqDat, prevDat, readSuccess  = mavObj.getVal_sony_aperture(mavObj.STATE_CAM_READING,timeout1)
-            timeout1 -= timeout1                                          # no retries
+            timeoutS1 -= timeout1                                          # no retries
             
         if ((not (reqDat == mavObj.STATE_INIT) and not (reqDat == prevDat)) and (readSuccess == True)):
             ans = self.set_sony_aperture( self.enumerate_still_cap_sony_a7(reqDat) ) 
@@ -1970,9 +1970,9 @@ class sonyAlphaNewCamera():
                 writeSuccess = False
                 try:
                     if ( ans[1] == reqDat ) :
-                        while (writeSuccess == False) and (timeout2 > 0): 
+                        while (writeSuccess == False) and (timeoutS2 > 0): 
                             writeSuccess = mavObj.setVal_sony_aperture(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,timeout2) 
-                            timeout2 -= timeout2                                  # no retries  
+                            timeoutS2 -= timeout2                                  # no retries  
                 except Exception as err_msg:                
                    print("\033[31m write sony aperture failed to set aperture \033[0m")                     
                 if ( writeSuccess == True ):
@@ -1988,12 +1988,12 @@ class sonyAlphaNewCamera():
         print(" =========== set sony ex pro ================ ")
         
         # 
-        timeout1 = timeout1 * no_timeout1_retry
-        timeout2 = timeout2 * no_timeout2_retry
+        timeoutS1 = timeout1 * no_timeout1_retry
+        timeoutS2 = timeout2 * no_timeout2_retry
         #
-        while (readSuccess == False) and (timeout1 > 0):
+        while (readSuccess == False) and (timeoutS1 > 0):
             reqDat, prevDat, readSuccess  = mavObj.getVal_sony_ex_pro(mavObj.STATE_CAM_READING,timeout1)
-            timeout1 -= timeout1
+            timeoutS1 -= timeout1
             
         if ((not (reqDat == mavObj.STATE_INIT) and not (reqDat == prevDat)) and (readSuccess == True)):
             ans = self.set_sony_ex_pro( self.enumerate_ex_pro_sony_a7(reqDat) ) 
@@ -2006,9 +2006,9 @@ class sonyAlphaNewCamera():
                 writeSuccess = False
                 try:
                     if ( ans[1] == reqDat ) :
-                        while (writeSuccess == False) and (timeout2 > 0): 
+                        while (writeSuccess == False) and (timeoutS2 > 0): 
                             writeSuccess = mavObj.setVal_sony_ex_pro(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,timeout2) 
-                            timeout2 -= timeout2                                  # no retries  
+                            timeoutS2 -= timeout2                                  # no retries  
                 except Exception as err_msg:                
                    print("\033[31m write sony expro failed to set expro \033[0m")                    
                 if ( writeSuccess == True ):
@@ -2023,12 +2023,12 @@ class sonyAlphaNewCamera():
         readSuccess = False
         print(" =========== set sony focus mode ================ ")
         # 
-        timeout1 = timeout1 * no_timeout1_retry
-        timeout2 = timeout2 * no_timeout2_retry
+        timeoutS1 = timeout1 * no_timeout1_retry
+        timeoutS2 = timeout2 * no_timeout2_retry
         #
-        while (readSuccess == False) and (timeout1 > 0):
+        while (readSuccess == False) and (timeoutS1 > 0):
             reqDat, prevDat, readSuccess  = mavObj.getVal_sony_focus(mavObj.STATE_CAM_READING,timeout1)
-            timeout1 -= timeout1
+            timeoutS1 -= timeout1
             
         if ((not (reqDat == mavObj.STATE_INIT) and not (reqDat == prevDat)) and (readSuccess == True)):
             ans = self.set_sony_focus( self.enumerate_focus_sony_a7(reqDat) ) 
@@ -2040,9 +2040,9 @@ class sonyAlphaNewCamera():
                 writeSuccess = False
                 try:
                     if ( ans[1] == reqDat ) :
-                        while (writeSuccess == False) and (timeout2 > 0): 
+                        while (writeSuccess == False) and (timeoutS2 > 0): 
                             writeSuccess = mavObj.setVal_sony_focus(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,timeout2) 
-                            timeout2 -= timeout2                                  # no retries  
+                            timeoutS2 -= timeout2                                  # no retries  
                 except Exception as err_msg:                
                    print("\033[31m write sony focus mode failed to set focus mode \033[0m")                    
                 if ( writeSuccess == True ):
@@ -2057,12 +2057,12 @@ class sonyAlphaNewCamera():
         readSuccess = False
         print(" =========== set sony focus area ================ ")
         # 
-        timeout1 = timeout1 * no_timeout1_retry
-        timeout2 = timeout2 * no_timeout2_retry
+        timeoutS1 = timeout1 * no_timeout1_retry
+        timeoutS2 = timeout2 * no_timeout2_retry
         #
-        while (readSuccess == False) and (timeout1 > 0):
+        while (readSuccess == False) and (timeoutS1 > 0):
             reqDat, prevDat, readSuccess  = mavObj.getVal_sony_focus_area(mavObj.STATE_CAM_READING,timeout1)
-            timeout1 -= timeout1
+            timeoutS1 -= timeout1
             
         if ((not (reqDat == mavObj.STATE_INIT) and not (reqDat == prevDat)) and (readSuccess == True)):
             ans = self.set_sony_focus_area( self.enumerate_focus_area_sony_a7(reqDat) ) 
@@ -2074,9 +2074,9 @@ class sonyAlphaNewCamera():
                 print(f" \033[32m set the focus area from/to :: {ans} \033[0m")   
                 try:
                     if ( ans[1] == reqDat ) :
-                        while (writeSuccess == False) and (timeout2 > 0): 
+                        while (writeSuccess == False) and (timeoutS2 > 0): 
                             writeSuccess = mavObj.setVal_sony_focus_area(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,timeout2) 
-                            timeout2 -= timeout2                                  # no retries  
+                            timeoutS2 -= timeout2                                  # no retries  
                 except Exception as err_msg:                
                    print("\033[31m write sony focus area failed to set focus area \033[0m")                    
                 if ( writeSuccess == True ):
@@ -2091,12 +2091,12 @@ class sonyAlphaNewCamera():
         readSuccess = False
         print(" =========== set sony shutter speed ================ ")
         # 
-        timeout1 = timeout1 * no_timeout1_retry
-        timeout2 = timeout2 * no_timeout2_retry
+        timeoutS1 = timeout1 * no_timeout1_retry
+        timeoutS2 = timeout2 * no_timeout2_retry
         #
-        while (readSuccess == False) and (timeout1 > 0):
+        while (readSuccess == False) and (timeoutS1 > 0):
             reqDat, prevDat, readSuccess  = mavObj.getVal_sony_shutter(mavObj.STATE_CAM_READING,timeout1)
-            timeout1 -= timeout1
+            timeoutS1 -= timeout1
             
         if ((not (reqDat == mavObj.STATE_INIT) and not (reqDat == prevDat)) and (readSuccess == True)):
             ans = self.set_sony_shutter( self.enumerate_shutter_sony_a7(reqDat) ) 
@@ -2108,9 +2108,9 @@ class sonyAlphaNewCamera():
                 print(f" \033[32m set the shutter speed from/to :: {ans} \033[0m")   
                 try:
                     if ( ans[1] == reqDat ) :
-                        while (writeSuccess == False) and (timeout2 > 0): 
+                        while (writeSuccess == False) and (timeoutS2 > 0): 
                             writeSuccess = mavObj.setVal_sony_shutter(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,timeout2) 
-                            timeout2 -= timeout2                                  # no retries  
+                            timeoutS2 -= timeout2                                  # no retries  
                 except Exception as err_msg:                
                    print("\033[31m write sony shutter speed failed to set shutter speed \033[0m")                    
                 if ( writeSuccess == True ):
@@ -2125,12 +2125,12 @@ class sonyAlphaNewCamera():
         readSuccess = False
         print(" =========== set sony white balance ================ ")
         # 
-        timeout1 = timeout1 * no_timeout1_retry
-        timeout2 = timeout2 * no_timeout2_retry
+        timeoutS1 = timeout1 * no_timeout1_retry
+        timeoutS2 = timeout2 * no_timeout2_retry
         #
-        while (readSuccess == False) and (timeout1 > 0):
+        while (readSuccess == False) and (timeoutS1 > 0):
             reqDat, prevDat, readSuccess  = mavObj.getVal_sony_white_bal(mavObj.STATE_CAM_READING,timeout1)
-            timeout1 -= timeout1
+            timeoutS1 -= timeout1
             
         if ((not (reqDat == mavObj.STATE_INIT) and not (reqDat == prevDat)) and (readSuccess == True)):
             ans = self.set_sony_white_bal( self.enumerate_white_bal_sony_a7(reqDat) ) 
@@ -2142,9 +2142,9 @@ class sonyAlphaNewCamera():
                 print(f" \033[32m set the white balance from/to :: {ans} \033[0m")   
                 try:
                     if ( ans[1] == reqDat ) :
-                        while (writeSuccess == False) and (timeout2 > 0): 
+                        while (writeSuccess == False) and (timeoutS2 > 0): 
                             writeSuccess = mavObj.setVal_sony_white_bal(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,timeout2) 
-                            timeout2 -= timeout2                                  # no retries  
+                            timeoutS2 -= timeout2                                  # no retries  
                 except Exception as err_msg:                
                    print("\033[31m write sony white balance failed to set white balance \033[0m")                    
                 if ( writeSuccess == True ):
@@ -2159,12 +2159,12 @@ class sonyAlphaNewCamera():
         readSuccess = False
         print(" =========== set sony still capture mode ================ ")
         # 
-        timeout1 = timeout1 * no_timeout1_retry
-        timeout2 = timeout2 * no_timeout2_retry
+        timeoutS1 = timeout1 * no_timeout1_retry
+        timeoutS2 = timeout2 * no_timeout2_retry
         #
-        while (readSuccess == False) and (timeout1 > 0):
+        while (readSuccess == False) and (timeoutS1 > 0):
             reqDat, prevDat, readSuccess  = mavObj.getVal_sony_still_cap_mode(mavObj.STATE_CAM_READING,timeout1)
-            timeout1 -= timeout1
+            timeoutS1 -= timeout1
             
         if ((not (reqDat == mavObj.STATE_INIT) and not (reqDat == prevDat)) and (readSuccess == True)):
             ans = self.set_sony_still_cap( self.enumerate_still_cap_sony_a7(reqDat) ) 
@@ -2176,9 +2176,9 @@ class sonyAlphaNewCamera():
                 print(f" \033[32m set the still capture mode from/to :: {ans} \033[0m")   
                 try:
                     if ( ans[1] == reqDat ) :
-                        while (writeSuccess == False) and (timeout2 > 0): 
+                        while (writeSuccess == False) and (timeoutS2 > 0): 
                             writeSuccess = mavObj.setVal_sony_white_bal(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,timeout2) 
-                            timeout2 -= timeout2                                  # no retries  
+                            timeoutS2 -= timeout2                                  # no retries  
                 except Exception as err_msg:                
                    print("\033[31m write sony still capture mode failed to set still capture mode \033[0m")                    
                 if ( writeSuccess == True ):
@@ -4390,8 +4390,6 @@ class MAVFrame():
         #"""
         loop = 5
         while loop >= 1:
-# for multi-tasking uncomment below and comment above
-#       while True:
             print("im receiving.............")
 
             #self.update_uptime_label( )
