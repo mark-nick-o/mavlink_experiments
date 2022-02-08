@@ -5553,6 +5553,7 @@ def reset_usb_camlink():
 #
 def raised_signal_handler(a,b):
     print("\033[32m ============ Take Picture ==================")
+    fastGlobals.take_picture = 1
     # do the action here
 
 #
@@ -5574,7 +5575,9 @@ def exit_handler(signum, frame):
 def sigusr1_handler(signum, frame):
     print("signal hander with a kill -SIGUSR1 (signal.SIGUSR1)")
     # what we want to do on that external signal
-    
+    print("\033[32m ============ Take Picture ==================")
+    fastGlobals.take_picture = 1
+	
 if __name__ == '__main__':
 
     # Register the alarm signal with our handler signal. signal(signal. SIGALRM, alarm_handler)
