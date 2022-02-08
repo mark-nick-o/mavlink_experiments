@@ -171,55 +171,55 @@ namespace aerostation.Forms
 	      return ret;
 	  }
 
-          // selection is string so convert to int32
-	  //		
-          private void sendParamSetMessageWhiteBalAsFloat( float pVal )
-          {
-            mavlink_param_set_t req = new mavlink_param_set_t();
-            req.target_system = MAV.sysid;
-            req.target_component = MAV.compid;
+               // selection is string so convert to int32
+               //		
+               private void sendParamSetMessageWhiteBalAsFloat( float pVal )
+               {
+                  mavlink_param_set_t req = new mavlink_param_set_t();
+                  req.target_system = MAV.sysid;
+                  req.target_component = MAV.compid;
 
-            req.param_id = "S_WHITE_BAL";
-            req.param_value = pVal; 
-            req.param_type = MAVLINK_MSG_ID.MAV_PARAM_TYPE_REAL32; 
+                  req.param_id = "S_WHITE_BAL";
+                  req.param_value = pVal; 
+                  req.param_type = MAVLINK_MSG_ID.MAV_PARAM_TYPE_REAL32; 
 
-            // send each one twice.
-            generatePacket((byte) MAVLINK_MSG_ID.PARAM_SET, req);
-            generatePacket((byte) MAVLINK_MSG_ID.PARAM_SET, req);
-          }
-
-          // sends the value as an int
-	  //
-          private void sendParamSetMessageWhiteBalAsInt32( Int32 pVal )
-          {
-               mavlink_param_set_t req = new mavlink_param_set_t();
-               req.target_system = MAV.sysid;
-               req.target_component = MAV.compid;
-
-                req.param_id = "S_WHITE_BAL";
-                req.param_value = Convert.ToSingle(pVal); 
-                req.param_type = MAVLINK_MSG_ID.MAV_PARAM_TYPE_UINT32; 
-
-                 // send each one twice.
-                 generatePacket((byte) MAVLINK_MSG_ID.PARAM_SET, req);
-                 generatePacket((byte) MAVLINK_MSG_ID.PARAM_SET, req);
+                  // send each one twice.
+                  generatePacket((byte) MAVLINK_MSG_ID.PARAM_SET, req);
+                  generatePacket((byte) MAVLINK_MSG_ID.PARAM_SET, req);
                }
+
+              // sends the value as an int
+	      //
+              private void sendParamSetMessageWhiteBalAsInt32( Int32 pVal )
+              {
+                 mavlink_param_set_t req = new mavlink_param_set_t();
+                 req.target_system = MAV.sysid;
+                 req.target_component = MAV.compid;
+
+                 req.param_id = "S_WHITE_BAL";
+                 req.param_value = Convert.ToSingle(pVal); 
+                 req.param_type = MAVLINK_MSG_ID.MAV_PARAM_TYPE_UINT32; 
+
+                  // send each one twice.
+                  generatePacket((byte) MAVLINK_MSG_ID.PARAM_SET, req);
+                  generatePacket((byte) MAVLINK_MSG_ID.PARAM_SET, req);
+                }
 
                 // when the object is selected then write to mavlink using PARAM_SET message
                 //		
 		private void comboBox1_SelectionChangeCommitted(object sender, EventArgs e)
 		{
-			string selectedItem = comboBox1.SelectedItem.ToString();
-			label1.Text = selectedItem + " for Camera White Balance";
-			Int32 optionSelection = stringArg2Int32( selectedItem );
-			if ( optionSelection >= 0 )
+		    string selectedItem = comboBox1.SelectedItem.ToString();
+		    label1.Text = selectedItem + " for Camera White Balance";
+		    Int32 optionSelection = stringArg2Int32( selectedItem );
+		    if ( optionSelection >= 0 )
+		    {
+			Int32 cameraValue = enumerate_white_bal_sony_a7( optionSelection );
+			if ( cameraValue >= 0 )
 			{
-			   Int32 cameraValue = enumerate_white_bal_sony_a7( optionSelection );
-			   if ( cameraValue >= 0 )
-			   {
-			       sendParamSetMessageWhiteBalAsInt32( cameraValue );
-			   }
+			   sendParamSetMessageWhiteBalAsInt32( cameraValue );
 			}
+		    }
 		}
 	}
 }
