@@ -19,6 +19,11 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using MissionPlanner.Comms;
+using MissionPlanner.Utilities;
+using System.Windows.Forms;
+using MissionPlanner.HIL;
+using MissionPlanner.Mavlink;
 
 namespace aerostation.Forms
 {
