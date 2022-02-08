@@ -19,7 +19,12 @@ import logging
 import signal
 
 import time
-       
+
+class fastGlobals:
+    __slots__ = ('take_picture','start_video',) # __slots__ defines a fast variable
+    take_picture: int    
+    start_video: int 
+    
 class mavlinkSonyCamWriteVals():
 
     # state for multi-process object
@@ -30,7 +35,7 @@ class mavlinkSonyCamWriteVals():
     STATE_MAV_WRITING = 4
     STATE_CAM_READING = 5
     # global counter for values
-    numberOfVals = 0
+    numberOfVals = 8
     # flags to incdicate write action
     WRITE_PREV_DATA = 1
     DONT_WRITE_PREV_DATA = 0
@@ -66,7 +71,7 @@ class mavlinkSonyCamWriteVals():
         self.mav_req_all_param = 0
         self.mav_ext_req_all_param = 0
         self.state = mavlinkSonyCamWriteVals.STATE_INIT
-        mavlinkSonyCamWriteVals.numberOfVals += 1                                                      # global counter of the number of values
+        mavlinkSonyCamWriteVals.numberOfVals += 8                                                      # global counter of the number of values
     
     def __del__(self):  
         class_name = self.__class__.__name__  
@@ -696,7 +701,17 @@ class sonyAlphaNewCamera():
         if (self.check_my_os() == 1):
             cmd = "date +%s"
             return( int(os.popen(cmd).read()) )
-            
+
+    def take_a_picture_now( self ):
+
+        # run the API command in the shell and look for the descriptor for the field
+        #
+        if (fastGlobals.take_picture == 1):
+           cmd='/home/pi/cams/SonyTEST32/take_picture/RemoteCli ' 
+           c = os.popen(cmd)
+           print(c.read())
+           fastGlobals.take_picture == 0
+        
     def set_sony_iso( self, isoVal ):
 
         # run the API command in the shell and look for the descriptor for the field
@@ -1920,6 +1935,108 @@ class sonyAlphaNewCamera():
             enum_num = 3
         elif num == 9830410:
             enum_num = 4
+        elif num == 8519690:
+            enum_num = 5
+        elif num == 6553610:
+            enum_num = 6
+        elif num == 5242890:
+            enum_num = 7
+        elif num == 3932170:
+            enum_num = 8
+        elif num == 3276810:
+            enum_num = 9
+        elif num == 2621450:
+            enum_num = 10
+        elif num == 2097162:
+            enum_num = 11
+        elif num == 1638410:
+            enum_num = 12
+        elif num == 1310730:
+            enum_num = 13
+        elif num == 1048586:
+            enum_num = 14
+        elif num == 851978:
+            enum_num = 15
+        elif num == 655370:
+            enum_num = 16
+        elif num == 524298:
+            enum_num = 17
+        elif num == 393226:
+            enum_num = 18
+        elif num == 327690:
+            enum_num = 19
+        elif num == 262154:
+            enum_num = 20
+        elif num == 65539:
+            enum_num = 21
+        elif num == 65540:
+            enum_num = 22
+        elif num == 65541:
+            enum_num = 23
+        elif num == 65542:
+            enum_num = 24
+        elif num == 65544:
+            enum_num = 25
+        elif num == 65546:
+            enum_num = 26
+        elif num == 65549:
+            enum_num = 27
+        elif num == 65551:
+            enum_num = 28
+        elif num == 65556:
+            enum_num = 29
+        elif num == 65561:
+            enum_num = 30
+        elif num == 65566:
+            enum_num = 31
+        elif num == 65576:
+            enum_num = 32
+        elif num == 65586:
+            enum_num = 33
+        elif num == 65596:
+            enum_num = 34
+        elif num == 65616:
+            enum_num = 35
+        elif num == 65636:
+            enum_num = 36
+        elif num == 65661:
+            enum_num = 37 
+        elif num == 65696:
+            enum_num = 38  
+        elif num == 65736:
+            enum_num = 39 
+        elif num == 65786:
+            enum_num = 40    
+        elif num == 65856:
+            enum_num = 41 
+        elif num == 65936:
+            enum_num = 42 
+        elif num == 66036:
+            enum_num = 43 
+        elif num == 66176:
+            enum_num = 44  
+        elif num == 66336:
+            enum_num = 45  
+        elif num == 66536:
+            enum_num = 46  
+        elif num == 66786:
+            enum_num = 47
+        elif num == 67136:
+            enum_num = 48 
+        elif num == 67536:
+            enum_num = 49  
+        elif num == 68036:
+            enum_num = 50    
+        elif num == 68736:
+            enum_num = 51  
+        elif num == 69536:
+            enum_num = 52  
+        elif num == 70536:
+            enum_num = 53  
+        elif num == 71936:
+            enum_num = 54 
+        elif num == 73936:
+            enum_num = 55             
         else:
             enum_num_state = False
         return enum_num_state, enum_num
@@ -4802,21 +4919,7 @@ class MAVFrame():
                         self.type_of_msg = mavutil.mavlink.MAV_CMD_DO_DIGICAM_CONTROL
                         print(f"\033[33m DO DIGICAM CONTROL {msg.param1} {msg.param1}")
                         if ((int(msg.param5) == 1) and (int(msg.param7) == 1)):
-                            try:
-                                if (redCam.redEdgeCaptureFivePicturesNoUpload() == 1):
-                                    print("Took the micasense pictures on SD Card")
-                                else:
-                                    print("Error taking pictures with the micasense camera")
-                            except Exception as e:
-                                print(f" Tried to take picture ERROR:: {e}") 
-                        elif ((int(msg.param5) == 1) and (int(msg.param7) == 0)):
-                             try:
-                                if (redCam.redEdgeCaptureFivePictures() == 1):
-                                    print("saved the pictures to the raspberry Pi")
-                                else:
-                                    print("error saving the pictures to the raspberry Pi")
-                             except Exception as e:
-                                print(f" Tried to take picture ERROR:: {e}") 
+                            fastGlobals.take_picture = 1 
                         self.Got_Param1 = msg.param1
                         self.Got_Param2 = msg.param2
                         self.Got_Param3 = msg.param3
@@ -5332,11 +5435,15 @@ def mavlinkReqGetParamExPro(  mySonyCam, obj ):
         return True
     else:
         return False
-        
+
+def mavlinkTakePhoto( mySonyCam ):
+    mySonyCam.take_a_picture_now()
+    
 def serviceParamRequests( mySonyCam, mav2SonyVals, stcap, wb, ss, iso, pf, pfa, pa, expro ):
 
     p = multiprocessing.current_process()
     print ('Starting Service Mavlink incoming request packets :', p.name, p.pid)
+
     if not (mav2SonyVals.mav_req_all_param == 0):
         if not ((int(mav2SonyVals.mav_req_all_param) & int(mav2SonyVals.ParamStillCap)) == 0):   
             stcap.set_update_flag( True, memoryValue.STATE_MAV_WRITING )
@@ -5603,10 +5710,7 @@ if __name__ == '__main__':
         #exit(10)
     
     #
-    # run the process managing the cmaera
-    #
-    #
-    # run the process managing the cmaera
+    # run the process managing the camera as daemons
     #
     a = True
     p0 = multiprocessing.Process(name='run_process_mavlink', target=run_process_messages_from_connection, args=(frame, cID, gcsWrites2Sony,))
@@ -5614,23 +5718,35 @@ if __name__ == '__main__':
     if not p0.is_alive() == True:
         print("\033[32m Started Mavlink Receiver \033[0m")
         p0.start() 
-    p00 = multiprocessing.Process(name='serviceParamRequests', target=serviceParamRequests, args=(mySonyCamNo1, gcsWrites2Sony, stillcap, whitebal, shut_sp, iso, focusdata, focusarea, aper, expro))      
+    p00 = multiprocessing.Process(name='serviceParamRequests', target=serviceParamRequests, args=(mySonyCamNo1, gcsWrites2Sony, stillcap, whitebal, shut_sp, iso, focusdata, focusarea, aper, expro,))      
     p00.daemon = True
     if not p00.is_alive() == True:
         print("Service Request Daemon Active")
         p00.start()  
-    
+    p000 = multiprocessing.Process(name='mavlinkTakePhoto', target=mavlinkTakePhoto, args=(mySonyCamNo1,))      
+    p000.daemon = True
+    if not p000.is_alive() == True:
+        print("Take a photo Daemon Active")
+        p000.start()  
+        
     while a:
+        # ========== if deamons die respawn them =================================================
+        #
         if not p0.is_alive() == True:
             p0 = multiprocessing.Process(name='run_process_mavlink', target=run_process_messages_from_connection, args=(frame, cID, gcsWrites2Sony,))
             p0.daemon = True
             p0.start() 
 
         if not p00.is_alive() == True:
-            p00 = multiprocessing.Process(name='serviceParamRequests', target=serviceParamRequests, args=(mySonyCamNo1, gcsWrites2Sony, stillcap, whitebal, shut_sp, iso, focusdata, focusarea, aper, expro))      
+            p00 = multiprocessing.Process(name='serviceParamRequests', target=serviceParamRequests, args=(mySonyCamNo1, gcsWrites2Sony, stillcap, whitebal, shut_sp, iso, focusdata, focusarea, aper, expro,))      
             p00.daemon = True
             p00.start() 
 
+        if not p000.is_alive() == True:
+            p000 = multiprocessing.Process(name='mavlinkTakePhoto', target=mavlinkTakePhoto, args=(mySonyCamNo1,))      
+            p000.daemon = True
+            p000.start() 
+            
         # ============= check for write actions to the camera (wait until a change of state has been made by the GCS)
         #
         v,p,st = gcsWrites2Sony.getVal_sony_ex_pro(gcsWrites2Sony.STATE_CAM_READING)
@@ -5737,5 +5853,6 @@ if __name__ == '__main__':
     del shut_sp
     del whitebal
     del stillcap
+
 
    
