@@ -24,7 +24,7 @@ namespace aerostation.Forms
 {
 	public partial class sonyCameraScreenMissionPlanner : Form
 	{
-		public Form1()
+		public sonyCameraScreenMissionPlanner()
 		{
 			InitializeComponent();
 		}
