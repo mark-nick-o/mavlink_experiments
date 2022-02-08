@@ -53,56 +53,56 @@ namespace aerostation.Forms
 			comboBox1.SelectedIndex = -1;    // make no selection
 		}
 
-        // selection is string so convert to float
+                // selection is string so convert to float
 		//
-        private float stringArg2Float( string s )
+                private float stringArg2Float( string s )
 		{
-	    	float num = 0.0f;
-            try
-            {
-                num = float.Parse(val);
-                Console.WriteLine($"Writing to Mavlink '{val}' {num}.");
-            }
-            catch (FormatException)
-            {
-                Console.WriteLine($"Unable to convert '{val}'.");
-				num = -1.0;
-            }
-            catch (OverflowException)
-            {
-                Console.WriteLine($"'{val}' is out of range of the float type.");
-				num = -2.0;
-            }
-			return num;
-        }
+	    	   float num = 0.0f;
+                   try
+                   {
+                      num = float.Parse(val);
+                      //Console.WriteLine($"Writing to Mavlink '{val}' {num}.");
+                   }
+                  catch (FormatException)
+                  {
+                      //Console.WriteLine($"Unable to convert '{val}'.");
+		      num = -1.0;
+                  }
+                 catch (OverflowException)
+                 {
+                      //Console.WriteLine($"'{val}' is out of range of the float type.");
+		       num = -2.0;
+                }
+		return num;
+              }
 
-        // selection is string so convert to float
-		//
-        private Int32 stringArg2Int32( string s )
-		{
+              // selection is string so convert to float
+	      //
+              private Int32 stringArg2Int32( string s )
+	      {
 	    	Int32 num = 0;
-            try
-            {
-                num = Int32.Parse(val);
-                Console.WriteLine($"Writing to Mavlink '{val}' {num}.");
-            }
-            catch (FormatException)
-            {
-                Console.WriteLine($"Unable to convert '{val}'.");
-				num = -2;
-            }
-            catch (OverflowException)
-            {
-                Console.WriteLine($"'{val}' is out of range of the float type.");
-				num = -3;
-            }
-			return num;
-        }
+                try
+                {
+                   num = Int32.Parse(val);
+                   //Console.WriteLine($"Writing to Mavlink '{val}' {num}.");
+                }
+                catch (FormatException)
+                {
+                   //Console.WriteLine($"Unable to convert '{val}'.");
+		   num = -2;
+                }
+                catch (OverflowException)
+                {
+                  //Console.WriteLine($"'{val}' is out of range of the float type.");
+		   num = -3;
+                }
+		return num;
+              }
 
-        private Int32 enumerate_white_bal_sony_a7( Int32 dataV )
-    	{
-	    	switch(dataV)
-            {
+            private Int32 enumerate_white_bal_sony_a7( Int32 dataV )
+    	    {
+	      switch(dataV)
+              {
                case 0:
                ret = 0;
                break;
@@ -167,14 +167,14 @@ namespace aerostation.Forms
                //Console.WriteLine("Error");
 			   ret = -4;
                break;
-            }
-		    return ret;
-	    }
+              }
+	      return ret;
+	  }
 
-        // selection is string so convert to int32
-		//		
-        private void sendParamSetMessageWhiteBalAsFloat( float pVal )
-        {
+          // selection is string so convert to int32
+	  //		
+          private void sendParamSetMessageWhiteBalAsFloat( float pVal )
+          {
             mavlink_param_set_t req = new mavlink_param_set_t();
             req.target_system = MAV.sysid;
             req.target_component = MAV.compid;
@@ -186,27 +186,27 @@ namespace aerostation.Forms
             // send each one twice.
             generatePacket((byte) MAVLINK_MSG_ID.PARAM_SET, req);
             generatePacket((byte) MAVLINK_MSG_ID.PARAM_SET, req);
-        }
+          }
 
-        // sends the value as an int
-		//
-        private void sendParamSetMessageWhiteBalAsInt32( Int32 pVal )
-        {
-            mavlink_param_set_t req = new mavlink_param_set_t();
-            req.target_system = MAV.sysid;
-            req.target_component = MAV.compid;
+          // sends the value as an int
+	  //
+          private void sendParamSetMessageWhiteBalAsInt32( Int32 pVal )
+          {
+               mavlink_param_set_t req = new mavlink_param_set_t();
+               req.target_system = MAV.sysid;
+               req.target_component = MAV.compid;
 
-            req.param_id = "S_WHITE_BAL";
-            req.param_value = Convert.ToSingle(pVal); 
-            req.param_type = MAVLINK_MSG_ID.MAV_PARAM_TYPE_UINT32; 
+                req.param_id = "S_WHITE_BAL";
+                req.param_value = Convert.ToSingle(pVal); 
+                req.param_type = MAVLINK_MSG_ID.MAV_PARAM_TYPE_UINT32; 
 
-            // send each one twice.
-            generatePacket((byte) MAVLINK_MSG_ID.PARAM_SET, req);
-            generatePacket((byte) MAVLINK_MSG_ID.PARAM_SET, req);
-        }
+                 // send each one twice.
+                 generatePacket((byte) MAVLINK_MSG_ID.PARAM_SET, req);
+                 generatePacket((byte) MAVLINK_MSG_ID.PARAM_SET, req);
+               }
 
-        // when the object is selected then write to mavlink using PARAM_SET message
-        //		
+                // when the object is selected then write to mavlink using PARAM_SET message
+                //		
 		private void comboBox1_SelectionChangeCommitted(object sender, EventArgs e)
 		{
 			string selectedItem = comboBox1.SelectedItem.ToString();
