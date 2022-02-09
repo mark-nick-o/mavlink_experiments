@@ -1,4 +1,4 @@
-# ===============================================================================================================================
+  # ===============================================================================================================================
 #
 # Name : mavlinkSonyCamWriteVals.py
 # Desc : Global memory value class for use to write mavlink to sony cam
@@ -711,6 +711,7 @@ class sonyAlphaNewCamera():
            c = os.popen(cmd)
            print(c.read())
            fastGlobals.take_picture == 0
+           print("\033[36m Took the picture")
         
     def set_sony_iso( self, isoVal ):
 
@@ -722,7 +723,7 @@ class sonyAlphaNewCamera():
         s=subprocess.Popen(args, stdout=subprocess.PIPE)
         p2 = subprocess.Popen(["grep", "ISO_Mode"], stdin=s.stdout, stdout=subprocess.PIPE)	   # look for only this string in the output
         output = p2.communicate()[0]
-        print(output)
+        print(f"{output} \n returned to shell {p2.returncode}")
         s.stdout.close()
         # consider if needed (if check of setval isnt working look for "cancelled" in the program output
         # 
@@ -1944,8 +1945,8 @@ class sonyAlphaNewCamera():
 
         enum_num = 0
         enum_num_state = True
-        if ((num >= 0) and (num <= 6)):
-            enum_num = num + 1
+        if ((num >= 1) and (num <= 7)):
+            enum_num = num - 1
         else:
             enum_num_state = False
         return enum_num_state, enum_num
@@ -1965,116 +1966,118 @@ class sonyAlphaNewCamera():
 
         enum_num = 0
         enum_num_state = True
+        if num == 0:
+            enum_num = 0        
         if num == 19660810:
-            enum_num = 0
-        elif num == 16384010:
             enum_num = 1
-        elif num == 13107210:
+        elif num == 16384010:
             enum_num = 2
-        elif num == 9830410:
+        elif num == 13107210:
             enum_num = 3
-        elif num == 8519690:
+        elif num == 9830410:
             enum_num = 4
-        elif num == 6553610:
+        elif num == 8519690:
             enum_num = 5
-        elif num == 5242890:
+        elif num == 6553610:
             enum_num = 6
-        elif num == 3932170:
+        elif num == 5242890:
             enum_num = 7
-        elif num == 3276810:
+        elif num == 3932170:
             enum_num = 8
-        elif num == 2621450:
+        elif num == 3276810:
             enum_num = 9
-        elif num == 2097162:
+        elif num == 2621450:
             enum_num = 10
-        elif num == 1638410:
+        elif num == 2097162:
             enum_num = 11
-        elif num == 1310730:
+        elif num == 1638410:
             enum_num = 12
-        elif num == 1048586:
+        elif num == 1310730:
             enum_num = 13
-        elif num == 851978:
+        elif num == 1048586:
             enum_num = 14
-        elif num == 655370:
+        elif num == 851978:
             enum_num = 15
-        elif num == 524298:
+        elif num == 655370:
             enum_num = 16
-        elif num == 393226:
+        elif num == 524298:
             enum_num = 17
-        elif num == 327690:
+        elif num == 393226:
             enum_num = 18
-        elif num == 262154:
+        elif num == 327690:
             enum_num = 19
-        elif num == 65539:
+        elif num == 262154:
             enum_num = 20
-        elif num == 65540:
+        elif num == 65539:
             enum_num = 21
-        elif num == 65541:
+        elif num == 65540:
             enum_num = 22
-        elif num == 65542:
+        elif num == 65541:
             enum_num = 23
-        elif num == 65544:
+        elif num == 65542:
             enum_num = 24
-        elif num == 65546:
+        elif num == 65544:
             enum_num = 25
-        elif num == 65549:
+        elif num == 65546:
             enum_num = 26
-        elif num == 65551:
+        elif num == 65549:
             enum_num = 27
-        elif num == 65556:
+        elif num == 65551:
             enum_num = 28
-        elif num == 65561:
+        elif num == 65556:
             enum_num = 29
-        elif num == 65566:
+        elif num == 65561:
             enum_num = 30
-        elif num == 65576:
+        elif num == 65566:
             enum_num = 31
-        elif num == 65586:
+        elif num == 65576:
             enum_num = 32
-        elif num == 65596:
+        elif num == 65586:
             enum_num = 33
-        elif num == 65616:
+        elif num == 65596:
             enum_num = 34
-        elif num == 65636:
+        elif num == 65616:
             enum_num = 35
+        elif num == 65636:
+            enum_num = 36
         elif num == 65661:
-            enum_num = 36 
+            enum_num = 37
         elif num == 65696:
-            enum_num = 37  
-        elif num == 65736:
             enum_num = 38 
+        elif num == 65736:
+            enum_num = 39 
         elif num == 65786:
-            enum_num = 39    
+            enum_num = 40
         elif num == 65856:
-            enum_num = 40 
-        elif num == 65936:
             enum_num = 41 
-        elif num == 66036:
+        elif num == 65936:
             enum_num = 42 
+        elif num == 66036:
+            enum_num = 43 
         elif num == 66176:
-            enum_num = 43  
-        elif num == 66336:
             enum_num = 44  
-        elif num == 66536:
+        elif num == 66336:
             enum_num = 45  
+        elif num == 66536:
+            enum_num = 46  
         elif num == 66786:
-            enum_num = 46
+            enum_num = 47
         elif num == 67136:
-            enum_num = 47 
+            enum_num = 48 
         elif num == 67536:
-            enum_num = 48  
+            enum_num = 49  
         elif num == 68036:
-            enum_num = 49    
+            enum_num = 50   
         elif num == 68736:
-            enum_num = 50  
-        elif num == 69536:
             enum_num = 51  
-        elif num == 70536:
+        elif num == 69536:
             enum_num = 52  
+        elif num == 70536:
+            enum_num = 53  
         elif num == 71936:
-            enum_num = 53 
+            enum_num = 54 
         elif num == 73536:
-            enum_num = 54             
+            enum_num = 55             
         else:
             enum_num_state = False
         return enum_num_state, enum_num
@@ -2407,6 +2410,8 @@ class sonyAlphaNewCamera():
             reqDat, prevDat, readSuccess  = mavObj.getVal_sony_shutter(mavObj.STATE_CAM_READING,timeout1)
             timeoutS1 -= timeout1
             
+        print(f"set to ISO r={reqDat} p={prevDat} time={timeout1} state={mavObj.state}")
+        
         if ((not (int(reqDat) == mavObj.STATE_INIT) and not (int(reqDat) == int(prevDat))) and (readSuccess == True)):
             timeoutS2 = timeout2 * no_timeout2_retry
             ret,ee = self.enumerate_shutter_sony_a7(int(reqDat))
@@ -2428,10 +2433,12 @@ class sonyAlphaNewCamera():
                     if ( int(ans[1]) == int(reqDat) ) :
                         while (writeSuccess == False) and (timeoutS2 > 0): 
                             writeSuccess = mavObj.setVal_sony_shutter(ans[1],mavObj.STATE_CAM_WRITING,mavObj.WRITE_PREV_DATA,timeout2) 
+                            print(f"written {ans[1]} {writeSuccess}")
                             timeoutS2 -= timeout2                                  # no retries  
                 except Exception as err_msg:                
                    print("\033[31m write sony shutter speed failed to set shutter speed \033[0m")                    
                 if ( writeSuccess == True ):
+                    print(f"saving..... {ans[1]} {writeSuccess}")               
                     ret = self.setSonyObjData( mem, int(ans[1]) ) 
         else:
             ret = ( int(prevDat) == int(reqDat) )
@@ -4956,8 +4963,8 @@ class MAVFrame():
                         # Taking a picture is hard coded to here as it needs no delay
                         #
                         self.type_of_msg = mavutil.mavlink.MAV_CMD_DO_DIGICAM_CONTROL
-                        print(f"\033[33m DO DIGICAM CONTROL {msg.param1} {msg.param1}")
-                        if ((int(msg.param5) == 1) and (int(msg.param7) == 1)):
+                        print(f"\033[33m DO DIGICAM CONTROL {msg.param5} {msg.param7}")
+                        if ((int(msg.param5) == 1) and (int(msg.param7) == 0)):
                             fastGlobals.take_picture = 1 
                         self.Got_Param1 = msg.param1
                         self.Got_Param2 = msg.param2
@@ -4967,6 +4974,7 @@ class MAVFrame():
                         self.Got_Param6 = msg.param6
                         self.Got_Param7 = msg.param7
                         print("\033[36m DO DIGICAM CONTROL COMPLETED")
+                        #exit(100)
                     elif (self.RCV_COMMAND == mavutil.mavlink.MAV_CMD_DO_CONTROL_VIDEO):
                         self.type_of_msg = mavutil.mavlink.MAV_CMD_DO_CONTROL_VIDEO
                         self.Got_Param1 = msg.param1
@@ -5241,6 +5249,8 @@ def sendMavFocusData( mySonyCam, focusdata, focusarea, ConnID ):
     # and update the update flag to get the mavlink send
     #     
     success = mySonyCam.sendMavlinkMessageForParamObject( focusdata, ConnID )
+    success = mySonyCam.sendMavlinkMessageForParamObject( focusarea, ConnID )
+    success = mySonyCam.sendMavlinkMessageForParamExtObject( focusdata, ConnID )
     success = mySonyCam.sendMavlinkMessageForParamExtObject( focusarea, ConnID )
     print ('Exiting Mavlink Focus Data  :', multiprocessing.current_process().name)
 
@@ -5766,6 +5776,7 @@ if __name__ == '__main__':
         if not (gcsWrites2Sony.set_sony_focus == gcsWrites2Sony.STATE_INIT) or not (gcsWrites2Sony.set_sony_focus_area == gcsWrites2Sony.STATE_INIT):
             print(f"on TOP LEVEL saw shutter speed {gcsWrites2Sony.set_sony_focus} {gcsWrites2Sony.prev_sony_focus} {gcsWrites2Sony.set_sony_focus_area} {gcsWrites2Sony.prev_sony_focus_area} {gcsWrites2Sony.mav_req_all_param}")
             manageAlphaCameraFocusData(mySonyCamNo1, gcsWrites2Sony, focusdata, focusarea)             
+        mavlinkTakePhoto(mySonyCamNo1)
         sendMavIso(mySonyCamNo1, iso, cID )
         sendMavAper( mySonyCamNo1, aper, cID )
         sendMavFocusData( mySonyCamNo1, focusdata, focusarea, cID )
@@ -5920,3 +5931,4 @@ if __name__ == '__main__':
     del shut_sp
     del whitebal
     del stillcap
+
