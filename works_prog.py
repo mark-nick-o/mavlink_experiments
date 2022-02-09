@@ -1,4 +1,4 @@
-# ===============================================================================================================================
+  # ===============================================================================================================================
 #
 # Name : mavlinkSonyCamWriteVals.py
 # Desc : Global memory value class for use to write mavlink to sony cam
@@ -1761,6 +1761,44 @@ class sonyAlphaNewCamera():
         enum_num_state = True
         if num == 65543:
             enum_num = 2
+        elif num == 1:
+            enum_num = 0
+        elif num == 65540:
+            enum_num = 1
+        elif num == 65537:
+            enum_num = 3
+        elif num == 65538:
+            enum_num = 4
+        elif num == 196611:
+            enum_num = 5
+        elif num == 196610:
+            enum_num = 6
+        elif num == 196609:
+            enum_num = 7
+        elif num == 524289:
+            enum_num = 8
+        elif num == 524290:
+            enum_num = 9
+        elif num == 524293:
+            enum_num = 10
+        elif num == 524294:
+            enum_num = 11
+        elif num == 524251:
+            enum_num = 12
+        elif num == 524292:
+            enum_num = 13
+        elif ((num >= 262913) and (num <= 262928)):
+            enum_num = 14 + (num-262913)
+        elif ((num >= 327681) and (num <= 327696)):
+            enum_num = 30 + (num-327681)
+        elif num == 393218:
+            enum_num = 46
+        elif num == 393217:
+            enum_num = 47
+        elif num == 458754:
+            enum_num = 48
+        elif num == 458753:
+            enum_num = 49
         else:
             enum_num_state = False
         return enum_num_state, enum_num
@@ -5577,7 +5615,7 @@ def sigusr1_handler(signum, frame):
     # what we want to do on that external signal
     print("\033[32m ============ Take Picture ==================")
     fastGlobals.take_picture = 1
-	
+    
 if __name__ == '__main__':
 
     # Register the alarm signal with our handler signal. signal(signal. SIGALRM, alarm_handler)
@@ -5856,6 +5894,5 @@ if __name__ == '__main__':
     del shut_sp
     del whitebal
     del stillcap
-
 
    
