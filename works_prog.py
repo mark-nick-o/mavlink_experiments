@@ -1,4 +1,4 @@
-  # ===============================================================================================================================
+# ===============================================================================================================================
 #
 # Name : mavlinkSonyCamWriteVals.py
 # Desc : Global memory value class for use to write mavlink to sony cam
@@ -956,7 +956,8 @@ class sonyAlphaNewCamera():
         # output2 = p3.communicate()[0]
         
         z = output.decode('ascii')         # convert bytes array output to ascii string 
-        a = shlex.split(z)                 # split this unique output into fields separated by commas
+        zz = z.replace("\"","")            # get rid of the inch symbol it will crash us
+        a = shlex.split(zz)                 # split this unique output into fields separated by commas
         #
         # Using this parser as it sometimes missed the bracket at the start (odd??) in the popen output
         # we get the value fields before and after and return that list
@@ -1398,7 +1399,8 @@ class sonyAlphaNewCamera():
         # output2 = p3.communicate()[0]
         
         z = output.decode('ascii')         # convert bytes array output to ascii string 
-        a = shlex.split(z)                 # split this unique output into fields separated by commas
+        zz = z.replace("\"","")            # remove quoate mark meaning seconds
+        a = shlex.split(zz)                 # split this unique output into fields separated by commas
         #
         # Using this parser as it sometimes missed the bracket at the start (odd??) in the popen output
         # we get the value fields before and after and return that list
@@ -1963,118 +1965,116 @@ class sonyAlphaNewCamera():
 
         enum_num = 0
         enum_num_state = True
-        if num == 0:
+        if num == 19660810:
             enum_num = 0
-        elif num == 19660810:
-            enum_num = 1
         elif num == 16384010:
-            enum_num = 2
+            enum_num = 1
         elif num == 13107210:
-            enum_num = 3
+            enum_num = 2
         elif num == 9830410:
-            enum_num = 4
+            enum_num = 3
         elif num == 8519690:
-            enum_num = 5
+            enum_num = 4
         elif num == 6553610:
-            enum_num = 6
+            enum_num = 5
         elif num == 5242890:
-            enum_num = 7
+            enum_num = 6
         elif num == 3932170:
-            enum_num = 8
+            enum_num = 7
         elif num == 3276810:
-            enum_num = 9
+            enum_num = 8
         elif num == 2621450:
-            enum_num = 10
+            enum_num = 9
         elif num == 2097162:
-            enum_num = 11
+            enum_num = 10
         elif num == 1638410:
-            enum_num = 12
+            enum_num = 11
         elif num == 1310730:
-            enum_num = 13
+            enum_num = 12
         elif num == 1048586:
-            enum_num = 14
+            enum_num = 13
         elif num == 851978:
-            enum_num = 15
+            enum_num = 14
         elif num == 655370:
-            enum_num = 16
+            enum_num = 15
         elif num == 524298:
-            enum_num = 17
+            enum_num = 16
         elif num == 393226:
-            enum_num = 18
+            enum_num = 17
         elif num == 327690:
-            enum_num = 19
+            enum_num = 18
         elif num == 262154:
-            enum_num = 20
+            enum_num = 19
         elif num == 65539:
-            enum_num = 21
+            enum_num = 20
         elif num == 65540:
-            enum_num = 22
+            enum_num = 21
         elif num == 65541:
-            enum_num = 23
+            enum_num = 22
         elif num == 65542:
-            enum_num = 24
+            enum_num = 23
         elif num == 65544:
-            enum_num = 25
+            enum_num = 24
         elif num == 65546:
-            enum_num = 26
+            enum_num = 25
         elif num == 65549:
-            enum_num = 27
+            enum_num = 26
         elif num == 65551:
-            enum_num = 28
+            enum_num = 27
         elif num == 65556:
-            enum_num = 29
+            enum_num = 28
         elif num == 65561:
-            enum_num = 30
+            enum_num = 29
         elif num == 65566:
-            enum_num = 31
+            enum_num = 30
         elif num == 65576:
-            enum_num = 32
+            enum_num = 31
         elif num == 65586:
-            enum_num = 33
+            enum_num = 32
         elif num == 65596:
-            enum_num = 34
+            enum_num = 33
         elif num == 65616:
-            enum_num = 35
+            enum_num = 34
         elif num == 65636:
-            enum_num = 36
+            enum_num = 35
         elif num == 65661:
-            enum_num = 37 
+            enum_num = 36 
         elif num == 65696:
-            enum_num = 38  
+            enum_num = 37  
         elif num == 65736:
-            enum_num = 39 
+            enum_num = 38 
         elif num == 65786:
-            enum_num = 40    
+            enum_num = 39    
         elif num == 65856:
-            enum_num = 41 
+            enum_num = 40 
         elif num == 65936:
-            enum_num = 42 
+            enum_num = 41 
         elif num == 66036:
-            enum_num = 43 
+            enum_num = 42 
         elif num == 66176:
-            enum_num = 44  
+            enum_num = 43  
         elif num == 66336:
-            enum_num = 45  
+            enum_num = 44  
         elif num == 66536:
-            enum_num = 46  
+            enum_num = 45  
         elif num == 66786:
-            enum_num = 47
+            enum_num = 46
         elif num == 67136:
-            enum_num = 48 
+            enum_num = 47 
         elif num == 67536:
-            enum_num = 49  
+            enum_num = 48  
         elif num == 68036:
-            enum_num = 50    
+            enum_num = 49    
         elif num == 68736:
-            enum_num = 51  
+            enum_num = 50  
         elif num == 69536:
-            enum_num = 52  
+            enum_num = 51  
         elif num == 70536:
-            enum_num = 53  
+            enum_num = 52  
         elif num == 71936:
-            enum_num = 54 
-        elif num == 73936:
-            enum_num = 55             
+            enum_num = 53 
+        elif num == 73536:
+            enum_num = 54             
         else:
             enum_num_state = False
         return enum_num_state, enum_num
@@ -2177,7 +2177,7 @@ class sonyAlphaNewCamera():
             timeoutS2 = timeout2 * no_timeout2_retry
             ret,ee = self.enumerate_iso_sony_a7(int(reqDat))
             if (ret == False):
-                print("\033[31m Error Invalid parameter Iso {reqDat}\033[0m")
+                print(f"\033[31m Error Invalid parameter Iso {reqDat}\033[0m")
                 writeSuccess = False
                 while (writeSuccess == False) and (timeoutS2 > 0): 
                     writeSuccess = mavObj.setVal_sony_iso(int(prevDat),mavObj.STATE_CAM_WRITING,mavObj.DONT_WRITE_PREV_DATA,timeout2) 
@@ -2227,9 +2227,9 @@ class sonyAlphaNewCamera():
             
         if ((not (int(reqDat) == mavObj.STATE_INIT) and not (int(reqDat) == int(prevDat))) and (readSuccess == True)):
             timeoutS2 = timeout2 * no_timeout2_retry
-            ret,e = self.enumerate_still_cap_sony_a7(int(reqDat))
+            ret,e = self.enumerate_aperture_sony_a7(int(reqDat))
             if (ret == False):
-                print("\033[31m Error Invalid parameter aperture {reqDat}\033[0m")
+                print(f"\033[31m Error Invalid parameter aperture {reqDat}\033[0m")
                 writeSuccess = False
                 while (writeSuccess == False) and (timeoutS2 > 0): 
                     writeSuccess = mavObj.setVal_sony_aperture(int(prevDat),mavObj.STATE_CAM_WRITING,mavObj.DONT_WRITE_PREV_DATA,timeout2) 
@@ -2275,7 +2275,7 @@ class sonyAlphaNewCamera():
             timeoutS2 = timeout2 * no_timeout2_retry
             ret,ee = self.enumerate_ex_pro_sony_a7(int(reqDat))
             if (ret == False):
-                print("\033[31m Error Invalid parameter exposure program mode {reqDat}\033[0m")
+                print(f"\033[31m Error Invalid parameter exposure program mode {reqDat}\033[0m")
                 writeSuccess = False
                 while (writeSuccess == False) and (timeoutS2 > 0): 
                     writeSuccess = mavObj.setVal_sony_ex_pro(int(prevDat),mavObj.STATE_CAM_WRITING,mavObj.DONT_WRITE_PREV_DATA,timeout2) 
@@ -2321,7 +2321,7 @@ class sonyAlphaNewCamera():
             timeoutS2 = timeout2 * no_timeout2_retry
             ret,ee = self.enumerate_focus_sony_a7(int(reqDat))
             if (ret == False):
-                print("\033[31m Error Invalid parameter focus mode {reqDat}\033[0m")
+                print(f"\033[31m Error Invalid parameter focus mode {reqDat}\033[0m")
                 writeSuccess = False
                 while (writeSuccess == False) and (timeoutS2 > 0): 
                     writeSuccess = mavObj.setVal_sony_focus(int(prevDat),mavObj.STATE_CAM_WRITING,mavObj.DONT_WRITE_PREV_DATA,timeout2) 
@@ -2366,7 +2366,7 @@ class sonyAlphaNewCamera():
             timeoutS2 = timeout2 * no_timeout2_retry
             ret,ee = self.enumerate_focus_area_sony_a7(int(reqDat))
             if (ret == False):
-                print("\033[31m Error Invalid parameter focus area {reqDat}\033[0m")
+                print(f"\033[31m Error Invalid parameter focus area {reqDat}\033[0m")
                 writeSuccess = False
                 while (writeSuccess == False) and (timeoutS2 > 0): 
                     writeSuccess = mavObj.setVal_sony_focus_area(int(prevDat),mavObj.STATE_CAM_WRITING,mavObj.DONT_WRITE_PREV_DATA,timeout2) 
@@ -2411,7 +2411,7 @@ class sonyAlphaNewCamera():
             timeoutS2 = timeout2 * no_timeout2_retry
             ret,ee = self.enumerate_shutter_sony_a7(int(reqDat))
             if (ret == False):
-                print("\033[31m Error Invalid parameter shutter speed {reqDat}\033[0m")
+                print(f"\033[31m Error Invalid parameter shutter speed {reqDat}\033[0m")
                 writeSuccess = False
                 while (writeSuccess == False) and (timeoutS2 > 0): 
                     writeSuccess = mavObj.setVal_sony_shutter(int(prevDat),mavObj.STATE_CAM_WRITING,mavObj.DONT_WRITE_PREV_DATA,timeout2) 
@@ -2456,7 +2456,7 @@ class sonyAlphaNewCamera():
             timeoutS2 = timeout2 * no_timeout2_retry
             ret,ee = self.enumerate_white_bal_sony_a7(int(reqDat))
             if (ret == False):
-                print("\033[31m Error Invalid parameter white balance {reqDat}\033[0m")
+                print(f"\033[31m Error Invalid parameter white balance {reqDat}\033[0m")
                 writeSuccess = False
                 while (writeSuccess == False) and (timeoutS2 > 0): 
                     writeSuccess = mavObj.setVal_sony_white_bal(int(prevDat),mavObj.STATE_CAM_WRITING,mavObj.DONT_WRITE_PREV_DATA,timeout2) 
@@ -2501,7 +2501,7 @@ class sonyAlphaNewCamera():
             timeoutS2 = timeout2 * no_timeout2_retry
             ret,ee = self.enumerate_still_cap_sony_a7(int(reqDat))
             if (ret == False):
-                print("\033[31m Error Invalid parameter still capture {reqDat}\033[0m")
+                print(f"\033[31m Error Invalid parameter still capture {reqDat}\033[0m")
                 writeSuccess = False
                 while (writeSuccess == False) and (timeoutS2 > 0): 
                     writeSuccess = mavObj.setVal_sony_still_cap_mode(int(prevDat),mavObj.STATE_CAM_WRITING,mavObj.DONT_WRITE_PREV_DATA,timeout2) 
@@ -2540,11 +2540,12 @@ class sonyAlphaNewCamera():
             #
             getName, getValueforMAVSending, getPrev, myState = obj.get_value_data(obj.STATE_MAV_READING, Timeout) 
             print(f"-------------- obj update found for param_value {getName} {getValueforMAVSending} {getPrev} {myState}")
+            sendVal = struct.unpack('f', struct.pack('I', getValueforMAVSending))[0]  
             if (myState == True):
                 try:
                     the_connection.mav.param_value_send(
                         getName.encode('ascii'),
-                        getValueforMAVSending,
+                        sendVal,
                         mavutil.mavlink.MAV_PARAM_TYPE_UINT32,
                         obj.numberOfVals,
                         obj.index)
@@ -4793,7 +4794,7 @@ class MAVFrame():
                 sharedObj.mav_req_all_param = mavlinkSonyCamWriteVals.MAV_REQ_ALL_PARAM
                 print("\033[35m PARAM_REQUEST_LIST was sent - shared object set to %d" % (sharedObj.mav_req_all_param))
                 # ===== TRAP ======
-                exit(99)
+                #exit(99)
             elif msg.get_type() == 'PARAM_EXT_REQUEST_LIST':
                 #
                 #
@@ -4825,7 +4826,7 @@ class MAVFrame():
                 else:
                     print(f"\033[31;46m Error reading param {msg.param_id} \033[0m")
                 # ===== TRAP =====
-                exit(96)
+                #exit(96)
             elif msg.get_type() == 'PARAM_EXT_REQUEST_READ':
                 #
                 if ( self.readParamExtSetFromMavLink( msg.param_id, sharedObj, the_connection )==True):
@@ -5742,11 +5743,36 @@ if __name__ == '__main__':
     active = True
     while active==True:
         run_process_messages_from_connection(frame, cID, gcsWrites2Sony)
+        serviceParamRequests( mySonyCamNo1, gcsWrites2Sony, stillcap, whitebal, shut_sp, iso, focusdata, focusarea, aper, expro )
         #manageAlphaCameraIso(mySonyCamNo1, gcsWrites2Sony, iso)
         if not (gcsWrites2Sony.set_sony_iso == gcsWrites2Sony.STATE_INIT):
             print(f"on TOP LEVEL saw {gcsWrites2Sony.set_sony_iso} {gcsWrites2Sony.prev_sony_iso} {gcsWrites2Sony.mav_req_all_param}")
             manageAlphaCameraIso(mySonyCamNo1, gcsWrites2Sony, iso)
-        sendMavIso(mySonyCamNo1, iso, cID ) 
+        if not (gcsWrites2Sony.set_sony_aperture == gcsWrites2Sony.STATE_INIT):
+            print(f"on TOP LEVEL saw aperture {gcsWrites2Sony.set_sony_aperture} {gcsWrites2Sony.prev_sony_aperture} {gcsWrites2Sony.mav_req_all_param}")
+            manageAlphaCameraAperture(mySonyCamNo1, gcsWrites2Sony, aper)
+        if not (gcsWrites2Sony.set_sony_white_bal == gcsWrites2Sony.STATE_INIT):
+            print(f"on TOP LEVEL saw wb {gcsWrites2Sony.set_sony_white_bal} {gcsWrites2Sony.prev_sony_white_bal} {gcsWrites2Sony.mav_req_all_param}")
+            manageAlphaWhiteBala(mySonyCamNo1, gcsWrites2Sony, whitebal)
+        if not (gcsWrites2Sony.set_sony_ex_pro == gcsWrites2Sony.STATE_INIT):
+            print(f"on TOP LEVEL saw expro {gcsWrites2Sony.set_sony_ex_pro} {gcsWrites2Sony.prev_sony_ex_pro} {gcsWrites2Sony.mav_req_all_param}")
+            manageAlphaCameraExpro(mySonyCamNo1, gcsWrites2Sony, expro)
+        if not (gcsWrites2Sony.set_sony_still_cap_mode == gcsWrites2Sony.STATE_INIT):
+            print(f"on TOP LEVEL saw still cap {gcsWrites2Sony.set_sony_still_cap_mode} {gcsWrites2Sony.prev_sony_still_cap_mode} {gcsWrites2Sony.mav_req_all_param}")
+            manageAlphaCameraStillCap(mySonyCamNo1, gcsWrites2Sony, stillcap)  
+        if not (gcsWrites2Sony.set_sony_shutter == gcsWrites2Sony.STATE_INIT):
+            print(f"on TOP LEVEL saw shutter speed {gcsWrites2Sony.set_sony_shutter} {gcsWrites2Sony.prev_sony_shutter} {gcsWrites2Sony.mav_req_all_param}")
+            manageAlphaCameraShutSpd(mySonyCamNo1, gcsWrites2Sony, shut_sp)  
+        if not (gcsWrites2Sony.set_sony_focus == gcsWrites2Sony.STATE_INIT) or not (gcsWrites2Sony.set_sony_focus_area == gcsWrites2Sony.STATE_INIT):
+            print(f"on TOP LEVEL saw shutter speed {gcsWrites2Sony.set_sony_focus} {gcsWrites2Sony.prev_sony_focus} {gcsWrites2Sony.set_sony_focus_area} {gcsWrites2Sony.prev_sony_focus_area} {gcsWrites2Sony.mav_req_all_param}")
+            manageAlphaCameraFocusData(mySonyCamNo1, gcsWrites2Sony, focusdata, focusarea)             
+        sendMavIso(mySonyCamNo1, iso, cID )
+        sendMavAper( mySonyCamNo1, aper, cID )
+        sendMavFocusData( mySonyCamNo1, focusdata, focusarea, cID )
+        sendMavExpro( mySonyCamNo1, expro, cID )
+        sendMavShutSpd( mySonyCamNo1, shut_sp, cID )
+        sendMavWhiteBala( mySonyCamNo1, whitebal, cID )
+        sendMavStillCap( mySonyCamNo1, stillcap, cID )       
         #active = False        
         #exit(10)
     
@@ -5894,5 +5920,3 @@ if __name__ == '__main__':
     del shut_sp
     del whitebal
     del stillcap
-
-   
