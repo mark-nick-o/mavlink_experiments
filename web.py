@@ -27,7 +27,11 @@ app = Flask(__name__, template_folder='template')
 #
 # https://habr.com/ru/post/472126/ ref client server / alternative
 #
-   
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory('/home/pi/cams/src/acp/sonyCam',
+                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
 @app.route('/take_a_photo')
 def take_a_photo_handler():
     #if camera.ready:
@@ -41,7 +45,6 @@ def take_a_photo_handler():
 @app.route('/cam_defs')
 def send_cam_defs_handler():
     return render_template('alpha_cam_new.xml')
-
 
 @app.route('/cam_default')
 def send_cam_default_handler():
