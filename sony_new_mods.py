@@ -6082,8 +6082,13 @@ if __name__ == '__main__':
     if not p00.is_alive() == True:
         print("Service Request Daemon Active")
         p00.start()  
-    p000 = multiprocessing.Process(name='mavlinkTakePhoto', target=mavlinkTakePhoto, args=(mySonyCamNo1,))      
+    p000 = multiprocessing.Process(name='mavlinkTakePhoto', target=mavlinkTakePhoto, args=(mySonyCamNo1, fastGlobals.take_picture,))      
     p000.daemon = True
+    if (fastGlobals.take_picture == 2):
+        sendMavlinkAckData( frame, cID, 1, frame.RCV_COMMAND, frame.RPM2, 0, frame.ACK_RESULT )
+        fastGlobals.take_picture = 0
+        frame.RCV_COMMAND = 0
+        frame.ACK_RESULT = 99
     if not p000.is_alive() == True:
         print("Take a photo Daemon Active")
         p000.start()  
@@ -6102,7 +6107,7 @@ if __name__ == '__main__':
             p00.start() 
 
         if not p000.is_alive() == True:
-            p000 = multiprocessing.Process(name='mavlinkTakePhoto', target=mavlinkTakePhoto, args=(mySonyCamNo1,))      
+            p000 = multiprocessing.Process(name='mavlinkTakePhoto', target=mavlinkTakePhoto, args=(mySonyCamNo1, fastGlobals.take_picture,))      
             p000.daemon = True
             p000.start() 
             
