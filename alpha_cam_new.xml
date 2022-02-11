@@ -5,6 +5,7 @@
 <vendor>SONY EUROPE B.V - AiRobotics</vendor>
 </definition>
  <parameters>
+<!-- 
 <parameter name="CrCommandId" type="uint32" default="0">
     <description>enum CrCommandId</description>
     <options>
@@ -16,6 +17,7 @@
         <option name="CancelMediaFormat" value="6"/>
     </options>
 </parameter>
+  --> 
 <parameter name="CrCommandParam" type="uint16" default="0">
     <description>enum CrCommandParam : CrInt16u</description>
     <options>
@@ -159,7 +161,7 @@
         <option name="CrPropValuePlus1" value="1"/>
     </options>
 </parameter>
-<parameter name="CrFnumberSet" type="uint32" default="0">
+<parameter name="S_APERTURE" type="uint32" default="0">
     <description>enum CrFnumberSet : CrInt16u</description>
     <options>		
         <option name="F2.8" value="280"/>
@@ -182,14 +184,14 @@
         <option name="F22" value="2200"/>
     </options>
 </parameter>
-<parameter name="CrShutterSpeedSet" type="uint32" default="0">
+<parameter name="S_SHUT_SPD" type="uint32" default="0">
     <description>enum CrShutterSpeedSet : CrInt32u</description>
     <options>
         <option name="Bulb" value="0"/>
         <option name="Nothing" value="1"/>
     </options>
 </parameter>
-<parameter name="CrISOMode" type="uint32" default="0">
+<parameter name="S_ISO" type="uint32" default="0">
     <description>enum CrISOMode : CrInt32u</description>
     <options>
         <option name="Normal" value="0"/>
@@ -229,7 +231,7 @@
         <option name="102400" value="102400"/>
     </options>
 </parameter>
-<parameter name="CrExposureProgram" type="uint32" default="0">
+<parameter name="S_EX_PRO_MODE" type="uint32" default="0">
     <description>enum CrExposureProgram : CrInt32u</description>
     <options>
         <option name="M Manual" value="1"/>
@@ -305,7 +307,7 @@
         <option name="ExFine" value="4"/>
     </options>
 </parameter>
-<parameter name="CrWhiteBalanceSetting" type="uint16" default="0">
+<parameter name="S_WHITE_BAL" type="uint32" default="0">
     <description>enum CrWhiteBalanceSetting : CrInt16u</description>
     <options>
         <option name="AWB" value="0"/>
@@ -548,7 +550,7 @@
         <option name="Recording State Recording Failed" value="2"/>
     </options>
 </parameter>
-<parameter name="CrFocusArea" type="uint16" default="0">
+<parameter name="S_FOCUS_AREA" type="uint32" default="0">
     <description>enum CrFocusArea : CrInt16u</description>
     <options>
         <option name="Unknown" value="0"/>
@@ -655,7 +657,7 @@
         <option name="IntervalShooting" value="2"/>
     </options>
 </parameter>
-<parameter name="CrFocusIndicator" type="uint32" default="0">
+<parameter name="S_FOCUS_MODE" type="uint32" default="0">
     <description>enum CrFocusIndicator : CrInt32u</description>
     <options>
         <option name="Unlocked" value="1"/>
