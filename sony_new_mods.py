@@ -5002,7 +5002,7 @@ class MAVFrame():
                         self.type_of_msg = mavutil.mavlink.MAV_CMD_REQUEST_VIDEO_STREAM_INFORMATION
                         print("=========== !! send to QGround VideoStream !! ==========")
                         self.mavlink_send_video_stream_information(the_connection)
-	            elif (self.RCV_COMMAND == mavutil.mavlink.MAV_CMD_REQUEST_CAMERA_SETTINGS):
+                    elif (self.RCV_COMMAND == mavutil.mavlink.MAV_CMD_REQUEST_CAMERA_SETTINGS):
                         print("request camera settings Info OLD MESSAGE.....")
                         self.type_of_msg = mavutil.mavlink.MAV_CMD_REQUEST_CAMERA_SETTINGS
                         print("\033[35m =========== !! send to QGround Camera settings !! ========== \033[0m")
@@ -5141,7 +5141,7 @@ class MAVFrame():
                         print("\033[32m saw the relay command come in")
                     elif (self.RCV_COMMAND == mavutil.mavlink.MAV_CMD_PREFLIGHT_STORAGE):
                         print(f"\033[33m Asks for storage params paramStorage={msg.param1}  missionStorage={msg.param2} \033[0m")
-		    elif (self.RCV_COMMAND == 42428):
+                    elif (self.RCV_COMMAND == 42428):
                         print(f"\033[37m Command 42428 was sent not sure what im meant to do..... \033[0m")	
                     else:
                         print(f"got this id {self.RCV_COMMAND} {msg.command}")
@@ -6212,3 +6212,4 @@ if __name__ == '__main__':
     del shut_sp
     del whitebal
     del stillcap
+	
