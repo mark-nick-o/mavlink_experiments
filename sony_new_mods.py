@@ -1,4 +1,4 @@
- # ===============================================================================================================================
+# ===============================================================================================================================
 #
 # Name : mavlinkSonyCamWriteVals.py
 # Desc : Global memory value class for use to write mavlink to sony cam
@@ -703,16 +703,18 @@ class sonyAlphaNewCamera():
             cmd = "date +%s"
             return( int(os.popen(cmd).read()) )
 
-    def take_a_picture_now( self ):
+    def take_a_picture_now( self,flag ):
 
         # run the API command in the shell and look for the descriptor for the field
         #
-        if (fastGlobals.take_picture == 1):
+        if (flag == 1):
            cmd='/home/pi/cams/SonyTEST32/take_picture/RemoteCli ' 
            c = os.popen(cmd)
            print(c.read())
-           fastGlobals.take_picture == 0
-           print("\033[36m Took the picture")
+           flag = 2
+           fastGlobals.take_picture = 2
+           print(f"\033[36m Took the picture {flag}")
+           #exit(222)
         
     def set_sony_iso_orig( self, isoVal ):
 
@@ -785,7 +787,7 @@ class sonyAlphaNewCamera():
         #
         s=subprocess.run( args, stdout=subprocess.PIPE )
         output=s.stdout
-        s.stdout.close()
+        #s.stdout.close()
               
         z = output.decode('ascii')         # convert bytes array output to ascii string 
         a = shlex.split(z)                 # split this unique output into fields separated by commas
@@ -2661,7 +2663,7 @@ class sonyAlphaNewCamera():
                     the_connection.mav.param_ext_value_send(
                         getName.encode('ascii'),
                         str(getValueforMAVSending).encode('ascii'),
-                        mavutil.mavlink.MAV_PARAM_EXT_TYPE_UINT32,
+                        mavdefs.MAV_PARAM_EXT_TYPE_UINT32,
                         obj.numberOfVals,
                         obj.index)
                     ret = True
@@ -4084,7 +4086,7 @@ class MAVFrame():
             the_connection.mav.param_ext_value_send(
             "S_ISO".encode('ascii'),
             d.encode('ascii'),
-            mavutil.mavlink.MAV_PARAM_EXT_TYPE_UINT32,
+            mavdefs.MAV_PARAM_EXT_TYPE_UINT32,
             8,
             1)
             return True
@@ -4100,7 +4102,7 @@ class MAVFrame():
             the_connection.mav.param_ext_value_send(
             "S_APERTURE".encode('ascii'),
             d.encode('ascii'),
-            mavutil.mavlink.MAV_PARAM_EXT_TYPE_UINT32,
+            mavdefs.MAV_PARAM_EXT_TYPE_UINT32,
             8,
             2)
             return True
@@ -4116,7 +4118,7 @@ class MAVFrame():
             the_connection.mav.param_ext_value_send(
             "S_EX_PRO_MODE".encode('ascii'),
             d.encode('ascii'),
-            mavutil.mavlink.MAV_PARAM_EXT_TYPE_UINT32,
+            mavdefs.MAV_PARAM_EXT_TYPE_UINT32,
             8,
             3)
             return True
@@ -4132,7 +4134,7 @@ class MAVFrame():
             the_connection.mav.param_ext_value_send(
             "S_FOCUS_MODE".encode('ascii'),
             d.encode('ascii'),
-            mavutil.mavlink.MAV_PARAM_EXT_TYPE_UINT32,
+            mavdefs.MAV_PARAM_EXT_TYPE_UINT32,
             8,
             4)
             return True
@@ -4148,7 +4150,7 @@ class MAVFrame():
             the_connection.mav.param_ext_value_send(
             "S_FOCUS_AREA".encode('ascii'),
             p.encode('ascii'),
-            mavutil.mavlink.MAV_PARAM_EXT_TYPE_UINT32,
+            mavdefs.MAV_PARAM_EXT_TYPE_UINT32,
             8,
             5)
             return True
@@ -4164,7 +4166,7 @@ class MAVFrame():
             the_connection.mav.param_ext_value_send(
             "S_SHUT_SPD".encode('ascii'),
             d.encode('ascii'),
-            mavutil.mavlink.MAV_PARAM_EXT_TYPE_UINT32,
+            mavdefs.MAV_PARAM_EXT_TYPE_UINT32,
             8,
             6)
             return True
@@ -4180,7 +4182,7 @@ class MAVFrame():
             the_connection.mav.param_ext_value_send(
             "S_WHITE_BAL".encode('ascii'),
             d.encode('ascii'),
-            mavutil.mavlink.MAV_PARAM_EXT_TYPE_UINT32,
+            mavdefs.MAV_PARAM_EXT_TYPE_UINT32,
             8,
             7)
             return True
@@ -4196,7 +4198,7 @@ class MAVFrame():
             the_connection.mav.param_ext_value_send(
             "S_STILL_CAP".encode('ascii'),
             d.encode('ascii'),
-            mavutil.mavlink.MAV_PARAM_EXT_TYPE_UINT32,
+            mavdefs.MAV_PARAM_EXT_TYPE_UINT32,
             8,
             8)
             return True
@@ -4511,7 +4513,7 @@ class MAVFrame():
             the_connection.mav.param_ext_ack_send(
             tag.encode('ascii'),
             d,
-            mavutil.mavlink.MAV_PARAM_EXT_TYPE_UINT32,
+            mavdefs.MAV_PARAM_EXT_TYPE_UINT32,
             status_code)
             ret = True
         except Exception as err_msg: 
@@ -4898,7 +4900,7 @@ class MAVFrame():
                 sharedObj.mav_ext_req_all_param = mavlinkSonyCamWriteVals.MAV_REQ_ALL_PARAM
                 print("\033[35m PARAM_EXT_REQUEST_LIST was sent - shared object set to %d" % (sharedObj.mav_ext_req_all_param))  
                 # ===== TRAP ======
-                exit(99)                
+                #exit(99)                
             elif msg.get_type() == 'PARAM_SET':
                 #
                 # for testing...... self.mavlink_send_ext_param_value(the_connection)
@@ -5000,7 +5002,7 @@ class MAVFrame():
                         self.type_of_msg = mavutil.mavlink.MAV_CMD_REQUEST_VIDEO_STREAM_INFORMATION
                         print("=========== !! send to QGround VideoStream !! ==========")
                         self.mavlink_send_video_stream_information(the_connection)
-                    elif (self.RCV_COMMAND == mavutil.mavlink.MAV_CMD_REQUEST_CAMERA_SETTINGS):
+	            elif (self.RCV_COMMAND == mavutil.mavlink.MAV_CMD_REQUEST_CAMERA_SETTINGS):
                         print("request camera settings Info OLD MESSAGE.....")
                         self.type_of_msg = mavutil.mavlink.MAV_CMD_REQUEST_CAMERA_SETTINGS
                         print("\033[35m =========== !! send to QGround Camera settings !! ========== \033[0m")
@@ -5071,6 +5073,8 @@ class MAVFrame():
                         print(f"\033[33m DO DIGICAM CONTROL {msg.param5} {msg.param7}")
                         if ((int(msg.param5) == 1) and (int(msg.param7) == 0)):
                             fastGlobals.take_picture = 1 
+                            print("set it to 1")
+                            #time.sleep(10)
                         self.Got_Param1 = msg.param1
                         self.Got_Param2 = msg.param2
                         self.Got_Param3 = msg.param3
@@ -5078,7 +5082,8 @@ class MAVFrame():
                         self.Got_Param5 = msg.param5
                         self.Got_Param6 = msg.param6
                         self.Got_Param7 = msg.param7
-                        print("\033[36m DO DIGICAM CONTROL COMPLETED")
+                        print(f"\033[36m DO DIGICAM CONTROL COMPLETED \033[0m {msg.param5} {msg.param7} ")
+                        #time.sleep(10)
                         #exit(100)
                     elif (self.RCV_COMMAND == mavutil.mavlink.MAV_CMD_DO_CONTROL_VIDEO):
                         self.type_of_msg = mavutil.mavlink.MAV_CMD_DO_CONTROL_VIDEO
@@ -5136,8 +5141,8 @@ class MAVFrame():
                         print("\033[32m saw the relay command come in")
                     elif (self.RCV_COMMAND == mavutil.mavlink.MAV_CMD_PREFLIGHT_STORAGE):
                         print(f"\033[33m Asks for storage params paramStorage={msg.param1}  missionStorage={msg.param2} \033[0m")
-                    elif (self.RCV_COMMAND == 42428):
-                        print(f"\033[37m Command 42428 was sent not sure what im meant to do..... \033[0m")			
+		    elif (self.RCV_COMMAND == 42428):
+                        print(f"\033[37m Command 42428 was sent not sure what im meant to do..... \033[0m")	
                     else:
                         print(f"got this id {self.RCV_COMMAND} {msg.command}")
                         self.RPM2 = 0
@@ -5592,8 +5597,9 @@ def mavlinkReqGetParamExPro(  mySonyCam, obj ):
     else:
         return False
 
-def mavlinkTakePhoto( mySonyCam ):
-    mySonyCam.take_a_picture_now()
+def mavlinkTakePhoto( mySonyCam, flg ):
+    mySonyCam.take_a_picture_now(flg)
+    
     
 def serviceParamRequestsOneAtATime( mySonyCam, mav2SonyVals, stcap, wb, ss, iso, pf, pfa, pa, expro ):
 
@@ -5837,6 +5843,13 @@ def sendMavlinkHeartBeat(fm, cID, sleepTm=1):
         time.sleep(1)
         print(f'{sleepTm} seconds')
         sleepTm -= 1
+
+def sendMavlinkAckData(fm, cID, sleep, cmd, rpm2, pro, res):
+    fm.mavlink_send_ack_command(cID, cmd, rpm2, pro, res)
+    while sleep > 0:
+        #await asyncio.sleep(1)
+        print(f'{sleep} seconds')
+        sleep -= 1
         
 #
 # ================ signal handlers ==============================
@@ -6035,7 +6048,13 @@ if __name__ == '__main__':
         if not (gcsWrites2Sony.set_sony_focus == gcsWrites2Sony.STATE_INIT) or not (gcsWrites2Sony.set_sony_focus_area == gcsWrites2Sony.STATE_INIT):
             print(f"on TOP LEVEL saw shutter speed {gcsWrites2Sony.set_sony_focus} {gcsWrites2Sony.prev_sony_focus} {gcsWrites2Sony.set_sony_focus_area} {gcsWrites2Sony.prev_sony_focus_area} {gcsWrites2Sony.mav_req_all_param}")
             manageAlphaCameraFocusData(mySonyCamNo1, gcsWrites2Sony, focusdata, focusarea)             
-        mavlinkTakePhoto(mySonyCamNo1)
+        mavlinkTakePhoto( mySonyCamNo1, fastGlobals.take_picture )
+        if (fastGlobals.take_picture == 2):
+            sendMavlinkAckData(frame, cID, 1, frame.RCV_COMMAND, frame.RPM2, 0, frame.ACK_RESULT )
+            fastGlobals.take_picture = 0
+            frame.RCV_COMMAND = 0
+            frame.ACK_RESULT = 99
+            #exit(220)
         sendMavIso(mySonyCamNo1, iso, cID )
         sendMavAper( mySonyCamNo1, aper, cID )
         sendMavFocusData( mySonyCamNo1, focusdata, focusarea, cID )
@@ -6193,4 +6212,3 @@ if __name__ == '__main__':
     del shut_sp
     del whitebal
     del stillcap
-    
