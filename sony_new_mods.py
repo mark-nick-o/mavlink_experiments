@@ -5000,6 +5000,21 @@ class MAVFrame():
                         self.type_of_msg = mavutil.mavlink.MAV_CMD_REQUEST_VIDEO_STREAM_INFORMATION
                         print("=========== !! send to QGround VideoStream !! ==========")
                         self.mavlink_send_video_stream_information(the_connection)
+                    elif (self.RCV_COMMAND == mavutil.mavlink.MAV_CMD_REQUEST_CAMERA_SETTINGS):
+                        print("request camera settings Info OLD MESSAGE.....")
+                        self.type_of_msg = mavutil.mavlink.MAV_CMD_REQUEST_CAMERA_SETTINGS
+                        print("\033[35m =========== !! send to QGround Camera settings !! ========== \033[0m")
+                        self.mavlink_send_camera_settings(the_connection)
+                    elif (self.RCV_COMMAND == mavutil.mavlink.MAV_CMD_REQUEST_CAMERA_CAPTURE_STATUS):
+                        print("request camera capture status Info OLD MESSAGE.....")
+                        self.type_of_msg = mavutil.mavlink.MAV_CMD_REQUEST_CAMERA_CAPTURE_STATUS
+                        print("\033[36m =========== !! send to QGround Camera capture status !! ========== \033[0m")
+                        self.mavlink_send_camera_capture_status(the_connection)
+                    elif (self.RCV_COMMAND == mavutil.mavlink.MAV_CMD_REQUEST_STORAGE_INFORMATION):
+                        print("request storage info Info OLD MESSAGE.....")
+                        self.type_of_msg = mavutil.mavlink.MAV_CMD_REQUEST_STORAGE_INFORMATION
+                        print("\033[34m =========== !! send to QGround Camera storage_info !! ========== \033[0m")
+                        self.mavlink_send_storage_information(the_connection)
                     elif (self.RCV_COMMAND == mavutil.mavlink.MAV_CMD_DO_SET_RELAY):
                         self.type_of_msg = mavutil.mavlink.MAV_CMD_DO_SET_RELAY
                         print(f"\033 [31m >>>>> Got a message to set the RelayNo {msg.param1} to state {msg.param2}")
@@ -5121,6 +5136,8 @@ class MAVFrame():
                         print("\033[32m saw the relay command come in")
                     elif (self.RCV_COMMAND == mavutil.mavlink.MAV_CMD_PREFLIGHT_STORAGE):
                         print(f"\033[33m Asks for storage params paramStorage={msg.param1}  missionStorage={msg.param2} \033[0m")
+                    elif (self.RCV_COMMAND == 42428):
+                        print(f"\033[37m Command 42428 was sent not sure what im meant to do..... \033[0m")			
                     else:
                         print(f"got this id {self.RCV_COMMAND} {msg.command}")
                         self.RPM2 = 0
