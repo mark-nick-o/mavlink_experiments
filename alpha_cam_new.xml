@@ -159,11 +159,27 @@
         <option name="CrPropValuePlus1" value="1"/>
     </options>
 </parameter>
-<parameter name="CrFnumberSet" type="uint16" default="0">
+<parameter name="CrFnumberSet" type="uint32" default="0">
     <description>enum CrFnumberSet : CrInt16u</description>
-    <options>
-        <option name="Unknown" value="0"/>
-        <option name="Nothing" value="1"/>
+    <options>		
+        <option name="F2.8" value="280"/>
+        <option name="F3.2" value="320"/>
+        <option name="F3.5" value="350"/>
+        <option name="F4.0" value="400"/>
+        <option name="F4.5" value="450"/>		
+	<option name="F5.0" value="500"/>
+        <option name="F5.6" value="560"/>
+        <option name="F6,3" value="630"/>
+        <option name="F7.1" value="710"/>
+        <option name="F8.0" value="800"/>		
+        <option name="F9.0" value="900"/>
+        <option name="F10" value="1000"/>
+        <option name="F13" value="1300"/>
+        <option name="F14" value="1400"/>
+        <option name="F16" value="1600"/>
+        <option name="F18" value="1800"/>
+        <option name="F20" value="2000"/>
+        <option name="F22" value="2200"/>
     </options>
 </parameter>
 <parameter name="CrShutterSpeedSet" type="uint32" default="0">
