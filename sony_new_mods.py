@@ -2031,9 +2031,20 @@ class sonyAlphaNewCamera():
 
         enum_num = 0
         enum_num_state = True
-        enum_num_state = True
         if num == 2:
             enum_num = 0
+        elif num == 1:
+            enum_num = 1
+        elif num == 258:
+            enum_num = 2
+        elif num == 514:
+            enum_num = 3
+        elif num == 259:
+            enum_num = 4
+        elif num == 515:
+            enum_num = 5
+        elif num == 771:
+            enum_num = 6
         else:
             enum_num_state = False
         return enum_num_state, enum_num
