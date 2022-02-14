@@ -2013,6 +2013,12 @@ class sonyAlphaNewCamera():
         enum_num_state = True
         if num == 32859:
             enum_num = 2
+        elif num == 1:
+            enum_num = 0
+        elif num == 2:
+            enum_num = 1
+        elif num == 32860:
+            enum_num = 3
         else:
             enum_num_state = False
         return enum_num_state, enum_num
