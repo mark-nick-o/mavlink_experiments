@@ -657,7 +657,7 @@
         <option name="IntervalShooting" value="2"/>
     </options>
 </parameter>
-<parameter name="S_FOCUS_MODE" type="uint32" default="0">
+<parameter name="CrFocusIndicator" type="uint32" default="0">
     <description>enum CrFocusIndicator : CrInt32u</description>
     <options>
         <option name="Unlocked" value="1"/>
