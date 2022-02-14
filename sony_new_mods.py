@@ -4953,13 +4953,24 @@ class MAVFrame():
                 exit(96)
             elif msg.get_type() == 'PARAM_EXT_SET':
                 #
-                # self.mavlink_send_param_value(the_connection)
+                # self.mavlink_send_param_value(the_connection) there are two different data types from various senders
                 #
-                if ( self.writeParamExtSetFromMavLink( msg.param_id, sharedObj, int(msg.param_value) ) == True ):
-                    print("\033[35m PARAM_EXT_SET was sent for %s :: %d \033[0m"%( msg.param_id, int(msg.param_value) ))
+                converted = True
+                try:
+                    valueSet = int(msg.param_value)
+                except Exception as err_msg:
+                    print(f"\033[31m PARAM_EXT_SET :: Error converting type {err_msg} \033[0m")
+                    try:
+                        valueSetActual = msg.param_value
+                        valueSet = int(valueSetActual.decode('ascii'))
+                    except Exception as err_msg:
+                        print(f"\033[31m PARAM_EXT_SET :: Error converting type {err_msg} \033[0m")
+                        converted = False
+                if (( self.writeParamExtSetFromMavLink( msg.param_id, sharedObj, valueSet ) == True ) and ( converted == True) ):
+                    print("\033[35m PARAM_EXT_SET :: was sent for %s :: %d \033[0m"%( msg.param_id, valueSet ))
                     ## =======> send_ext_ack
                 else:
-                    print("\033[31m PARAM_EXT_SET write fail for %s :: %s"%( msg.param_id, msg.param_value))
+                    print("\033[31m PARAM_EXT_SET :: write fail for %s :: %d \033[0m"%( msg.param_id, valueSet))
                 # ===== TRAP =====
                 exit(95)
             elif msg.get_type() == 'RC_CHANNELS':
