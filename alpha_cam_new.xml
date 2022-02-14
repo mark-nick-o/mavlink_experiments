@@ -329,7 +329,7 @@
         <option name="Custom" value="260"/>
     </options>
 </parameter>
-<parameter name="CrFocusMode" type="uint16" default="0">
+<parameter name="S_FOCUS_MODE" type="uint16" default="0">
     <description>enum CrFocusMode : CrInt16u</description>
     <options>
         <option name="MF" value="1"/>
