@@ -334,7 +334,7 @@ class mavlinkSonyCamWriteVals():
             p = self.prev_sony_focus.value
             with self.state.get_lock():
                 self.state.value = mavlinkSonyCamWriteVals.STATE_READY
-            return c.p,True
+            return c,p,True
         else:
             if (reset_state == True):  
                 with self.state.get_lock():            
@@ -2176,141 +2176,162 @@ class sonyAlphaNewCamera():
         return enum_num_state, enum_num
 
     # To enable this ensure physical switch has been set to AUTO on the Lens
+    # seemed to give a different subset of options ???? what is different ?
     #
     def enumerate_focus_sony_a7( self, num ):
 
         enum_num = 0
         enum_num_state = True
+        #if num == 2:
+        #    enum_num = 0
+        #elif num == 4:
+        #    enum_num = 1
+        #elif num == 3:
+        #    enum_num = 2
+        #elif num == 6:
+        #    enum_num = 3
+        #elif num == 1:
+        #    enum_num = 4
+        #else:
+        #    enum_num_state = False
+        #return enum_num_state, enum_num
+        #
+        # under some situation it gave me this instead (re-write to make this a choice)
+        #
         if num == 2:
             enum_num = 0
         elif num == 4:
             enum_num = 1
-        elif num == 3:
-            enum_num = 2
         elif num == 6:
-            enum_num = 3
+            enum_num = 2
         elif num == 1:
-            enum_num = 4
+            enum_num = 3
         else:
             enum_num_state = False
         return enum_num_state, enum_num
-
+        
+    # after testing can this sometimes under certain circustances change by one ??
+    # Bulb 0 = 0 ???
+    #
     def enumerate_shutter_sony_a7( self, num ):
 
         enum_num = 0
         enum_num_state = True
-        if num == 0:
-            enum_num = 0        
+        # this occurs under certain conditions
+        # then they all shift down by one 
+        #
+        #if num == 0:
+        #    enum_num = 0        
         if num == 19660810:
-            enum_num = 1
+            enum_num = 0
         elif num == 16384010:
-            enum_num = 2
+            enum_num = 1
         elif num == 13107210:
-            enum_num = 3
+            enum_num = 2
         elif num == 9830410:
-            enum_num = 4
+            enum_num = 3
         elif num == 8519690:
-            enum_num = 5
+            enum_num = 4
         elif num == 6553610:
-            enum_num = 6
+            enum_num = 5
         elif num == 5242890:
-            enum_num = 7
+            enum_num = 6
         elif num == 3932170:
-            enum_num = 8
+            enum_num = 7
         elif num == 3276810:
-            enum_num = 9
+            enum_num = 8
         elif num == 2621450:
-            enum_num = 10
+            enum_num = 9
         elif num == 2097162:
-            enum_num = 11
+            enum_num = 10
         elif num == 1638410:
-            enum_num = 12
+            enum_num = 11
         elif num == 1310730:
-            enum_num = 13
+            enum_num = 12
         elif num == 1048586:
-            enum_num = 14
+            enum_num = 13
         elif num == 851978:
-            enum_num = 15
+            enum_num = 14
         elif num == 655370:
-            enum_num = 16
+            enum_num = 15
         elif num == 524298:
-            enum_num = 17
+            enum_num = 16
         elif num == 393226:
-            enum_num = 18
+            enum_num = 17
         elif num == 327690:
-            enum_num = 19
+            enum_num = 18
         elif num == 262154:
-            enum_num = 20
+            enum_num = 19
         elif num == 65539:
-            enum_num = 21
+            enum_num = 20
         elif num == 65540:
-            enum_num = 22
+            enum_num = 21
         elif num == 65541:
-            enum_num = 23
+            enum_num = 22
         elif num == 65542:
-            enum_num = 24
+            enum_num = 23
         elif num == 65544:
-            enum_num = 25
+            enum_num = 24
         elif num == 65546:
-            enum_num = 26
+            enum_num = 25
         elif num == 65549:
-            enum_num = 27
+            enum_num = 26
         elif num == 65551:
-            enum_num = 28
+            enum_num = 27
         elif num == 65556:
-            enum_num = 29
+            enum_num = 28
         elif num == 65561:
-            enum_num = 30
+            enum_num = 29
         elif num == 65566:
-            enum_num = 31
+            enum_num = 30
         elif num == 65576:
-            enum_num = 32
+            enum_num = 31
         elif num == 65586:
-            enum_num = 33
+            enum_num = 32
         elif num == 65596:
-            enum_num = 34
+            enum_num = 33
         elif num == 65616:
-            enum_num = 35
+            enum_num = 34
         elif num == 65636:
-            enum_num = 36
+            enum_num = 35
         elif num == 65661:
-            enum_num = 37
+            enum_num = 36
         elif num == 65696:
-            enum_num = 38 
+            enum_num = 37 
         elif num == 65736:
-            enum_num = 39 
+            enum_num = 38 
         elif num == 65786:
-            enum_num = 40
+            enum_num = 39
         elif num == 65856:
-            enum_num = 41 
+            enum_num = 40 
         elif num == 65936:
-            enum_num = 42 
+            enum_num = 41 
         elif num == 66036:
-            enum_num = 43 
+            enum_num = 42 
         elif num == 66176:
-            enum_num = 44  
+            enum_num = 43  
         elif num == 66336:
-            enum_num = 45  
+            enum_num = 44  
         elif num == 66536:
-            enum_num = 46  
+            enum_num = 45  
         elif num == 66786:
-            enum_num = 47
+            enum_num = 46
         elif num == 67136:
-            enum_num = 48 
+            enum_num = 47 
         elif num == 67536:
-            enum_num = 49  
+            enum_num = 48  
         elif num == 68036:
-            enum_num = 50   
+            enum_num = 49   
         elif num == 68736:
-            enum_num = 51  
+            enum_num = 50  
         elif num == 69536:
-            enum_num = 52  
+            enum_num = 51  
         elif num == 70536:
-            enum_num = 53  
+            enum_num = 52  
         elif num == 71936:
-            enum_num = 54 
+            enum_num = 53 
         elif num == 73536:
-            enum_num = 55             
+            enum_num = 54             
         else:
             enum_num_state = False
         return enum_num_state, enum_num
@@ -2407,7 +2428,7 @@ class sonyAlphaNewCamera():
             timeoutS1 -= timeout1                                          # no retries
             print(f"In iterator {readSuccess} {reqDat} {prevDat}")
             
-        print(f"set to ISO r={reqDat} p={prevDat} time={timeout1} state={mavObj.state}")
+        print(f"set to ISO r={reqDat} p={prevDat} time={timeout1} state={mavObj.state.value}")
         
         if ((not (int(reqDat) == mavlinkSonyCamWriteVals.STATE_INIT) and not (int(reqDat) == int(prevDat))) and (readSuccess == True)):
             timeoutS2 = timeout2 * no_timeout2_retry
@@ -2643,7 +2664,7 @@ class sonyAlphaNewCamera():
             reqDat, prevDat, readSuccess  = mavObj.getVal_sony_shutter(mavObj.STATE_CAM_READING,timeout1)
             timeoutS1 -= timeout1
             
-        print(f"set to ISO r={reqDat} p={prevDat} time={timeout1} state={mavObj.state}")
+        print(f"set to Shutter Speed r={reqDat} p={prevDat} time={timeout1} state={mavObj.state.value}")
         
         if ((not (int(reqDat) == mavObj.STATE_INIT) and not (int(reqDat) == int(prevDat))) and (readSuccess == True)):
             timeoutS2 = timeout2 * no_timeout2_retry
@@ -3541,7 +3562,7 @@ class MAVFrame():
             print("Failed to connect : %s" % (err_msg))
             return the_conection,False
             
-    # Send heartbeat from a GCS (types are define as enum in the dialect file). 
+    # Send heartbeat from camera to GCS (types are define as enum in the dialect file). 
     #
     def mavlink_send_GCS_heartbeat(self, the_conection): 
         print(" heartbeat..............................  %s\n"%(mavutil.mavlink.MAV_TYPE_CAMERA))
@@ -3551,6 +3572,7 @@ class MAVFrame():
         except Exception as err_msg:
             print("Failed to send GCS heartbeat : %s" % (err_msg))
             ret = False
+        print(" heartbeat..............................  %s\n"%(ret))
         return ret
         
     # Send heartbeat from a MAVLink application.
@@ -5108,7 +5130,7 @@ class MAVFrame():
                 else:
                     print(f"\033[31;43m Error sending param {msg.param_id} \033[0m")                
                 # ===== TRAP =====
-                exit(96)
+                #exit(96)
             elif msg.get_type() == 'PARAM_EXT_SET':
                 #
                 # self.mavlink_send_param_value(the_connection) there are two different data types from various senders
@@ -5130,7 +5152,9 @@ class MAVFrame():
                 else:
                     print("\033[31m PARAM_EXT_SET :: write fail for %s :: %d \033[0m"%( msg.param_id, valueSet))
                 # ===== TRAP =====
-                exit(95)
+                #exit(95)
+            elif msg.get_type() == 'PARAM_VALUE':
+                print(f"Recieved a param value for :- {msg.param_id} = {msg.param_value}")
             elif msg.get_type() == 'RC_CHANNELS':
                 print("RC Channel message (system %u component %u)\n" % (the_connection.target_system, the_connection.target_component))
             elif msg.get_type() == 'COMMAND_LONG':
@@ -5751,7 +5775,7 @@ def manageAlphaCameraExpro( cam, classObj, pvar, mpc, state_of_task ):
 
     with mpc.get_lock():
         mpc.value = mavlinkSonyCamWriteVals.FUNC_APER
-    print(f"Task1:: second value set is {classObj.set_sony_iso.value} {classObj.set_sony_aperture.value} {mavlinkSonyCamWriteVals.class_global} {pvar} {mpc}")
+    print(f"Task1:: Expro")
     # advance to the next routine in the queued sequence
     with state_of_task.get_lock():
         state_of_task.value = mavlinkSonyCamWriteVals.STATE_READY    
@@ -5767,7 +5791,7 @@ def manageAlphaCameraAperture( cam, classObj, pvar, mpc, state_of_task ):
 
     with mpc.get_lock():
         mpc.value = mavlinkSonyCamWriteVals.FUNC_FOCUS
-    print(f"Task2:: second value set is {classObj.set_sony_iso.value} {classObj.set_sony_aperture.value} {mavlinkSonyCamWriteVals.class_global} {pvar} {mpc}")
+    print(f"Task2:: Aperture")
     # advance to the next routine in the queued sequence
     with state_of_task.get_lock():
         state_of_task.value = mavlinkSonyCamWriteVals.STATE_READY         
@@ -5780,7 +5804,7 @@ def manageAlphaCameraFocusData( cam, classObj, pvar, c, mpc, state_of_task ):
     
     with mpc.get_lock():
         mpc.value = mavlinkSonyCamWriteVals.FUNC_ISO
-    print(f"Task3:: second value set is {classObj.set_sony_iso.value} {classObj.set_sony_aperture.value} {mavlinkSonyCamWriteVals.class_global} {pvar} {mpc}")
+    print(f"Task3:: Focus parameters")
     # advance to the next routine in the queued sequence
     with state_of_task.get_lock():
         state_of_task.value = mavlinkSonyCamWriteVals.STATE_READY         
@@ -5793,7 +5817,7 @@ def manageAlphaCameraIso( cam, classObj, pvar, mpc, state_of_task ):
     
     with mpc.get_lock():
         mpc.value = mavlinkSonyCamWriteVals.FUNC_SS
-    print(f"Task4:: second value set is {classObj.set_sony_iso.value} {classObj.set_sony_aperture.value} {mavlinkSonyCamWriteVals.class_global} {pvar} {mpc}")
+    print(f"Task4:: Iso")
     # advance to the next routine in the queued sequence
     with state_of_task.get_lock():
         state_of_task.value = mavlinkSonyCamWriteVals.STATE_READY         
@@ -5806,7 +5830,7 @@ def manageAlphaCameraShutSpd( cam, classObj, pvar, mpc, state_of_task ):
 
     with mpc.get_lock():
         mpc.value = mavlinkSonyCamWriteVals.FUNC_WB
-    print(f"Task5:: second value set is {classObj.set_sony_iso.value} {classObj.set_sony_aperture.value} {mavlinkSonyCamWriteVals.class_global} {pvar} {mpc}")
+    print(f"Task5:: Shutter Speed")
     # advance to the next routine in the queued sequence
     with state_of_task.get_lock():
         state_of_task.value = mavlinkSonyCamWriteVals.STATE_READY         
@@ -5819,7 +5843,7 @@ def manageAlphaWhiteBala( cam, classObj, pvar, mpc, state_of_task ):
 
     with mpc.get_lock():
         mpc.value = mavlinkSonyCamWriteVals.FUNC_SC
-    print(f"Task6:: second value set is {classObj.set_sony_iso.value} {classObj.set_sony_aperture.value} {mavlinkSonyCamWriteVals.class_global} {pvar} {mpc}")
+    print(f"Task6:: White Balance")
     # advance to the next routine in the queued sequence
     with state_of_task.get_lock():
         state_of_task.value = mavlinkSonyCamWriteVals.STATE_READY         
@@ -5832,7 +5856,7 @@ def manageAlphaCameraStillCap( cam, classObj, pvar, mpc, state_of_task ):
 
     with mpc.get_lock():
         mpc.value = mavlinkSonyCamWriteVals.FUNC_EX_PRO
-    print(f"Task7:: second value set is {classObj.set_sony_iso.value} {classObj.set_sony_aperture.value} {mavlinkSonyCamWriteVals.class_global} {pvar} {mpc}")
+    print(f"Task7:: Still Capture")
     # advance to the next routine in the queued sequence
     with state_of_task.get_lock():
         state_of_task.value = mavlinkSonyCamWriteVals.STATE_READY         
@@ -5909,7 +5933,7 @@ def mavlinkReqGetParamExPro(  mySonyCam, obj ):
         return False
 
 def mavlinkTakePhoto( mySonyCam, flg ):
-    mySonyCam.take_a_picture_now(flg)
+    mySonyCam.take_a_picture_now(flg)                 
     
 def get_cam_enum( nameS ):
     for s in sorted(camStateClass):
@@ -6160,11 +6184,11 @@ def serviceParamRequests( mySonyCam, mav2SonyVals, stcap, wb, ss, iso, pf, pfa, 
 
     print ('Exiting Service Mavlink incoming packet requests :', multiprocessing.current_process().name) #
     
-def run_process_messages_from_connection4444(fra, the_connect, sharedObj):
-    #p = multiprocessing.current_process()
-    #print ('Starting: MavReader ', p.name, p.pid) 
+def run_process_messages_from_connection_single(fra, the_connect, sharedObj):
+    p = multiprocessing.current_process()
+    print ('Starting: MavReader ', p.name, p.pid) 
     fra.process_messages_from_connection( the_connect, sharedObj )
-    #print ('Exiting MavReader :', multiprocessing.current_process().name)
+    print ('Exiting MavReader :', multiprocessing.current_process().name)
 
 #
 # @#= delete above after daemon fully tested
@@ -6199,7 +6223,7 @@ def perform_usb_reset( mySonyCam ):
 #
 # The heartbeat task
 #
-def sendMavlinkHeartBeat55555(fm, cID, sleepTm=1):
+def sendMavlinkHeartBeat_single(fm, cID, sleepTm=1):
     fm.mavlink_send_GCS_heartbeat(cID)
     while sleepTm > 0:
         time.sleep(1)
@@ -6320,9 +6344,9 @@ if __name__ == '__main__':
     # for extra logging use this 
     # instead
     #
-    # multiprocessing.log_to_stderr()
-    # logger = multiprocessing.get_logger()
-    # logger.setLevel(logging.INFO)
+    multiprocessing.log_to_stderr()
+    #logger = multiprocessing.get_logger()
+    #logger.setLevel(logging.INFO)
     
     #
     # create instance of sony alpha cam (new API)
@@ -6378,33 +6402,33 @@ if __name__ == '__main__':
 
     # ========== send back to GCS via mavlink if a new change of state has been detected or polled if requested 
     #        
-    p2 = multiprocessing.Process(name='sendMavExpro', target=sendMavExpro, args=(mySonyCamNo1, expro, cID,)).start()
-    p4 = multiprocessing.Process(name='sendMavAper', target=sendMavAper, args=(mySonyCamNo1, aper, cID,)).start()
-    p6 = multiprocessing.Process(name='sendMavFocusData', target=sendMavFocusData, args=(mySonyCamNo1, focusdata, focusarea, cID, )).start()
-    p8 = multiprocessing.Process(name='sendMavIso', target=sendMavIso, args=(mySonyCamNo1, iso, cID, )).start()
-    p10 = multiprocessing.Process(name='sendMavShutSpd', target=sendMavShutSpd, args=(mySonyCamNo1, shut_sp, cID, )).start()
-    p12 = multiprocessing.Process(name='sendMavWhiteBala', target=sendMavWhiteBala, args=(mySonyCamNo1, whitebal, cID, )).start()
-    p14 = multiprocessing.Process(name='sendMavStillCap', target=sendMavStillCap, args=(mySonyCamNo1, stillcap, cID, )).start() 
-    if p2 is not None:        
-        p2.join()
-    if p4 is not None:              
-        p4.join()
-    if p6 is not None:          
-        p6.join()
-    if p8 is not None:          
-        p8.join()
-    if p10 is not None:          
-        p10.join()
-    if p12 is not None:          
-        p12.join()  
-    if p14 is not None:          
-        p14.join() 
+    #p2 = multiprocessing.Process(name='sendMavExpro', target=sendMavExpro, args=(mySonyCamNo1, expro, cID,)).start()
+    #p4 = multiprocessing.Process(name='sendMavAper', target=sendMavAper, args=(mySonyCamNo1, aper, cID,)).start()
+    #p6 = multiprocessing.Process(name='sendMavFocusData', target=sendMavFocusData, args=(mySonyCamNo1, focusdata, focusarea, cID, )).start()
+    #p8 = multiprocessing.Process(name='sendMavIso', target=sendMavIso, args=(mySonyCamNo1, iso, cID, )).start()
+    #p10 = multiprocessing.Process(name='sendMavShutSpd', target=sendMavShutSpd, args=(mySonyCamNo1, shut_sp, cID, )).start()
+    #p12 = multiprocessing.Process(name='sendMavWhiteBala', target=sendMavWhiteBala, args=(mySonyCamNo1, whitebal, cID, )).start()
+    #p14 = multiprocessing.Process(name='sendMavStillCap', target=sendMavStillCap, args=(mySonyCamNo1, stillcap, cID, )).start() 
+    #if p2 is not None:        
+    #    p2.join()
+    #if p4 is not None:              
+    #    p4.join()
+    #if p6 is not None:          
+    #    p6.join()
+    #if p8 is not None:          
+    #    p8.join()
+    #if p10 is not None:          
+    #    p10.join()
+    #if p12 is not None:          
+    #    p12.join()  
+    #if p14 is not None:          
+    #    p14.join() 
             
     #
     # now set the class to be initialised
     #
     gcsWrites2Sony.init_class_state()
-
+        
     #
     # test iso write (single task mode) 
     #
@@ -6412,13 +6436,13 @@ if __name__ == '__main__':
     #
     # active = True
     #
-    # ### If you want this in single multi mode ###
+    # ### If you want this in multi mode ###
     #
     active = False
     
     while active==True:
-        run_process_messages_from_connection(frame, cID, gcsWrites2Sony)
-        sendMavlinkHeartBeat(frame, cID, 0)
+        run_process_messages_from_connection_single(frame, cID, gcsWrites2Sony)
+        sendMavlinkHeartBeat_single(frame, cID, 0)
         serviceParamRequests( mySonyCamNo1, gcsWrites2Sony, stillcap, whitebal, shut_sp, iso, focusdata, focusarea, aper, expro )
         #manageAlphaCameraIso(mySonyCamNo1, gcsWrites2Sony, iso)
         if not (gcsWrites2Sony.set_sony_iso.value == gcsWrites2Sony.STATE_INIT):
@@ -6585,7 +6609,7 @@ if __name__ == '__main__':
     # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> New Scheduler <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     #
     #
-    p1 = multiprocessing.Process(name='manageAlphaCameraExpro', target=manageAlphaCameraExpro, args=(gcsWrites2Sony,programVar, mp_choice, mp_state, ))
+    p1 = multiprocessing.Process(name='manageAlphaCameraExpro', target=manageAlphaCameraExpro, args=(mySonyCamNo1, gcsWrites2Sony, expro, mp_choice, mp_state ))
     print("p1 is created...")
     
     # ================================= DAEMON CONTINUOS TASK No.1 ======================================
@@ -6601,6 +6625,9 @@ if __name__ == '__main__':
     #if not p2.is_alive() == True:
     #    p2.start() 
     #print("daemon 1 is running")
+    #
+    # commented out from here...............................
+    #
     invSendHz = 5 / 6;
     p3 = multiprocessing.Process(name='sendMavlinkHeartBeat', target=sendMavlinkHeartBeat, args=(frame, cID, invSendHz))
     p3.daemon = True
@@ -6617,12 +6644,15 @@ if __name__ == '__main__':
     if not p0.is_alive() == True:
         p0.start() 
     print("\033[32m Started Mavlink Receiver \033[0m")  
-    #p4 = multiprocessing.Process(name='fast_globs', target=fast_globs, args=(frame,))
-    #p4.daemon = True
-    #if not p4.is_alive() == True:
-    #    p4.start() 
-    #print("\033[32m Started Fast Globs \033[0m")
 
+    #while True:
+    
+        # this task is in the main loop and is managing taking a picture
+        #
+        # print(f"start at top of loop using multiprocessing..... {fastGlobals.take_picture}")
+        # run_process_messages_from_connection_single(frame, cID, gcsWrites2Sony)
+        # sendMavlinkHeartBeat_single(frame, cID, 0)
+        
     #
     # continuos task scheduler
     #    
@@ -6635,7 +6665,7 @@ if __name__ == '__main__':
             fastGlobals.take_picture = get_cam_enum("taking_photo")
             gcsWrites2Sony.take_photo.value = False
             
-        fastGlobals.take_picture = mavlinkTakePhoto( frame, fastGlobals.take_picture )
+        fastGlobals.take_picture = mavlinkTakePhoto( mySonyCamNo1, fastGlobals.take_picture )
         if (fastGlobals.take_picture == get_cam_enum("photo_ack")):
             if ( sendMavlinkAckData(frame, cID, 1, frame.RCV_COMMAND, frame.RPM2, 0, frame.ACK_RESULT ) == True):
                 fastGlobals.take_picture = get_cam_enum("photo_complete")
@@ -6715,7 +6745,7 @@ if __name__ == '__main__':
         # runs each task in a paralel waiting for all to finish 
         #
         
-        print("\033[31m;42m Always waits for all proceses before restart loop ????\033[0m")    
+        print("\033[31;42m Always waits for all proceses before restart loop ???? \033[0m")    
         pool = multiprocessing.Pool(max_number_processes)  #Defines the Batch Size
 
         pool.apply_async(perform_usb_reset,args=(mySonyCamNo1,)) 
