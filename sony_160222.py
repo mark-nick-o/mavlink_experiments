@@ -5802,7 +5802,7 @@ def manageAlphaCameraShutSpd( cam, classObj, pvar, mpc, state_of_task ):
 
     state_of_task.value = mavlinkSonyCamWriteVals.STATE_CAM_WRITING
 
-   doAlphaCameraShutSpd( cam, classObj, pvar )
+    doAlphaCameraShutSpd( cam, classObj, pvar )
 
     with mpc.get_lock():
         mpc.value = mavlinkSonyCamWriteVals.FUNC_WB
@@ -6012,7 +6012,7 @@ def serviceParamRequestsOneAtATime( mySonyCam, mav2SonyVals, stcap, wb, ss, iso,
             if ( mavlinkReqGetParamExPro(  mySonyCam, expro ) == True ):
                 if ( expro.set_ack_send( True, expro.STATE_CAM_READING ) == True ):                                                      # additional PARAM_EXT_VALUE message requested               
                     with mav2SonyVals.mav_ext_req_all_param.get_lock():
-                    mav2SonyVals.mav_ext_req_all_param.value = mav2SonyVals.mav_ext_req_all_param.value & ~mav2SonyVals.ParamExPro
+                        mav2SonyVals.mav_ext_req_all_param.value = mav2SonyVals.mav_ext_req_all_param.value & ~mav2SonyVals.ParamExPro
 
     print ('Exiting Service Mavlink incoming packet requests :', multiprocessing.current_process().name) #
 
