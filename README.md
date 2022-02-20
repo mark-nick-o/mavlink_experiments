@@ -39,3 +39,7 @@ At present I have added a class for control of the micaSense camera RedEye/RedEd
 and some mavlink communication scripts for testing using pymavlink and mavlink-routerd as well as scripts to run them via crontab to keep mavlink-routerd running all the time even when it is killed.
 
 This is for use at present on raspberry Pi 
+
+Testing is ongoing with sony alpha camera setting it up from both QGC and Mission Planner
+
+and to aid with multi-processing examples in multi-proc to be incorporated in latest python routunes
