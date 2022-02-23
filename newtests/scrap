@@ -1,0 +1,61 @@
+    def set_sony_shutter_shite( self, Val ):
+
+        # run the API command in the shell and look for the descriptor for the field
+        #
+        ValArg=str(Val)
+        cmd='/home/pi/cams/SonyTEST32/set_shutter/RemoteCli ' + ValArg
+        args = shlex.split(cmd)
+
+        # CONSIDER :: because we have to trap various errors and act on them we had to parse the output for other things i might modify CameraDevice.cpp to
+        # cover it all and exit as quick as possible using return codes but i couldnt succeed to read them all successfully using .returncode property
+        # with the pipe attached as above and we dont want too many delays
+        #
+        s=subprocess.run( args, stdout=subprocess.PIPE )
+        output=s.stdout
+        #s.stdout.close()
+              
+        z = output.decode('ascii')         # convert bytes array output to ascii string 
+        a = shlex.split(z)                 # split this unique output into fields separated by commas
+        
+        #
+        # Using this parser as it sometimes missed the bracket at the start (odd??) in the popen output
+        # we get the value fields before and after and return that list
+        #
+        itemNo = 0
+        idx = 99999
+        answers = []
+
+        # new error handler sends a unique reply which means count these errors and then force a reset of the usb
+        #
+        if  ( not(z.find("No cameras detected") == -1) or not(z.find("Failed to get") == -1)):            
+            self.error_counts.value += 1
+            print(f"\033[31m Error Reading from Camera USB Link {self.error_counts.value} \033[0m")
+            return answers
+
+        # look for the not writable option
+        #
+        if not(z.find("not writable") == -1):
+            print("\033[31m This option is not writable \033[0m ")
+            answers.append(-1) 
+            answers.append(-1) 
+            answers.append(0) 
+            answers.append("CAN_NOT_WRITE") 
+            return answers
+            
+        for xx in a:
+            if xx.find('Shutter_Value') > -1:
+                idx = itemNo
+            else:
+                if (idx != 99999):
+                    if xx.find(':') > -1:
+                        idx = itemNo
+                    else:
+                        if not (xx.isdigit()):
+                            if xx.find("AUTO") > -1:
+                                xx = str(0)
+                        xx = xx.replace(",","")                                
+                        vv = xx.strip("}")                       # caters for a case in testing where i have closing bracket 34}                                
+                        answers.append(vv)
+                        idx = 99999
+            itemNo += 1
+        return answers
