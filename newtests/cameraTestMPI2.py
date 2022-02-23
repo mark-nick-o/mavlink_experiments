@@ -150,6 +150,51 @@ class sonyAlphaNewCamera():
                         idx = 99999
             itemNo += 1
         return answers	
+
+    def set_sony_white_bal( self, Val ):
+
+        # run the API command in the shell and look for the descriptor for the field
+        #
+        ValArg=str(Val)
+        cmd='/bin/sh /home/mark/pipe/whitebal.sh ' + ValArg
+        args = shlex.split(cmd)
+        s=subprocess.Popen(args, stdout=subprocess.PIPE)
+        p2 = subprocess.Popen(["grep", "White_Bal_Val"], stdin=s.stdout, stdout=subprocess.PIPE)	   # look for only this string in the output
+        output = p2.communicate()[0]
+        print(output)
+        s.stdout.close()
+        # consider if needed (if check of setval isnt working look for "cancelled" in the program output
+        # 
+        # s=subprocess.Popen(args, stdout=subprocess.PIPE)
+        # p3 = subprocess.Popen(["grep", "cancelled"], stdin=s.stdout, stdout=subprocess.PIPE)
+        # output2 = p3.communicate()[0]
+        
+        z = output.decode('ascii')         # convert bytes array output to ascii string 
+        a = shlex.split(z)                 # split this unique output into fields separated by commas
+        #
+        # Using this parser as it sometimes missed the bracket at the start (odd??) in the popen output
+        # we get the value fields before and after and return that list
+        #
+        itemNo = 0
+        idx = 99999
+        answers = []
+        for xx in a:
+            if xx.find('White_Bal_Val') > -1:
+                idx = itemNo
+            else:
+                if (idx != 99999):
+                    if xx.find(':') > -1:
+                        idx = itemNo
+                    else:
+                        if not (xx.isdigit()):
+                            if xx.find("AUTO") > -1:
+                                xx = str(0) 
+                        xx = xx.replace(",","")                                     
+                        vv = xx.strip("}")                       # caters for a case in testing where i have closing bracket 34}                                
+                        answers.append(vv)
+                        idx = 99999
+            itemNo += 1
+        return answers
         
 # ============================ functions =================================
 #
@@ -179,13 +224,13 @@ def doMPIRcv( cam ):
 def rundoMPIRcv( cam ):
     while True:
         doMPIRcv( cam )
-
+    
 # ============================ main =================================
 #        
 if __name__ == '__main__':
         
     tagValues = [ 2, 1, 5, 2, 3, 3, 5, 4 ]
-    tag_list = [ "S_STILL_CAP", "S_APERTURE", "S_ISO", "S_EX_PRO", "S_FOCUS", "S_FOCUS_MODE", "S_FOCUS_AREA", "S_SHUT_SP" ]
+    tag_list = [ "S_EX_PRO_MODE", "S_APERTURE", "S_FOCUS_MODE", "S_FOCUS_AREA", "S_ISO", "S_SHUT_SPD", "S_WHITE_BAL", "S_STILL_CAP" ]
         
     NUMBER_OF_ITEMS = len(tag_list)
     LOOP_ITERATOR = NUMBER_OF_ITEMS - 1
@@ -256,7 +301,7 @@ if __name__ == '__main__':
         # now the main loop is waiting for the shared variable to indicate we recieved back both packets
         # in other words the camera did both chosen actions with the values sent over MPI from this rank
         #
-        while mySonyAlpha.loop.value <= 1:
+        while mySonyAlpha.loop.value <= 2:
             #doMPIRcv( mySonyAlpha )
             print("in main loop")
             time.sleep(10) 
@@ -297,17 +342,23 @@ if __name__ == '__main__':
                 print('Process {} received data index number :'.format(rank), int(list1[1]))
                 print('Process {} received data value :'.format(rank), list1[0])
         
-                if (list1[1] == 3):
+                if (list1[1] == 5) and not (tagName.find("S_ISO") == -1):
                     ansList = mySonyAlpha.set_sony_iso(list1[0]) 
                     print(f"ISO ran the shell with a reply of {ansList}")
                     data = np.array(ansList, dtype="float64")
                     comm.Send(data, dest=0, tag=0)                   
-                elif (list1[1] == 2):
+                elif (list1[1] == 2) and not (tagName.find("S_APERTURE") == -1) :
                     ansList = mySonyAlpha.set_sony_aperture(list1[0])  
                     print(f"APERTURE ran the shell with a reply of {ansList}")                    
                     #time.sleep(0.6)
                     data = np.array(ansList, dtype="float64")
-                    comm.Send(data, dest=0, tag=0)        
+                    comm.Send(data, dest=0, tag=0)  
+                elif (list1[1] == 7) and not (tagName.find("S_WHITE_BAL") == -1) :
+                    ansList = mySonyAlpha.set_sony_white_bal(list1[0])  
+                    print(f"APERTURE ran the shell with a reply of {ansList}")                    
+                    #time.sleep(0.6)
+                    data = np.array(ansList, dtype="float64")
+                    comm.Send(data, dest=0, tag=0)                    
             time.sleep(10)
             loop += 1
             print('\033[34m Process {} errcnt : \033[0m'.format(rank), mySonyAlpha.error_counts)  
