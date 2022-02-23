@@ -165,7 +165,7 @@ class mavlinkSonyCamWriteVals():
                 self.mav_write_pro_word.value &= ~(1 << bit)
             with self.state.get_lock():
                 self.state.value = mavlinkSonyCamWriteVals.STATE_READY
-            print(f"\033[37m set the write protect word for {bit} \033[0m")
+            print(f"\033[37m cleared the write protect word for {bit} \033[0m")
             return True
         else:
             if (reset_state == True):
@@ -1671,8 +1671,9 @@ class sonyAlphaNewCamera():
         #s.stdout.close()
               
         z = output.decode('ascii')         # convert bytes array output to ascii string 
-        a = shlex.split(z)                 # split this unique output into fields separated by commas
-        
+        zz = z.replace("\"","")            # get rid of the inch symbol it will crash us
+        a = shlex.split(zz)                # split this unique output into fields separated by commas
+       
         #
         # Using this parser as it sometimes missed the bracket at the start (odd??) in the popen output
         # we get the value fields before and after and return that list
@@ -3096,7 +3097,7 @@ class sonyAlphaNewCamera():
                     if not (ans[3].find("CAN_NOT_WRITE") == -1):                                           # if we get that we cant write it, we reset the request
                         writeSuccess = mavObj.clearReq_sony_iso( mavObj.STATE_CAM_WRITING )
                         while wpWrite == False:
-                            wpWrite = set_WritePro( mavObj.STATE_CAM_WRITING, mavObj.WriPro_ISO )
+                            wpWrite = mavObj.set_WritePro( mavObj.STATE_CAM_WRITING, mavObj.WriPro_ISO )
                         return writeSuccessWriPro_ISO
                 print(f" \033[32m set the ISO from/to :: {ans} \033[0m")                       
                 try:
@@ -3111,7 +3112,7 @@ class sonyAlphaNewCamera():
                    print("\033[31m write sony iso failed to set iso \033[0m")                    
                 if ( writeSuccess == True ):
                     while wpWrite == False:
-                        wpWrite = clear_WritePro( mavObj.STATE_CAM_WRITING, mavObj.WriPro_ISO )
+                        wpWrite = mavObj.clear_WritePro( mavObj.STATE_CAM_WRITING, mavObj.WriPro_ISO )
                     ret = self.setSonyObjData( mem, int(ans[1]) ) 
         else:
             ret = ( int(prevDat) == int(reqDat) )
@@ -3155,7 +3156,7 @@ class sonyAlphaNewCamera():
                     if not (ans[3].find("CAN_NOT_WRITE") == -1):                                           # if we get that we cant write it, we reset the request
                         writeSuccess = mavObj.clearReq_sony_aperture( mavObj.STATE_CAM_WRITING )
                         while wpWrite == False:
-                            wpWrite = set_WritePro( mavObj.STATE_CAM_WRITING, mavObj.WriPro_APER )
+                            wpWrite = mavObj.set_WritePro( mavObj.STATE_CAM_WRITING, mavObj.WriPro_APER )
                         return writeSuccess
                 print(f" \033[32m set the Aperture from/to :: {ans} \033[0m")                           # 
                 try:
@@ -3167,7 +3168,7 @@ class sonyAlphaNewCamera():
                    print("\033[31m write sony aperture failed to set aperture \033[0m")                     
                 if ( writeSuccess == True ):
                     while wpWrite == False:
-                        wpWrite = clear_WritePro( mavObj.STATE_CAM_WRITING, mavObj.WriPro_APER )
+                        wpWrite = mavObj.clear_WritePro( mavObj.STATE_CAM_WRITING, mavObj.WriPro_APER )
                     ret = self.setSonyObjData( mem, int(ans[1]) ) 
         else:
             ret = ( int(prevDat) == int(reqDat) )
@@ -3211,8 +3212,8 @@ class sonyAlphaNewCamera():
                     if not (ans[3].find("CAN_NOT_WRITE") == -1):                                           # if we get that we cant write it, we reset the request
                         writeSuccess = mavObj.clearReq_sony_ex_pro( mavObj.STATE_CAM_WRITING )
                         while wpWrite == False:
-                            wpWrite = set_WritePro( mavObj.STATE_CAM_WRITING, mavObj.WriPro_EX_PRO ) 
-                       return writeSuccess                    # 
+                            wpWrite = mavObj.set_WritePro( mavObj.STATE_CAM_WRITING, mavObj.WriPro_EX_PRO ) 
+                        return writeSuccess                    # 
                 print(f" \033[32m set the ex=Pro from/to :: {ans} \033[0m")  
                 try:
                     if ( int(ans[1]) == int(reqDat) ) :
@@ -3223,7 +3224,7 @@ class sonyAlphaNewCamera():
                    print("\033[31m write sony expro failed to set expro \033[0m")                    
                 if ( writeSuccess == True ):
                     while wpWrite == False:
-                        wpWrite = clear_WritePro( mavObj.STATE_CAM_WRITING, mavObj.WriPro_EX_PRO )
+                        wpWrite = mavObj.clear_WritePro( mavObj.STATE_CAM_WRITING, mavObj.WriPro_EX_PRO )
                     ret = self.setSonyObjData( mem, int(ans[1]) ) 
         else:
             ret = ( int(prevDat) == int(reqDat) )
@@ -3265,7 +3266,7 @@ class sonyAlphaNewCamera():
                     if not (ans[3].find("CAN_NOT_WRITE") == -1):                                           # if we get that we cant write it, we reset the request
                         writeSuccess = mavObj.clearReq_sony_focus( mavObj.STATE_CAM_WRITING )
                         while wpWrite == False:
-                            wpWrite = set_WritePro( mavObj.STATE_CAM_WRITING, mavObj.WriPro_FOCUS  ) 
+                            wpWrite = mavObj.set_WritePro( mavObj.STATE_CAM_WRITING, mavObj.WriPro_FOCUS  ) 
                         return writeSuccess     
                 print(f" \033[32m set the focus mode from/to :: {ans} \033[0m")   
                 try:
@@ -3277,7 +3278,7 @@ class sonyAlphaNewCamera():
                    print("\033[31m write sony focus mode failed to set focus mode \033[0m")                    
                 if ( writeSuccess == True ):
                     while wpWrite == False:
-                        wpWrite = clear_WritePro( mavObj.STATE_CAM_WRITING, mavObj.WriPro_FOCUS  )
+                        wpWrite = mavObj.clear_WritePro( mavObj.STATE_CAM_WRITING, mavObj.WriPro_FOCUS  )
                     ret = self.setSonyObjData( mem, int(ans[1]) ) 
         else:
             ret = ( int(prevDat) == int(reqDat) )
@@ -3319,7 +3320,7 @@ class sonyAlphaNewCamera():
                     if not (ans[3].find("CAN_NOT_WRITE") == -1):                                           # if we get that we cant write it, we reset the request
                         writeSuccess = mavObj.clearReq_sony_focus_area( mavObj.STATE_CAM_WRITING )
                         while wpWrite == False:
-                            wpWrite = set_WritePro( mavObj.STATE_CAM_WRITING, mavObj.WriPro_FOCUSA  ) 
+                            wpWrite = mavObj.set_WritePro( mavObj.STATE_CAM_WRITING, mavObj.WriPro_FOCUSA  ) 
                         return writeSuccess  
                 print(f" \033[32m set the focus area from/to :: {ans} \033[0m")   
                 try:
@@ -3331,7 +3332,7 @@ class sonyAlphaNewCamera():
                    print("\033[31m write sony focus area failed to set focus area \033[0m")                    
                 if ( writeSuccess == True ):
                     while wpWrite == False:
-                        wpWrite = clear_WritePro( mavObj.STATE_CAM_WRITING, mavObj.WriPro_FOCUSA  )
+                        wpWrite = mavObj.clear_WritePro( mavObj.STATE_CAM_WRITING, mavObj.WriPro_FOCUSA  )
                     ret = self.setSonyObjData( mem, int(ans[1]) ) 
         else:
             ret = ( int(prevDat) == int(reqDat) )
@@ -3362,8 +3363,8 @@ class sonyAlphaNewCamera():
                 writeSuccess = False
                 while (writeSuccess == False) and (timeoutS2 > 0): 
                     writeSuccess = mavObj.setVal_sony_shutter(int(prevDat),mavObj.STATE_CAM_WRITING,mavObj.DONT_WRITE_PREV_DATA,timeout2) 
-                    while wpWrite == False:
-                        wpWrite = set_WritePro( mavObj.STATE_CAM_WRITING, mavObj.WriPro_SS  ) 
+                    #while wpWrite == False:
+                    #    wpWrite = set_WritePro( mavObj.STATE_CAM_WRITING, mavObj.WriPro_SS  ) 
                     timeoutS2 -= timeout2                                  # no retries  
                 return writeSuccess 
             ans = self.set_sony_shutter( ee ) 
@@ -3377,7 +3378,7 @@ class sonyAlphaNewCamera():
                     if not (ans[3].find("CAN_NOT_WRITE") == -1):                                           # if we get that we cant write it, we reset the request
                         writeSuccess = mavObj.clearReq_sony_shutter( mavObj.STATE_CAM_WRITING )
                         while wpWrite == False:
-                            wpWrite = set_WritePro( mavObj.STATE_CAM_WRITING, mavObj.WriPro_SS  ) 
+                            wpWrite = mavObj.set_WritePro( mavObj.STATE_CAM_WRITING, mavObj.WriPro_SS  ) 
                         return writeSuccess  
                 print(f" \033[32m set the shutter speed from/to :: {ans} \033[0m")   
                 try:
@@ -3391,7 +3392,7 @@ class sonyAlphaNewCamera():
                 if ( writeSuccess == True ):
                     print(f"saving..... {ans[1]} {writeSuccess}")  
                     while wpWrite == False:
-                        wpWrite = clear_WritePro( mavObj.STATE_CAM_WRITING, mavObj.WriPro_SS  )                    
+                        wpWrite = mavObj.clear_WritePro( mavObj.STATE_CAM_WRITING, mavObj.WriPro_SS  )                    
                     ret = self.setSonyObjData( mem, int(ans[1]) ) 
         else:
             ret = ( int(prevDat) == int(reqDat) )
@@ -3433,7 +3434,7 @@ class sonyAlphaNewCamera():
                     if not (ans[3].find("CAN_NOT_WRITE") == -1):                                           # if we get that we cant write it, we reset the request
                         writeSuccess = mavObj.clearReq_sony_white_bal( mavObj.STATE_CAM_WRITING )
                         while wpWrite == False:
-                            wpWrite = set_WritePro( mavObj.STATE_CAM_WRITING, mavObj.WriPro_WB  ) 
+                            wpWrite = mavObj.set_WritePro( mavObj.STATE_CAM_WRITING, mavObj.WriPro_WB  ) 
                         return writeSuccess  
                 print(f" \033[32m set the white balance from/to :: {ans} \033[0m")   
                 try:
@@ -3445,7 +3446,7 @@ class sonyAlphaNewCamera():
                    print("\033[31m write sony white balance failed to set white balance \033[0m")                    
                 if ( writeSuccess == True ):
                     while wpWrite == False:
-                        wpWrite = clear_WritePro( mavObj.STATE_CAM_WRITING, mavObj.WriPro_WB  ) 
+                        wpWrite = mavObj.clear_WritePro( mavObj.STATE_CAM_WRITING, mavObj.WriPro_WB  ) 
                     ret = self.setSonyObjData( mem, int(ans[1]) ) 
         else:
             ret = ( int(prevDat) == int(reqDat) )
@@ -3487,7 +3488,7 @@ class sonyAlphaNewCamera():
                     if not (ans[3].find("CAN_NOT_WRITE") == -1):                                           # if we get that we cant write it, we reset the request
                         writeSuccess = mavObj.clearReq_sony_still_cap_mode( mavObj.STATE_CAM_WRITING )
                         while wpWrite == False:
-                            wpWrite = set_WritePro( mavObj.STATE_CAM_WRITING, mavObj.WriPro_SC  ) 
+                            wpWrite = mavObj.set_WritePro( mavObj.STATE_CAM_WRITING, mavObj.WriPro_SC  ) 
                         return writeSuccess  
                 print(f" \033[32m set the still capture mode from/to :: {ans} \033[0m")   
                 try:
@@ -3499,7 +3500,7 @@ class sonyAlphaNewCamera():
                    print("\033[31m write sony still capture mode failed to set still capture mode \033[0m")                    
                 if ( writeSuccess == True ):
                     while wpWrite == False:
-                        wpWrite = clear_WritePro( mavObj.STATE_CAM_WRITING, mavObj.WriPro_SC  ) 
+                        wpWrite = mavObj.clear_WritePro( mavObj.STATE_CAM_WRITING, mavObj.WriPro_SC  ) 
                     ret = self.setSonyObjData( mem, int(ans[1]) ) 
         else:
             ret = ( int(prevDat) == int(reqDat) )
@@ -7589,4 +7590,3 @@ if __name__ == '__main__':
     del shut_sp
     del whitebal
     del stillcap
-	
