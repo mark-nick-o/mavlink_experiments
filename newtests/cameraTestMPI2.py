@@ -9,7 +9,39 @@
 import multiprocessing
 
 # run program as :- mpirun -np 2 python3 cameraTestMPI.py
+# or on Raspberry Pi :- mpirun.openmpi -np 2 python3 cameraTestMPI.py
 #
+
+# =============== install raspberry pi as follows =====================
+#
+# https://forums.raspberrypi.com/viewtopic.php?f=49&t=199994&start=25#p1267249
+# https://raspberrytips.com/raspberry-pi-cluster/
+#
+# pre-requisite requires fortran compiler....
+#
+# sudo apt update
+# sudo apt upgrade
+# sudo apt-get install gfortran
+#
+# it requires mpich to be built from source ...
+#
+# get the latest tar ball 
+# tar zxf mpich-4.0.tar.gz
+# cd mpich-4.0
+# ./configure --with-device=ch3:sock FCFLAGS=-fallow-argument-mismatch
+# make
+# or sudo pip install mpi4py
+#
+# sudo apt install nmap
+# 
+# for python3
+# python3 -m pip install mpi4py
+# 
+# for python2
+# python -m pip install mpi4py
+#
+# =========================================================================
+
 from mpi4py import MPI
 import numpy as np
 
@@ -64,8 +96,8 @@ class sonyAlphaNewCamera():
         # run the API command in the shell and look for the descriptor for the field
         #
         isoValArg=str(isoVal)
-        #cmd='/home/pi/cams/SonyTEST32/set_iso/RemoteCli ' + isoValArg
-        cmd='/bin/sh /home/mark/pipe/iso.sh ' + isoValArg
+        cmd='/home/pi/cams/SonyTEST32/set_iso/RemoteCli ' + isoValArg
+        #cmd='/bin/sh /home/mark/pipe/iso.sh ' + isoValArg
         args = shlex.split(cmd)
         s=subprocess.Popen(args, stdout=subprocess.PIPE)
         p2 = subprocess.Popen(["grep", "ISO_Format"], stdin=s.stdout, stdout=subprocess.PIPE)	   # look for only this string in the output
@@ -110,8 +142,8 @@ class sonyAlphaNewCamera():
         # run the API command in the shell and look for the descriptor for the field
         #
         ValArg=str(Val)
-        #cmd='/home/pi/cams/SonyTEST32/set_aperture/RemoteCli ' + ValArg
-        cmd='/bin/sh /home/mark/pipe/aper.sh ' + ValArg
+        cmd='/home/pi/cams/SonyTEST32/set_aperture/RemoteCli ' + ValArg
+        #cmd='/bin/sh /home/mark/pipe/aper.sh ' + ValArg
         args = shlex.split(cmd)
         s=subprocess.Popen(args, stdout=subprocess.PIPE)
         p2 = subprocess.Popen(["grep", "Aperture_Val"], stdin=s.stdout, stdout=subprocess.PIPE)	   # look for only this string in the output
@@ -156,7 +188,8 @@ class sonyAlphaNewCamera():
         # run the API command in the shell and look for the descriptor for the field
         #
         ValArg=str(Val)
-        cmd='/bin/sh /home/mark/pipe/whitebal.sh ' + ValArg
+        cmd='/home/pi/cams/SonyTEST32/set_wb/RemoteCli ' + ValArg
+        #cmd='/bin/sh /home/mark/pipe/whitebal.sh ' + ValArg
         args = shlex.split(cmd)
         s=subprocess.Popen(args, stdout=subprocess.PIPE)
         p2 = subprocess.Popen(["grep", "White_Bal_Val"], stdin=s.stdout, stdout=subprocess.PIPE)	   # look for only this string in the output
@@ -229,7 +262,7 @@ def rundoMPIRcv( cam ):
 #        
 if __name__ == '__main__':
         
-    tagValues = [ 2, 1, 5, 2, 3, 3, 5, 4 ]
+    tagValues = [ 1, 4, 3, 2, 6, 4, 7, 8 ]
     tag_list = [ "S_EX_PRO_MODE", "S_APERTURE", "S_FOCUS_MODE", "S_FOCUS_AREA", "S_ISO", "S_SHUT_SPD", "S_WHITE_BAL", "S_STILL_CAP" ]
         
     NUMBER_OF_ITEMS = len(tag_list)
@@ -303,7 +336,7 @@ if __name__ == '__main__':
         #
         while mySonyAlpha.loop.value <= 2:
             #doMPIRcv( mySonyAlpha )
-            print("in main loop")
+            print(f"in main loop {mySonyAlpha.loop.value}")
             time.sleep(10) 
         time.sleep(1)            
         p1.terminate()
@@ -344,18 +377,18 @@ if __name__ == '__main__':
         
                 if (list1[1] == 5) and not (tagName.find("S_ISO") == -1):
                     ansList = mySonyAlpha.set_sony_iso(list1[0]) 
-                    print(f"ISO ran the shell with a reply of {ansList}")
+                    print(f"ISO ran the shell in with a reply of {ansList}")
                     data = np.array(ansList, dtype="float64")
                     comm.Send(data, dest=0, tag=0)                   
                 elif (list1[1] == 2) and not (tagName.find("S_APERTURE") == -1) :
                     ansList = mySonyAlpha.set_sony_aperture(list1[0])  
-                    print(f"APERTURE ran the shell with a reply of {ansList}")                    
+                    print(f"APERTURE ran the in shell with a reply of {ansList}")                    
                     #time.sleep(0.6)
                     data = np.array(ansList, dtype="float64")
                     comm.Send(data, dest=0, tag=0)  
                 elif (list1[1] == 7) and not (tagName.find("S_WHITE_BAL") == -1) :
                     ansList = mySonyAlpha.set_sony_white_bal(list1[0])  
-                    print(f"APERTURE ran the shell with a reply of {ansList}")                    
+                    print(f"WHITE BALANCE ran in the shell with a reply of {ansList}")                    
                     #time.sleep(0.6)
                     data = np.array(ansList, dtype="float64")
                     comm.Send(data, dest=0, tag=0)                    
