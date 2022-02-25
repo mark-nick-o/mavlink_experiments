@@ -1,4 +1,4 @@
-# ===============================================================================================================================
+ # ===============================================================================================================================
 #
 # Name : mavlinkSonyCamWriteVals.py
 # Desc : Global memory value class for use to write mavlink to sony cam
@@ -3697,7 +3697,22 @@ class sonyAlphaNewCamera():
             # LOOK FOR CHANGE (1)
             if ((not (int(reqDat) == mavlinkSonyCamWriteVals.STATE_INIT) and not (int(reqDat) == int(prevDat))) and (readSuccess == True)):
                 timeoutS2 = timeout2 * no_timeout2_retry
-                ret,ee = self.enumerate_iso_sony_a7(int(reqDat))
+                if (index == 5):
+                    ret,ee = self.enumerate_iso_sony_a7(int(reqDat))
+                elif (index == 2):
+                    ret,ee = self.enumerate_aperture_sony_a7(int(reqDat))
+                elif (index == 7):
+                    ret,ee = self.enumerate_white_bal_sony_a7(int(reqDat))
+                elif (index == 1):
+                    ret,ee = self.enumerate_ex_pro_sony_a7(int(reqDat))
+                elif (index == 8):
+                    ret,ee = self.enumerate_still_cap_sony_a7(int(reqDat))
+                elif (index == 6):
+                    ret,ee = self.enumerate_shutter_sony_a7(int(reqDat))
+                elif (index == 3):
+                    ret,ee = self.enumerate_focus_sony_a7(int(reqDat))
+                elif (index == 4):
+                    ret,ee = self.enumerate_focus_area_sony_a7(int(reqDat))
                 # INVALID CHANGE MADE (return to reading state == 0)
                 if (ret == False):
                     print(f"\033[31m Error Invalid parameter Iso {reqDat}\033[0m")
@@ -7823,3 +7838,4 @@ if __name__ == '__main__':
     del shut_sp
     del whitebal
     del stillcap
+	
