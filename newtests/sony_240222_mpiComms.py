@@ -3519,7 +3519,7 @@ class sonyAlphaNewCamera():
                 print(f"\033[32m timeout error trying to set still capture mode to \033[4;42;31m {reqDat} \033[0m")               
         return ret  
 
-    def sendTagOverMPILink( tag_name, rankId=1 ):
+    def sendTagOverMPILink( self, tag_name, rankId=1 ):
     #
     # convert string to ascii list and make numpy array from it.
     #
@@ -3532,7 +3532,7 @@ class sonyAlphaNewCamera():
         comm.Send(data, dest=rankId, tag=0)
         print('\033[33m MPI Process {} sent string data: \033[9m'.format(rank), data)   
 
-    def sendValueListOverMPILink( tagValues, rankId=1 ):
+    def sendValueListOverMPILink( self, tagValues, rankId=1 ):
 
         loop - 0
         for loop in range(0,len(tagValues)):
@@ -3545,7 +3545,7 @@ class sonyAlphaNewCamera():
 
     # master readers
     #
-    def readStringReplyOverMPILink( rankId=1 ):
+    def readStringReplyOverMPILink( self, rankId=1 ):
         # initialize the receiving buffer to 20 elements max char size for tag
         #
         data = np.zeros(150)
@@ -3565,7 +3565,7 @@ class sonyAlphaNewCamera():
     #
     # performs MPI receive from rank 1
     #
-    def doMPISlaveRcv( mavObj, stillcap, whitebal, shut_sp, iso, focusdata, focusarea, aper, expro ):
+    def doMPISlaveRcv( self, mavObj, stillcap, whitebal, shut_sp, iso, focusdata, focusarea, aper, expro ):
     
         # initialize the receiving buffer to 20 elements max char size for tag
         #
@@ -3612,7 +3612,7 @@ class sonyAlphaNewCamera():
     
     # slave readers
     #    
-    def readTagOverMPILink( rankId=0 ):
+    def readTagOverMPILink( self, rankId=0 ):
         # initialize the receiving buffer to 20 elements max char size for tag
         #
         data = np.zeros(20)
@@ -3631,7 +3631,7 @@ class sonyAlphaNewCamera():
         print(f"\033[32m MPI Process {rank} received the tagname \033[31;46m {tagName} \033[0m") 
         return tagName 
         
-    def readValueListOverMPILink( rankId=0 ):
+    def readValueListOverMPILink( self, rankId=0 ):
         # initialize the receiving buffer to 20 elements max char size for tag
         #
         data = np.zeros(20)
@@ -3703,22 +3703,22 @@ class sonyAlphaNewCamera():
                     print(f"\033[31m Error Invalid parameter Iso {reqDat}\033[0m")
                     writeSuccess = False
                     while (writeSuccess == False) and (timeoutS2 > 0): 
-                    if (index == 5):
-                        writeSuccess = mavObj.setVal_sony_iso( int(prevDat),mavObj.STATE_CAM_WRITING,mavObj.DONT_WRITE_PREV_DATA,timeout2 )
-                    elif (index == 2):
-                        writeSuccess = mavObj.setVal_sony_aperture( int(prevDat),mavObj.STATE_CAM_WRITING,mavObj.DONT_WRITE_PREV_DATA,timeout2 )
-                    elif (index == 7):
-                        writeSuccess = mavObj.setVal_sony_white_bal( int(prevDat),mavObj.STATE_CAM_WRITING,mavObj.DONT_WRITE_PREV_DATA,timeout2 ) 
-                    elif (index == 1):
-                        writeSuccess = mavObj.setVal_sony_ex_pro( int(prevDat),mavObj.STATE_CAM_WRITING,mavObj.DONT_WRITE_PREV_DATA,timeout2 )
-                    elif (index == 8):
-                        writeSuccess = mavObj.setVal_sony_still_cap_mode( int(prevDat),mavObj.STATE_CAM_WRITING,mavObj.DONT_WRITE_PREV_DATA,timeout2 ) 
-                    elif (index == 6):
-                        writeSuccess = mavObj.setVal_sony_shutter( int(prevDat),mavObj.STATE_CAM_WRITING,mavObj.DONT_WRITE_PREV_DATA,timeout2 )
-                    elif (index == 3):
-                        writeSuccess = mavObj.setVal_sony_focus( int(prevDat),mavObj.STATE_CAM_WRITING,mavObj.DONT_WRITE_PREV_DATA,timeout2 )
-                    elif (index == 4):
-                        writeSuccess = mavObj.setVal_sony_focus_area( int(prevDat),mavObj.STATE_CAM_WRITING,mavObj.DONT_WRITE_PREV_DATA,timeout2 )
+                        if (index == 5):
+                            writeSuccess = mavObj.setVal_sony_iso( int(prevDat),mavObj.STATE_CAM_WRITING,mavObj.DONT_WRITE_PREV_DATA,timeout2 )
+                        elif (index == 2):
+                            writeSuccess = mavObj.setVal_sony_aperture( int(prevDat),mavObj.STATE_CAM_WRITING,mavObj.DONT_WRITE_PREV_DATA,timeout2 )
+                        elif (index == 7):
+                            writeSuccess = mavObj.setVal_sony_white_bal( int(prevDat),mavObj.STATE_CAM_WRITING,mavObj.DONT_WRITE_PREV_DATA,timeout2 ) 
+                        elif (index == 1):
+                            writeSuccess = mavObj.setVal_sony_ex_pro( int(prevDat),mavObj.STATE_CAM_WRITING,mavObj.DONT_WRITE_PREV_DATA,timeout2 )
+                        elif (index == 8):
+                            writeSuccess = mavObj.setVal_sony_still_cap_mode( int(prevDat),mavObj.STATE_CAM_WRITING,mavObj.DONT_WRITE_PREV_DATA,timeout2 ) 
+                        elif (index == 6):
+                            writeSuccess = mavObj.setVal_sony_shutter( int(prevDat),mavObj.STATE_CAM_WRITING,mavObj.DONT_WRITE_PREV_DATA,timeout2 )
+                        elif (index == 3):
+                            writeSuccess = mavObj.setVal_sony_focus( int(prevDat),mavObj.STATE_CAM_WRITING,mavObj.DONT_WRITE_PREV_DATA,timeout2 )
+                        elif (index == 4):
+                            writeSuccess = mavObj.setVal_sony_focus_area( int(prevDat),mavObj.STATE_CAM_WRITING,mavObj.DONT_WRITE_PREV_DATA,timeout2 )
                         timeoutS2 -= timeout2                                  # no retries  
                     return -1
                 print(f"enumeration value for iso {ee} req {reqDat}")
@@ -3731,7 +3731,7 @@ class sonyAlphaNewCamera():
         else:
             return ee
 
-    def sendReqOverMPI_Master( enumSetVal, index ):
+    def sendReqOverMPI_Master( self, enumSetVal, index ):
         
         if (self.mav_cam_action_state.value == sonyAlphaNewCamera.SEND_TO_MPI):
             self.sendTagOverMPILink( "S_ISO" )
@@ -3747,7 +3747,7 @@ class sonyAlphaNewCamera():
             # DO ACTION IN RANK1 (6)
             # READ MPI_REPLY FROM RANK1 (7)
 
-    def readISOResultOverMPI_Master( mavObj ):
+    def readISOResultOverMPI_Master( self, mavObj ):
 
         if (self.mav_cam_action_state.value == sonyAlphaNewCamera.RECV_FROM_MPI): 
             self.doMPISlaveRcv()
@@ -7729,7 +7729,7 @@ if __name__ == '__main__':
         # if we do drop out terminate the daemon task
         p1.terminate()
         
-    elif {rank == 1):                     # ============================= Sony <-> Raspberry pi link ================================================
+    elif (rank == 1):                     # ============================= Sony <-> Raspberry pi link ================================================
 
         loop = True    
         while (loop == True): 
@@ -7805,7 +7805,7 @@ if __name__ == '__main__':
                     
             time.sleep(0.5)
             print('\033[34m Process {} errcnt : \033[0m'.format(rank), mySonyAlpha.error_counts)     
-    elif {rank == 2):                     # ============================= heart beat ranking ================================================
+    elif (rank == 2):                     # ============================= heart beat ranking ================================================
     
         while active==True:
             sendMavlinkHeartBeat_single(frame, cID, 0)
