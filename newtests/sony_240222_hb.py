@@ -7335,7 +7335,7 @@ if __name__ == '__main__':
                 with mySonyCamNo1.error_counts.get_lock():
                     mySonyCamNo1.error_counts.value = 0            
 
-    elif {rank == 1):                     # ============================= heart beat ranking ================================================
+    elif (rank == 1):                     # ============================= heart beat ranking ================================================
     
         while active==True:
             sendMavlinkHeartBeat_single(frame, cID, 0)
