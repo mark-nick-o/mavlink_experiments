@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<mavlinkcamera>
+<definition version="7">
+<model>ILCE-7C or DSC-RX0M2</model>
+<vendor>SONY EUROPE B.V - AiRobotics</vendor>
+</definition>
+ <parameters>
+<!-- 
+<parameter name="CrCommandId" type="uint32" default="0">
+    <description>enum CrCommandId</description>
+    <options>
+        <option name="Release" value="0"/>
+        <option name="MovieRecord" value="1"/>
+        <option name="CancelShooting" value="2"/>
+        <option name="MediaFormat" value="4"/>
+        <option name="MediaQuickFormat" value="5"/>
+        <option name="CancelMediaFormat" value="6"/>
+    </options>
+</parameter>
+  --> 
+<parameter name="S_APERTURE" type="uint32" default="0">
+    <description>enum CrFnumberSet : CrInt16u</description>
+    <options>		
+        <option name="F2.8" value="280"/>
+        <option name="F3.2" value="320"/>
+        <option name="F3.5" value="350"/>
+        <option name="F4.0" value="400"/>
+        <option name="F4.5" value="450"/>		
+	<option name="F5.0" value="500"/>
+        <option name="F5.6" value="560"/>
+        <option name="F6,3" value="630"/>
+        <option name="F7.1" value="710"/>
+        <option name="F8.0" value="800"/>		
+        <option name="F9.0" value="900"/>
+        <option name="F10" value="1000"/>
+        <option name="F13" value="1300"/>
+        <option name="F14" value="1400"/>
+        <option name="F16" value="1600"/>
+        <option name="F18" value="1800"/>
+        <option name="F20" value="2000"/>
+        <option name="F22" value="2200"/>
+    </options>
+</parameter>
+<parameter name="S_SHUT_SPD" type="uint32" default="0">
+    <description>enum CrShutterSpeedSet : CrInt32u</description>
+    <options>
+        <option name="Bulb" value="0"/>
+        <option name="Nothing" value="1"/>
+    </options>
+</parameter>
+<parameter name="S_ISO" type="uint32" default="0">
+    <description>enum CrISOMode : CrInt32u</description>
+    <options>
+        <option name="Normal" value="0"/>
+        <option name="50" value="50"/>
+        <option name="64" value="64"/>
+        <option name="80" value="80"/>
+        <option name="100" value="100"/>
+        <option name="125" value="125"/>
+        <option name="160" value="160"/>
+        <option name="200" value="200"/>
+        <option name="250" value="250"/>
+        <option name="320" value="320"/>
+        <option name="400" value="400"/>
+        <option name="500" value="500"/>
+        <option name="640" value="640"/>
+        <option name="800" value="800"/>
+        <option name="1000" value="1000"/>
+        <option name="1250" value="1250"/>
+        <option name="1600" value="1600"/>
+        <option name="2000" value="2000"/>
+        <option name="2500" value="2500"/>
+        <option name="3200" value="3200"/>
+        <option name="4000" value="4000"/>
+        <option name="5000" value="5000"/>
+        <option name="6400" value="6400"/>
+        <option name="8000" value="8000"/>
+        <option name="10000" value="10000"/>
+        <option name="12800" value="12800"/>
+        <option name="16000" value="16000"/>
+        <option name="20000" value="20000"/>
+        <option name="25600" value="25600"/>
+        <option name="38000" value="38000"/>
+        <option name="40000" value="40000"/>
+        <option name="51200" value="51200"/>
+        <option name="64000" value="64000"/>
+        <option name="80000" value="80000"/>
+        <option name="102400" value="102400"/>
+    </options>
+</parameter>
+<parameter name="S_EX_PRO_MODE" type="uint32" default="0">
+    <description>enum CrExposureProgram : CrInt32u</description>
+    <options>
+        <option name="M Manual" value="1"/>
+        <option name="P Auto" value="2"/>
+        <option name="A AperturePriority" value="3"/>
+        <option name="S ShutterSpeedPriority" value="4"/>
+        <option name="Program Creative" value="5"/>
+        <option name="Program Action" value="6"/>
+        <option name="Portrait" value="7"/>
+        <option name="Auto" value="32768"/>
+        <option name="Auto Plus" value="32769"/>
+        <option name="P A" value="32770"/>
+        <option name="P S" value="32771"/>
+        <option name="Sports Action" value="32772"/>
+        <option name="Sprots Action" value="32773"/>
+        <option name="Sunset" value="32774"/>
+        <option name="Night" value="32775"/>
+        <option name="Landscape" value="32776"/>
+        <option name="Macro" value="32777"/>
+        <option name="HandheldTwilight" value="32778"/>
+        <option name="NightPortrait" value="32779"/>
+        <option name="AntiMotionBlur" value="32780"/>
+        <option name="Pet" value="32781"/>
+        <option name="Gourmet" value="32782"/>
+        <option name="Fireworks" value="32783"/>
+        <option name="HighSensitivity" value="32784"/>
+        <option name="MemoryRecall" value="32800"/>
+        <option name="ContinuousPriority AE 8pics" value="32817"/>
+        <option name="ContinuousPriority AE 10pics" value="32818"/>
+        <option name="ContinuousPriority AE 12pics" value="32819"/>
+        <option name="3D SweepPanorama" value="32832"/>
+        <option name="SweepPanorama" value="32833"/>
+        <option name="Movie P" value="32848"/>
+        <option name="Movie A" value="32849"/>
+        <option name="Movie S" value="32850"/>
+        <option name="Movie M" value="32851"/>
+        <option name="Movie Auto" value="32852"/>
+        <option name="Movie SQMotion P" value="32857"/>
+        <option name="Movie SQMotion A" value="32858"/>
+        <option name="Movie SQMotion S" value="32859"/>
+        <option name="Movie SQMotion M" value="32860"/>
+        <option name="Flash Off" value="32864"/>
+        <option name="PictureEffect" value="32880"/>
+        <option name="HiFrameRate P" value="32896"/>
+        <option name="HiFrameRate A" value="32897"/>
+        <option name="HiFrameRate S" value="32898"/>
+        <option name="HiFrameRate M" value="32899"/>
+        <option name="SQMotion P" value="32900"/>
+        <option name="SQMotion A" value="32901"/>
+        <option name="SQMotion S" value="32902"/>
+        <option name="SQMotion M" value="32903"/>
+        <option name="MOVIE" value="32904"/>
+        <option name="STILL" value="32905"/>
+    </options>
+</parameter>
+<parameter name="S_WHITE_BAL" type="uint32" default="0">
+    <description>enum CrWhiteBalanceSetting : CrInt16u</description>
+    <options>
+        <option name="AWB" value="0"/>
+        <option name="Underwater Auto" value="1"/>
+        <option name="Daylight" value="17"/>
+        <option name="Shadow" value="18"/>
+        <option name="Cloudy" value="19"/>
+        <option name="Tungsten" value="20"/>
+        <option name="Fluorescent" value="32"/>
+        <option name="Fluorescent WarmWhite" value="33"/>
+        <option name="Fluorescent CoolWhite" value="34"/>
+        <option name="Fluorescent DayWhite" value="35"/>
+        <option name="Fluorescent Daylight" value="36"/>
+        <option name="Flush" value="48"/>
+        <option name="ColorTemp" value="256"/>
+        <option name="Custom 1" value="257"/>
+        <option name="Custom 2" value="258"/>
+        <option name="Custom 3" value="259"/>
+        <option name="Custom" value="260"/>
+    </options>
+</parameter>
+<parameter name="S_FOCUS_MODE" type="uint16" default="0">
+    <description>enum CrFocusMode : CrInt16u</description>
+    <options>
+        <option name="MF" value="1"/>
+        <option name="AF S" value="2"/>
+        <option name="AF C" value="3"/>
+        <option name="AF A" value="4"/>
+        <option name="AF D" value="5"/>
+        <option name="DMF" value="6"/>
+        <option name="PF" value="7"/>
+    </options>
+</parameter>
+<parameter name="S_STILL_CAP" type="uint32" default="0">
+    <description>enum CrDriveMode : CrInt32u</description>
+    <options>
+        <option name="Single" value="1"/>
+        <option name="Continuous Hi" value="65537"/>
+        <option name="Continuous Hi Plus" value="65538"/>
+        <option name="Continuous Hi Live" value="65539"/>
+        <option name="Continuous Lo" value="65540"/>
+        <option name="Continuous" value="65541"/>
+        <option name="Continuous SpeedPriority" value="65542"/>
+        <option name="Continuous Mid" value="65543"/>
+        <option name="Continuous Mid Live" value="65544"/>
+        <option name="Continuous Lo Live" value="65545"/>
+        <option name="SingleBurstShooting lo" value="69633"/>
+        <option name="SingleBurstShooting mid" value="69634"/>
+        <option name="SingleBurstShooting hi" value="69635"/>
+        <option name="Timelapse" value="131073"/>
+        <option name="Timer 2s" value="196609"/>
+        <option name="Timer 5s" value="196610"/>
+        <option name="Timer 10s" value="196611"/>
+        <option name="Continuous Bracket 03Ev 3pics" value="262913"/>
+        <option name="Continuous Bracket 03Ev 5pics" value="262914"/>
+        <option name="Continuous Bracket 03Ev 9pics" value="262915"/>
+        <option name="Continuous Bracket 05Ev 3pics" value="262916"/>
+        <option name="Continuous Bracket 05Ev 5pics" value="262917"/>
+        <option name="Continuous Bracket 05Ev 9pics" value="262918"/>
+        <option name="Continuous Bracket 07Ev 3pics" value="262919"/>
+        <option name="Continuous Bracket 07Ev 5pics" value="262920"/>
+        <option name="Continuous Bracket 07Ev 9pics" value="262921"/>
+        <option name="Continuous Bracket 10Ev 3pics" value="262922"/>
+        <option name="Continuous Bracket 10Ev 5pics" value="262923"/>
+        <option name="Continuous Bracket 10Ev 9pics" value="262924"/>
+        <option name="Continuous Bracket 20Ev 3pics" value="262925"/>
+        <option name="Continuous Bracket 20Ev 5pics" value="262926"/>
+        <option name="Continuous Bracket 30Ev 3pics" value="262927"/>
+        <option name="Continuous Bracket 30Ev 5pics" value="262928"/>
+        <option name="Single Bracket 03Ev 3pics" value="327681"/>
+        <option name="Single Bracket 03Ev 5pics" value="327682"/>
+        <option name="Single Bracket 03Ev 9pics" value="327683"/>
+        <option name="Single Bracket 05Ev 3pics" value="327684"/>
+        <option name="Single Bracket 05Ev 5pics" value="327685"/>
+        <option name="Single Bracket 05Ev 9pics" value="327686"/>
+        <option name="Single Bracket 07Ev 3pics" value="327687"/>
+        <option name="Single Bracket 07Ev 5pics" value="327688"/>
+        <option name="Single Bracket 07Ev 9pics" value="327689"/>
+        <option name="Single Bracket 10Ev 3pics" value="327690"/>
+        <option name="Single Bracket 10Ev 5pics" value="327691"/>
+        <option name="Single Bracket 10Ev 9pics" value="327692"/>
+        <option name="Single Bracket 20Ev 3pics" value="327693"/>
+        <option name="Single Bracket 20Ev 5pics" value="327694"/>
+        <option name="Single Bracket 30Ev 3pics" value="327695"/>
+        <option name="Single Bracket 30Ev 5pics" value="327696"/>
+        <option name="WB Bracket Lo" value="393217"/>
+        <option name="WB Bracket Hi" value="393218"/>
+        <option name="DRO Bracket Lo" value="458753"/>
+        <option name="DRO Bracket Hi" value="458754"/>
+        <option name="Continuous Timer 3pics" value="524289"/>
+        <option name="Continuous Timer 5pics" value="524290"/>
+        <option name="Continuous Timer 2s 3pics" value="524291"/>
+        <option name="Continuous Timer 2s 5pics" value="524292"/>
+        <option name="Continuous Timer 5s 3pics" value="524293"/>
+        <option name="Continuous Timer 5s 5pics" value="524294"/>
+        <option name="LPF Bracket" value="268435457"/>
+        <option name="RemoteCommander" value="268435458"/>
+        <option name="MirrorUp" value="268435459"/>
+        <option name="SelfPortrait 1" value="268435460"/>
+        <option name="SelfPortrait 2" value="268435461"/>
+    </options>
+</parameter>
+<parameter name="S_FOCUS_AREA" type="uint32" default="0">
+    <description>enum CrFocusArea : CrInt16u</description>
+    <options>
+        <option name="Unknown" value="0"/>
+        <option name="Wide" value="1"/>
+        <option name="Zone" value="2"/>
+        <option name="Center" value="3"/>
+        <option name="Flexible Spot S" value="4"/>
+        <option name="Flexible Spot M" value="5"/>
+        <option name="Flexible Spot L" value="6"/>
+        <option name="Expand Flexible Spot" value="7"/>
+        <option name="Flexible Spot" value="8"/>
+        <option name="Tracking Wide" value="17"/>
+        <option name="Tracking Zone" value="18"/>
+        <option name="Tracking Center" value="19"/>
+        <option name="Tracking Flexible Spot S" value="20"/>
+        <option name="Tracking Flexible Spot M" value="21"/>
+        <option name="Tracking Flexible Spot L" value="22"/>
+        <option name="Tracking Expand Flexible Spot" value="23"/>
+        <option name="Tracking Flexible Spot" value="24"/>
+    </options>
+</parameter>
+    </parameters>
+    <localization>
+    <locale name="en_EN">
+    <strings original="enum CrFnumberSet : CrInt16u" translated="Set F Number" />
+    <strings original="enum CrShutterSpeedSet : CrInt32u" translated="Shutter Speed Set" />
+    <strings original="enum CrISOMode : CrInt32u" translated="ISO Mode" />
+    <strings original="enum CrExposureProgram : CrInt32u" translated="Exposure Program" />
+    <strings original="enum CrWhiteBalanceSetting : CrInt16u" translated="White Balance Setting" />
+    <strings original="enum CrFocusMode : CrInt16u" translated="Focus Mode" />
+    <strings original="enum CrDriveMode : CrInt32u" translated="Drive Mode" />
+    <strings original="enum CrFocusArea : CrInt16u" translated="Focus Area" />
+    </locale>
+    <locale name="en_US">
+    <strings original="enum CrFnumberSet : CrInt16u" translated="Set F Number" />
+    <strings original="enum CrShutterSpeedSet : CrInt32u" translated="Shutter Speed Set" />
+    <strings original="enum CrISOMode : CrInt32u" translated="ISO Mode" />
+    <strings original="enum CrExposureProgram : CrInt32u" translated="Exposure Program" />
+    <strings original="enum CrWhiteBalanceSetting : CrInt16u" translated="White Balance Setting" />
+    <strings original="enum CrFocusMode : CrInt16u" translated="Focus Mode" />
+    <strings original="enum CrDriveMode : CrInt32u" translated="Drive Mode" />
+    <strings original="enum CrFocusArea : CrInt16u" translated="Focus Area" />
+    </locale>
+    <locale name="en_AU">
+    <strings original="enum CrFnumberSet : CrInt16u" translated="Set F Number" />
+    <strings original="enum CrShutterSpeedSet : CrInt32u" translated="Shutter Speed Set" />
+    <strings original="enum CrISOMode : CrInt32u" translated="ISO Mode" />
+    <strings original="enum CrExposureProgram : CrInt32u" translated="Exposure Program" />
+    <strings original="enum CrWhiteBalanceSetting : CrInt16u" translated="White Balance Setting" />
+    <strings original="enum CrFocusMode : CrInt16u" translated="Focus Mode" />
+    <strings original="enum CrDriveMode : CrInt32u" translated="Drive Mode" />
+    <strings original="enum CrFocusArea : CrInt16u" translated="Focus Area" />
+    </locale>
+    <locale name="en_GB">
+    <strings original="enum CrFnumberSet : CrInt16u" translated="Set F Number" />
+    <strings original="enum CrShutterSpeedSet : CrInt32u" translated="Shutter Speed Set" />
+    <strings original="enum CrISOMode : CrInt32u" translated="ISO Mode" />
+    <strings original="enum CrExposureProgram : CrInt32u" translated="Exposure Program" />
+    <strings original="enum CrWhiteBalanceSetting : CrInt16u" translated="White Balance Setting" />
+    <strings original="enum CrFocusMode : CrInt16u" translated="Focus Mode" />
+    <strings original="enum CrDriveMode : CrInt32u" translated="Drive Mode" />
+    <strings original="enum CrFocusArea : CrInt16u" translated="Focus Area" />
+    </locale>
+    <locale name="en_IE">
+    <strings original="enum CrFnumberSet : CrInt16u" translated="Set F Number" />
+    <strings original="enum CrShutterSpeedSet : CrInt32u" translated="Shutter Speed Set" />
+    <strings original="enum CrISOMode : CrInt32u" translated="ISO Mode" />
+    <strings original="enum CrExposureProgram : CrInt32u" translated="Exposure Program" />
+    <strings original="enum CrWhiteBalanceSetting : CrInt16u" translated="White Balance Setting" />
+    <strings original="enum CrFocusMode : CrInt16u" translated="Focus Mode" />
+    <strings original="enum CrDriveMode : CrInt32u" translated="Drive Mode" />
+    <strings original="enum CrFocusArea : CrInt16u" translated="Focus Area" />
+    </locale>
+    <locale name="en_GB.ISO-8859-15">
+    <strings original="enum CrFnumberSet : CrInt16u" translated="Set F Number" />
+    <strings original="enum CrShutterSpeedSet : CrInt32u" translated="Shutter Speed Set" />
+    <strings original="enum CrISOMode : CrInt32u" translated="ISO Mode" />
+    <strings original="enum CrExposureProgram : CrInt32u" translated="Exposure Program" />
+    <strings original="enum CrWhiteBalanceSetting : CrInt16u" translated="White Balance Setting" />
+    <strings original="enum CrFocusMode : CrInt16u" translated="Focus Mode" />
+    <strings original="enum CrDriveMode : CrInt32u" translated="Drive Mode" />
+    <strings original="enum CrFocusArea : CrInt16u" translated="Focus Area" />
+    </locale>
+    <locale name="en_US.ISO-8859-15">
+    <strings original="enum CrFnumberSet : CrInt16u" translated="Set F Number" />
+    <strings original="enum CrShutterSpeedSet : CrInt32u" translated="Shutter Speed Set" />
+    <strings original="enum CrISOMode : CrInt32u" translated="ISO Mode" />
+    <strings original="enum CrExposureProgram : CrInt32u" translated="Exposure Program" />
+    <strings original="enum CrWhiteBalanceSetting : CrInt16u" translated="White Balance Setting" />
+    <strings original="enum CrFocusMode : CrInt16u" translated="Focus Mode" />
+    <strings original="enum CrDriveMode : CrInt32u" translated="Drive Mode" />
+    <strings original="enum CrFocusArea : CrInt16u" translated="Focus Area" />
+    </locale>
+    <locale name="en_GB.UTF-8">
+    <strings original="enum CrFnumberSet : CrInt16u" translated="Set F Number" />
+    <strings original="enum CrShutterSpeedSet : CrInt32u" translated="Shutter Speed Set" />
+    <strings original="enum CrISOMode : CrInt32u" translated="ISO Mode" />
+    <strings original="enum CrExposureProgram : CrInt32u" translated="Exposure Program" />
+    <strings original="enum CrWhiteBalanceSetting : CrInt16u" translated="White Balance Setting" />
+    <strings original="enum CrFocusMode : CrInt16u" translated="Focus Mode" />
+    <strings original="enum CrDriveMode : CrInt32u" translated="Drive Mode" />
+    <strings original="enum CrFocusArea : CrInt16u" translated="Focus Area" />
+    </locale>
+    <locale name="en_US.UTF-8">
+    <strings original="enum CrFnumberSet : CrInt16u" translated="Set F Number" />
+    <strings original="enum CrShutterSpeedSet : CrInt32u" translated="Shutter Speed Set" />
+    <strings original="enum CrISOMode : CrInt32u" translated="ISO Mode" />
+    <strings original="enum CrExposureProgram : CrInt32u" translated="Exposure Program" />
+    <strings original="enum CrWhiteBalanceSetting : CrInt16u" translated="White Balance Setting" />
+    <strings original="enum CrFocusMode : CrInt16u" translated="Focus Mode" />
+    <strings original="enum CrDriveMode : CrInt32u" translated="Drive Mode" />
+    <strings original="enum CrFocusArea : CrInt16u" translated="Focus Area" />
+    </locale>
+    <locale name="en_ZA">
+    <strings original="enum CrFnumberSet : CrInt16u" translated="Set F Number" />
+    <strings original="enum CrShutterSpeedSet : CrInt32u" translated="Shutter Speed Set" />
+    <strings original="enum CrISOMode : CrInt32u" translated="ISO Mode" />
+    <strings original="enum CrExposureProgram : CrInt32u" translated="Exposure Program" />
+    <strings original="enum CrWhiteBalanceSetting : CrInt16u" translated="White Balance Setting" />
+    <strings original="enum CrFocusMode : CrInt16u" translated="Focus Mode" />
+    <strings original="enum CrDriveMode : CrInt32u" translated="Drive Mode" />
+    <strings original="enum CrFocusArea : CrInt16u" translated="Focus Area" />
+    </locale>
+    <locale name="en_IL">
+    <strings original="enum CrFnumberSet : CrInt16u" translated="Set F Number" />
+    <strings original="enum CrShutterSpeedSet : CrInt32u" translated="Shutter Speed Set" />
+    <strings original="enum CrISOMode : CrInt32u" translated="ISO Mode" />
+    <strings original="enum CrExposureProgram : CrInt32u" translated="Exposure Program" />
+    <strings original="enum CrWhiteBalanceSetting : CrInt16u" translated="White Balance Setting" />
+    <strings original="enum CrFocusMode : CrInt16u" translated="Focus Mode" />
+    <strings original="enum CrDriveMode : CrInt32u" translated="Drive Mode" />
+    <strings original="enum CrFocusArea : CrInt16u" translated="Focus Area" />
+    </locale>
+    <locale name="jp_JP">	
+    <strings original="enum CrFnumberSet:Crint16U"translated="F（絞り）番号を設定します。"/>
+    <strings original="enum CrShutterSpeedSet:Crint32U"translated="シャッタースピードセット"/>
+    <strings original="enum CrISOMode:Crint32U"translated="ISOモード"/>
+    <strings original="enum CrExposureProgram:Crint32U"translated="露出プログラム"/>
+    <strings original="enum CrWhiteBalanceSetting:Crint16U"translated="ホワイトバランス設定"/>
+    <strings original="enum CrFocusMode:Crint16U"translated="フォーカスモード"/>
+    <strings original="enum CrDriveMode:Crint32U"translated="ドライブモード"/>
+    <strings original="enum CrFocusArea:Crint16U"translated="フォーカスエリア"/>
+    </locale>
+    </localization>	
+</mavlinkcamera>
