@@ -28,7 +28,7 @@
         <option name="F4.5" value="450"/>		
 	<option name="F5.0" value="500"/>
         <option name="F5.6" value="560"/>
-        <option name="F6,3" value="630"/>
+        <option name="F6.3" value="630"/>
         <option name="F7.1" value="710"/>
         <option name="F8.0" value="800"/>		
         <option name="F9.0" value="900"/>
@@ -382,14 +382,14 @@
     <strings original="enum CrFocusArea : CrInt16u" translated="Focus Area" />
     </locale>
     <locale name="jp_JP">	
-    <strings original="enum CrFnumberSet:Crint16U"translated="F（絞り）番号を設定します。"/>
-    <strings original="enum CrShutterSpeedSet:Crint32U"translated="シャッタースピードセット"/>
-    <strings original="enum CrISOMode:Crint32U"translated="ISOモード"/>
-    <strings original="enum CrExposureProgram:Crint32U"translated="露出プログラム"/>
-    <strings original="enum CrWhiteBalanceSetting:Crint16U"translated="ホワイトバランス設定"/>
-    <strings original="enum CrFocusMode:Crint16U"translated="フォーカスモード"/>
-    <strings original="enum CrDriveMode:Crint32U"translated="ドライブモード"/>
-    <strings original="enum CrFocusArea:Crint16U"translated="フォーカスエリア"/>
+    <strings original="enum CrFnumberSet:Crint16U" translated="F（絞り）番号を設定します。"/>
+    <strings original="enum CrShutterSpeedSet:Crint32U" translated="シャッタースピードセット"/>
+    <strings original="enum CrISOMode:Crint32U" translated="ISOモード"/>
+    <strings original="enum CrExposureProgram:Crint32U" translated="露出プログラム"/>
+    <strings original="enum CrWhiteBalanceSetting:Crint16U" translated="ホワイトバランス設定"/>
+    <strings original="enum CrFocusMode:Crint16U" translated="フォーカスモード"/>
+    <strings original="enum CrDriveMode:Crint32U" translated="ドライブモード"/>
+    <strings original="enum CrFocusArea:Crint16U" translated="フォーカスエリア"/>
     </locale>
     </localization>	
 </mavlinkcamera>
