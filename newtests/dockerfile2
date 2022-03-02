@@ -7,7 +7,8 @@
 # sudo docker build -t flask .
 
 # Specifying the Base Image
-FROM python:3.5.2-alpine
+#FROM python:3.5.2-alpine
+FROM python:3.8
 
 # home directory                                                 
 ARG project_dir=/home/pi/cams/src/acp/sonyCam/docker
