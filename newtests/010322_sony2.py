@@ -7424,7 +7424,38 @@ async def processMavlinkMessageData(fm, cID, sleep, sonycam=0, caminst=0, redeye
         print(f'{sleep} seconds')
         sleep -= 1
     fm.task_control_1 = 0
-    
+
+# 
+# =================================================================== buffer flushing routines ==================================================================
+#
+async def read_mav_buffer(the_connection):
+"""this functions purpose is to just read the overloaded buffer quick and flush out the records."""
+    loop = 100                                                                                  # realistic records to read under overload in the tome period (timeout means normal input rate)
+    while loop >= 1:
+        print("im flushing.............")
+        msg = the_connection.recv_match(blocking=True, timeout=2)
+        if (msg is None):                                                                       # timeout with nothing just return 
+            return None
+		loop -= 1
+	return loop
+	
+async def flush_mavlink_buffer(the_connection):
+"""flush_mavlink_buffer: Flush the buffer -> if we timeout then we have read all the records in it, otherwise repeat the read attempts number of times."""
+    print("\033[32m Buffer Flushing Active ! \033[0m")
+	attempts = 3                                                                                # number of times we read before returning
+	timeout_s = 1.0                                                                             # timeout on buffer 
+	result = None
+	while attempts >= 1:
+        try:
+            result = await asyncio.wait_for(read_mav_buffer(the_connection), timeout=timeout_s)
+        except asyncio.TimeoutError:
+            print('\033[32m Buffer Flushing Completed ! \033[0m')
+            return None
+        if result == None:
+		    attempts = 1
+		attempts -= 1
+    print(f"\033[32m Buffer Flushing after 3 operations returned {result} records in {timeout_s} seconds ! \033[0m")
+	return result
 #
 # @#= delete above after daemon tested
 #
