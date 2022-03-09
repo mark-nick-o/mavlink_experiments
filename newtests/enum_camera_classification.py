@@ -3,6 +3,7 @@
 #
 
 import enum
+import re
 
 # --------------- each camera has a set of enumerations for each functionality and its available options --------------------------------------
  
@@ -49,7 +50,9 @@ class sonyClassAlpha7WhiteBalanceOptions(enum.IntEnum):
     CrWhiteBalance_Custom_1 = 12
     CrWhiteBalance_Custom_2 = 13
     CrWhiteBalance_Custom_3 = 14
-
+    # test unit only
+    #CrWhiteBalance_Custom = 15
+    
 # =========================== Focus Mode ==============================================================
 
 class sonyClassFocusModeCpEnums(enum.IntEnum):
@@ -722,8 +725,8 @@ class sonyAlphaNewCamera():
     def match_name_enum( self, nameS,eClass ):
         #pattern = re.compile(nameS)
         for s in sorted(eClass):
-            if not s.name.find(nameS) == -1:
-            #if (re.search(pattern, s.name.upper())==True):
+            #if not s.name.find(nameS) == -1:
+            if not (re.fullmatch(nameS, s.name)==None):
                 #print(f" value {s.value} {s.value}")
                 return s.value
         return None
@@ -760,8 +763,8 @@ class sonyAlphaNewCamera():
         #pattern = re.compile(my_model)
         for model_name, model_id in CAMERA_MODELS_DATA.items():
             if not model_name == None:
-                if not model_name.find(my_model) == -1:
-                #if (re.search(pattern, model_name.upper())==True):
+                #if not model_name.find(my_model) == -1:
+                if  not (re.fullmatch(my_model, model_name)==None):
                     my_data_set = CAMERA_FEATURE_DATA[model_name]
                     return my_data_set,model_id
         return None
@@ -820,6 +823,7 @@ if __name__ == '__main__':
     cam1_data, cam1_id = droneCam.getDataForModel('SonyAlfa7')   
     print(f" sonyAlfa7:: whitebalance enum for 2 is {droneCam.getEnumFromOption( 2, cam1_data, 'white_bal' )}")
     print(f" sonyAlfa7:: whitebalance option for 256 is {droneCam.getOptionFromEnum( 256, cam1_data, 'white_bal' )}")
+    print(f" sonyAlfa7:: whitebalance option for 260 is {droneCam.getOptionFromEnum( 260, cam1_data, 'white_bal' )}")
     
     print(f" sonyAlfa7:: iso enum for 2 is {droneCam.getEnumFromOption( 2, cam1_data, 'iso' )}")
     print(f" sonyAlfa7:: iso option for 800 is {droneCam.getOptionFromEnum( 800, cam1_data, 'iso' )}")
@@ -834,10 +838,9 @@ if __name__ == '__main__':
     print(f" sonyAlfa7:: shutter_speed option for 66786 is {droneCam.getOptionFromEnum( 66786, cam1_data, 'shutter_speed' )}")
     
     print(f" sonyAlfa7:: still_cap_mode enum for 2 is {droneCam.getEnumFromOption( 2, cam1_data, 'still_cap_mode' )}")
-    print(f" sonyAlfa7:: still_cap_mode option for 262921 is {droneCam.getOptionFromEnum( 262921, cam1_data, 'still_cap_mode' )}")
+    print(f" sonyAlfa7:: still_cap_mode option for 65541 is {droneCam.getOptionFromEnum( 65541, cam1_data, 'still_cap_mode' )}")
+    print(f" sonyAlfa7:: still_cap_mode option for 65540 is {droneCam.getOptionFromEnum( 65540, cam1_data, 'still_cap_mode' )}")
     
     print(f" sonyAlfa7:: aperture enum for 2 is {droneCam.getEnumFromOption( 2, cam1_data, 'aperture' )}")
     print(f" sonyAlfa7:: aperture option for 1300 is {droneCam.getOptionFromEnum( 1300, cam1_data, 'aperture' )}")
-    
-    
     
