@@ -19,6 +19,7 @@ import logging
 import signal
 
 import time
+import logging
 
 class fastGlobals:
     __slots__ = ('take_picture','start_video',) # __slots__ defines a fast variable
@@ -1084,7 +1085,7 @@ class sonyAlphaNewCamera():
         # p3 = subprocess.Popen(["grep", "cancelled"], stdin=s.stdout, stdout=subprocess.PIPE)
         # output2 = p3.communicate()[0]
         
-        z = output.decode('ascii')         # convert bytes array output to ascii string 
+        z = output.decode('utf-8')         # convert bytes array output to utf-8 string 
         a = shlex.split(z)                 # split this unique output into fields separated by commas
         #
         # Using this parser as it sometimes missed the bracket at the start (odd??) in the popen output
@@ -1127,7 +1128,7 @@ class sonyAlphaNewCamera():
         output=s.stdout
         #s.stdout.close()
               
-        z = output.decode('ascii')         # convert bytes array output to ascii string 
+        z = output.decode('utf-8')         # convert bytes array output to utf-8 string 
         a = shlex.split(z)                 # split this unique output into fields separated by commas
 
         #    alternative using file........
@@ -1200,7 +1201,7 @@ class sonyAlphaNewCamera():
         # p3 = subprocess.Popen(["grep", "cancelled"], stdin=s.stdout, stdout=subprocess.PIPE)
         # output2 = p3.communicate()[0]
         
-        z = output.decode('ascii')         # convert bytes array output to ascii string 
+        z = output.decode('utf-8')         # convert bytes array output to utf-8 string 
         a = shlex.split(z)                 # split this unique output into fields separated by commas
         #
         # Using this parser as it sometimes missed the bracket at the start (odd??) in the popen output
@@ -1243,7 +1244,7 @@ class sonyAlphaNewCamera():
         output=s.stdout
         #s.stdout.close()
               
-        z = output.decode('ascii')         # convert bytes array output to ascii string 
+        z = output.decode('utf-8')         # convert bytes array output to utf-8 string 
         a = shlex.split(z)                 # split this unique output into fields separated by commas
         
         #
@@ -1307,7 +1308,7 @@ class sonyAlphaNewCamera():
         # p3 = subprocess.Popen(["grep", "cancelled"], stdin=s.stdout, stdout=subprocess.PIPE)
         # output2 = p3.communicate()[0]
         
-        z = output.decode('ascii')         # convert bytes array output to ascii string 
+        z = output.decode('utf-8')         # convert bytes array output to utf-8 string 
         a = shlex.split(z)                 # split this unique output into fields separated by commas
         #
         # Using this parser as it sometimes missed the bracket at the start (odd??) in the popen output
@@ -1350,7 +1351,7 @@ class sonyAlphaNewCamera():
         output=s.stdout
         #s.stdout.close()
               
-        z = output.decode('ascii')         # convert bytes array output to ascii string 
+        z = output.decode('utf-8')         # convert bytes array output to utf-8 string 
         a = shlex.split(z)                 # split this unique output into fields separated by commas
         
         #
@@ -1414,7 +1415,7 @@ class sonyAlphaNewCamera():
         # p3 = subprocess.Popen(["grep", "cancelled"], stdin=s.stdout, stdout=subprocess.PIPE)
         # output2 = p3.communicate()[0]
         
-        z = output.decode('ascii')         # convert bytes array output to ascii string 
+        z = output.decode('utf-8')         # convert bytes array output to utf-8 string 
         a = shlex.split(z)                 # split this unique output into fields separated by commas
         #
         # Using this parser as it sometimes missed the bracket at the start (odd??) in the popen output
@@ -1457,7 +1458,7 @@ class sonyAlphaNewCamera():
         output=s.stdout
         #s.stdout.close()
               
-        z = output.decode('ascii')         # convert bytes array output to ascii string 
+        z = output.decode('utf-8')         # convert bytes array output to utf-8 string 
         a = shlex.split(z)                 # split this unique output into fields separated by commas
         
         #
@@ -1521,7 +1522,7 @@ class sonyAlphaNewCamera():
         # p3 = subprocess.Popen(["grep", "cancelled"], stdin=s.stdout, stdout=subprocess.PIPE)
         # output2 = p3.communicate()[0]
         
-        z = output.decode('ascii')         # convert bytes array output to ascii string 
+        z = output.decode('utf-8')         # convert bytes array output to utf-8 string 
         a = shlex.split(z)                 # split this unique output into fields separated by commas
         #
         # Using this parser as it sometimes missed the bracket at the start (odd??) in the popen output
@@ -1564,7 +1565,7 @@ class sonyAlphaNewCamera():
         output=s.stdout
         #s.stdout.close()
               
-        z = output.decode('ascii')         # convert bytes array output to ascii string 
+        z = output.decode('utf-8')         # convert bytes array output to utf-8 string 
         a = shlex.split(z)                 # split this unique output into fields separated by commas
         
         #
@@ -1628,7 +1629,7 @@ class sonyAlphaNewCamera():
         # p3 = subprocess.Popen(["grep", "cancelled"], stdin=s.stdout, stdout=subprocess.PIPE)
         # output2 = p3.communicate()[0]
         
-        z = output.decode('ascii')         # convert bytes array output to ascii string 
+        z = output.decode('utf-8')         # convert bytes array output to utf-8 string 
         zz = z.replace("\"","")            # get rid of the inch symbol it will crash us
         a = shlex.split(zz)                 # split this unique output into fields separated by commas
         #
@@ -1672,7 +1673,7 @@ class sonyAlphaNewCamera():
         output=s.stdout
         #s.stdout.close()
               
-        z = output.decode('ascii')         # convert bytes array output to ascii string 
+        z = output.decode('utf-8')         # convert bytes array output to utf-8 string 
         zz = z.replace("\"","")            # get rid of the inch symbol it will crash us
         a = shlex.split(zz)                # split this unique output into fields separated by commas
        
@@ -1738,7 +1739,7 @@ class sonyAlphaNewCamera():
         # p3 = subprocess.Popen(["grep", "cancelled"], stdin=s.stdout, stdout=subprocess.PIPE)
         # output2 = p3.communicate()[0]
         
-        z = output.decode('ascii')         # convert bytes array output to ascii string 
+        z = output.decode('utf-8')         # convert bytes array output to utf-8 string 
         a = shlex.split(z)                 # split this unique output into fields separated by commas
         #
         # Using this parser as it sometimes missed the bracket at the start (odd??) in the popen output
@@ -1781,7 +1782,7 @@ class sonyAlphaNewCamera():
         output=s.stdout
         #s.stdout.close()
               
-        z = output.decode('ascii')         # convert bytes array output to ascii string 
+        z = output.decode('utf-8')         # convert bytes array output to utf-8 string 
         a = shlex.split(z)                 # split this unique output into fields separated by commas
         
         #
@@ -1845,7 +1846,7 @@ class sonyAlphaNewCamera():
         # p3 = subprocess.Popen(["grep", "cancelled"], stdin=s.stdout, stdout=subprocess.PIPE)
         # output2 = p3.communicate()[0]
         
-        z = output.decode('ascii')         # convert bytes array output to ascii string 
+        z = output.decode('utf-8')         # convert bytes array output to utf-8 string 
         a = shlex.split(z)                 # split this unique output into fields separated by commas
         #
         # Using this parser as it sometimes missed the bracket at the start (odd??) in the popen output
@@ -1888,7 +1889,7 @@ class sonyAlphaNewCamera():
         output=s.stdout
         #s.stdout.close()
               
-        z = output.decode('ascii')         # convert bytes array output to ascii string 
+        z = output.decode('utf-8')         # convert bytes array output to utf-8 string 
         a = shlex.split(z)                 # split this unique output into fields separated by commas
         
         #
@@ -1951,7 +1952,7 @@ class sonyAlphaNewCamera():
         # p3 = subprocess.Popen(["grep", "cancelled"], stdin=s.stdout, stdout=subprocess.PIPE)
         # output2 = p3.communicate()[0]
         
-        z = output.decode('ascii')         # convert bytes array output to ascii string 
+        z = output.decode('utf-8')         # convert bytes array output to utf-8 string 
         a = shlex.split(z)                 # split this unique output into fields separated by commas
         #
         # Using this parser as it sometimes missed the bracket at the start (odd??) in the popen output
@@ -1995,7 +1996,7 @@ class sonyAlphaNewCamera():
         # p3 = subprocess.Popen(["grep", "cancelled"], stdin=s.stdout, stdout=subprocess.PIPE)
         # output2 = p3.communicate()[0]
         
-        z = output.decode('ascii')         # convert bytes array output to ascii string 
+        z = output.decode('utf-8')         # convert bytes array output to utf-8 string 
         a = shlex.split(z)                 # split this unique output into fields separated by commas
         #
         # Using this parser as it sometimes missed the bracket at the start (odd??) in the popen output
@@ -2039,7 +2040,7 @@ class sonyAlphaNewCamera():
         # p3 = subprocess.Popen(["grep", "cancelled"], stdin=s.stdout, stdout=subprocess.PIPE)
         # output2 = p3.communicate()[0]
         
-        z = output.decode('ascii')         # convert bytes array output to ascii string 
+        z = output.decode('utf-8')         # convert bytes array output to utf-8 string 
         a = shlex.split(z)                 # split this unique output into fields separated by commas
         #
         # Using this parser as it sometimes missed the bracket at the start (odd??) in the popen output
@@ -2083,7 +2084,7 @@ class sonyAlphaNewCamera():
         # p3 = subprocess.Popen(["grep", "cancelled"], stdin=s.stdout, stdout=subprocess.PIPE)
         # output2 = p3.communicate()[0]
         
-        z = output.decode('ascii')         # convert bytes array output to ascii string 
+        z = output.decode('utf-8')         # convert bytes array output to utf-8 string 
         a = shlex.split(z)                 # split this unique output into fields separated by commas
         #
         # Using this parser as it sometimes missed the bracket at the start (odd??) in the popen output
@@ -2127,7 +2128,7 @@ class sonyAlphaNewCamera():
         # p3 = subprocess.Popen(["grep", "cancelled"], stdin=s.stdout, stdout=subprocess.PIPE)
         # output2 = p3.communicate()[0]
         
-        z = output.decode('ascii')         # convert bytes array output to ascii string 
+        z = output.decode('utf-8')         # convert bytes array output to utf-8 string 
         a = shlex.split(z)                 # split this unique output into fields separated by commas
         #
         # Using this parser as it sometimes missed the bracket at the start (odd??) in the popen output
@@ -2171,7 +2172,7 @@ class sonyAlphaNewCamera():
         # p3 = subprocess.Popen(["grep", "cancelled"], stdin=s.stdout, stdout=subprocess.PIPE)
         # output2 = p3.communicate()[0]
         
-        z = output.decode('ascii')         # convert bytes array output to ascii string 
+        z = output.decode('utf-8')         # convert bytes array output to utf-8 string 
         a = shlex.split(z)                 # split this unique output into fields separated by commas
         #
         # Using this parser as it sometimes missed the bracket at the start (odd??) in the popen output
@@ -2215,7 +2216,7 @@ class sonyAlphaNewCamera():
         # p3 = subprocess.Popen(["grep", "cancelled"], stdin=s.stdout, stdout=subprocess.PIPE)
         # output2 = p3.communicate()[0]
         
-        z = output.decode('ascii')         # convert bytes array output to ascii string 
+        z = output.decode('utf-8')         # convert bytes array output to utf-8 string 
         a = shlex.split(z)                 # split this unique output into fields separated by commas
         #
         # Using this parser as it sometimes missed the bracket at the start (odd??) in the popen output
@@ -2259,7 +2260,7 @@ class sonyAlphaNewCamera():
         # p3 = subprocess.Popen(["grep", "cancelled"], stdin=s.stdout, stdout=subprocess.PIPE)
         # output2 = p3.communicate()[0]
         
-        z = output.decode('ascii')         # convert bytes array output to ascii string 
+        z = output.decode('utf-8')         # convert bytes array output to utf-8 string 
         zz = z.replace("\"","")            # remove quoate mark meaning seconds
         a = shlex.split(zz)                 # split this unique output into fields separated by commas
         #
@@ -2304,18 +2305,18 @@ class sonyAlphaNewCamera():
             if (len(ans) > 0):
                 print(f" Exposure Prog Mode = {ans}")
                 try:
-                    SonyObject = memoryValue('S_EX_PRO_MODE',int(ans[0]))
+                    SonyObject = memoryValue('CAM_EXPMODE',int(ans[0]))
                     with SonyObject.updateNeeded.get_lock():
                         SonyObject.updateNeeded.value = True 
                 except Exception as err_msg:
                     print("\033[31m Failed set the object to initial value : %s \033[0m" % (err_msg))
-                    SonyObject = memoryValue('S_EX_PRO_MODE',0) 
+                    SonyObject = memoryValue('CAM_EXPMODE',0) 
             else:
                 print("\033[31m Failed get the camera ExPro \033[0m")
-                SonyObject = memoryValue('S_EX_PRO_MODE',0)             
+                SonyObject = memoryValue('CAM_EXPMODE',0)             
         else:
             print("\033[31m Cant get Exposure Prog Mode \033[0m")
-            SonyObject = memoryValue('S_EX_PRO_MODE',0)
+            SonyObject = memoryValue('CAM_EXPMODE',0)
 
         SonyObject.index = memoryValue.numberOfVals 
         print(f"Expro : created object number : {SonyObject.index}")
@@ -2345,18 +2346,18 @@ class sonyAlphaNewCamera():
             if (len(ans) > 0):
                 print(f" Aperture = {ans}")
                 try:
-                    SonyObject = memoryValue('S_APERTURE',int(ans[0]))
+                    SonyObject = memoryValue('CAM_APERTURE',int(ans[0]))
                     with SonyObject.updateNeeded.get_lock():
                         SonyObject.updateNeeded.value = True 
                 except Exception as err_msg:
                     print("\033[31m Failed set the object to initial value : %s \033[0m" % (err_msg))
-                    SonyObject = memoryValue('S_APERTURE',0) 
+                    SonyObject = memoryValue('CAM_APERTURE',0) 
             else:
                 print("\033[31m Failed get the camera aperture \033[0m")
-                SonyObject = memoryValue('S_APERTURE',0)  
+                SonyObject = memoryValue('CAM_APERTURE',0)  
         else:
             print("\033[31m Cant get Aperture \033[0m")
-            SonyObject = memoryValue('S_APERTURE',0)  
+            SonyObject = memoryValue('CAM_APERTURE',0)  
 
         SonyObject.index = memoryValue.numberOfVals 
         print(f"Aperture : created object number : {SonyObject.index}")             
@@ -2469,18 +2470,18 @@ class sonyAlphaNewCamera():
             if (len(ans) > 0):
                 print(f" ISO = {ans}")
                 try:
-                    SonyObject = memoryValue('S_ISO',int(ans[0]))
+                    SonyObject = memoryValue('CAM_ISO',int(ans[0]))
                     with SonyObject.updateNeeded.get_lock():
                         SonyObject.updateNeeded.value = True  
                 except Exception as err_msg:
                     print("\033[31m Failed set the iso object to initial value : %s \033[0m" % (err_msg))
-                    SonyObject = memoryValue('S_ISO',0) 
+                    SonyObject = memoryValue('CAM_ISO',0) 
             else:
                 print("\033[31m Failed get the camera iso \033[0m")
-                SonyObject = memoryValue('S_ISO',0) 
+                SonyObject = memoryValue('CAM_ISO',0) 
         else:
             print("\033[31m Cant get ISO \033[0m")
-            SonyObject = memoryValue('S_ISO',0) 
+            SonyObject = memoryValue('CAM_ISO',0) 
 
         SonyObject.index = memoryValue.numberOfVals 
         print(f"ISO : created object number : {SonyObject.index}")            
@@ -2510,18 +2511,18 @@ class sonyAlphaNewCamera():
             if (len(ans) > 0):
                 print(f" Shutter Speed =  {ans}")
                 try:
-                    SonyObject = memoryValue('S_SHUT_SPD',int(ans[0]))
+                    SonyObject = memoryValue('CAM_SHUTTERSPD',int(ans[0]))
                     with SonyObject.updateNeeded.get_lock():
                         SonyObject.updateNeeded.value = True  
                 except Exception as err_msg:
                     print("\033[31m Failed set the shut spd object to initial value : %s \033[0m" % (err_msg))
-                    SonyObject = memoryValue('S_SHUT_SPD',0) 
+                    SonyObject = memoryValue('CAM_SHUTTERSPD',0) 
             else:
                 print("\033[31m Failed get the camera shutter speed \033[0m")
-                SonyObject = memoryValue('S_SHUT_SPD',0) 
+                SonyObject = memoryValue('CAM_SHUTTERSPD',0) 
         else:
             print("\033[31m Cant get Shutter Speed \033[0m")
-            SonyObject = memoryValue('S_SHUT_SPD',0)
+            SonyObject = memoryValue('CAM_SHUTTERSPD',0)
             
         SonyObject.index = memoryValue.numberOfVals 
         print(f"Shut Speed : created object number : {SonyObject.index}")              
@@ -2551,18 +2552,18 @@ class sonyAlphaNewCamera():
             if (len(ans) > 0):
                 print(f" White Balance =  {ans}")
                 try:
-                    SonyObject = memoryValue('S_WHITE_BAL',int(ans[0]))
+                    SonyObject = memoryValue('CAM_WBMODE',int(ans[0]))
                     with SonyObject.updateNeeded.get_lock():
                         SonyObject.updateNeeded.value = True  
                 except Exception as err_msg:
                     print("\033[31m Failed set the object to initial value : %s \033[0m" % (err_msg))
-                    SonyObject = memoryValue('S_WHITE_BAL',0) 
+                    SonyObject = memoryValue('CAM_WBMODE',0) 
             else:
                 print("\033[31m Failed get the camera white balance \033[0m")
-                SonyObject = memoryValue('S_WHITE_BAL',0)         
+                SonyObject = memoryValue('CAM_WBMODE',0)         
         else:
             print("\033[31m Cant get Shutter Speed \033[0m")
-            SonyObject = memoryValue('S_WHITE_BAL',0)    
+            SonyObject = memoryValue('CAM_WBMODE',0)    
 
         SonyObject.index = memoryValue.numberOfVals 
         print(f"White Balance : created object number : {SonyObject.index}")            
@@ -3526,7 +3527,7 @@ class sonyAlphaNewCamera():
             if (myState == True):
                 try:
                     the_connection.mav.param_value_send(
-                        getName.encode('ascii'),
+                        getName.encode('utf-8'),
                         sendVal,
                         mavutil.mavlink.MAV_PARAM_TYPE_UINT32,
                         obj.numberOfVals,
@@ -3560,8 +3561,8 @@ class sonyAlphaNewCamera():
             if (myState == True):
                 try:
                     the_connection.mav.param_ext_value_send(
-                        getName.encode('ascii'),
-                        str(getValueforMAVSending).encode('ascii'),
+                        getName.encode('utf-8'),
+                        str(getValueforMAVSending).encode('utf-8'),
                         mavdefs.MAV_PARAM_EXT_TYPE_UINT32,
                         obj.numberOfVals,
                         obj.index)
@@ -4856,7 +4857,7 @@ class MAVFrame():
         d = struct.unpack('f', struct.pack('I', val))[0]
         try:
             the_connection.mav.param_value_send(
-            "S_ISO".encode('ascii'),
+            "CAM_ISO".encode('utf-8'),
             d,
             mavutil.mavlink.MAV_PARAM_TYPE_UINT32,
             8,
@@ -4872,7 +4873,7 @@ class MAVFrame():
         d = struct.unpack('f', struct.pack('I', val))[0]
         try:
             the_connection.mav.param_value_send(
-            "S_APERTURE".encode('ascii'),
+            "CAM_APERTURE".encode('utf-8'),
             d,
             mavutil.mavlink.MAV_PARAM_TYPE_UINT32,
             8,
@@ -4888,7 +4889,7 @@ class MAVFrame():
         d = struct.unpack('f', struct.pack('I', val))[0]
         try:
             the_connection.mav.param_value_send(
-            "S_EX_PRO_MODE".encode('ascii'),
+            "CAM_EXPMODE".encode('utf-8'),
             d,
             mavutil.mavlink.MAV_PARAM_TYPE_UINT32,
             8,
@@ -4904,7 +4905,7 @@ class MAVFrame():
         d = struct.unpack('f', struct.pack('I', val))[0]           
         try:
             the_connection.mav.param_value_send(
-            "S_FOCUS_MODE".encode('ascii'),
+            "S_FOCUS_MODE".encode('utf-8'),
             d,
             mavutil.mavlink.MAV_PARAM_TYPE_UINT32,
             8,
@@ -4920,7 +4921,7 @@ class MAVFrame():
         p = struct.unpack('f', struct.pack('I', val))[0] 
         try:
             the_connection.mav.param_value_send(
-            "S_FOCUS_AREA".encode('ascii'),
+            "S_FOCUS_AREA".encode('utf-8'),
             p,
             mavutil.mavlink.MAV_PARAM_TYPE_UINT32,
             8,
@@ -4936,7 +4937,7 @@ class MAVFrame():
         d = struct.unpack('f', struct.pack('I', val))[0]
         try:
             the_connection.mav.param_value_send(
-            "S_SHUT_SPD".encode('ascii'),
+            "CAM_SHUTTERSPD".encode('utf-8'),
             d,
             mavutil.mavlink.MAV_PARAM_TYPE_UINT32,
             8,
@@ -4952,7 +4953,7 @@ class MAVFrame():
         d = struct.unpack('f', struct.pack('I', val))[0]
         try:
             the_connection.mav.param_value_send(
-            "S_WHITE_BAL".encode('ascii'),
+            "CAM_WBMODE".encode('utf-8'),
             d,
             mavutil.mavlink.MAV_PARAM_TYPE_UINT32,
             8,
@@ -4968,7 +4969,7 @@ class MAVFrame():
         d = struct.unpack('f', struct.pack('I', val))[0]
         try:
             the_connection.mav.param_value_send(
-            "S_STILL_CAP".encode('ascii'),
+            "S_STILL_CAP".encode('utf-8'),
             d,
             mavutil.mavlink.MAV_PARAM_TYPE_UINT32,
             8,
@@ -4984,8 +4985,8 @@ class MAVFrame():
         d = str(val)
         try:
             the_connection.mav.param_ext_value_send(
-            "S_ISO".encode('ascii'),
-            d.encode('ascii'),
+            "CAM_ISO".encode('utf-8'),
+            d.encode('utf-8'),
             mavdefs.MAV_PARAM_EXT_TYPE_UINT32,
             8,
             1)
@@ -5000,8 +5001,8 @@ class MAVFrame():
         d = str(val)
         try:
             the_connection.mav.param_ext_value_send(
-            "S_APERTURE".encode('ascii'),
-            d.encode('ascii'),
+            "CAM_APERTURE".encode('utf-8'),
+            d.encode('utf-8'),
             mavdefs.MAV_PARAM_EXT_TYPE_UINT32,
             8,
             2)
@@ -5016,8 +5017,8 @@ class MAVFrame():
         d = str(val)
         try:
             the_connection.mav.param_ext_value_send(
-            "S_EX_PRO_MODE".encode('ascii'),
-            d.encode('ascii'),
+            "CAM_EXPMODE".encode('utf-8'),
+            d.encode('utf-8'),
             mavdefs.MAV_PARAM_EXT_TYPE_UINT32,
             8,
             3)
@@ -5032,8 +5033,8 @@ class MAVFrame():
         d = str(val)           
         try:
             the_connection.mav.param_ext_value_send(
-            "S_FOCUS_MODE".encode('ascii'),
-            d.encode('ascii'),
+            "S_FOCUS_MODE".encode('utf-8'),
+            d.encode('utf-8'),
             mavdefs.MAV_PARAM_EXT_TYPE_UINT32,
             8,
             4)
@@ -5048,8 +5049,8 @@ class MAVFrame():
         p = str(val) 
         try:
             the_connection.mav.param_ext_value_send(
-            "S_FOCUS_AREA".encode('ascii'),
-            p.encode('ascii'),
+            "S_FOCUS_AREA".encode('utf-8'),
+            p.encode('utf-8'),
             mavdefs.MAV_PARAM_EXT_TYPE_UINT32,
             8,
             5)
@@ -5064,8 +5065,8 @@ class MAVFrame():
         d = str(val)
         try:
             the_connection.mav.param_ext_value_send(
-            "S_SHUT_SPD".encode('ascii'),
-            d.encode('ascii'),
+            "CAM_SHUTTERSPD".encode('utf-8'),
+            d.encode('utf-8'),
             mavdefs.MAV_PARAM_EXT_TYPE_UINT32,
             8,
             6)
@@ -5080,8 +5081,8 @@ class MAVFrame():
         d = str(val)
         try:
             the_connection.mav.param_ext_value_send(
-            "S_WHITE_BAL".encode('ascii'),
-            d.encode('ascii'),
+            "CAM_WBMODE".encode('utf-8'),
+            d.encode('utf-8'),
             mavdefs.MAV_PARAM_EXT_TYPE_UINT32,
             8,
             7)
@@ -5096,8 +5097,8 @@ class MAVFrame():
         d = str(val)
         try:
             the_connection.mav.param_ext_value_send(
-            "S_STILL_CAP".encode('ascii'),
-            d.encode('ascii'),
+            "S_STILL_CAP".encode('utf-8'),
+            d.encode('utf-8'),
             mavdefs.MAV_PARAM_EXT_TYPE_UINT32,
             8,
             8)
@@ -5112,7 +5113,7 @@ class MAVFrame():
         d = struct.unpack('f', struct.pack('I', 1))[0]
         try:
             the_connection.mav.param_value_send(
-            "S_ISO".encode('ascii'),
+            "CAM_ISO".encode('utf-8'),
             d,
             mavutil.mavlink.MAV_PARAM_TYPE_UINT32,
             8,
@@ -5124,7 +5125,7 @@ class MAVFrame():
         d = struct.unpack('f', struct.pack('I', 10))[0]
         try:
             the_connection.mav.param_value_send(
-            "S_APERTURE".encode('ascii'),
+            "CAM_APERTURE".encode('utf-8'),
             d,
             mavutil.mavlink.MAV_PARAM_TYPE_UINT32,
             8,
@@ -5136,7 +5137,7 @@ class MAVFrame():
         d = struct.unpack('f', struct.pack('I', 30))[0]
         try:
             the_connection.mav.param_value_send(
-            "S_EX_PRO_MODE".encode('ascii'),
+            "CAM_EXPMODE".encode('utf-8'),
             d,
             mavutil.mavlink.MAV_PARAM_TYPE_UINT32,
             8,
@@ -5148,7 +5149,7 @@ class MAVFrame():
         d = struct.unpack('f', struct.pack('I', 5))[0]           
         try:
             the_connection.mav.param_value_send(
-            "S_FOCUS_MODE".encode('ascii'),
+            "S_FOCUS_MODE".encode('utf-8'),
             d,
             mavutil.mavlink.MAV_PARAM_TYPE_UINT32,
             8,
@@ -5160,7 +5161,7 @@ class MAVFrame():
         p = struct.unpack('f', struct.pack('I', 11))[0] 
         try:
             the_connection.mav.param_value_send(
-            "S_FOCUS_AREA".encode('ascii'),
+            "S_FOCUS_AREA".encode('utf-8'),
             p,
             mavutil.mavlink.MAV_PARAM_TYPE_UINT32,
             8,
@@ -5172,7 +5173,7 @@ class MAVFrame():
         d = struct.unpack('f', struct.pack('I', 675))[0]
         try:
             the_connection.mav.param_value_send(
-            "S_SHUT_SPD".encode('ascii'),
+            "CAM_SHUTTERSPD".encode('utf-8'),
             d,
             mavutil.mavlink.MAV_PARAM_TYPE_UINT32,
             8,
@@ -5184,7 +5185,7 @@ class MAVFrame():
         d = struct.unpack('f', struct.pack('I', 76))[0]
         try:
             the_connection.mav.param_value_send(
-            "S_WHITE_BAL".encode('ascii'),
+            "CAM_WBMODE".encode('utf-8'),
             d,
             mavutil.mavlink.MAV_PARAM_TYPE_UINT32,
             8,
@@ -5196,7 +5197,7 @@ class MAVFrame():
         d = struct.unpack('f', struct.pack('I', 7))[0]
         try:
             the_connection.mav.param_value_send(
-            "S_STILL_CAP".encode('ascii'),
+            "S_STILL_CAP".encode('utf-8'),
             d,
             mavutil.mavlink.MAV_PARAM_TYPE_UINT32,
             8,
@@ -5217,7 +5218,7 @@ class MAVFrame():
         vendor_name = "ABB" 
         model_name = "BAC"
         #
-        # convert string to ascii list and make numpy array
+        # convert string to utf-8 list and make numpy array
         #
         vn = []
         mn = []
@@ -5238,7 +5239,7 @@ class MAVFrame():
         arr_model = [0] * 32
         arr_model[0] = ord("C")
 
-        #    "http://10.0.2.51/cam_defs/alpha_cam_new.xml".encode('ascii'))
+        #    "http://10.0.2.51/cam_defs/alpha_cam_new.xml".encode('utf-8'))
         print("\033[33m Sending camera information")
         try:
             the_connection.mav.camera_information_send(
@@ -5254,7 +5255,7 @@ class MAVFrame():
             0,
             391,
             1,
-            "http://10.0.2.51/cam_defs".encode('ascii'))
+            "http://10.0.2.51/cam_defs".encode('utf-8'))
             ret = True
         except Exception as err_msg:
             print("Failed to send camera information message : %s" % (err_msg))
@@ -5286,11 +5287,11 @@ class MAVFrame():
         #
         b8_numpy = np.array(b, np.uint8)
         #
-        # ascii string encoded
+        # utf-8 string encoded
         #
         nm = "storenm"
         try:
-            u8_model_name = (nm).encode("ascii")
+            u8_model_name = (nm).encode("utf-8")
         except Exception as err_msg:
             print("\033[32m Failed to SET storage information message : %s " % (err_msg))
         print(f" sending storage info {u8_model_name} type {type(u8_model_name)}")
@@ -5306,7 +5307,7 @@ class MAVFrame():
                 self.read_speed, 
                 self.write_speed,
                 1,
-                np.array(u8_model_name,np.uint8),
+                u8_model_name,
                 2)
             ret = True
         except Exception as err_msg:
@@ -5334,6 +5335,7 @@ class MAVFrame():
     def mavlink_send_video_stream_information(self, the_connection):
         #if self.mavlink10():
         print("    !!! sending the video stream information   !!! \n")
+        return True
         try:             
             the_connection.mav.video_stream_information_send(
                 self.stream_id, 
@@ -5347,8 +5349,8 @@ class MAVFrame():
                 self.rotation, 
                 self.hfov, 
                 #self.videoname, 
-                (self.videoname).encode('ascii'),
-                (self.video_uri).encode('ascii'))
+                (self.videoname).encode('utf-8'),
+                (self.video_uri).encode('utf-8'))
             ret = True
         except Exception as err_msg:
             print("Failed to send video stream information message : %s" % (err_msg))
@@ -5406,48 +5408,47 @@ class MAVFrame():
     # check with this function the order in python !!!!!!!!
     #
     def mavlink_send_param_ext_ack(self, the_connection, val, status_code, tag ):
-        
-        print("\033[38m acking the ext parameter iso") 
+        print("\033[33m acking the ext parameter iso \033[0m") 
         d = str(val)
         try:
             the_connection.mav.param_ext_ack_send(
             tag.encode('ascii'),
-            d,
+            d.encode('ascii'),
             mavdefs.MAV_PARAM_EXT_TYPE_UINT32,
             status_code)
             ret = True
         except Exception as err_msg: 
             print("Failed to send param value message 1: %s" % (err_msg))
             ret = False
+        return ret
 
-            
     def writeParamSetFromMavLink( self, msgString, mavObj, dataRcv, the_connection ):
 
         # must be EXACT tag match
-        #patternISO = re.compile(r"\bS_ISO\b")
-        #patternAper = re.compile(r"\bS_APERTURE\b")
-        #patternExPro = re.compile(r"\bS_EX_PRO_MODE\b")
+        #patternISO = re.compile(r"\bCAM_ISO\b")
+        #patternAper = re.compile(r"\bCAM_APERTURE\b")
+        #patternExPro = re.compile(r"\bCAM_EXPMODE\b")
         #patternFocus = re.compile(r"\bS_FOCUS_MODE\b")
         #patternFocA = re.compile(r"\bS_FOCUS_AREA\b")
-        #patternShSp = re.compile(r"\bS_SHUT_SPD\b")  
-        #patternWhiBal = re.compile(r"S_WHITE_BAL") 
+        #patternShSp = re.compile(r"\bCAM_SHUTTERSPD\b")  
+        #patternWhiBal = re.compile(r"CAM_WBMODE") 
         #patternStCa = re.compile(r"\bS_STILL_CAP\b") 
 
         if (len(msgString) == 0):
             print("zero length tag passed")
             return False
             
-        if not (msgString.find("S_ISO") == -1):
+        if not (msgString.find("CAM_ISO") == -1):
         #if (re.search(patternISO, msgString.upper())==True): 
             print(f"saw sonISO with {dataRcv}")
             if (mavObj.setMavIsoModeData( dataRcv )==True):
                 print(f"setMavIsoModeData sonISO with {dataRcv}")
                 return (self.mavlink_send_param_value_iso( the_connection, dataRcv )) 
-        elif not (msgString.find("S_APERTURE") == -1):
+        elif not (msgString.find("CAM_APERTURE") == -1):
         #elif (re.search(patternAper, msgString.upper())==True):
             if (mavObj.setMavApertureData( dataRcv )==True):        
                 return (self.mavlink_send_param_value_aper( the_connection, dataRcv ))          
-        elif not (msgString.find("S_EX_PRO_MODE") == -1):
+        elif not (msgString.find("CAM_EXPMODE") == -1):
         #elif (re.search(patternExPro, msgString.upper())==True): 
             if (mavObj.setMavExProData( dataRcv )==True):        
                 return (self.mavlink_send_param_value_expro( the_connection, dataRcv ))                   
@@ -5459,11 +5460,11 @@ class MAVFrame():
         #elif (re.search(patternFocus, msgString.upper())==True):
             if (mavObj.setMavFocusData( dataRcv )==True): 
                 return (self.mavlink_send_param_value_focus( the_connection, dataRcv ))                  
-        elif not (msgString.find("S_SHUT_SPD") == -1):
+        elif not (msgString.find("CAM_SHUTTERSPD") == -1):
         #elif (re.search(patternShSp, msgString.upper())==True):
             if (mavObj.setMavShutterData( dataRcv )==True):         
                 return (self.mavlink_send_param_value_shut_spd( the_connection, dataRcv ))                               
-        elif not (msgString.find("S_WHITE_BAL") == -1):
+        elif not (msgString.find("CAM_WBMODE") == -1):
         #elif (re.search(patternWhiBal, msgString.upper())==True): 
             if (mavObj.setMavWhiteBalData( dataRcv )==True):        
                 return (self.mavlink_send_param_value_white_bal( the_connection, dataRcv ))
@@ -5478,13 +5479,13 @@ class MAVFrame():
     def readParamSetFromMavLink( self, msgString, mavObj, the_connection ):
 
         # must be EXACT tag match
-        #patternISO = re.compile(r"\bS_ISO\b")
-        #patternAper = re.compile(r"\bS_APERTURE\b")
-        #patternExPro = re.compile(r"\bS_EX_PRO_MODE\b")
+        #patternISO = re.compile(r"\bCAM_ISO\b")
+        #patternAper = re.compile(r"\bCAM_APERTURE\b")
+        #patternExPro = re.compile(r"\bCAM_EXPMODE\b")
         #patternFocus = re.compile(r"\bS_FOCUS_MODE\b")
         #patternFocA = re.compile(r"\bS_FOCUS_AREA\b")
-        #patternShSp = re.compile(r"\bS_SHUT_SPD\b")  
-        #patternWhiBal = re.compile(r"S_WHITE_BAL") 
+        #patternShSp = re.compile(r"\bCAM_SHUTTERSPD\b")  
+        #patternWhiBal = re.compile(r"CAM_WBMODE") 
         #patternStCa = re.compile(r"\bS_STILL_CAP\b") 
 
         v = 0
@@ -5495,7 +5496,7 @@ class MAVFrame():
             print("zero length tag passed")
             return False
             
-        if not (msgString.find("S_ISO") == -1):
+        if not (msgString.find("CAM_ISO") == -1):
         #if (re.search(patternISO, msgString.upper())==True): 
             with mavObj.mav_req_all_param.get_lock():
                 mavObj.mav_req_all_param.value |= mavlinkSonyCamWriteVals.ParamIso                                     # >>> set the bit to enable full read of parameter
@@ -5504,7 +5505,7 @@ class MAVFrame():
                 return ( self.mavlink_send_param_value_iso( the_connection, v ) )
             else:
                 return False            
-        elif not (msgString.find("S_APERTURE") == -1):
+        elif not (msgString.find("CAM_APERTURE") == -1):
         #elif (re.search(patternAper, msgString.upper())==True): 
             with mavObj.mav_req_all_param.get_lock():
                 mavObj.mav_req_all_param.value |= mavlinkSonyCamWriteVals.ParamAperture                                # >>> set the bit to enable full read of parameter
@@ -5513,7 +5514,7 @@ class MAVFrame():
                 return ( self.mavlink_send_param_value_aper( the_connection, v ) )  
             else:
                 return False                 
-        elif not (msgString.find("S_EX_PRO_MODE") == -1):
+        elif not (msgString.find("CAM_EXPMODE") == -1):
         #elif (re.search(patternExPro, msgString.upper())==True): 
             with mavObj.mav_req_all_param.get_lock():
                 mavObj.mav_req_all_param.value |= mavlinkSonyCamWriteVals.ParamExPro                                   # >>> set the bit to enable full read of parameter
@@ -5540,7 +5541,7 @@ class MAVFrame():
                 return ( self.mavlink_send_param_value_focus( the_connection, v ) )
             else:
                 return False                 
-        elif not (msgString.find("S_SHUT_SPD") == -1):
+        elif not (msgString.find("CAM_SHUTTERSPD") == -1):
         #elif (re.search(patternShSp, msgString.upper())==True): 
             with mavObj.mav_req_all_param.get_lock():
                 mavObj.mav_req_all_param.value |= mavlinkSonyCamWriteVals.ParamShutSpd                                   # >>> set the bit to enable full read of parameter  
@@ -5549,7 +5550,7 @@ class MAVFrame():
                 return ( self.mavlink_send_param_value_shut_spd( the_connection, v ) )      
             else:
                 return False                 
-        elif not (msgString.find("S_WHITE_BAL") == -1):
+        elif not (msgString.find("CAM_WBMODE") == -1):
         #elif (re.search(patternWhiBal, msgString.upper())==True):  
             with mavObj.mav_req_all_param.get_lock():
                 mavObj.mav_req_all_param.value |= mavlinkSonyCamWriteVals.ParamWhiteBala                                   # >>> set the bit to enable full read of parameter  
@@ -5574,69 +5575,75 @@ class MAVFrame():
     def writeParamExtSetFromMavLink( self, msgString, mavObj, dataRcv, the_connection ):
 
         # must be EXACT tag match
-        #patternISO = re.compile(r"\bS_ISO\b")
-        #patternAper = re.compile(r"\bS_APERTURE\b")
-        #patternExPro = re.compile(r"\bS_EX_PRO_MODE\b")
+        #patternISO = re.compile(r"\bCAM_ISO\b")
+        #patternAper = re.compile(r"\bCAM_APERTURE\b")
+        #patternExPro = re.compile(r"\bCAM_EXPMODE\b")
         #patternFocus = re.compile(r"\bS_FOCUS_MODE\b")
         #patternFocA = re.compile(r"\bS_FOCUS_AREA\b")
-        #patternShSp = re.compile(r"\bS_SHUT_SPD\b")  
-        #patternWhiBal = re.compile(r"S_WHITE_BAL") 
+        #patternShSp = re.compile(r"\bCAM_SHUTTERSPD\b")  
+        #patternWhiBal = re.compile(r"CAM_WBMODE") 
         #patternStCa = re.compile(r"\bS_STILL_CAP\b") 
 
         ret = False
 
         if (len(msgString) == 0):
-            print("zero length tag passed")
-            return False
+            print(f" in the routine to acknowledge the tag {msgString}")
+            exit(121)
+            #print("zero length tag passed")
+            #return False
             
-        if not (msgString.find("S_ISO") == -1):
-        #if (re.search(patternISO, msgString.upper())==True): 
+        if not (msgString.find("CAM_ISO") == -1):
+        #if (re.search(patternISO, msgString.upper())==True):
+            print(f"CAM_ISO received {msgString} value {dataRcv}")
+            ret = self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavdefs.PARAM_ACK_IN_PROGRESS, "CAM_ISO" )
             if ((mavObj.setMavIsoModeData( dataRcv )) == True):
-                ret = self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_ACCEPTED, "S_ISO" )
+                print(f"Succfully updated to Sony Cam for param_ext_set {mavdefs.PARAM_ACK_ACCEPTED}")
+                ret = self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavdefs.PARAM_ACK_ACCEPTED, "CAM_ISO" )
+                print(f"Ack of ISO : {ret}")
             else:
-                self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_FAILED, "S_ISO" )            
-        elif not (msgString.find("S_APERTURE") == -1):
+                ret = self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavdefs.PARAM_ACK_FAILED, "CAM_ISO" )            
+        elif not (msgString.find("CAM_APERTURE") == -1):
         #elif (re.search(patternAper, msgString.upper())==True): 
             if ((mavObj.setMavApertureData( dataRcv )) == True):
-                ret = self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_ACCEPTED, "S_APERTURE" )
+                ret = self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavdefs.PARAM_ACK_ACCEPTED, "CAM_APERTURE" )
             else:
-                self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_FAILED, "S_APERTURE" )   
-        elif not (msgString.find("S_EX_PRO_MODE") == -1):
+                ret = self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavdefs.PARAM_ACK_FAILED, "CAM_APERTURE" )   
+        elif not (msgString.find("CAM_EXPMODE") == -1):
         #elif (re.search(patternExPro, msgString.upper())==True): 
             if ((mavObj.setMavExProData( dataRcv )) == True):
-                self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_ACCEPTED, "S_EX_PRO_MODE" )
+                ret = self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavdefs.PARAM_ACK_ACCEPTED, "CAM_EXPMODE" )
             else:
-                self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_FAILED, "S_EX_PRO_MODE" )                        
+                ret = self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavdefs.PARAM_ACK_FAILED, "CAM_EXPMODE" )                        
         elif not (msgString.find("S_FOCUS_AREA") == -1):
         #elif (re.search(patternFocA, msgString.upper())==True):    
             if ((mavObj.setMavFocusAreaData( dataRcv )) == True):
-                ret = self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_ACCEPTED, "S_FOCUS_AREA" )
+                ret = self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavdefs.PARAM_ACK_ACCEPTED, "S_FOCUS_AREA" )
             else:
-                self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_FAILED, "S_FOCUS_AREA" )              
+                ret = self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavdefs.PARAM_ACK_FAILED, "S_FOCUS_AREA" )              
         elif not (msgString.find("S_FOCUS_MODE") == -1):
         #elif (re.search(patternFocus, msgString.upper())==True):
             if ((mavObj.setMavFocusData( dataRcv )) == True):
-                ret = self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_ACCEPTED, "S_FOCUS_MODE" )
+                ret = self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavdefs.PARAM_ACK_ACCEPTED, "S_FOCUS_MODE" )
             else:
-                self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_FAILED, "S_FOCUS_MODE" )                 
-        elif not (msgString.find("S_SHUT_SPD") == -1):
+                ret = self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavdefs.PARAM_ACK_FAILED, "S_FOCUS_MODE" )                 
+        elif not (msgString.find("CAM_SHUTTERSPD") == -1):
         #elif (re.search(patternShSp, msgString.upper())==True):   
             if ((mavObj.setMavShutterData( dataRcv )) == True):
-                ret = self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_ACCEPTED, "S_SHUT_SPD" )
+                ret = self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavdefs.PARAM_ACK_ACCEPTED, "CAM_SHUTTERSPD" )
             else:
-                self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_FAILED, "S_SHUT_SPD" )                           
-        elif not (msgString.find("S_WHITE_BAL") == -1):
+                ret = self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavdefs.PARAM_ACK_FAILED, "CAM_SHUTTERSPD" )                           
+        elif not (msgString.find("CAM_WBMODE") == -1):
         #elif (re.search(patternWhiBal, msgString.upper())==True):  
             if ((mavObj.setMavWhiteBalData( dataRcv )) == True):
-                ret = self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_ACCEPTED, "S_WHITE_BAL" )
+                ret = self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavdefs.PARAM_ACK_ACCEPTED, "CAM_WBMODE" )
             else:
-                self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_FAILED, "S_WHITE_BAL" )          
+                ret = self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavdefs.PARAM_ACK_FAILED, "CAM_WBMODE" )          
         elif not (msgString.find("S_STILL_CAP") == -1):
         #elif (re.search(patternStCa, msgString.upper())==True):    
             if ((mavObj.setMavStillCapModeData( dataRcv )) == True):
-                    ret = self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_ACCEPTED, "S_STILL_CAP" )
+                    ret = self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavdefs.PARAM_ACK_ACCEPTED, "S_STILL_CAP" )
             else:
-                self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavutil.mavlink.PARAM_ACK_FAILED, "S_STILL_CAP" )                  
+                ret = self.mavlink_send_param_ext_ack( the_connection, dataRcv, mavdefs.PARAM_ACK_FAILED, "S_STILL_CAP" )                  
         else:
             print("unsupported variable name %s to val=%d :: NOT SET "%(msgString,dataRcv))
             return False
@@ -5646,13 +5653,13 @@ class MAVFrame():
     def readParamExtSetFromMavLink( self, msgString, mavObj, the_connection ):
 
         # must be EXACT tag match
-        #patternISO = re.compile(r"\bS_ISO\b")
-        #patternAper = re.compile(r"\bS_APERTURE\b")
-        #patternExPro = re.compile(r"\bS_EX_PRO_MODE\b")
+        #patternISO = re.compile(r"\bCAM_ISO\b")
+        #patternAper = re.compile(r"\bCAM_APERTURE\b")
+        #patternExPro = re.compile(r"\bCAM_EXPMODE\b")
         #patternFocus = re.compile(r"\bS_FOCUS_MODE\b")
         #patternFocA = re.compile(r"\bS_FOCUS_AREA\b")
-        #patternShSp = re.compile(r"\bS_SHUT_SPD\b")  
-        #patternWhiBal = re.compile(r"S_WHITE_BAL") 
+        #patternShSp = re.compile(r"\bCAM_SHUTTERSPD\b")  
+        #patternWhiBal = re.compile(r"CAM_WBMODE") 
         #patternStCa = re.compile(r"\bS_STILL_CAP\b") 
 
         v = 0
@@ -5663,16 +5670,17 @@ class MAVFrame():
             print("zero length tag passed")
             return False
             
-        if not (msgString.find("S_ISO") == -1):
+        if not (msgString.find("CAM_ISO") == -1):
         #if (re.search(patternISO, msgString.upper())==True): 
             v, p, r = mavObj.getMavIsoModeData( )
             if (r == True):
                 if ( self.mavlink_send_param_ext_value_iso( the_connection, v ) == True ):
+                    print(f"\033[33m Value ISO is : {v}\033[0m")
                     with mavObj.mav_ext_req_all_param.get_lock():
                         mavObj.mav_ext_req_all_param.value |= mavObj.ParamIso                                     # >>> set the bit to enable full read of parameter
                     return r
             return False            
-        elif not (msgString.find("S_APERTURE") == -1):
+        elif not (msgString.find("CAM_APERTURE") == -1):
         #elif (re.search(patternAper, msgString.upper())==True): 
             v, p, r = mavObj.getMavApertureData( )
             if (r == True):
@@ -5681,7 +5689,7 @@ class MAVFrame():
                         mavObj.mav_ext_req_all_param.value |= mavObj.ParamAperture                                # >>> set the bit to enable full read of parameter                
                     return r
             return False                 
-        elif not (msgString.find("S_EX_PRO_MODE") == -1):
+        elif not (msgString.find("CAM_EXPMODE") == -1):
         #elif (re.search(patternExPro, msgString.upper())==True): 
             v, p, r = mavObj.getMavExProData( )
             if (r == True):
@@ -5708,7 +5716,7 @@ class MAVFrame():
                         mavObj.mav_ext_req_all_param.value |= mavObj.ParamFocus                                   # >>> set the bit to enable full read of parameter 
                     return r
             return False                  
-        elif not (msgString.find("S_SHUT_SPD") == -1):
+        elif not (msgString.find("CAM_SHUTTERSPD") == -1):
         #elif (re.search(patternShSp, msgString.upper())==True): 
             v, p, r = mavObj.getMavShutterData( )
             if (r == True):
@@ -5717,7 +5725,7 @@ class MAVFrame():
                         mavObj.mav_ext_req_all_param.value |= mavObj.ParamShutSpd                                 # >>> set the bit to enable full read of parameter                 
                     return r
             return False                     
-        elif not (msgString.find("S_WHITE_BAL") == -1):
+        elif not (msgString.find("CAM_WBMODE") == -1):
         #elif (re.search(patternWhiBal, msgString.upper())==True):  
             v, p, r = mavObj.getMavWhiteBalData( )
             if (r == True):
@@ -5749,7 +5757,7 @@ class MAVFrame():
         loop = 5
         while loop >= 1:
         #while True:
-            print("im receiving.............")
+            #print("im receiving.............")
             #time.sleep(0.05)
             #self.update_uptime_label( )
             #self.update_utc_label( )
@@ -5774,7 +5782,8 @@ class MAVFrame():
             #self.mavlink_send_camera_feedback( the_connection )
             #self.mavlink_send_camera_information(the_connection)
             #self.mavlink_send_storage_information(the_connection)
-            #self.mavlink_send_camera_capture_status(the_connection)
+            #if (loop == 4):
+            #    self.mavlink_send_camera_capture_status(the_connection)
             #print(f" video stream returned {self.mavlink_send_video_stream_information(the_connection)}")
             #self.mavlink_send_camera_image_captured(the_connection)
             #the_connection.mav.camera_feedback_send( 1000, 1, 1, 22, 21, 10, 30, 21, 2, 3, 5, 2, 3)
@@ -5821,6 +5830,7 @@ class MAVFrame():
                 # ===== TRAP ======
                 #exit(99)                
             elif msg.get_type() == 'PARAM_SET':
+                print(f"\033[32m whole dump {msg}\033[0m")
                 #
                 # for testing...... self.mavlink_send_ext_param_value(the_connection)
                 #
@@ -5860,21 +5870,27 @@ class MAVFrame():
                 converted = True
                 try:
                     valueSet = int(msg.param_value)
+                    print(valueSet)
                 except Exception as err_msg:
-                    print(f"\033[31m PARAM_EXT_SET :: Error converting type {err_msg} \033[0m")
-                    try:
-                        valueSetActual = msg.param_value
-                        valueSet = int(valueSetActual.decode('ascii'))
-                    except Exception as err_msg:
-                        print(f"\033[31m PARAM_EXT_SET :: Error converting type {err_msg} it says {msg.param_value} \033[0m")
-                        converted = False
-                if (( self.writeParamExtSetFromMavLink( msg.param_id, sharedObj, valueSet ) == True ) and ( converted == True) ):
-                    print("\033[35m PARAM_EXT_SET :: was sent for %s :: %d \033[0m"%( msg.param_id, valueSet ))
-                    ## =======> send_ext_ack
-                else:
-                    print("\033[31m PARAM_EXT_SET :: write fail for %s :: %d \033[0m"%( msg.param_id, valueSet))
-                # ===== TRAP =====
+                    print(f"\033[31m PARAM_EXT_SET :: Error converting type {err_msg} and value {msg.param_value} and dump {msg} \033[0m")
+                    #exit(95)
+                    #try:
+                    #    valueSetActual = msg.param_value
+                    #    valueSet = int(valueSetActual.decode('utf-8'))
+                    #except Exception as err_msg:
+                    #    print(f"\033[31m PARAM_EXT_SET :: Error converting type {err_msg} it says {msg.param_value} \033[0m")
+                    converted = False
+                if ( converted == True):
+                    print(f"Setting Param_Ext_Set Value : {valueSet} : param id : {msg.param_id}")
+                    #ee = self.mav_param_type_conv( msg.param_type, valueSet )
+                    #print(f"ee value is {ee}")
+                    if (self.writeParamExtSetFromMavLink( msg.param_id, sharedObj, valueSet, the_connection ) == True):
+                        print("\033[35m PARAM_EXT_SET :: was sent for %s :: %d \033[0m"%( msg.param_id, valueSet ))
+                        ## =======> send_ext_ack
+                    else:
+                        print("\033[31m PARAM_EXT_SET :: write fail for %s :: %d \033[0m"%( msg.param_id, valueSet))
                 #exit(95)
+                # ===== TRAP =====
             elif msg.get_type() == 'PARAM_VALUE':
                 print(f"Recieved a param value for :- {msg.param_id} = {msg.param_value}")
             elif msg.get_type() == 'RC_CHANNELS':
@@ -7428,34 +7444,35 @@ async def processMavlinkMessageData(fm, cID, sleep, sonycam=0, caminst=0, redeye
 # 
 # =================================================================== buffer flushing routines ==================================================================
 #
-async def read_mav_buffer(the_connection):
-"""this functions purpose is to just read the overloaded buffer quick and flush out the records."""
-    loop = 100                                                                                  # realistic records to read under overload in the tome period (timeout means normal input rate)
+async def read_mav_buffer(the_connection, loop=100):
+    """this functions purpose is to just read the overloaded buffer quick and flush out the records."""
+    #loop = 100                                                                                  # realistic records to read under overload in the tome period (timeout means normal input rate)
     while loop >= 1:
         print("im flushing.............")
         msg = the_connection.recv_match(blocking=True, timeout=2)
         if (msg is None):                                                                       # timeout with nothing just return 
             return None
-		loop -= 1
-	return loop
+        loop -= 1
+    return loop
 	
 async def flush_mavlink_buffer(the_connection):
-"""flush_mavlink_buffer: Flush the buffer -> if we timeout then we have read all the records in it, otherwise repeat the read attempts number of times."""
+    """flush_mavlink_buffer: Flush the buffer -> if we timeout then we have read all the records in it, otherwise repeat the read attempts number of times."""
     print("\033[32m Buffer Flushing Active ! \033[0m")
-	attempts = 3                                                                                # number of times we read before returning
-	timeout_s = 1.0                                                                             # timeout on buffer 
-	result = None
-	while attempts >= 1:
+    attempts = 3                                                                                # number of times we read before returning
+    timeout_s = 1.0                                                                             # timeout on buffer 
+    result = None
+    while attempts >= 1:
         try:
             result = await asyncio.wait_for(read_mav_buffer(the_connection), timeout=timeout_s)
         except asyncio.TimeoutError:
             print('\033[32m Buffer Flushing Completed ! \033[0m')
             return None
         if result == None:
-		    attempts = 1
-		attempts -= 1
+            attempts = 1
+        attempts -= 1
     print(f"\033[32m Buffer Flushing after 3 operations returned {result} records in {timeout_s} seconds ! \033[0m")
-	return result
+    return result
+
 #
 # @#= delete above after daemon tested
 #
@@ -7481,7 +7498,7 @@ import numpy as np
 
 def sendTagOverMPILink( tag_name ):
     #
-    # convert string to ascii list and make numpy array from it.
+    # convert string to utf-8 list and make numpy array from it.
     #
     vn = []
     k = 0
