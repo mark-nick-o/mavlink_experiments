@@ -321,7 +321,7 @@ class micaSenseCamera():
         capture_data = self.micaSensePostNoRetry( url, capture_params, True )
         if capture_data:
              self.print_myJson( capture_data )
-        return capture_data.status_code,status_code 
+        return capture_data.status_code,capture_data 
 
     # Post a message to the RedEdge camera commanding a capture, block until complete
     #        
@@ -531,8 +531,26 @@ class micaSenseCamera():
                           }
         url = "http://" + self.CAM_HOST_IP + "/exposure"
         capture_data = self.micaSensePostNoRetry( url, exposure_params, True )
-        return capture_data.status_code,status_code 
+        return capture_data.status_code,capture_data 
 
+    # Post a message to the camera setting exposure, block until complete 
+    #
+    def micaSenseSetExposureFromMav( self, mav_class ):
+        exposure_params = { "enable_man_exposure" : False, 
+                            "exposure1" : mav_class.set_mica_exposure.exp1, 
+                            "exposure2" : mav_class.set_mica_exposure.exp2, 
+                            "exposure3" : mav_class.set_mica_exposure.exp3, 
+                            "exposure4" : mav_class.set_mica_exposure.exp4,
+                            "exposure5" : mav_class.set_mica_exposure.exp5,
+                            "gain1" : mav_class.set_mica_exposure.gain1,
+                            "gain2" : mav_class.set_mica_exposure.gain2,
+                            "gain3" : mav_class.set_mica_exposure.gain3,
+                            "gain4" : mav_class.set_mica_exposure.gain4,
+                            "gain5" : mav_class.set_mica_exposure.gain5,
+                          }
+        url = "http://" + self.CAM_HOST_IP + "/exposure"
+        capture_data = self.micaSensePostNoRetry( url, exposure_params, True )
+        return capture_data.status_code,capture_data 
         
     # Detect Panel On
     #
@@ -540,7 +558,7 @@ class micaSenseCamera():
         dt_params = { "detect_panel" : True } 
         url = "http://" + self.CAM_HOST_IP + "/detect_panel"
         capture_data = self.micaSensePostNoRetry( url, dt_params, True )
-        return capture_data.status_code,status_code         
+        return capture_data.status_code,capture_data        
 
     # Detect Panel On
     #
@@ -551,7 +569,7 @@ class micaSenseCamera():
         }
         url = "http://" + self.CAM_HOST_IP + "/detect_panel"
         capture_data = self.micaSensePostNoRetry( url, dt_params, True )
-        return capture_data.status_code,status_code 
+        return capture_data.status_code,capture_data 
    
 
     # set GPS
@@ -573,7 +591,7 @@ class micaSenseCamera():
         dt_params = { "latitude" : lat, "longitude" : lon, "altitude" : alt, "vel_n" : veln, "vel_e" : vele, "vel_d" : veld, "p_acc" : pacc, "v_acc" : vacc, "fix3d" : fix3d, utc_time : dtime_utc } 
         url = "http://" + self.CAM_HOST_IP + "/gps"
         capture_data = self.micaSensePostNoRetry( url, dt_params, True )
-        return capture_data.status_code,status_code 
+        return capture_data.status_code,capture_data 
 
     # get GPS
     #
@@ -591,7 +609,7 @@ class micaSenseCamera():
         orintation_params = { "aircraft_phi" : Aphi, "aircraft_theta" : Atheta, "aircraft_psi" : Apsi, "camera_phi" : Cphi, "camera_theta"	: Ctheta, "camera_psi" : Cpsi }
         url = "http://" + self.CAM_HOST_IP + "/orientation"
         capture_data = self.micaSensePostNoRetry( url, orintation_params, True )
-        return capture_data.status_code,status_code 
+        return capture_data.status_code,capture_data 
 
     # get Orientation
     #
@@ -608,7 +626,7 @@ class micaSenseCamera():
         pic_stat_params = { "aircraft_phi" : Aphi, "aircraft_theta" : Atheta, "aircraft_psi" : Apsi, "camera_phi" : Cphi, "camera_theta"	: Ctheta, "camera_psi" : Cpsi, "latitude" : lat, "longitude" : lon, "altitude" : alt, "vel_n" : veln, "vel_e" : vele, "vel_d" : veld, "p_acc" : pacc, "v_acc" : vacc, "fix3d" : fix3d, utc_time : dtime_utc }
         url = "http://" + self.CAM_HOST_IP + "/capture_state"
         capture_data = self.micaSensePostNoRetry( url, pic_stat_params, True )
-        return capture_data.status_code,status_code 
+        return capture_data.status_code,capture_data 
                 
     # set configuration
     #
@@ -641,8 +659,15 @@ class micaSenseCamera():
         }
         url = "http://" + self.CAM_HOST_IP + "/config"
         capture_data = self.micaSensePostNoRetry( url, orintation_params, True )
-        return capture_data.status_code,status_code 
-       
+        return capture_data.status_code,capture_data 
+
+    # Post a message to the camera getting the exposure parameters, block until complete 
+    #
+    def micaSenseGetExposure( self ):
+        url = "http://" + self.CAM_HOST_IP + "/exposure"
+        capture_data = self.micaSenseGetNoRetry( url )        
+        return capture_data
+        
     # get pins
     #
     def micaSenseGetPinMux( self ):
@@ -982,6 +1007,9 @@ if __name__ == '__main__':
     print(">>>>>>>>>>>>>>>> Get GPS  >>>>>>>>>>>>>>>>>>>>>>>>>")
     a = myRedEdgeCamNo1.micaSenseGetGPS()
 
+    print(">>>>>>>>>>>>>>>> Get Exposure Call  >>>>>>>>>>>>>>>>>>>>>>>>>")
+    print(micaSenseGetExposure())
+    
     #print(">>>>>>>>>>>>>>>> Reformat SD Card >>>>>>>>>>>>>>>>>")
     #a,b = myRedEdgeCamNo1.micaSenseReformatSDCard()
     #if (a == 200):
@@ -992,5 +1020,3 @@ if __name__ == '__main__':
     #myRedEdgeCamNo1.micaSenseSetConfig()
     #myRedEdgeCamNo1.micaSensePreparePowerDwn()
     #myRedEdgeCamNo1.micaSensePowerDwnRdy()
-    
-
