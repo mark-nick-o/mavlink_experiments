@@ -78,6 +78,7 @@ class sonyClassAlpha7FocusModeOptions(enum.IntEnum):
 
 class sonyClassApertureCpEnums(enum.IntEnum):
 
+    F2_5 = 250
     F2_8 = 280
     F3_2 = 320
     F3_5 = 350
