@@ -200,7 +200,7 @@ class alphaSonyCam
     void alphaSetBiaxialFineTuneDirAB(SCRSDK::CrDeviceHandle handle, SCRSDK::CrColorTuning v);
     void alphaSetBiaxialFineTuneDirGM(SCRSDK::CrDeviceHandle handle, SCRSDK::CrColorTuning v);
     void alphaSetLiveViewDisplayEffect(SCRSDK::CrDeviceHandle handle, SCRSDK::CrLiveViewDisplayEffect v);
-    void alphaSetStillImageStoreDestination(SCRSDK::CrDeviceHandle handle, SCRSDK::CrStillImageStoreDestination v)
+    void alphaSetStillImageStoreDestination(SCRSDK::CrDeviceHandle handle, SCRSDK::CrStillImageStoreDestination v);
     void alphaSetPositionKeySetting(SCRSDK::CrDeviceHandle handle, SCRSDK::CrPriorityKeySettings v);
     void alphaSetDateTime(SCRSDK::CrDeviceHandle handle, SCRSDK::CrCommandParam v);
     void alphaSetFocusMagnifierSetting(SCRSDK::CrDeviceHandle handle, SCRSDK::CrCommandParam v);
