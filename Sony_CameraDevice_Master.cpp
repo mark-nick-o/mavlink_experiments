@@ -21,6 +21,9 @@ namespace fs = std::filesystem;
 #include "CRSDK/CrDeviceProperty.h"
 #include "Text.h"
 
+/* for manjaro compilation */
+#include <string.h>
+
 /* from previous driver */
 #ifdef _WIN32
 #include <Windows.h>
@@ -4586,6 +4589,18 @@ namespace cli
                 tout << m_info->GetModel() << " (" << id.data() << ")" << std::endl;
             }
         }
+    }
+   
+    void CameraDevice::set_focus_position(int value)
+    {
+
+        SDK::CrDeviceProperty prop_focus;
+        prop_focus.SetCode(SDK::CrDevicePropertyCode::CrDeviceProperty_NearFar);
+        prop_focus.SetCurrentValue(value);
+        prop_focus.SetValueType(SDK::CrDataType::CrDataType_Int8);
+        SDK::SetDeviceProperty(m_device_handle, &prop_focus);
+
+        std::this_thread::sleep_for(1000ms);
     }
 
     void CameraDevice::getScreennail(SDK::CrContentHandle content)
